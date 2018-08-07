@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mappers.calendarMapper">
+	
+	<insert id="insertCalendarEvents" parameterType="map">
+		insert into [동림].[dbo].[캘린더](카테고리코드, 제목, 시작일, 종료일, 사원코드, 카테고리월, 상세)
+		values
+		<foreach collection="list" item="event" separator=" , ">
+		(#{event.cate}, #{event.title}, #{event.start}, #{event.end}, #{code}, #{event.cateMonth}, #{event.description})
+		</foreach>
+	</insert> 
+	
+	<resultMap id="RM_CalendarData" type="CalendarEvent">
+		<result column="일련번호"		property="id"	javaType="string"/>
+		<result column="제목"			property="title"	javaType="string"/>
+		<result column="시작일"		property="start"	javaType="string"/>
+		<result column="종료일"		property="end"	javaType="string"/>
+		<result column="카테고리월"		property="cateMonth"	javaType="string"/>
+		<result column="카테고리코드"	property="cate"	javaType="string"/>
+		<result column="상세"			property="description"	javaType="string"/>
+		<result column="myevent"	property="mine"	javaType="string"/>
+	</resultMap>
+	
+	<resultMap id="RM_CalendarCate" type="CalendarCategory">
+		<result column="코드"			property="code"			javaType="string"/>
+		<result column="카테고리명"		property="name"			javaType="string"/>
+		<result column="바탕색"		property="color"		javaType="string"/>
+		<result column="글자색"		property="textColor"	javaType="string"/>
+	</resultMap>
+	
+	<select id="selectCalendarDataList" parameterType="map" resultMap="RM_CalendarData">
+		select 제목, 시작일, 종료일, 카테고리월, 카테고리코드, 일련번호, 상세,
+			   case when 사원코드 = #{sawonCode} then 'Y'
+			   		else 'N'
+			   end as myevent
+		  from [동림].[dbo].[캘린더]
+		 where 시작일 >= #{startDate} and 시작일 <![CDATA[<]]> #{endDate}
+		   and 카테고리코드 = #{cate}
+	</select>
+	
+	<select id="selectCalendarCategory" resultMap="RM_CalendarCate">
+		select 코드, 카테고리명, 바탕색, 글자색
+		  from [동림].[dbo].[캘린더카테고리]
+	</select>
+	
+	<update id="updateCalendarEvents" parameterType="map">
+		<foreach collection="list" item="event" separator=";">
+		update [동림].[dbo].[캘린더]
+		   set 시작일 = #{event.start},
+		   	       종료일 = #{event.end},
+		   	       제목 = #{event.title}
+		 where 일련번호 = #{event.id}
+		</foreach>	
+	</update>
+	
+	<delete id="deleteCalendarEvents" parameterType="map">
+		delete 
+		  from [동림].[dbo].[캘린더]
+		 where 일련번호 in 
+		<foreach collection="list" item="event" open="(" close=")" separator=",">
+		 #{event.id}		  
+		</foreach>
+	</delete>
+</mapper>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+
+	<!-- MSsqlWeb 192.168.0.43 -->
+	<bean id="mssqlDataSource" 
+		  class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="#{dsCfg['mssql.datasource.driverClassName']}" />
+		<property name="url" value="#{dsCfg['mssql.datasource.url']}" />
+		<property name="username" value="#{dsCfg['mssql.datasource.username']}" />
+		<property name="password" value="#{dsCfg['mssql.datasource.password']}" />
+	</bean>
+	
+	<!-- MyBatisMssqlWeb -->
+	<bean id="msSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="mssqlDataSource" />
+		<property name="configLocation" value="classpath:/sql-config.xml" />
+		<property name="mapperLocations" value="classpath:/mappers/*Mapper.xml" />
+	</bean>
+	
+	<!-- MyBatis MSsqlSessionWeb -->
+	<bean id="msSqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg name="sqlSessionFactory" ref="msSqlSessionFactory" />
+	</bean>
+	
+	<!-- Transaction -->
+	<tx:annotation-driven transaction-manager="mssqlTransactionManager" />
+	<bean id="mssqlTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="mssqlDataSource"></property>
+	</bean>
+	
+	<util:properties id="dsCfg" location="classpath:/config/ds.properties" />
+</beans>

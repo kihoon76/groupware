@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mappers.sawonMapper">
+	
+	<resultMap id="RM_selectSawon" type="Sawon">
+		<result column="사원코드" property="code" javaType="string"/>
+		<result column="사원번호" property="num" javaType="string" />
+		<result column="사원명" property="name" javaType="string"/>
+		<result column="비밀번호" property="password" javaType="string"/>
+		<result column="부서명" property="booseo" javaType="string"/>
+		<result column="직급명" property="jiggeub" javaType="string"/>
+	 	<collection property="authorities" column="사원코드" javaType="java.util.ArrayList"
+	 				ofType="Authority" select="selectAuthorities" />
+	</resultMap>
+	
+	<select id="selectSawonInfo" parameterType="string" resultMap="RM_selectSawon">
+		select 사원코드, 사원번호, 사원명, 비밀번호, t2.직급명, t3.부서명 
+		  from [동림].[dbo].[사원] t1
+		  left outer join [동림].[dbo].[직급] t2
+		    on t1.직급코드 = t2.직급코드
+		  left outer join [동림].[dbo].[부서] t3
+		    on t1.부서코드 = t3.부서코드
+		 where 사원번호 = #{sawonNum}
+	</select>
+	
+	<select id="selectAuthorities" parameterType="string" resultType="Authority">
+		select b.[권한이름] as authName 
+		  from [동림].[dbo].[사원권한] a
+		 inner join [동림].[dbo].[권한] b
+		    on a.[권한번호] = b.[권한번호]
+		 where a.[사원코드] = #{sawonCode}
+	</select>
+</mapper>

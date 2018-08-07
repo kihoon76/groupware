@@ -1,0 +1,29 @@
+@font-face {font-family:ngttf; src:url(NanumGothic.ttf);}
+@font-face {font-family:ngeot; src:url(NanumGothic.eot);}
+
+.x-tab-inner {
+	font-size : 12px;
+}
+.x-grid-cell-inner {
+	font-size : 12px;
+}
+
+.x-btn-default-toolbar-small .x-btn-inner {
+    font-size: 12px;
+}
+.x-datepicker-header .x-btn-inner {font-size:13px;}
+.x-datepicker-inner span{
+	font-size : 13px;
+}
+.x-column-header .x-column-header-text {font-size : 12px;}
+.x-menu-item .x-menu-item-text {font-size : 12px;}
+
+
+
+.x-window-header-text-default {
+	font-size:15px;
+}
+
+/* .x-border-box .x-form-text { */
+/* 	height: 30px; */
+/* } */

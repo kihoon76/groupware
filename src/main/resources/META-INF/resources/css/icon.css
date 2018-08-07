@@ -1,0 +1,12 @@
+.icon-search {background-image: url(../images/search.gif) !important; }
+.icon-add {background-image : url(../images/add.png) !important;}
+.icon-del {background-image : url(../images/delete.png) !important;}
+.icon-modi {background-image : url(../images/modify.gif) !important;}
+.icon-user {background-image : url(../images/icon_user.gif) !important;}
+.icon-window {background-image : url(../images/new_window.gif) !important;}
+.icon-close {background-image : url(../images/close.gif) !important;}
+.icon-refresh {background-image : url(../images/refresh.png) !important;}
+.tree-expand {background-image : url(../images/tree_expand.gif) !important;}
+.tree-collapse {background-image : url(../images/tree_collapse.gif) !important;}
+.reg {background-image : url(../images/text_edit.gif) !important;}
+.icon-logout {background-image: url(../images/logout.png) !important; background-size: 16px 16px;}
