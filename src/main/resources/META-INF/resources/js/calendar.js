@@ -161,10 +161,23 @@ $(document).ready(function() {
 	    	 });*/
 	     },
 	     eventClick: function(calEvent, jsEvent, view) {
-	    	 console.log(calEvent);
+	    	 console.log(calEvent.end.format());
 	    	 
 	    	 if(calEvent.editable) {
-	    		 common.showExtMsg({
+	    		 var sDate = calEvent.start.format();
+		    	 var eDate = calEvent.end.format();
+		    	 var title = calEvent.title;
+		    	 var time = '';
+		    	 
+		    	 if(category == 'C1') {
+		    		 var sIdx = title.indexOf('(');
+		    		 var eIdx = title.indexOf(')');
+		    		 title = title.substring(0, sIdx);
+		    		 time = calEvent.title.substring(sIdx+1, eIdx);
+		    		 console.log(time);
+		    	 }
+	    		
+		    	 /*common.showExtMsg({
 		    		 msg: '삭제하시겠습니까?',
 		    		 type: 'confirm',
 		    		 callback: function(btn) {
@@ -181,7 +194,39 @@ $(document).ready(function() {
 		    				 deleteEvent(calEvent);
 		    			 }
 		    		 }
-		    	 }); 
+		    	 });*/
+	    		 
+	    		 common.showExtWin({
+	    			 mode: 'update',
+		    		 start: sDate,
+		    		 end: eDate,
+		    		 cate: category,
+		    		 title: title,
+		    		 description: calEvent.description,
+		    		 time: time,
+	    			 modify: function(win, winData) {
+	    				 var title = (category == 'C1') ? winData.title + '(' + winData.time + ')' : winData.title;
+	    				 calEvent.title = title;
+	    				 calEvent.description = winData.desc;
+		    			
+	    				 $('#calendar').fullCalendar('updateEvent', calEvent);
+	    				 modifyEvent(calEvent);
+		    			 win.close(); 
+	    			 },
+	    			 del: function(win) {
+	    				 if(calEvent.isDb) {
+	    					 delEvents.push({
+	    	    				 id: calEvent.id,
+	    	    				 isDelete: true
+	    					 }); 
+	    					 
+	    					 isModified = true;
+	    				 }
+	    				 
+	    				 deleteEvent(calEvent); 
+	    				 win.close();
+	    			 }
+	    		 });
 	    	 }
 	    
 	     },
@@ -222,6 +267,7 @@ $(document).ready(function() {
 	    		 //x: jsEvent.pageX,
 	    		 //y: jsEvent.pageY,
 	    		 //type: 
+	    		 mode: 'insert',
 	    		 start: sDate,
 	    		 end: eDate,
 	    		 cate: category,
@@ -254,26 +300,6 @@ $(document).ready(function() {
 	    		 }
 	    	 });
 	     }
-//	     eventMouseover: function(event) {
-//	    	 //var tooltip = '<div class="tooltipevent event-tooltip" style="width:100px;height:100px;background:#ccc;position:absolute;z-index:10001;">1111</div>';
-//	    	 var tooltip = '<div class="tooltipevent event-tooltip">' + event.description + '</div>';
-//	    	 var $tooltip = $(tooltip).appendTo('body');
-//
-//	    	 $(this).mouseover(function(e) {
-//	    		 $(this).css('z-index', 10000);
-//	    	     $tooltip.fadeIn('500');
-//	    	     $tooltip.fadeTo('10', 1.9);
-//	    	 })
-//	    	 .mousemove(function(e) {
-//	    		 $tooltip.css('top', e.pageY + 10);
-//	    	     $tooltip.css('left', e.pageX + 20);
-//	    	 });
-//	     },
-//	     eventMouseout: function(event, jsEvent) {
-//	    	 $(this).css('z-index', 8);
-//	    	 $('.tooltipevent').remove();
-//	     },
-
 	});
 	
 	$('#selCate').selectmenu({
@@ -369,7 +395,7 @@ $(document).ready(function() {
 		var changeStartDate = event.start.format();
 		var changeEndDate = event.end.format();
 		
-		console.log
+		console.log(event)
 		var id = event.id;
 		var cate = event.cate;
 		
@@ -380,10 +406,14 @@ $(document).ready(function() {
 			if(eventArr[i].id == id) {
 				eventArr[i].start = changeStartDate;
 				eventArr[i].end = changeEndDate;
+				eventArr[i].title = event.title;
+				eventArr[i].description = event.description;
+				
 				if(!eventArr[i].isNew) {
 					eventArr[i].isModify = true;
 					isModified = true;
 				}
+				
 				break;
 			}
 		}

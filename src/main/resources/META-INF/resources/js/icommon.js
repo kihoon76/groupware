@@ -78,6 +78,8 @@ var common = (function() {
 	        	allowBlank: false,
 	        }];
 			
+			var buttons = [];
+			
 			if(param.cate == 'C1') {
 				items.push({
 		        	fieldLabel: '시간',
@@ -89,6 +91,73 @@ var common = (function() {
 		            increment: 60,
 		        });
 			}
+			
+			if(param.mode == 'insert') {
+				buttons.push({
+					text: '추가',
+					iconCls: 'icon-add',
+				    handler: function() {
+				    	var title = parent.Ext.getCmp('ifm-cal-title');
+				    	var desc = parent.Ext.getCmp('ifm-cal-desc');
+				    	var time = null;
+				    	//var team = parent.Ext.getCmp('ifm-cal-team');
+				    	
+				    	if(!title.validate()) return;
+				    	if(!desc.validate()) return;
+				    	
+				    	if(param.cate == 'C1') {
+				    		time = parent.Ext.getCmp('ifm-cal-time');
+				    	  	if(!time.validate()) return;
+				    	}
+				    	
+				    	param.add(win, {
+				    		title: title.getValue(),
+				    		desc: desc.getValue(), 
+				    		time: time == null ? '' : time.getRawValue()
+				    	});
+			        }
+				});
+			}
+			else if(param.mode == 'update') {
+				buttons.push({
+					text: '수정',
+					iconCls: 'icon-modi',
+				    handler: function() {
+				    	var title = parent.Ext.getCmp('ifm-cal-title');
+				    	var desc = parent.Ext.getCmp('ifm-cal-desc');
+				    	var time = null;
+				    	//var team = parent.Ext.getCmp('ifm-cal-team');
+				    	
+				    	if(!title.validate()) return;
+				    	if(!desc.validate()) return;
+				    	
+				    	if(param.cate == 'C1') {
+				    		time = parent.Ext.getCmp('ifm-cal-time');
+				    	  	if(!time.validate()) return;
+				    	}
+				    	
+				    	param.modify(win, {
+				    		title: title.getValue(),
+				    		desc: desc.getValue(), 
+				    		time: time == null ? '' : time.getRawValue()
+				    	});
+			        }
+				}, {
+					text: '삭제',
+					iconCls: 'icon-del',
+				    handler: function() {
+				    	param.del(win);
+			        }
+				});
+			}
+			
+			buttons.push({
+				text: '닫기',
+				iconCls: 'icon-close',
+			    handler: function() {
+			    	win.close();
+		        }
+			});
 		
 			
 			var	win = parent.Ext.create('Ext.window.Window', {
@@ -111,36 +180,24 @@ var common = (function() {
 				        defaultType: 'textfield',
 				        items: items,
 					}],
-					buttons: [{
-						text: '추가',
-						iconCls: 'icon-add',
-					    handler: function() {
-					    	var title = parent.Ext.getCmp('ifm-cal-title');
-					    	var desc = parent.Ext.getCmp('ifm-cal-desc');
-					    	var time = null;
-					    	//var team = parent.Ext.getCmp('ifm-cal-team');
-					    	
-					    	if(!title.validate()) return;
-					    	if(!desc.validate()) return;
-					    	
-					    	if(param.cate == 'C1') {
-					    		time = parent.Ext.getCmp('ifm-cal-time');
-					    	  	if(!time.validate()) return;
-					    	}
-					    	
-					    	param.add(win, {
-					    		title: title.getValue(),
-					    		desc: desc.getValue(), 
-					    		time: time == null ? '' : time.getRawValue()
-					    	});
-				        }
-					}, {
-						text: '닫기',
-						iconCls: 'icon-close',
-					    handler: function() {
-					    	win.close();
-				        }
-					}]
+					buttons: buttons,
+					listeners: {
+						afterrender: function(w) {
+							if(param.mode == 'update') {
+								var title = parent.Ext.getCmp('ifm-cal-title');
+						    	var desc = parent.Ext.getCmp('ifm-cal-desc');
+						    	var time = null;
+						    	
+						    	if(param.cate == 'C1') {
+						    		time = parent.Ext.getCmp('ifm-cal-time');
+						    		time.setValue(param.time);
+						    	}
+						    	
+						    	title.setValue(param.title);
+						    	desc.setValue(param.description);
+							}
+						}
+					}
 			}).show();
 			
 			
