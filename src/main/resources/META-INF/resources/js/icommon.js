@@ -168,6 +168,7 @@ var common = (function() {
 					modal: true,
 					resizable: false,
 					closeAction: 'destroy',
+					animateTarget: param.aniTarget,
 					items: [{
 						xtype: 'form',
 						bodyStyle  : 'padding: 10px;',

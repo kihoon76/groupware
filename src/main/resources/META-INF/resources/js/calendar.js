@@ -117,9 +117,9 @@ $(document).ready(function() {
 			 }
 		 },
 		 header: {
-			 left: 'cPrev,cNext today cSave',
+			 left: 'cPrev,cNext today',
 		     center: 'title',
-		     right: 'month,basicWeek,basicDay'
+		     right: 'cSave'//'month,basicWeek,basicDay'
 		 },
 		 height: 'auto',
 		 defaultDate: $('body').data('date'),
@@ -159,6 +159,7 @@ $(document).ready(function() {
 	    			 win.close();
 	    		 }
 	    	 });*/
+	    	 console.log('ppp')
 	     },
 	     eventClick: function(calEvent, jsEvent, view) {
 	    	 console.log(calEvent.end.format());
@@ -250,6 +251,9 @@ $(document).ready(function() {
 	    	 $('#calendar').fullCalendar('updateEvent', event);
 	    	 modifyEvent(event);
 	     },
+	     navLinkDayClick: function(date, jsEvent) {
+	    	 console.log('yyyyy')
+	     },
 	     viewRender: function(view) {
 	    	calMStart = view.start.format();
 	    	calMEnd = view.end.format();
@@ -262,7 +266,6 @@ $(document).ready(function() {
 	    	 var sDate = start.format();
 	    	 var eDate = end.format();
 	    	 //var eDate = end.add(-1, 'days').format();
-	    	 
 	    	 common.showExtWin({
 	    		 //x: jsEvent.pageX,
 	    		 //y: jsEvent.pageY,
@@ -358,7 +361,7 @@ $(document).ready(function() {
     			msg: '정보로딩중...'
     		},
 			success: function(jo) {
-				console.log(jo);
+				//console.log(jo);
 				if(jo.success) {
 					if(jo.datas.length > 0) {
 						var events = jo.datas[0];
