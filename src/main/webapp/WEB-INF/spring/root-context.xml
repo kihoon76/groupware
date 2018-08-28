@@ -23,6 +23,5 @@
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 	
-	<util:properties id="pathCfg" location="classpath:/config/path.properties" />
 </beans>
 
