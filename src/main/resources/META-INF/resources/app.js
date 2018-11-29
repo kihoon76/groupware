@@ -1,4 +1,4 @@
-Ext.Loader.setConfig({enabled: true});
+Ext.Loader.setConfig({enabled: true, disableCaching: false}); // disableCaching: false _dc 제거
 Ext.Loader.setPath('Ext.ux.form', '/resources/ux');
 
 Ext.application({

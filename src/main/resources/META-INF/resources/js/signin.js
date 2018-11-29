@@ -1,3 +1,14 @@
+Ext.Loader.setConfig({
+	enabled: true,
+	disableCaching: false,
+	paths: {
+		'Drpnd.store': '/resources/app/store',
+		'Drpnd.util': '/resources/app/util/'
+	}
+});
+
+Ext.require('Drpnd.util.CommonFn');
+
 Ext.onReady(function() {
 	function submit() {
 		var form = Ext.getCmp('form').getForm();
@@ -32,11 +43,23 @@ Ext.onReady(function() {
 	}
 	
 	var regWin = null;
+	var departmentChanged = true;
+	
+	function eventHandlerDepartment(combo, records) {
+		var comboTeam = Ext.getCmp('comboTeam');
+		if(comboTeam.isDisabled()) comboTeam.setDisabled(false);
+		
+		var departmentCode = combo.getValue();
+		departmentChanged = true;
+		
+		comboTeam.clearValue();
+		comboTeam.getStore().setPCode(departmentCode);
+	}
 	
 	function getForm() {
 		return Ext.create('Ext.form.Panel', {
 			 frame: true,
-			 title: 'Form Fields',
+			 title: '사원등록',
 		     anchor: '100%',
 		     bodyPadding: 5,
 
@@ -47,69 +70,125 @@ Ext.onReady(function() {
 		        },
 
 		        items: [{
-		            xtype: 'textfield',
-		            name: 'textfield1',
-		            fieldLabel: 'Text field',
-		            value: 'Text field value'
-		        }, {
-		            xtype: 'hiddenfield',
-		            name: 'hidden1',
-		            value: 'Hidden field value'
+		            xtype: 'combo',
+		            name: 'sawonDepartment',
+		            id: 'sawonDepartment',
+		            fieldLabel: '부서',
+		            queryMode: 'remote',
+		            displayField: 'departmentName',
+		            valueField: 'departmentCode',
+		            editable: false,
+		            allowBlank: false,
+		            store: Ext.create('Drpnd.store.DepartmentListStore'),
+		            listeners: {
+		            	select: function(combo, records) {
+		            		eventHandlerDepartment(combo, records);
+		            	}
+		            }
+		        },{
+		            xtype: 'combo',
+		            id: 'comboTeam',
+		            name: 'sawonTeam',
+		            fieldLabel: '소속팀',
+		            queryMode: 'remote',
+		            displayField: 'teamName',
+		            valueField: 'teamCode',
+		            editable: false,
+		            allowBlank: false,
+		            store: Ext.create('Drpnd.store.TeamListStore'),
+		            disabled: true,
+		            listeners: {
+		            	beforequery: function(qe) {
+		            		if(departmentChanged) {
+		            			delete qe.combo.lastQuery;
+		            			departmentChanged = false;
+		            		}
+		            	}
+		            }
+		        },{
+		            xtype: 'combo',
+		            name: 'sawonPosition',
+		            fieldLabel: '직급',
+		            queryMode: 'remote',
+		            displayField: 'positionName',
+		            valueField: 'positionCode',
+		            editable: false,
+		            allowBlank: false,
+		            store: Ext.create('Drpnd.store.PositionListStore')
 		        },{
 		            xtype: 'textfield',
-		            name: 'password1',
+		            name: 'sawonName',
+		            fieldLabel: '사원명',
+		            allowBlank: false
+		        },{
+		            xtype: 'textfield',
+		            name: 'sawonId',
+		            fieldLabel: '아이디',
+		            allowBlank: false
+		        },{
+		            xtype: 'textfield',
+		            name: 'sawonPassword',
 		            inputType: 'password',
-		            fieldLabel: 'Password field'
-		        }, {
-		            xtype: 'filefield',
-		            name: 'file1',
-		            fieldLabel: 'File upload'
-		        }, {
-		            xtype: 'textareafield',
-		            name: 'textarea1',
-		            fieldLabel: 'TextArea',
-		            value: 'Textarea value'
-		        }, {
-		            xtype: 'displayfield',
-		            name: 'displayfield1',
-		            fieldLabel: 'Display field',
-		            value: 'Display field <span style="color:green;">value</span>'
-		        }, {
-		            xtype: 'numberfield',
-		            name: 'numberfield1',
-		            fieldLabel: 'Number field',
-		            value: 5,
-		            minValue: 0,
-		            maxValue: 50
-		        }, {
-		            xtype: 'checkboxfield',
-		            name: 'checkbox1',
-		            fieldLabel: 'Checkbox',
-		            boxLabel: 'box label'
-		        }, {
-		            xtype: 'radiofield',
-		            name: 'radio1',
-		            value: 'radiovalue1',
-		            fieldLabel: 'Radio buttons',
-		            boxLabel: 'radio 1'
-		        }, {
-		            xtype: 'radiofield',
-		            name: 'radio1',
-		            value: 'radiovalue2',
-		            fieldLabel: '',
-		            labelSeparator: '',
-		            hideEmptyLabel: false,
-		            boxLabel: 'radio 2'
-		        }, {
+		            fieldLabel: '비밀번호',
+		            allowBlank: false
+		        },{
+		            xtype: 'textfield',
+		            id: 'passwordConfirm',
+		            inputType: 'password',
+		            fieldLabel: '비밀번호확인',
+		            allowBlank: false
+		        },{
+		            xtype: 'textfield',
+		            name: 'sawonPhone',
+		            fieldLabel: '연락처',
+		            allowBlank: false
+		        },{
+		            xtype: 'textfield',
+		            name: 'sawonEmail',
+		            fieldLabel: '이메일',
+		            allowBlank: false
+		        },{
 		            xtype: 'datefield',
-		            name: 'date1',
-		            fieldLabel: 'Date Field'
-		        }, {
-		            xtype: 'timefield',
-		            name: 'time1',
-		            fieldLabel: 'Time Field',
-		            minValue: '1:30 AM',
-		            maxValue: '9:15 PM'
+		            name: 'sawonBirthday',
+		            fieldLabel: '생년월일',
+		            format:'Y-m-d',
+		            editable: false
+		        },{
+		        	xtype: 'radiogroup',
+	            	fieldLabel: '성별',
+	            	//height: 120,
+	            	items: [{
+	            		boxLabel: '남',
+	            		boxLabelAlign: 'after',
+	            		name: 'sawonManWoman',
+	            		checked: true,
+	            		id: 'rdoSawonMan',
+	            		padding: '0 50 0 0',
+	            		
+	            	},{
+	            		boxLabel: '여',
+	            		boxLabelAlign: 'after',
+	            		name: 'sawonManWoman',
+	            		id: 'rdoSawonWoman'
+	            	}]
+		        },{
+		        	xtype: 'radiogroup',
+	            	fieldLabel: '팀리더',
+	            	//height: 120,
+	            	items: [{
+	            		boxLabel: '예',
+	            		boxLabelAlign: 'after',
+	            		name: 'sawonTeamLeader',
+	            		id: 'rdoSawonTeamLeaderY',
+	            		padding: '0 50 0 0',
+	            		
+	            	},{
+	            		boxLabel: '아니오',
+	            		boxLabelAlign: 'after',
+	            		checked: true,
+	            		name: 'sawonTeamLeader',
+	            		id: 'rdoSawonTeamLeaderN'
+	            	}]
 		        }]
 		});
 	}
@@ -117,7 +196,7 @@ Ext.onReady(function() {
 	
 	function reg() {
 		regWin = Ext.create('Ext.window.Window', {
-			title: '사원등록',
+			title: '동림피엔디 로그인',
 			width: 500,
 			height: 500,
 			closeAction: 'destroy',
@@ -136,7 +215,12 @@ Ext.onReady(function() {
 			    handler: function() {
 			    	regWin.close();
 		        }
-			}]
+			}],
+			listeners: {
+				destroy: function() {
+					departmentChanged = true;
+				}
+			}
 		}).show();
 	}
 	
@@ -220,7 +304,7 @@ Ext.onReady(function() {
 	Ext.EventManager.onWindowResize(function(w, h) {
 		var wins = [loginWin, regWin];
 		for(var x=0; x<2; x++) {
-			if(wins[x] != null) {
+			if(wins[x] != null && wins[x].isVisible()) {
 				resize(w, h, wins[x]);
 			}
 		}

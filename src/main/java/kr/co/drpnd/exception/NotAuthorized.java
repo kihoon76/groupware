@@ -1,4 +1,4 @@
-package kr.co.drpnd.exceptions;
+package kr.co.drpnd.exception;
 
 import org.springframework.security.core.AuthenticationException;
 

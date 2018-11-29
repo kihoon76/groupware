@@ -14,7 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import kr.co.drpnd.exceptions.NotAuthorized;
+import kr.co.drpnd.exception.NotAuthorized;
 
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider{

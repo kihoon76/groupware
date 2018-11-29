@@ -16,7 +16,7 @@
 	}
 	</style>
 </head>
-<body>
+<body data-url="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}">
 	<script src="/resources/core/ver/4.1.1-rc2/js/ext-all.js"></script>
 	
 	<!-- locale -->

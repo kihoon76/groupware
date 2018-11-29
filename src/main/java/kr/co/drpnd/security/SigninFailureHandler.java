@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 import com.google.gson.Gson;
 
 import kr.co.drpnd.domain.AjaxVO;
-import kr.co.drpnd.exceptions.NotAuthorized;
+import kr.co.drpnd.exception.NotAuthorized;
 
 @Component
 public class SigninFailureHandler extends SimpleUrlAuthenticationFailureHandler{

@@ -7,102 +7,165 @@ import org.apache.ibatis.type.Alias;
 @Alias("Sawon")
 public class Sawon {
 
-	private String code;
-	private String num;
-	private String name;
-	private String password;
-	private String phone;
-	private String email;
-	private String ipsaDate;
-	private String booseo;
-	private String jiggeub;
+	private String sawonCode;
+	private String sawonName;
+	private String sawonDepartment;
+	private String sawonTeam;
+	private String sawonPosition;
+	private String sawonId;
+	private String sawonPassword;
+	private String sawonPhone;
+	private String sawonEmail;
+	private String sawonBirthday;
+	private String sawonManWoman;
+	private boolean sawonQuit;
+	private boolean sawonTeamLeader;
+	private String sawonQuitDay;
+	private String regDate;
+
 	
 	private List<Authority> authorities;
+	private List<Team> manageTeams;
 	
 	public List<Authority> getAuthorities() {
 		return authorities;
 	}
 
-	public String getCode() {
-		return code;
+	public String getSawonCode() {
+		return sawonCode;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
+	public void setSawonCode(String sawonCode) {
+		this.sawonCode = sawonCode;
 	}
 
-	public String getName() {
-		return name;
+	public String getSawonName() {
+		return sawonName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setSawonName(String sawonName) {
+		this.sawonName = sawonName;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getSawonDepartment() {
+		return sawonDepartment;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setSawonDepartment(String sawonDepartment) {
+		this.sawonDepartment = sawonDepartment;
 	}
 
-	public String getPhone() {
-		return phone;
+	public String getSawonTeam() {
+		return sawonTeam;
 	}
 
-	public void setPhone(String phone) {
-		this.phone = phone;
+	public void setSawonTeam(String sawonTeam) {
+		this.sawonTeam = sawonTeam;
 	}
 
-	public String getEmail() {
-		return email;
+	public String getSawonPosition() {
+		return sawonPosition;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setSawonPosition(String sawonPosition) {
+		this.sawonPosition = sawonPosition;
 	}
 
-	public String getIpsaDate() {
-		return ipsaDate;
+	public String getSawonId() {
+		return sawonId;
 	}
 
-	public void setIpsaDate(String ipsaDate) {
-		this.ipsaDate = ipsaDate;
+	public void setSawonId(String sawonId) {
+		this.sawonId = sawonId;
+	}
+
+	public String getSawonPassword() {
+		return sawonPassword;
+	}
+
+	public void setSawonPassword(String sawonPassword) {
+		this.sawonPassword = sawonPassword;
+	}
+
+	public String getSawonPhone() {
+		return sawonPhone;
+	}
+
+	public void setSawonPhone(String sawonPhone) {
+		this.sawonPhone = sawonPhone;
+	}
+
+	public String getSawonEmail() {
+		return sawonEmail;
+	}
+
+	public void setSawonEmail(String sawonEmail) {
+		this.sawonEmail = sawonEmail;
+	}
+
+	public String getSawonBirthday() {
+		return sawonBirthday;
+	}
+
+	public void setSawonBirthday(String sawonBirthday) {
+		this.sawonBirthday = sawonBirthday;
+	}
+
+	public String getSawonManWoman() {
+		return sawonManWoman;
+	}
+
+	public void setSawonManWoman(String sawonManWoman) {
+		this.sawonManWoman = sawonManWoman;
+	}
+	public boolean isSawonQuit() {
+		return sawonQuit;
+	}
+
+	public void setSawonQuit(boolean sawonQuit) {
+		this.sawonQuit = sawonQuit;
+	}
+
+	public boolean isSawonTeamLeader() {
+		return sawonTeamLeader;
+	}
+
+	public void setSawonTeamLeader(boolean sawonTeamLeader) {
+		this.sawonTeamLeader = sawonTeamLeader;
+	}
+
+	public String getSawonQuitDay() {
+		return sawonQuitDay;
+	}
+
+	public void setSawonQuitDay(String sawonQuitDay) {
+		this.sawonQuitDay = sawonQuitDay;
+	}
+
+	public String getRegDate() {
+		return regDate;
+	}
+
+	public void setRegDate(String regDate) {
+		this.regDate = regDate;
+	}
+
+	public List<Team> getManageTeams() {
+		return manageTeams;
+	}
+
+	public void setManageTeams(List<Team> manageTeams) {
+		this.manageTeams = manageTeams;
 	}
 
 	public void setAuthorities(List<Authority> authorities) {
 		this.authorities = authorities;
 	}
 
-	public String getBooseo() {
-		return booseo;
-	}
-
-	public void setBooseo(String booseo) {
-		this.booseo = booseo;
-	}
-
-	public String getJiggeub() {
-		return jiggeub;
-	}
-
-	public void setJiggeub(String jiggeub) {
-		this.jiggeub = jiggeub;
-	}
-
-	public String getNum() {
-		return num;
-	}
-
-	public void setNum(String num) {
-		this.num = num;
-	}
-	
 	@Override
 	public boolean equals(Object o) {
 		 if (o instanceof Sawon) {
-            return num.equals(((Sawon) o).getNum());
+            return sawonCode.equals(((Sawon) o).getSawonCode());
         }
 		 
         return false;
@@ -110,7 +173,7 @@ public class Sawon {
 	
 	@Override
 	public int hashCode() {
-		return num.hashCode();
+		return sawonCode.hashCode();
 	}
 	
 }

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mappers.codeMapper">
+	
+		
+	<resultMap id="RM_Department" type="Department">
+		<result column="부서코드"		property="departmentCode"	javaType="string"/>
+		<result column="부서명"		property="departmentName"	javaType="string"/>
+	</resultMap>
+	
+	<resultMap id="RM_Team" type="Team">
+		<result column="팀코드"		property="teamCode"			javaType="string"/>
+		<result column="팀명"			property="teamName"			javaType="string"/>
+	</resultMap>
+	
+	<resultMap id="RM_Position" type="Position">
+		<result column="직급코드"		property="positionCode"			javaType="string"/>
+		<result column="직급명"		property="positionName"			javaType="string"/>
+	</resultMap>
+	
+	<select id="selectDepartment" resultMap="RM_Department">
+		select 부서코드, 부서명 
+		  from [동림].[dbo].[부서]
+	</select>
+	
+	<select id="selectTeam"  parameterType="string"  resultMap="RM_Team">
+		select 팀코드, 팀명 
+		  from [동림].[dbo].[팀]
+		 where 부서코드 = #{departmentCode}
+	</select>
+	
+	<select id="selectPosition" resultMap="RM_Position">
+		select 직급코드, 직급명 
+		  from [동림].[dbo].[직급]
+	</select>
+	
+	
+</mapper>
