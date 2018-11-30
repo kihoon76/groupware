@@ -1,3 +1,7 @@
+/*
+ * For example, if it's something your class instantiates Foo in the constructor, then it should be in requires.
+   If it instantiates Foo in some method that might get called later by the developer, it could go in uses.
+ * */
 Ext.define('Drpnd.util.CommonFn', {
 	 singleton : true
 	,uses: ['Drpnd.util.Constants']
@@ -85,6 +89,81 @@ Ext.define('Drpnd.util.CommonFn', {
 //	    getUserIP(function(ip){
 //		    alert("Got IP! :" + ip);
 //		});
+	},
+	validEmail: function(val) {
+		var re =  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; 
+		return re.test(val);
+	},
+	ajax: function(param) {
+		var Constants = Drpnd.util.Constants;
+		var context = Constants.context;
+		
+		var config = {};
+		if(!param) throw new Error('파라미터 객체없음');
+		if(!param.url) throw new Error('url not found');
+		
+		var myMask = null;
+		
+		config.url = context + param.url;
+		config.method = (param.method || 'GET').toUpperCase();
+		config.timeout = param.timeout || Constants.ajaxTimeout;
+		
+		if(param.params) config.params = param.params;
+		if(param.headers) config.headers = param.headers;
+		if(param.jsonData) config.jsonData = param.jsonData;
+		
+		config.success = function(response) {
+			try {
+				var jo = Ext.decode(response.responseText);
+				var errCode = jo.errCode;
+				
+				//중복로그인 세션 체크
+				if(!jo.success) {
+					if(errCode == '202') {
+						Ext.Msg.alert('', '중복로그인이  발생했습니다.', function() {
+							window.location.href = context + '/signin';
+						});
+						return;
+					}
+				}
+				
+				if(param.success) {
+					param.success(jo);
+				}
+				
+			}
+			catch(e) {
+				if(!Ext.String.trim(response.responseText).startsWith('{')) {
+					//html로 간주
+					Ext.Msg.alert('', '세션만료 되었습니다.', function() {
+						window.location.href = context + '/signin';
+					});
+				}
+			}
+			finally {
+				if(myMask) myMask.hide();
+			}
+		}
+		
+		config.failure = function(response) {
+			if(myMask) myMask.hide();
+			Ext.Msg.alert('', '오류가 발생했습니다.');
+			
+			if(param.failure) param.failure(response);
+		}
+		
+		if(param.loadmask) {
+			if(typeof param.loadmask === 'boolean') {
+				myMask = new Ext.LoadMask(Ext.getBody(), {msg: 'loading..'});
+			}
+			else {
+				myMask = new Ext.LoadMask(param.loadmask.el, {msg: param.loadmask.msg});
+			}
+			
+			myMask.show();
+		}
+		
+		Ext.Ajax.request(config);
 	}
    
 });

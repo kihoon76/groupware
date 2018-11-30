@@ -16,6 +16,7 @@
 	<resultMap id="RM_Position" type="Position">
 		<result column="직급코드"		property="positionCode"			javaType="string"/>
 		<result column="직급명"		property="positionName"			javaType="string"/>
+		<result column="직급구별"		property="positionGubun"		javaType="string"/>
 	</resultMap>
 	
 	<select id="selectDepartment" resultMap="RM_Department">
@@ -30,7 +31,7 @@
 	</select>
 	
 	<select id="selectPosition" resultMap="RM_Position">
-		select 직급코드, 직급명 
+		select 직급코드, 직급명, 직급구별
 		  from [동림].[dbo].[직급]
 	</select>
 	

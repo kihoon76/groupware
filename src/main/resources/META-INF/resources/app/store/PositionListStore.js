@@ -16,6 +16,6 @@ Ext.define('Drpnd.store.PositionListStore', {
 	    	   }
 	       }
 	  },
-	  fields : ['positionCode', 'positionName'],
+	  fields : ['positionCode', 'positionName', 'positionGubun'],
 	  //autoLoad : true,
 });

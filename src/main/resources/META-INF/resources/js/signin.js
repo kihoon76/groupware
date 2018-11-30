@@ -3,13 +3,20 @@ Ext.Loader.setConfig({
 	disableCaching: false,
 	paths: {
 		'Drpnd.store': '/resources/app/store',
-		'Drpnd.util': '/resources/app/util/'
+		'Drpnd.util': '/resources/app/util',
+		'Drpnd.custom': '/resources/app/custom'
 	}
 });
 
-Ext.require('Drpnd.util.CommonFn');
+Ext.require([
+	'Drpnd.util.CommonFn',
+	//'Drpnd.custom.SawonRegForm'
+]);
 
 Ext.onReady(function() {
+	var CommonFn = Drpnd.util.CommonFn;
+	var SawonRegForm = Ext.create('Drpnd.custom.SawonRegForm');
+	
 	function submit() {
 		var form = Ext.getCmp('form').getForm();
     	if (form.isValid()) {
@@ -43,17 +50,32 @@ Ext.onReady(function() {
 	}
 	
 	var regWin = null;
-	var departmentChanged = true;
 	
-	function eventHandlerDepartment(combo, records) {
-		var comboTeam = Ext.getCmp('comboTeam');
-		if(comboTeam.isDisabled()) comboTeam.setDisabled(false);
+	function sendRegForm() {
+		//SawonRegForm.getDepartmentCombo().markInvalid('부서를 선택');
+		console.log(SawonRegForm.isValid());
 		
-		var departmentCode = combo.getValue();
-		departmentChanged = true;
-		
-		comboTeam.clearValue();
-		comboTeam.getStore().setPCode(departmentCode);
+//		CommonFn.ajax({
+//			url: '/coupon/regJehu',
+//			method:'POST',
+//			headers: { 'Content-Type': 'application/json' }, 
+//			jsonData: {
+//				jehuName: jehuName
+//			},
+//			timeout:60000,
+//			success: function(jo) {
+//				
+//				if(jo.success) {
+//					Ext.Msg.alert('', '업체가 등록 되었습니다.', function() {
+//						regJehuWin.close();
+//					});
+//					
+//				}
+//				else {
+//					Ext.Msg.alert('에러', jo.errMsg);
+//				}
+//			}
+//		});
 	}
 	
 	function getForm() {
@@ -78,11 +100,13 @@ Ext.onReady(function() {
 		            displayField: 'departmentName',
 		            valueField: 'departmentCode',
 		            editable: false,
-		            allowBlank: false,
 		            store: Ext.create('Drpnd.store.DepartmentListStore'),
 		            listeners: {
+		            	afterrender: function(combo) {
+		            		SawonRegForm.setDepartmentCombo(combo);
+		            	},
 		            	select: function(combo, records) {
-		            		eventHandlerDepartment(combo, records);
+		            		SawonRegForm.onSelectDepartmentCombo(); 
 		            	}
 		            }
 		        },{
@@ -94,14 +118,16 @@ Ext.onReady(function() {
 		            displayField: 'teamName',
 		            valueField: 'teamCode',
 		            editable: false,
-		            allowBlank: false,
 		            store: Ext.create('Drpnd.store.TeamListStore'),
 		            disabled: true,
 		            listeners: {
+		            	afterrender: function(combo) {
+		            		SawonRegForm.setTeamCombo(combo);
+		            	},
 		            	beforequery: function(qe) {
-		            		if(departmentChanged) {
+		            		if(SawonRegForm.getDepartmentChanged()) {
 		            			delete qe.combo.lastQuery;
-		            			departmentChanged = false;
+		            			SawonRegForm.setDepartmentChanged(false);
 		            		}
 		            	}
 		            }
@@ -113,46 +139,83 @@ Ext.onReady(function() {
 		            displayField: 'positionName',
 		            valueField: 'positionCode',
 		            editable: false,
-		            allowBlank: false,
-		            store: Ext.create('Drpnd.store.PositionListStore')
+		            store: Ext.create('Drpnd.store.PositionListStore'),
+		            listeners: {
+		            	afterrender: function(combo) {
+		            		SawonRegForm.setPositionCombo(combo);
+		            	},
+		            	select: function(combo, records) {
+		            		SawonRegForm.setImwon(records[0].data.positionGubun);
+		            	}
+		            	
+		            }
 		        },{
 		            xtype: 'textfield',
 		            name: 'sawonName',
 		            fieldLabel: '사원명',
-		            allowBlank: false
+		            listeners: {
+		            	afterrender: function(txt) {
+		            		SawonRegForm.setNameTxt(txt);
+		            	}
+		            }
 		        },{
 		            xtype: 'textfield',
 		            name: 'sawonId',
 		            fieldLabel: '아이디',
-		            allowBlank: false
+		            listeners: {
+		            	afterrender: function(txt) {
+		            		SawonRegForm.setIdTxt(txt);
+		            	}
+		            }
 		        },{
 		            xtype: 'textfield',
 		            name: 'sawonPassword',
 		            inputType: 'password',
 		            fieldLabel: '비밀번호',
-		            allowBlank: false
+		            listeners: {
+		            	afterrender: function(txt) {
+		            		SawonRegForm.setPwTxt(txt);
+		            	}
+		            }
 		        },{
 		            xtype: 'textfield',
 		            id: 'passwordConfirm',
 		            inputType: 'password',
 		            fieldLabel: '비밀번호확인',
-		            allowBlank: false
+		            listeners: {
+		            	afterrender: function(txt) {
+		            		SawonRegForm.setPwConfirmTxt(txt);
+		            	}
+		            }
 		        },{
 		            xtype: 'textfield',
 		            name: 'sawonPhone',
 		            fieldLabel: '연락처',
-		            allowBlank: false
+		            listeners: {
+		            	afterrender: function(txt) {
+		            		SawonRegForm.setPhoneTxt(txt);
+		            	}
+		            }
 		        },{
 		            xtype: 'textfield',
 		            name: 'sawonEmail',
 		            fieldLabel: '이메일',
-		            allowBlank: false
+		            listeners: {
+		            	afterrender: function(txt) {
+		            		SawonRegForm.setEmailTxt(txt);
+		            	}
+		            }
 		        },{
 		            xtype: 'datefield',
 		            name: 'sawonBirthday',
 		            fieldLabel: '생년월일',
 		            format:'Y-m-d',
-		            editable: false
+		            editable: false,
+		            listeners: {
+		            	afterrender: function(date) {
+		            		SawonRegForm.setBirthdayDate(date);
+		            	}
+		            }
 		        },{
 		        	xtype: 'radiogroup',
 	            	fieldLabel: '성별',
@@ -164,13 +227,20 @@ Ext.onReady(function() {
 	            		checked: true,
 	            		id: 'rdoSawonMan',
 	            		padding: '0 50 0 0',
+	            		_value: 'M'
 	            		
 	            	},{
 	            		boxLabel: '여',
 	            		boxLabelAlign: 'after',
 	            		name: 'sawonManWoman',
-	            		id: 'rdoSawonWoman'
-	            	}]
+	            		id: 'rdoSawonWoman',
+	            		_value: 'W'
+	            	}],
+	            	listeners: {
+		            	afterrender: function(rdoGrp) {
+		            		SawonRegForm.setManWomanRdoGrp(rdoGrp);
+		            	}
+		            }
 		        },{
 		        	xtype: 'radiogroup',
 	            	fieldLabel: '팀리더',
@@ -188,7 +258,12 @@ Ext.onReady(function() {
 	            		checked: true,
 	            		name: 'sawonTeamLeader',
 	            		id: 'rdoSawonTeamLeaderN'
-	            	}]
+	            	}],
+	            	listeners: {
+		            	afterrender: function(rdoGrp) {
+		            		SawonRegForm.setTeamLeaderRdoGrp(rdoGrp);
+		            	}
+		            }
 		        }]
 		});
 	}
@@ -208,7 +283,7 @@ Ext.onReady(function() {
 				text: '등록',
 				id: 'btnRegist',
 			    handler: function() {
-			    	
+			    	sendRegForm()
 		        }
 			}, {
 				text: '취소',
@@ -218,7 +293,7 @@ Ext.onReady(function() {
 			}],
 			listeners: {
 				destroy: function() {
-					departmentChanged = true;
+					SawonRegForm.initSetting();
 				}
 			}
 		}).show();
