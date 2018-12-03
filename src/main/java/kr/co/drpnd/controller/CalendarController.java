@@ -84,7 +84,7 @@ public class CalendarController {
 			param.put("startDate", startDate);
 			param.put("endDate", endDate);
 			param.put("cate", category);
-			param.put("sawonCode", sawon.getCode());
+			param.put("sawonCode", sawon.getSawonCode());
 			
 			Map<String, List<Map<String, Object>>> m = calendarService.getCalendarData(param);
 			vo.addObject(m);

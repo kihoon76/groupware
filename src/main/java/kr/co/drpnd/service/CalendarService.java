@@ -36,7 +36,7 @@ public class CalendarService {
 		List<CalendarEvent> delL = null;
 		
 		Sawon sawon = SessionUtil.getSessionSawon();
-		String sawonCode = sawon.getCode();
+		String sawonCode = sawon.getSawonCode();
 		
 		for(CalendarEvent cal : list) {
 			if(cal.isNew()) { //새로 추가된 것

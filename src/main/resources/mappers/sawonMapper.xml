@@ -3,24 +3,24 @@
 <mapper namespace="mappers.sawonMapper">
 	
 	<resultMap id="RM_selectSawon" type="Sawon">
-		<result column="사원코드" property="code" javaType="string"/>
-		<result column="사원번호" property="num" javaType="string" />
-		<result column="사원명" property="name" javaType="string"/>
-		<result column="비밀번호" property="password" javaType="string"/>
-		<result column="부서명" property="booseo" javaType="string"/>
-		<result column="직급명" property="jiggeub" javaType="string"/>
+		<result column="사원코드" property="sawonCode" javaType="string"/>
+		<result column="사원아이디" property="sawonId" javaType="string" />
+		<result column="사원명" property="sawonName" javaType="string"/>
+		<result column="비밀번호" property="sawonPassword" javaType="string"/>
+		<result column="부서코드" property="sawonDepartment" javaType="string"/>
+		<result column="직급코드" property="sawonPosition" javaType="string"/>
 	 	<collection property="authorities" column="사원코드" javaType="java.util.ArrayList"
 	 				ofType="Authority" select="selectAuthorities" />
 	</resultMap>
 	
 	<select id="selectSawonInfo" parameterType="string" resultMap="RM_selectSawon">
-		select 사원코드, 사원번호, 사원명, 비밀번호, t2.직급명, t3.부서명 
+		select 사원코드, 사원아이디, 사원명, 비밀번호, t2.직급명, t3.부서명 
 		  from [동림].[dbo].[사원] t1
 		  left outer join [동림].[dbo].[직급] t2
 		    on t1.직급코드 = t2.직급코드
 		  left outer join [동림].[dbo].[부서] t3
 		    on t1.부서코드 = t3.부서코드
-		 where 사원번호 = #{sawonNum}
+		 where 사원아이디 = #{sawonId}
 	</select>
 	
 	<select id="selectAuthorities" parameterType="string" resultType="Authority">
@@ -30,4 +30,20 @@
 		    on a.[권한번호] = b.[권한번호]
 		 where a.[사원코드] = #{sawonCode}
 	</select>
+	
+	<insert id="insertSawon" parameterType="Sawon">
+		insert into [동림].[dbo].[사원] (사원명, 사원아이디, 비밀번호, 연락처, 이메일, 생년월일, 직급코드, 부서코드, 팀코드, 팀리더, 시스템등록일)
+		values (
+			#{sawonName},
+			#{sawonId},
+			#{sawonPassword},
+			#{sawonPhone},
+			#{sawonEmail},
+			#{sawonBirthday},
+			#{sawonPosition},
+			#{sawonDepartment},
+			#{sawonTeam},
+			#{sawonTeamLeader},
+			getDate())
+	</insert>
 </mapper>

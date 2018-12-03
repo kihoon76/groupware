@@ -6,4 +6,6 @@ public interface SawonDao {
 
 	Sawon selectSawonInfo(String username);
 
+	int insertSawon(Sawon sawon);
+
 }

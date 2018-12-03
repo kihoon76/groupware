@@ -94,6 +94,10 @@ Ext.define('Drpnd.util.CommonFn', {
 		var re =  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; 
 		return re.test(val);
 	},
+	validPhone: function(val) {
+		var re = /^\d{3}-\d{3,4}-\d{4}$/;
+		return re.test(val);
+	},
 	ajax: function(param) {
 		var Constants = Drpnd.util.Constants;
 		var context = Constants.context;

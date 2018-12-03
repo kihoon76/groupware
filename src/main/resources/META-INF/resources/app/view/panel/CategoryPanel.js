@@ -11,6 +11,11 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
     	    	 root : {
     	    		  expanded : true
 					 ,children : [{
+						 text: '근태관리', expand: true, iconCls : 'tree-expand'
+						,children : [{
+							text: '근태리스트', leaf : true, cate : 'guntae', id : 'cate-guntae-list'
+						}]
+					 }, {
 						 text: '사원관리', expand: true, iconCls : 'tree-expand'
 						,children : [{
 							text: '사원리스트', leaf : true, cate : 'sawon', id : 'cate-sawon-list'

@@ -16,4 +16,8 @@ public class SawonService {
 	public Sawon getSawonInfo(String username) {
 		return sawonDao.selectSawonInfo(username);
 	}
+
+	public boolean regist(Sawon sawon) {
+		return 1 == sawonDao.insertSawon(sawon);
+	}
 }

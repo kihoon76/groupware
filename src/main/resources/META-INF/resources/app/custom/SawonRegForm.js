@@ -7,17 +7,21 @@ Ext.define('Drpnd.custom.SawonRegForm', function(){
 		POSITION_MSG = '직급을 선택해 주세요',
 		NAME_MSG = '사원명을 입력해 주세요',
 		ID_MSG = '아이디를 입력해 주세요',
+		ID_DUP_MSG = '중복된 아이디 입니다.',
 		PW_MSG = '비밀번호를 입력해주세요',
 		PW_CONFIRM_MSG = '비밀번호가 일치하지 않습니다.',
+		PHONE_BLK_MSG = '연락처를 입력해 주세요.',
+		PHONE_FRM_MSG = '연락처 형식이 올바르지 않습니다. (010-XXXX-XXXX)',
 		EMAIL_BLK_MSG = '이메일을 입력해 주세요.',
-		EMAIL_FRM_MSG = '이메일형식이 올바르지 않습니다.';
+		EMAIL_FRM_MSG = '이메일형식이 올바르지 않습니다.',
+		BIRTHDAY_MSG = '생년월일을 입력하세요.';
 	
 	function markInvalid(component, msg) {
 		component.markInvalid(msg);
 	}
 	
-	function validBlank(component, msg) {
-		var v = component.getValue();
+	function validBlank(component, msg, isDate) {
+		var v = isDate ? component.getRawValue() : component.getValue();
 		v = (v != null) ? trim(v) : v;
 		
 		if(!v) {
@@ -26,6 +30,10 @@ Ext.define('Drpnd.custom.SawonRegForm', function(){
 		}
 		
 		return true;
+	}
+	
+	function validIdDuplicate(idTxt) {
+		markInvalid(idTxt, ID_DUP_MSG);
 	}
 	
 	function validDepartmentCombo(departmentCombo) {
@@ -77,6 +85,22 @@ Ext.define('Drpnd.custom.SawonRegForm', function(){
 		return true;
 	}
 	
+	function validPhoneTxt(phoneTxt) {
+		var v = phoneTxt.getValue();
+		
+		if(v == '010-') {
+			markInvalid(phoneTxt, PHONE_BLK_MSG);
+			return false;
+		}
+		
+		if(CommonFn.validPhone(v)) {
+			return true;
+		}
+		
+		markInvalid(phoneTxt, PHONE_FRM_MSG);
+		return false;
+	}
+	
 	function validEmailTxt(emailTxt) {
 		if(validBlank(emailTxt, EMAIL_BLK_MSG)) {
 			var v = trim(emailTxt.getValue());
@@ -89,6 +113,10 @@ Ext.define('Drpnd.custom.SawonRegForm', function(){
 		}
 		
 		return false;
+	}
+	
+	function vaildBirthdayDate(birthdayDate) {
+		return validBlank(birthdayDate, BIRTHDAY_MSG, true);
 	}
 	
 	return {
@@ -110,12 +138,17 @@ Ext.define('Drpnd.custom.SawonRegForm', function(){
 		},
 		getJsonParam: function() {
 			return {
-				sawonName: this.nameTxt.getValue(),
+				sawonName: trim(this.nameTxt.getValue()),
 				sawonDepartment: this.departmentCombo.getValue(),
 				sawonTeam: this.teamCombo.getValue(),
 				sawonPosition: this.positionCombo.getValue(),
-				sawonId: this.idTxt.getValue(),
-				sawonManWoman: (this.manWomanRdoGrp.getChecked())[0]._value
+				sawonId: trim(this.idTxt.getValue()),
+				sawonPassword: trim(this.pwTxt.getValue()),
+				sawonPhone: trim(this.phoneTxt.getValue()),
+				sawonEmail: trim(this.emailTxt.getValue()),
+				sawonBirthday: trim(this.birthdayDate.getRawValue()),
+				sawonManWoman: (this.manWomanRdoGrp.getChecked())[0]._value,
+				sawonTeamLeader: (this.teamLeaderRdoGrp.getChecked())[0]._value
 			}
 		},
 		isValid: function() {
@@ -125,7 +158,9 @@ Ext.define('Drpnd.custom.SawonRegForm', function(){
 				   vaildNameTxt(this.nameTxt) &&
 				   validIdTxt(this.idTxt) && 
 				   validPwTxt(this.pwTxt, this.pwConfirmTxt) &&
-				   validEmailTxt(this.emailTxt);
+				   validPhoneTxt(this.phoneTxt) &&
+				   validEmailTxt(this.emailTxt) &&
+				   vaildBirthdayDate(this.birthdayDate);
 		},
 		adjustTeamCombo: function() {
 			//부서 값이 없으면  무조건 비활성, 직급이 임원이면 비활성
@@ -159,6 +194,9 @@ Ext.define('Drpnd.custom.SawonRegForm', function(){
 		initSetting: function() {
 			isImwon = false;
 			this.setDepartmentChanged(true);
+		},
+		validIdDuplicate: function() {
+			validIdDuplicate(this.idTxt)
 		}
 	}
 });

@@ -19,12 +19,12 @@ public class UserDetailsImpl implements UserDetails {
 	
 	@Override
 	public String getPassword() {
-		return sawon.getPassword();
+		return sawon.getSawonPassword();
 	}
 
 	@Override
 	public String getUsername() {
-		return sawon.getNum();
+		return sawon.getSawonCode();
 	}
 
 	@Override

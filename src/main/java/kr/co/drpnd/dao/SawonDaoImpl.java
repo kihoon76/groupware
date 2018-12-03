@@ -20,4 +20,10 @@ public class SawonDaoImpl implements SawonDao {
 		return msSqlSession.selectOne(namespace + ".selectSawonInfo", username);
 	}
 
+	@Override
+	public int insertSawon(Sawon sawon) {
+		return msSqlSession.insert(namespace + ".insertSawon", sawon);
+		
+	}
+
 }
