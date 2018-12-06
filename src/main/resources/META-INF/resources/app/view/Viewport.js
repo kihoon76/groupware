@@ -1,6 +1,10 @@
 Ext.define('Drpnd.view.Viewport', {
     extend : 'Ext.container.Viewport'
+   ,requires: ['Drpnd.util.CommonFn', 'Drpnd.util.Html']
    ,initComponent: function(){
+	    var CommonFn = Drpnd.util.CommonFn;
+	    var Html = Drpnd.util.Html;
+	    
         Ext.apply(this, {
             id     : 'app-viewport'
            ,layout : {
@@ -19,7 +23,7 @@ Ext.define('Drpnd.view.Viewport', {
                ,region : 'north'
 			   ,height : 50
 			   ,items: [{
-				   html:'<span><img src="resources/images/logo.png" style="width:54px; height:40px"></span>'
+				   html: Html.logo
 			   }, 
 			   '->', {
 					xtype: 'button',
@@ -29,40 +33,28 @@ Ext.define('Drpnd.view.Viewport', {
 					height: 30,
 					listeners: {
 						click: function() {
-							
 							Ext.Msg.confirm(
 								'로그아웃',
 								'로그아웃 하시겠습니까?',
 								function(button) {
 									if(button == 'yes') {
-										var url = Ext.getBody().getAttribute('data-url');
-										Ext.Ajax.request({
-											url: url + '/logout',
-											method: 'GET',
-											success:function(res) {
-												try {
-													var data = JSON.parse(res.responseText);
-													if(data.success) {
-														window.location.href = url;
-													}
-													else {
-														Ext.MessageBox.alert('info', '로그아웃에 실패했습니다.');
-													}
+										CommonFn.ajax({
+											url: '/logout',
+											method:'GET',
+											success: function(jo) {
+												if(jo.success) {
+													window.location.href = CommonFn.getFullUrl(); 
 												}
-												catch(e) {
-													throw e;
+												else {
+													Ext.MessageBox.alert('info', '로그아웃에 실패했습니다.');
 												}
 											},
-											failure: function() {
-												Ext.MessageBox.alert('info', '로그아웃에 실패했습니다.');
-											}
 										});
 									}
 								});
 						}
 					}
 			   }]
-               //,html   : '<img src="../../resources/images/asher.png" style="width:200px; height:40px">'
             },{
             	id          : 'app-category'
                ,xtype       : 'categorypanel'

@@ -7,7 +7,8 @@ public class Team {
 
 	private String teamCode;
 	private String teamName;
-	private String teamColor;
+	private String teamFontColor;
+	private String teamBackColor;
 	
 	public String getTeamCode() {
 		return teamCode;
@@ -21,10 +22,17 @@ public class Team {
 	public void setTeamName(String teamName) {
 		this.teamName = teamName;
 	}
-	public String getTeamColor() {
-		return teamColor;
+	public String getTeamFontColor() {
+		return teamFontColor;
 	}
-	public void setTeamColor(String teamColor) {
-		this.teamColor = teamColor;
+	public void setTeamFontColor(String teamFontColor) {
+		this.teamFontColor = teamFontColor;
 	}
+	public String getTeamBackColor() {
+		return teamBackColor;
+	}
+	public void setTeamBackColor(String teamBackColor) {
+		this.teamBackColor = teamBackColor;
+	}
+	
 }

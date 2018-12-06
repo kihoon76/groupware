@@ -15,6 +15,7 @@ public class Sawon {
 	private String sawonId;
 	private String sawonPassword;
 	private String sawonPhone;
+	private String sawonInnerPhone;
 	private String sawonEmail;
 	private String sawonBirthday;
 	private String sawonManWoman;
@@ -160,6 +161,14 @@ public class Sawon {
 
 	public void setAuthorities(List<Authority> authorities) {
 		this.authorities = authorities;
+	}
+
+	public String getSawonInnerPhone() {
+		return sawonInnerPhone;
+	}
+
+	public void setSawonInnerPhone(String sawonInnerPhone) {
+		this.sawonInnerPhone = sawonInnerPhone;
 	}
 
 	@Override

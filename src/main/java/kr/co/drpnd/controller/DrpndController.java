@@ -35,4 +35,16 @@ public class DrpndController {
 		m.addAttribute("errCode", "");
 		return "result";
 	}
+	
+	@GetMapping("drawing")
+	public String drawing() {
+		
+		return "drawing";
+	}
+	
+	@GetMapping("reservation")
+	public String reservate() {
+		
+		return "reservation";
+	}
 }

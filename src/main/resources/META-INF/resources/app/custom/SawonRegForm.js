@@ -130,6 +130,7 @@ Ext.define('Drpnd.custom.SawonRegForm', function(){
 			pwTxt: null,
 			pwConfirmTxt: null,
 			phoneTxt: null,
+			innerPhoneTxt: null,
 			emailTxt: null,
 			birthdayDate: null,
 			manWomanRdoGrp: null,

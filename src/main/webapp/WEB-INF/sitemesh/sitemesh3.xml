@@ -5,6 +5,8 @@
     </content-processor>
 
 	<mapping path="/calendar/view" decorator="/WEB-INF/views/layout/defaultiframe.jsp" />
+	<mapping path="/drawing" decorator="/WEB-INF/views/layout/defaultiframe.jsp" />
+	<mapping path="/reservation" decorator="/WEB-INF/views/layout/defaultiframe.jsp" />
 	<mapping path="/*" decorator="/WEB-INF/views/layout/default.jsp" />
 	<mapping path="/signin" exclude="true" />
 	<mapping path="/result" exclude="true" />
