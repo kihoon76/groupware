@@ -1,5 +1,6 @@
 package kr.co.drpnd.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ import com.google.gson.Gson;
 import kr.co.drpnd.domain.AjaxVO;
 import kr.co.drpnd.domain.CalendarCategory;
 import kr.co.drpnd.domain.CalendarEvent;
+import kr.co.drpnd.domain.ConferenceReservation;
 import kr.co.drpnd.domain.Sawon;
 import kr.co.drpnd.service.CalendarService;
 import kr.co.drpnd.util.DateUtil;
@@ -111,6 +113,37 @@ public class CalendarController {
 		catch(Exception e) {
 			vo.setSuccess(false);
 			vo.setErrMsg(e.getMessage());
+		}
+		
+		return vo;
+	}
+	
+	@PostMapping("/conference/reservation")
+	@ResponseBody
+	public AjaxVO<Map<String, String>> reserveConference(@RequestBody Map<String, String> param) {
+		AjaxVO vo = new AjaxVO<>();
+		
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		
+		ConferenceReservation cr = new ConferenceReservation();
+		cr.setTitle(param.get("title"));
+		cr.setStartTimeFull(param.get("ymd") + " " + param.get("startTime"));
+		cr.setEndTimeFull(param.get("ymd") + " " + param.get("endTime"));
+		cr.setStartTime(param.get("startTime"));
+		cr.setEndTime(param.get("endTime"));
+		cr.setReservationSawonCode(myInfo.getSawonCode());
+		cr.setYmd(param.get("ymd"));
+		
+		System.err.println(cr.getReserveNum());
+		
+		try {
+			calendarService.reserveConference(cr);
+			vo.setSuccess(true);
+			param.put("rnum", cr.getReserveNum());
+			vo.addObject(param);
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
 		}
 		
 		return vo;

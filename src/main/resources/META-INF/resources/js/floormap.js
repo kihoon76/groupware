@@ -17,6 +17,13 @@
 	var seatSpace = recH + cellPhoneH + innerPhoneH + gap;
 	var divH = recH + cellPhoneH + innerPhoneH;
 	var seatMap = [];
+	var TimeObj = {
+		title: null,
+		startTime: null,
+		endTime: null,
+		ymd: ''
+	};
+	var timeSettingWin = null;
 	
 	function Seat(x, y, isSudo) {
 		
@@ -102,7 +109,7 @@
 		});
 		
 		rect.on('click', function() {
-			reservation();
+			viewTimeline();
 		})
 		.on('mouseover', function() {
 			this.fill({ color : recColor, opacity: 0.3})
@@ -120,7 +127,8 @@
 		});
 	}
 	
-	function reservation() {
+	function viewTimeline() {
+		var iframe = parent.Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'reservation' });
 		var reserveWin = parent.Ext.create('Ext.window.Window', {
 			title: '회의실 예약현황',
 			height: 800,
@@ -129,7 +137,7 @@
 			closeAction: 'destroy',
 			modal: true,
 			draggable: false,
-			items: [parent.Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'reservation' })],
+			items: [iframe],
 			dockedItems: [{
 			    xtype: 'toolbar',
 			    dock: 'bottom',
@@ -137,7 +145,13 @@
 			    //defaults: {minWidth: minButtonWidth},
 			    items: [
 			        { xtype: 'component', flex: 1 },
-			        { xtype: 'button', text: '예약하기' },
+			        { xtype: 'button', text: '시간설정', listeners: {
+			        	click: function() {
+			        		//setConferenceTime();
+			        		TimeObj.ymd = $(iframe.el.dom).find('iframe')[0].contentWindow.getCurrentDate();
+			        		setConferenceTime();
+			        	}
+			        } },
 			        { xtype: 'button', text: '닫기', listeners: {
 			        	click: function(btn) {
 			        		reserveWin.close();
@@ -153,6 +167,130 @@
 	
 	}
 	
+	function setConferenceTime() {
+		timeSettingWin = parent.Ext.create('Ext.window.Window', {
+			title: '시간설정(' + TimeObj.ymd + ')',
+			height: 200,
+			width: 400,
+			layout: 'fit',
+			closeAction: 'destroy',
+			modal: true,
+			items: [{
+				xtype: 'form',
+				bodyStyle  : 'padding: 10px;',
+		        margins    : '0 0 0 0',
+		        fieldDefaults: {
+		            msgTarget: 'side',
+		            labelWidth: 85,
+		            anchor: '100%'
+		        },
+		        defaultType: 'textfield',
+		        items: [{
+		        	fieldLabel: '제목',
+		        	id: 'conf-title',
+		        	listeners: {
+		        		afterrender: function(txt) {
+		        			TimeObj.title = txt;
+		        		}
+		        	}
+		        },{
+		        	fieldLabel: '시작시간',
+		        	xtype: 'timefield',
+		        	id: 'conf-start',
+		        	allowBlank: false,
+		        	editable: false,
+		            increment: 30,
+		            format: 'H:i',
+		            minValue: '08:00',
+		            maxValue: '19:00',
+		            listeners: {
+		        		afterrender: function(time) {
+		        			TimeObj.startTime = time;
+		        		}
+		        	}
+				},{
+		        	fieldLabel: '종료시간',
+		        	xtype: 'timefield',
+		        	id: 'conf-end',
+		        	allowBlank: false,
+		        	editable: false,
+		            increment: 30,
+		            format: 'H:i',
+		            minValue: '08:00',
+		            maxValue: '19:00',
+		            listeners: {
+		        		afterrender: function(time) {
+		        			TimeObj.endTime = time;
+		        		}
+		        	}
+				}]
+			}],
+			dockedItems: [{
+			    xtype: 'toolbar',
+			    dock: 'bottom',
+			    ui: 'footer',
+			    //defaults: {minWidth: minButtonWidth},
+			    items: [
+			        { xtype: 'component', flex: 1 },
+			        { xtype: 'button', text: '예약', listeners: {
+			        	click: function() {
+			        		reserve();
+			        	}
+			        } },
+			        { xtype: 'button', text: '닫기', listeners: {
+			        	click: function(btn) {
+			        		timeSettingWin.close();
+			        	}
+			        } }
+			    ]
+			}]  
+		});
+		
+		timeSettingWin.show();
+	}
+	
+	function reserve() {
+		var title = $.trim(TimeObj.title.getValue());
+		var startTime = $.trim(TimeObj.startTime.getRawValue());
+		var endTime = $.trim(TimeObj.endTime.getRawValue());
+		
+		if(title == '') {
+			TimeObj.title.markInvalid('제목을 입력하세요');
+			return;
+		}
+		
+		if(startTime == '') {
+			TimeObj.startTime.markInvalid('시작시간을 선택하세요');
+			return;
+		}
+		
+		if(endTime == '') {
+			TimeObj.endTime.markInvalid('종료시간을 선택하세요');
+			return;
+		}
+		
+		common.ajaxExt({
+			url: '/calendar/conference/reservation',
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' }, 
+			jsonData: {
+				title: title,
+				startTime: startTime,
+				endTime: endTime,
+				ymd: TimeObj.ymd
+			},
+			loadmask: {
+				msg: '예약등록중 입니다.'
+			},
+			success: function(jo) {
+				console.log(jo);
+				if(jo.success) {
+					timeSettingWin.close();
+				}
+			}
+		});
+	}
+	
 	function makeSeat() {
 		var row2Y = seatSpace;
 		var div1Y = row2Y + divH;
@@ -161,6 +299,7 @@
 		var div2Y = row4Y + divH;
 		var row5Y = div2Y + linePadding + lineWidth;
 		var row6Y = row5Y + seatSpace;
+		var div3Y = row6Y + divH;
 		
 		makeRowSeat(4, 0);
 		makeRowSeat(4, row2Y);
@@ -170,6 +309,7 @@
 		drawDivider(0, div2Y, 4, div2Y);
 		makeRowSeat(4, row5Y);
 		makeRowSeat(3, row6Y);
+		drawDivider(0, div3Y, 3, div3Y);
 		var lastY = imwonSeat(4);
 		makeConferenceSeat(window.innerWidth - recW + recPadding, lastY + seatSpace);
 		

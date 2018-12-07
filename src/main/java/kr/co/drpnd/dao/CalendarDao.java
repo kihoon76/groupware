@@ -5,6 +5,7 @@ import java.util.Map;
 
 import kr.co.drpnd.domain.CalendarCategory;
 import kr.co.drpnd.domain.CalendarEvent;
+import kr.co.drpnd.domain.ConferenceReservation;
 
 public interface CalendarDao {
 
@@ -17,5 +18,7 @@ public interface CalendarDao {
 	void updateCalendarEvents(Map<String, Object> m);
 
 	void deleteCalendarEvents(Map<String, Object> m);
+
+	void insertConferenceReservation(ConferenceReservation cr);
 
 }

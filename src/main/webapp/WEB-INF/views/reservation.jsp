@@ -10,6 +10,7 @@
 <script src="/resources/lib/moment.min.js"></script>
 <script src="/resources/os/fullcalendar-3.9.0/fullcalendar.min.js"></script>
 <script src="/resources/os/fullcalendar-3.9.0/locale/ko.js"></script>
+<script src="/resources/js/icommon.js"></script>
 <script src="/resources/js/reservation.js"></script>
 </content>
 <head>

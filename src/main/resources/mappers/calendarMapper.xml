@@ -61,4 +61,20 @@
 		 #{event.id}		  
 		</foreach>
 	</delete>
+	
+	<insert id="insertConferenceReservation" parameterType="ConferenceReservation">
+		insert into [동림].[dbo].[회의실예약] (회의제목, 시작시간_FULL, 종료시간_FULL, 회의년도, 시작시간, 종료시간, 예약자_사원코드)
+		values (
+			#{title},
+			#{startTimeFull}, 
+			#{endTimeFull}, 
+			#{ymd}, 
+			#{startTime}, 
+			#{endTime}, 
+			#{reservationSawonCode}
+		)
+		<selectKey keyProperty="reserveNum" resultType="Integer" order="AFTER">
+        	SELECT IDENT_CURRENT('[동림].[dbo].[회의실예약]')
+    	</selectKey>
+	</insert>
 </mapper>

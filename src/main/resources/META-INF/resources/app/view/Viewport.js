@@ -25,7 +25,17 @@ Ext.define('Drpnd.view.Viewport', {
 			   ,items: [{
 				   html: Html.logo
 			   }, 
-			   '->', {
+			   '->',{
+				   xtype: 'button',
+				   text: '출근처리',
+				   iconCls: 'icon-gotowork'
+			   },{
+				   xtype: 'button',
+				   text: '퇴근처리',
+				   iconCls: 'icon-offwork',
+				   disabled: true,
+				   
+			   },{
 					xtype: 'button',
 					text: '로그아웃',
 					iconCls: 'icon-logout',

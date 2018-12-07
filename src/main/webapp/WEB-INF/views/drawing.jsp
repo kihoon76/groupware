@@ -7,6 +7,7 @@
 <content tag="script">
 <script src="/resources/lib/jquery.min.js"></script>
 <script src="/resources/os/SVG/svg.min.js"></script>
+<script src="/resources/js/icommon.js"></script>
 <script src="/resources/js/floormap.js"></script>
 </content>
 <head>

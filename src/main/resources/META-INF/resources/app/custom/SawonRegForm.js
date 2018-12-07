@@ -12,6 +12,7 @@ Ext.define('Drpnd.custom.SawonRegForm', function(){
 		PW_CONFIRM_MSG = '비밀번호가 일치하지 않습니다.',
 		PHONE_BLK_MSG = '연락처를 입력해 주세요.',
 		PHONE_FRM_MSG = '연락처 형식이 올바르지 않습니다. (010-XXXX-XXXX)',
+		INNER_PHONE_FRM_MSG = '내선번호  형식이 올바르지 않습니다. (0000)-4자리',
 		EMAIL_BLK_MSG = '이메일을 입력해 주세요.',
 		EMAIL_FRM_MSG = '이메일형식이 올바르지 않습니다.',
 		BIRTHDAY_MSG = '생년월일을 입력하세요.';
@@ -101,6 +102,21 @@ Ext.define('Drpnd.custom.SawonRegForm', function(){
 		return false;
 	}
 	
+	function validInnerPhoneTxt(innerPhoneTxt) {
+		var v = trim(innerPhoneTxt.getValue());
+		
+		if(v != '') {
+			if(CommonFn.validInnerPhone(v)) {
+				return true;
+			}
+			
+			markInvalid(innerPhoneTxt, INNER_PHONE_FRM_MSG);
+			return false;
+		}
+		
+		return true;
+	}
+	
 	function validEmailTxt(emailTxt) {
 		if(validBlank(emailTxt, EMAIL_BLK_MSG)) {
 			var v = trim(emailTxt.getValue());
@@ -146,6 +162,7 @@ Ext.define('Drpnd.custom.SawonRegForm', function(){
 				sawonId: trim(this.idTxt.getValue()),
 				sawonPassword: trim(this.pwTxt.getValue()),
 				sawonPhone: trim(this.phoneTxt.getValue()),
+				sawonInnerPhone: trim(this.innerPhoneTxt.getValue()),
 				sawonEmail: trim(this.emailTxt.getValue()),
 				sawonBirthday: trim(this.birthdayDate.getRawValue()),
 				sawonManWoman: (this.manWomanRdoGrp.getChecked())[0]._value,
@@ -160,6 +177,7 @@ Ext.define('Drpnd.custom.SawonRegForm', function(){
 				   validIdTxt(this.idTxt) && 
 				   validPwTxt(this.pwTxt, this.pwConfirmTxt) &&
 				   validPhoneTxt(this.phoneTxt) &&
+				   validInnerPhoneTxt(this.innerPhoneTxt) &&
 				   validEmailTxt(this.emailTxt) &&
 				   vaildBirthdayDate(this.birthdayDate);
 		},

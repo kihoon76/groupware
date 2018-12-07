@@ -220,7 +220,6 @@ Ext.onReady(function() {
 		            xtype: 'textfield',
 		            name: 'sawonInnerPhone',
 		            fieldLabel: '내선번호',
-		            maxLength: 4,
 		            listeners: {
 		            	afterrender: function(txt) {
 		            		SawonRegForm.setInnerPhoneTxt(txt);

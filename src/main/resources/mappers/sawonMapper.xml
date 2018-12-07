@@ -32,12 +32,13 @@
 	</select>
 	
 	<insert id="insertSawon" parameterType="Sawon">
-		insert into [동림].[dbo].[사원] (사원명, 사원아이디, 비밀번호, 연락처, 이메일, 생년월일, 직급코드, 부서코드, 팀코드, 팀리더, 시스템등록일)
+		insert into [동림].[dbo].[사원] (사원명, 사원아이디, 비밀번호, 연락처, 내선번호, 이메일, 생년월일, 직급코드, 부서코드, 팀코드, 팀리더, 시스템등록일)
 		values (
 			#{sawonName},
 			#{sawonId},
 			#{sawonPassword},
 			#{sawonPhone},
+			#{sawonInnerPhone},
 			#{sawonEmail},
 			#{sawonBirthday},
 			#{sawonPosition},

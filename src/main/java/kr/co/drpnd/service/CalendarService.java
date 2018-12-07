@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import kr.co.drpnd.dao.CalendarDao;
 import kr.co.drpnd.domain.CalendarCategory;
 import kr.co.drpnd.domain.CalendarEvent;
+import kr.co.drpnd.domain.ConferenceReservation;
 import kr.co.drpnd.domain.Sawon;
 import kr.co.drpnd.util.SessionUtil;
 
@@ -128,6 +129,11 @@ public class CalendarService {
 
 	public List<CalendarCategory> getCalendarCategory() {
 		return calendarDao.selectCalendarCategory();
+	}
+
+	public void reserveConference(ConferenceReservation cr) {
+		calendarDao.insertConferenceReservation(cr);
+		
 	}
 
 }

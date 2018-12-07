@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import kr.co.drpnd.domain.CalendarCategory;
 import kr.co.drpnd.domain.CalendarEvent;
+import kr.co.drpnd.domain.ConferenceReservation;
 
 @Repository("CalendarDao")
 public class CalendarDaoImpl implements CalendarDao {
@@ -44,6 +45,12 @@ public class CalendarDaoImpl implements CalendarDao {
 	@Override
 	public void deleteCalendarEvents(Map<String, Object> m) {
 		msSqlSession.delete(namespace + ".deleteCalendarEvents", m);
+	}
+
+	@Override
+	public void insertConferenceReservation(ConferenceReservation cr) {
+		msSqlSession.insert(namespace + ".insertConferenceReservation", cr);
+		
 	}
 
 }
