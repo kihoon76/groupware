@@ -9,6 +9,30 @@ $(function() {
 	
 	var delEvents = [];
 	
+	var socket = new SockJS('/websocket'),
+		stompClient = Stomp.over(socket);
+	
+	stompClient.connect({}, function(frame) {
+	    hasConntected = true;
+	    //displayWebSocketConnectionStatus(true, hasConntected);
+	 
+	    stompClient.send('/app/authorization', {}, JSON.stringify({
+	        'key': 'csrfToken',
+	        'value': $('#_csrfToken').val()
+	    }));
+	 
+	    stompClient.subscribe('/message/authentication', function(message){
+	       var m = $.parseJSON(message.body);
+	       console.log(m)
+	    });
+	 
+
+	}, function(error) {
+	   console.log(error)
+	});
+	
+	
+	
 	function initEventSources() {
 		eventSources = {};
 		delEvents.length = 0;

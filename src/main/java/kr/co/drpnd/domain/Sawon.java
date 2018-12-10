@@ -23,6 +23,7 @@ public class Sawon {
 	private boolean sawonTeamLeader;
 	private String sawonQuitDay;
 	private String regDate;
+	private String token;
 
 	
 	private List<Authority> authorities;
@@ -169,6 +170,14 @@ public class Sawon {
 
 	public void setSawonInnerPhone(String sawonInnerPhone) {
 		this.sawonInnerPhone = sawonInnerPhone;
+	}
+	
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 	@Override

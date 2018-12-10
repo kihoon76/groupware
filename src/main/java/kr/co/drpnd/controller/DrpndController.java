@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import kr.co.drpnd.util.DateUtil;
+import kr.co.drpnd.util.SessionUtil;
 import kr.co.drpnd.util.StringUtil;
 
 @RequestMapping("/")
@@ -43,7 +44,11 @@ public class DrpndController {
 	}
 	
 	@GetMapping("reservation")
-	public String reservate() {
+	public String reserve(ModelMap m) {
+		String token = SessionUtil.createToken();
+		SessionUtil.getSessionSawon().setToken(token);
+		
+		m.addAttribute("_csrfToken", token);
 		
 		return "reservation";
 	}

@@ -11,6 +11,9 @@
 <script src="/resources/os/fullcalendar-3.9.0/fullcalendar.min.js"></script>
 <script src="/resources/os/fullcalendar-3.9.0/locale/ko.js"></script>
 <script src="/resources/js/icommon.js"></script>
+
+<script src="/resources/js/sockjs.min.js"></script>
+<script src="/resources/js/stomp.min.js"></script>
 <script src="/resources/js/reservation.js"></script>
 </content>
 <head>
@@ -20,4 +23,5 @@
 </head>
 <body>
 	<div id="reservation"></div>
+	<input type="hidden" id="_csrfToken" value="${_csrfToken}" />
 </body>

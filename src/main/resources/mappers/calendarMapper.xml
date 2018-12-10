@@ -73,7 +73,7 @@
 			#{endTime}, 
 			#{reservationSawonCode}
 		)
-		<selectKey keyProperty="reserveNum" resultType="Integer" order="AFTER">
+		<selectKey keyProperty="reserveNum" resultType="String" order="AFTER">
         	SELECT IDENT_CURRENT('[동림].[dbo].[회의실예약]')
     	</selectKey>
 	</insert>
