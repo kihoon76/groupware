@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import kr.co.drpnd.type.TokenKey;
 import kr.co.drpnd.util.DateUtil;
 import kr.co.drpnd.util.SessionUtil;
 import kr.co.drpnd.util.StringUtil;
@@ -37,19 +38,21 @@ public class DrpndController {
 		return "result";
 	}
 	
-	@GetMapping("drawing")
-	public String drawing() {
-		
-		return "drawing";
+	@GetMapping("floormap")
+	public String floormap(ModelMap m) {
+		createToken(m, TokenKey.FLOORMAP);
+		return "floormap";
 	}
 	
 	@GetMapping("reservation")
 	public String reserve(ModelMap m) {
+		return "reservation";
+	}
+	
+	private void createToken(ModelMap m, TokenKey key) {
 		String token = SessionUtil.createToken();
-		SessionUtil.getSessionSawon().setToken(token);
+		SessionUtil.getSessionSawon().setToken(key, token);
 		
 		m.addAttribute("_csrfToken", token);
-		
-		return "reservation";
 	}
 }

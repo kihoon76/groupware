@@ -8,6 +8,8 @@
 <script src="/resources/lib/jquery.min.js"></script>
 <script src="/resources/os/SVG/svg.min.js"></script>
 <script src="/resources/js/icommon.js"></script>
+<script src="/resources/js/sockjs.min.js"></script>
+<script src="/resources/js/stomp.min.js"></script>
 <script src="/resources/js/floormap.js"></script>
 </content>
 <head>
@@ -18,5 +20,5 @@
 </head>
 <body>
 	<div id="drawing"></div>
-
+	<input type="hidden" id="_csrfToken" value="${_csrfToken}" />
 </body>

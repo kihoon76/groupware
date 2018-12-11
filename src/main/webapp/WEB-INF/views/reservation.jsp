@@ -23,5 +23,4 @@
 </head>
 <body>
 	<div id="reservation"></div>
-	<input type="hidden" id="_csrfToken" value="${_csrfToken}" />
 </body>

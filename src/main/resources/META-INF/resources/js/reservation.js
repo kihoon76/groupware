@@ -8,35 +8,36 @@ $(function() {
 	};
 	
 	var delEvents = [];
+	var calId = '#reservation';
 	
-	var socket = new SockJS('/websocket'),
-		stompClient = Stomp.over(socket);
-	
-	stompClient.connect({}, function(frame) {
-	    hasConntected = true;
-	    //displayWebSocketConnectionStatus(true, hasConntected);
-	 
-	    stompClient.send('/app/authorization', {}, JSON.stringify({
-	        'key': 'csrfToken',
-	        'value': $('#_csrfToken').val()
-	    }));
-	 
-	    stompClient.subscribe('/message/authentication', function(message){
-	       var m = $.parseJSON(message.body);
-	       console.log(m)
-	    });
-	 
-
-	}, function(error) {
-	   console.log(error)
-	});
+//	var socket = new SockJS('/websocket'),
+//		stompClient = Stomp.over(socket);
+//	
+//	stompClient.connect({}, function(frame) {
+//	    hasConntected = true;
+//	    //displayWebSocketConnectionStatus(true, hasConntected);
+//	 
+//	    stompClient.send('/app/authorization', {}, JSON.stringify({
+//	        'key': 'csrfToken',
+//	        'value': $('#_csrfToken').val()
+//	    }));
+//	 
+//	    stompClient.subscribe('/message/authentication', function(message){
+//	       var m = $.parseJSON(message.body);
+//	       console.log(m)
+//	    });
+//	 
+//
+//	}, function(error) {
+//	   console.log(error)
+//	});
 	
 	
 	
 	function initEventSources() {
 		eventSources = {};
 		delEvents.length = 0;
-		$('#reservation').fullCalendar('removeEventSources');
+		$(calId).fullCalendar('removeEventSources');
 		
 		
 		eventSources['default'] = {
@@ -54,8 +55,8 @@ $(function() {
 			reserver: '남기훈'
 		}];
 		
-		$('#reservation').fullCalendar('removeEventSource', eventSources['default']);
-		$('#reservation').fullCalendar('addEventSource', eventSources['default']);
+		$(calId).fullCalendar('removeEventSource', eventSources['default']);
+		$(calId).fullCalendar('addEventSource', eventSources['default']);
 		
 //		common.ajaxExt({
 //    		url: '/calendar/load?startDate=' + calMStart + '&endDate=' + calMEnd + '&cate=' + category,
@@ -80,24 +81,7 @@ $(function() {
 //    	});
 	}
 	
-	function addEvent(event) {
-		var teamId = event.cate;
-		$('#calendar').fullCalendar('removeEventSource', eventSources[teamId]);
-		
-		eventSources[teamId].events.push(event);
-		$('#calendar').fullCalendar('addEventSource', eventSources[teamId]);
-//		if(!eventSource) return;
-//		
-//		eventSource.eventDefs.push(event);
-//		$('#calendar').fullCalendar('renderEvent', event);
-//		
-		
-		isModified = true;
-		console.log($('#calendar').fullCalendar('getEventSources'));
-
-	}
-	
-	$('#reservation').fullCalendar({
+	$(calId).fullCalendar({
 		height: 'auto',
 		defaultView: 'agendaDay',
 		minTime: '08:00:00',
@@ -109,17 +93,36 @@ $(function() {
 		eventRender: function(event, element) {
 			element.find('.fc-title').remove();
 			element.find('.fc-time').remove();
-			var new_description = '회의시간 : ' 
-				+ moment(event.start).format("HH:mm") + ' - '
-		        + moment(event.end).format("HH:mm") + '<br/>'
-		        + '회의제목: ' + event.title + '<br/>'
+			
+			//시간이 1시간 이하면 한줄로
+			var sStart = moment(event.start).format('HH:mm');
+			var sEnd = moment(event.end).format("HH:mm");
+			var diff = parseInt(sEnd.replace(':', '')) - parseInt(sStart.replace(':', ''));
+			var new_description = '';
+			
+			if(diff >= 130) {
+				new_description = '회의시간 : ' 
+				+ sStart + ' - ' + sEnd + '<br/>'
+			    + '회의제목: ' + event.title + '<br/>'
 				+ '예약자: ' +  event.reserver + '<br/>';
-			       
-			    element.append(new_description);
+			}
+			else {
+				new_description = '(' + sStart + ' - ' + sEnd + ') '
+				+ event.title + ' (예약자: ' + event.reserver + ')';
+			}
+
+			element.append(new_description);
 	     }
 	});
 	
 	window.getCurrentDate = function() {
-		return $('#reservation').fullCalendar('getDate').format().substring(0, 10);
+		return $(calId).fullCalendar('getDate').format().substring(0, 10);
+	}
+	
+	window.addEvent = function(event) {
+		$(calId).fullCalendar('removeEventSource', eventSources['default']);
+		
+		eventSources['default'].events.push(event);
+		$(calId).fullCalendar('addEventSource', eventSources['default']);
 	}
 });

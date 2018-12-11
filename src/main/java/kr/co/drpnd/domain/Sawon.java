@@ -1,8 +1,12 @@
 package kr.co.drpnd.domain;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.type.Alias;
+
+import kr.co.drpnd.type.TokenKey;
 
 @Alias("Sawon")
 public class Sawon {
@@ -23,7 +27,7 @@ public class Sawon {
 	private boolean sawonTeamLeader;
 	private String sawonQuitDay;
 	private String regDate;
-	private String token;
+	private Map<TokenKey, String> token = new HashMap<>();
 
 	
 	private List<Authority> authorities;
@@ -172,12 +176,12 @@ public class Sawon {
 		this.sawonInnerPhone = sawonInnerPhone;
 	}
 	
-	public String getToken() {
-		return token;
+	public String getToken(TokenKey key) {
+		return token.get(key);
 	}
 
-	public void setToken(String token) {
-		this.token = token;
+	public void setToken(TokenKey key, String value) {
+		this.token.put(key, value);
 	}
 
 	@Override

@@ -8,6 +8,7 @@ public class AjaxVO<T> {
 	private boolean success;
 	private String errCode;
 	private String errMsg;
+	private String token;
 	private List<T> datas;
 	
 	public AjaxVO() {
@@ -45,5 +46,13 @@ public class AjaxVO<T> {
 
 	public String getErrCode() {
 		return errCode;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 }

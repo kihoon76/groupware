@@ -27,6 +27,7 @@ import kr.co.drpnd.domain.CalendarEvent;
 import kr.co.drpnd.domain.ConferenceReservation;
 import kr.co.drpnd.domain.Sawon;
 import kr.co.drpnd.service.CalendarService;
+import kr.co.drpnd.type.TokenKey;
 import kr.co.drpnd.util.DateUtil;
 import kr.co.drpnd.util.SessionUtil;
 
@@ -128,36 +129,32 @@ public class CalendarController {
 	public AjaxVO<Map<String, String>> reserveConference(@RequestBody Map<String, String> param) {
 		AjaxVO vo = new AjaxVO<>();
 		
-//		Sawon myInfo = SessionUtil.getSessionSawon();
-//		
-//		ConferenceReservation cr = new ConferenceReservation();
-//		cr.setTitle(param.get("title"));
-//		cr.setStartTimeFull(param.get("ymd") + " " + param.get("startTime"));
-//		cr.setEndTimeFull(param.get("ymd") + " " + param.get("endTime"));
-//		cr.setStartTime(param.get("startTime"));
-//		cr.setEndTime(param.get("endTime"));
-//		cr.setReservationSawonCode(myInfo.getSawonCode());
-//		cr.setYmd(param.get("ymd"));
-//		
-//		
-//		
-//		try {
-//			calendarService.reserveConference(cr);
-//			System.err.println(cr.getReserveNum());
-//			vo.setSuccess(true);
-//			param.put("rnum", cr.getReserveNum());
-//			vo.addObject(param);
-//			
-//			//this.template.convertAndSend("/message");
-//		}
-//		catch(Exception e) {
-//			vo.setSuccess(false);
-//			vo.setErrMsg(e.getMessage());
-//		}
+		Sawon myInfo = SessionUtil.getSessionSawon();
 		
-		Map<String, String> m = new HashMap<>();
-		m.put("ppp", "1");
-		this.template.convertAndSend("/message/authentication", m);
+		ConferenceReservation cr = new ConferenceReservation();
+		cr.setTitle(param.get("title"));
+		cr.setStartTimeFull(param.get("ymd") + " " + param.get("startTime"));
+		cr.setEndTimeFull(param.get("ymd") + " " + param.get("endTime"));
+		cr.setStartTime(param.get("startTime"));
+		cr.setEndTime(param.get("endTime"));
+		cr.setReservationSawonCode(myInfo.getSawonCode());
+		cr.setYmd(param.get("ymd"));
+		
+		try {
+			calendarService.reserveConference(cr);
+			vo.setSuccess(true);
+			param.put("rnum", cr.getReserveNum());
+			param.put("token", myInfo.getToken(TokenKey.FLOORMAP));
+			param.put("reserver", myInfo.getSawonName());
+			vo.addObject(param);
+			
+			this.template.convertAndSend("/message/conference/reservation", param);
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+		
 		return vo;
 	}
 }

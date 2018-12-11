@@ -24,6 +24,29 @@
 		ymd: ''
 	};
 	var timeSettingWin = null;
+	var myToken = $('#_csrfToken').val();
+	var hasSocketConntected = false;
+	var reservationContentWin = null;
+	
+	var socket = new SockJS('/websocket'),
+	stompClient = Stomp.over(socket);
+
+	stompClient.connect({}, function(frame) {
+		hasSocketConntected = true;
+	    
+	    stompClient.subscribe('/message/conference/reservation', function(message){
+	       var m = $.parseJSON(message.body);
+	       console.log(m.token+ '/' + myToken)
+	       
+	       if(m.token != myToken) {
+	    	   console.log('ii')
+	       }
+	    });
+	    
+	    
+	}, function(error) {
+		hasSocketConntected = false;
+	});
 	
 	function Seat(x, y, isSudo) {
 		
@@ -148,7 +171,8 @@
 			        { xtype: 'button', text: '시간설정', listeners: {
 			        	click: function() {
 			        		//setConferenceTime();
-			        		TimeObj.ymd = $(iframe.el.dom).find('iframe')[0].contentWindow.getCurrentDate();
+			        		reservationContentWin = $(iframe.el.dom).find('iframe')[0].contentWindow;
+			        		TimeObj.ymd = reservationContentWin.getCurrentDate();
 			        		setConferenceTime();
 			        	}
 			        } },
@@ -250,6 +274,15 @@
 	}
 	
 	function reserve() {
+		if(!hasSocketConntected) {
+			common.showExtMsg({
+				msg: '소켓연결에 실패했습니다.',
+				type: 'alert'
+			});
+			
+			return;
+		}
+		
 		var title = $.trim(TimeObj.title.getValue());
 		var startTime = $.trim(TimeObj.startTime.getRawValue());
 		var endTime = $.trim(TimeObj.endTime.getRawValue());
@@ -269,6 +302,12 @@
 			return;
 		}
 		
+		if(parseInt(endTime.replace(':', '')) - parseInt(startTime.replace(':', '')) <= 0) {
+			TimeObj.startTime.markInvalid('시작시간은 종료시간보다 빨라야 합니다.');
+			return;
+		}
+		
+		
 		common.ajaxExt({
 			url: '/calendar/conference/reservation',
 			method: 'POST',
@@ -285,7 +324,17 @@
 			success: function(jo) {
 				console.log(jo);
 				if(jo.success) {
-					timeSettingWin.close();
+					if(reservationContentWin) {
+						var data = jo.datas[0];
+						reservationContentWin.addEvent({
+							title: data.title,
+							start: data.ymd + 'T' + data.startTime,
+							end: data.ymd + 'T' + data.endTime,
+							reserver: data.reserver
+						});
+						
+						timeSettingWin.close();
+					}
 				}
 			}
 		});
