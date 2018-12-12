@@ -17,6 +17,8 @@ import kr.co.drpnd.domain.CalendarCategory;
 import kr.co.drpnd.domain.CalendarEvent;
 import kr.co.drpnd.domain.ConferenceReservation;
 import kr.co.drpnd.domain.Sawon;
+import kr.co.drpnd.exception.InvalidReservationTime;
+import kr.co.drpnd.type.ExceptionCode;
 import kr.co.drpnd.util.SessionUtil;
 
 @Service("calendarService")
@@ -132,8 +134,15 @@ public class CalendarService {
 	}
 
 	public void reserveConference(ConferenceReservation cr) {
+		//이미 예약된 시간인지 체크
+		int r = calendarDao.selectInReservation(cr);
+		if(r > 0)  throw new InvalidReservationTime(ExceptionCode.INVALID_RESERVATION_Time.getMsg());
 		calendarDao.insertConferenceReservation(cr);
 		
+	}
+
+	public List<Map<String, String>> getConferenceReservationList(Map<String, String> param) {
+		return calendarDao.selectConferenceReservationList(param);
 	}
 
 }

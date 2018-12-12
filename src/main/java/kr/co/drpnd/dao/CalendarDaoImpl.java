@@ -53,4 +53,14 @@ public class CalendarDaoImpl implements CalendarDao {
 		
 	}
 
+	@Override
+	public int selectInReservation(ConferenceReservation cr) {
+		return msSqlSession.selectOne(namespace + ".selectInReservation", cr);
+	}
+
+	@Override
+	public List<Map<String, String>> selectConferenceReservationList(Map<String, String> param) {
+		return msSqlSession.selectList(namespace + ".selectConferenceReservationList", param);
+	}
+
 }

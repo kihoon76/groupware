@@ -1,6 +1,7 @@
 var common = (function() {
 	var win = null;
-	
+	var ErrCode = parent.Drpnd.util.ErrorCode;
+	//var ErrCode = parent.Ext.create('Drpnd.util.ErrorCode');
 	return {
 		refreshExtTab: function(id, callback) {
 			//cate-notice-list-panel
@@ -253,14 +254,25 @@ var common = (function() {
 					var jo = parent.Ext.decode(response.responseText);
 					var errCode = jo.errCode;
 					
-					//중복로그인 세션 체크
 					if(!jo.success) {
-						if(errCode == '202') {
-							Ext.Msg.alert('', '중복로그인이  발생했습니다.', function() {
-								window.location.href = context + '/signin';
-							});
-							return;
+						if(errCode == null) {
+							parent.Ext.Msg.alert('오류', jo.errMsg);
 						}
+						else {
+							switch(errCode) {
+							case ErrCode.INVALID_RESERVATION_TIME :
+								parent.Ext.Msg.alert('', jo.errMsg);
+								break;
+							}
+						}
+						
+						return;
+//						if(errCode == '202') {
+//							Ext.Msg.alert('', '중복로그인이  발생했습니다.', function() {
+//								window.location.href = context + '/signin';
+//							});
+//							return;
+//						}
 					}
 					
 					if(cfg.success) {

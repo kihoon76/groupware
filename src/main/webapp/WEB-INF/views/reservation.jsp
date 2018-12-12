@@ -20,6 +20,9 @@
 	<link rel="stylesheet" href="/resources/css/jquery-ui.css" />
 	<link rel="stylesheet" href="/resources/css/calendar.css" />
 	<link rel="stylesheet" href="/resources/os/fullcalendar-3.9.0/fullcalendar.min.css" />
+	<style>
+	.fc-event{cursor: pointer;}
+	</style>
 </head>
 <body>
 	<div id="reservation"></div>

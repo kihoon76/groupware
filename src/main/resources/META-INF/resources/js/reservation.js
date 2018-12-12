@@ -1,14 +1,14 @@
 $(function() {
-	var eventSources = {
-		'default': {
-			events:[],
-			color: 'red',
-			textColor: 'black'
-		}
-	};
+	var eventSources = null;
 	
 	var delEvents = [];
 	var calId = '#reservation';
+	var TimeObj = {
+		title: null,
+		startTime: null,
+		endTime: null,
+		ymd: ''
+	};
 	
 //	var socket = new SockJS('/websocket'),
 //		stompClient = Stomp.over(socket);
@@ -44,20 +44,58 @@ $(function() {
 			events: [],
 			color: 'blue',
 			textColor: 'white'
+		}
+		
+		eventSources['mine'] = {
+			events: [],
+			color: 'red',
+			textColor: 'white'
 		} 
 	}
 	
-	function getData() {
-		eventSources['default'].events = [{
-			title: 'E-Biz팀 회의',
-			start: '2018-12-07T13:00',
-			end: '2018-12-07T14:30',
-			reserver: '남기훈'
-		}];
-		
+	function reloadDefaultEventSource() {
 		$(calId).fullCalendar('removeEventSource', eventSources['default']);
+		$(calId).fullCalendar('removeEventSource', eventSources['mine']);
 		$(calId).fullCalendar('addEventSource', eventSources['default']);
+		$(calId).fullCalendar('addEventSource', eventSources['mine']);
+	}
+	
+	function getCurrentDate() {
+		return $(calId).fullCalendar('getDate').format().substring(0, 10);
+	}
+	
+	function getData() {
+		var cd = getCurrentDate();
+		eventSources['default'].events = null;
+		eventSources['mine'].events = null;
+		common.ajaxExt({
+    		url: '/calendar/conference/reservation/load?reserveDate=' + cd,
+    		method: 'GET',
+    		loadmask: {
+    			msg: '(' + cd + ') 정보로딩중...'
+    		},
+			success: function(jo) {
+				var events = jo.datas[0];
+				if(events != null) {
+					eventSources['default'].events = events['default'] || [];
+					eventSources['mine'].events = events['mine'] || [];
+					reloadDefaultEventSource();
+				}
+			}
+    	});
 		
+		
+		
+//		eventSources['default'].events = [{
+//			title: 'E-Biz팀 회의',
+//			start: '2018-12-07T13:00',
+//			end: '2018-12-07T14:30',
+//			reserver: '남기훈'
+//		}];
+//		
+//		$(calId).fullCalendar('removeEventSource', eventSources['default']);
+//		$(calId).fullCalendar('addEventSource', eventSources['default']);
+//		
 //		common.ajaxExt({
 //    		url: '/calendar/load?startDate=' + calMStart + '&endDate=' + calMEnd + '&cate=' + category,
 //    		method: 'GET',
@@ -90,6 +128,11 @@ $(function() {
    		 	initEventSources();
    		 	getData();
 		},
+		eventClick: function(event, jsEvent, view) {
+			if(event.mine == 'Y') {
+				modifyConferenceTime(event);
+			}
+		},
 		eventRender: function(event, element) {
 			element.find('.fc-title').remove();
 			element.find('.fc-time').remove();
@@ -115,14 +158,102 @@ $(function() {
 	     }
 	});
 	
-	window.getCurrentDate = function() {
-		return $(calId).fullCalendar('getDate').format().substring(0, 10);
+	function modifyConferenceTime(event) {
+		var rnum = event.rnum;
+		var timeModifyWin = parent.Ext.create('Ext.window.Window', {
+			title: '시간설정(' + getCurrentDate() + ')',
+			height: 200,
+			width: 400,
+			layout: 'fit',
+			closeAction: 'destroy',
+			modal: true,
+			items: [{
+				xtype: 'form',
+				bodyStyle  : 'padding: 10px;',
+		        margins    : '0 0 0 0',
+		        fieldDefaults: {
+		            msgTarget: 'side',
+		            labelWidth: 85,
+		            anchor: '100%'
+		        },
+		        defaultType: 'textfield',
+		        items: [{
+		        	fieldLabel: '제목',
+		        	value: event.title,
+		        	listeners: {
+		        		afterrender: function(txt) {
+		        			TimeObj.title = txt;
+		        		}
+		        	}
+		        },{
+		        	fieldLabel: '시작시간',
+		        	xtype: 'timefield',
+		        	allowBlank: false,
+		        	editable: false,
+		            increment: 30,
+		            format: 'H:i',
+		            minValue: '08:00',
+		            maxValue: '19:00',
+		            listeners: {
+		        		afterrender: function(time) {
+		        			TimeObj.startTime = time;
+		        			var t = event.start.format().split('T')[1].substring(0, 5);
+		        			time.setRawValue(t);
+		        		}
+		        	}
+				},{
+		        	fieldLabel: '종료시간',
+		        	xtype: 'timefield',
+		        	allowBlank: false,
+		        	editable: false,
+		            increment: 30,
+		            format: 'H:i',
+		            minValue: '08:00',
+		            maxValue: '19:00',
+		            listeners: {
+		        		afterrender: function(time) {
+		        			TimeObj.endTime = time;
+		        			var t = event.end.format().split('T')[1].substring(0, 5);
+		        			time.setRawValue(t);
+		        		}
+		        	}
+				}]
+			}],
+			dockedItems: [{
+			    xtype: 'toolbar',
+			    dock: 'bottom',
+			    ui: 'footer',
+			    //defaults: {minWidth: minButtonWidth},
+			    items: [
+			        { xtype: 'component', flex: 1 },
+			        { xtype: 'button', text: '수정', listeners: {
+			        	click: function() {
+			        		
+			        	}
+			        } },
+			        { xtype: 'button', text: '삭제', listeners: {
+			        	click: function() {
+			        		
+			        	}
+			        } },
+			        { xtype: 'button', text: '닫기', listeners: {
+			        	click: function(btn) {
+			        		timeModifyWin.close();
+			        	}
+			        } }
+			    ]
+			}]  
+		});
+		
+		timeModifyWin.show();
 	}
 	
-	window.addEvent = function(event) {
-		$(calId).fullCalendar('removeEventSource', eventSources['default']);
+	window.getCurrentDate = getCurrentDate;
+	
+	window.addEvent = function(event, key) {
+		$(calId).fullCalendar('removeEventSource', eventSources[key]);
 		
-		eventSources['default'].events.push(event);
-		$(calId).fullCalendar('addEventSource', eventSources['default']);
+		eventSources[key].events.push(event);
+		$(calId).fullCalendar('addEventSource', eventSources[key]);
 	}
 });

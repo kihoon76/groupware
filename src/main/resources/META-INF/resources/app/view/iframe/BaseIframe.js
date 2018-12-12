@@ -16,6 +16,16 @@ Ext.define('Drpnd.view.iframe.BaseIframe', {
 					tag: 'iframe',
 					frameborder: 0,
 					src: Drpnd.util.CommonFn.getFullUrl(that.param.url)
+				},
+				listeners: {
+					afterrender: function() {
+						var obj = this.getEl();
+						obj.on('load', function() {
+							if(that.param.load) {
+								that.param.load(Ext.getDom(obj));
+							}
+						});
+					}
 				}
 			}]
 		});

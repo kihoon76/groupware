@@ -21,4 +21,8 @@ public interface CalendarDao {
 
 	void insertConferenceReservation(ConferenceReservation cr);
 
+	int selectInReservation(ConferenceReservation cr);
+
+	List<Map<String, String>> selectConferenceReservationList(Map<String, String> param);
+
 }

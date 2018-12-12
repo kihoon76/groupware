@@ -77,4 +77,26 @@
         	SELECT IDENT_CURRENT('[동림].[dbo].[회의실예약]')
     	</selectKey>
 	</insert>
+	
+	<select id="selectInReservation" parameterType="ConferenceReservation" resultType="int">
+		select count(*)
+		  from [동림].[dbo].[회의실예약]
+		 where 회의년도 = #{ymd}
+		   and (시작시간_FULL >= #{startTimeFull} and 시작시간_FULL <![CDATA[<]]> #{endTimeFull})
+		    or (종료시간_FULL > #{startTimeFull} and 종료시간_FULL <![CDATA[<=]]> #{endTimeFull})
+	</select>
+	
+	<select id="selectConferenceReservationList" parameterType="string"  resultType="map">
+		select 예약번호 as rnum,
+			      회의제목 as title,
+			   concat(회의년도, 'T', 시작시간) as [start],
+			   concat(회의년도, 'T', 종료시간) as [end],
+			   T2.사원명 as reserver,
+			   case when #{sawonCode} = 예약자_사원코드 then 'Y'
+			   		else 'N'
+			   end as mine
+		 from  [동림].[dbo].[회의실예약] T1
+		inner join [동림].[dbo].[사원] T2 on T1.예약자_사원코드 = T2.사원코드
+		where 회의년도 = #{reserveDate}
+	</select>
 </mapper>

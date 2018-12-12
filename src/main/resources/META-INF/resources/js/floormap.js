@@ -39,7 +39,18 @@
 	       console.log(m.token+ '/' + myToken)
 	       
 	       if(m.token != myToken) {
-	    	   console.log('ii')
+	    	  var m = $.parseJSON(message.body);
+	    	  
+	    	  if(reservationContentWin) {
+	    		  reservationContentWin.addEvent({
+	    			  title: m.title,
+	    			  start: m.ymd + 'T' + m.startTime,
+	    			  end: m.ymd + 'T' + m.endTime,
+	    			  reserver: m.reserver,
+	    			  mine: m.mine
+				  }, 'default');  
+	    	  }
+	    	  console.log(m.title);
 	       }
 	    });
 	    
@@ -151,7 +162,12 @@
 	}
 	
 	function viewTimeline() {
-		var iframe = parent.Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'reservation' });
+		var iframe = parent.Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'reservation', load: function(dom) {
+			reservationContentWin = $(dom)[0].contentWindow;
+		} });
+		
+		//console.log(iframe.getId());
+		//$(iframe.el.dom).find('iframe')[0].contentWindow.t();
 		var reserveWin = parent.Ext.create('Ext.window.Window', {
 			title: '회의실 예약현황',
 			height: 800,
@@ -171,7 +187,7 @@
 			        { xtype: 'button', text: '시간설정', listeners: {
 			        	click: function() {
 			        		//setConferenceTime();
-			        		reservationContentWin = $(iframe.el.dom).find('iframe')[0].contentWindow;
+			        		//reservationContentWin = $(iframe.el.dom).find('iframe')[0].contentWindow;
 			        		TimeObj.ymd = reservationContentWin.getCurrentDate();
 			        		setConferenceTime();
 			        	}
@@ -182,10 +198,8 @@
 			        	}
 			        } }
 			    ]
-			}]  
-			    
+			}]
 		})
-		
 		
 		reserveWin.show();
 	
@@ -322,19 +336,17 @@
 				msg: '예약등록중 입니다.'
 			},
 			success: function(jo) {
-				console.log(jo);
-				if(jo.success) {
-					if(reservationContentWin) {
-						var data = jo.datas[0];
-						reservationContentWin.addEvent({
-							title: data.title,
-							start: data.ymd + 'T' + data.startTime,
-							end: data.ymd + 'T' + data.endTime,
-							reserver: data.reserver
-						});
-						
-						timeSettingWin.close();
-					}
+				if(reservationContentWin) {
+					var data = jo.datas[0];
+					reservationContentWin.addEvent({
+						title: data.title,
+						start: data.ymd + 'T' + data.startTime,
+						end: data.ymd + 'T' + data.endTime,
+						reserver: data.reserver,
+						mine: data.mine
+					}, 'mine');
+					
+					timeSettingWin.close();
 				}
 			}
 		});
@@ -373,5 +385,6 @@
 	else {
 		$('#drawing').html('SVG를 지원하지 않는 브라우저 입니다.')
 	}
+	
 	
 }());

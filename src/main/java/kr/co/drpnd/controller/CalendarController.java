@@ -1,6 +1,7 @@
 package kr.co.drpnd.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,9 @@ import kr.co.drpnd.domain.CalendarCategory;
 import kr.co.drpnd.domain.CalendarEvent;
 import kr.co.drpnd.domain.ConferenceReservation;
 import kr.co.drpnd.domain.Sawon;
+import kr.co.drpnd.exception.InvalidReservationTime;
 import kr.co.drpnd.service.CalendarService;
+import kr.co.drpnd.type.ExceptionCode;
 import kr.co.drpnd.type.TokenKey;
 import kr.co.drpnd.util.DateUtil;
 import kr.co.drpnd.util.SessionUtil;
@@ -99,7 +102,6 @@ public class CalendarController {
 			vo.setSuccess(true);
 		}
 		catch(Exception e) {
-			
 			vo.setSuccess(false);
 			vo.setErrMsg(e.getMessage());
 		}
@@ -123,6 +125,51 @@ public class CalendarController {
 		
 		return vo;
 	}
+	
+	
+	@GetMapping("/conference/reservation/load")
+	@ResponseBody
+	public AjaxVO<Map<String, ArrayList<Map<String, String>>>> getConferenceReservationList(@RequestParam("reserveDate") String reserveDate) {
+		AjaxVO<Map<String, ArrayList<Map<String, String>>>> vo = new AjaxVO<>();
+		
+		try {
+			Map<String, String> param = new HashMap<>();
+			param.put("reserveDate", reserveDate);
+			param.put("sawonCode", SessionUtil.getSessionSawon().getSawonCode());
+			List<Map<String, String>> list = calendarService.getConferenceReservationList(param);
+			Map<String, ArrayList<Map<String, String>>> events = new HashMap<>();
+			
+			int size = list.size();
+			if(size > 0) {
+				for(Map<String, String> e : list) {
+					if("Y".equals(e.get("mine"))) {
+						if(events.get("mine") == null) {
+							events.put("mine", new ArrayList<Map<String, String>>());
+						}
+						
+						events.get("mine").add(e);
+					}
+					else {
+						if(events.get("default") == null) {
+							events.put("default", new ArrayList<Map<String, String>>());
+						}
+						
+						events.get("default").add(e);
+					}
+				}
+			}
+			
+			vo.setSuccess(true);
+			vo.addObject(events);
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+		
+		return vo;
+	}
+	
 	
 	@PostMapping("/conference/reservation")
 	@ResponseBody
@@ -149,6 +196,11 @@ public class CalendarController {
 			vo.addObject(param);
 			
 			this.template.convertAndSend("/message/conference/reservation", param);
+		}
+		catch(InvalidReservationTime e) {
+			vo.setSuccess(false);
+			vo.setErrCode(ExceptionCode.INVALID_RESERVATION_Time.getCode());
+			vo.setErrMsg(e.getMessage());
 		}
 		catch(Exception e) {
 			vo.setSuccess(false);
