@@ -1,7 +1,5 @@
 $(function() {
 	var eventSources = null;
-	
-	var delEvents = [];
 	var calId = '#reservation';
 	var TimeObj = {
 		title: null,
@@ -10,33 +8,10 @@ $(function() {
 		ymd: ''
 	};
 	
-//	var socket = new SockJS('/websocket'),
-//		stompClient = Stomp.over(socket);
-//	
-//	stompClient.connect({}, function(frame) {
-//	    hasConntected = true;
-//	    //displayWebSocketConnectionStatus(true, hasConntected);
-//	 
-//	    stompClient.send('/app/authorization', {}, JSON.stringify({
-//	        'key': 'csrfToken',
-//	        'value': $('#_csrfToken').val()
-//	    }));
-//	 
-//	    stompClient.subscribe('/message/authentication', function(message){
-//	       var m = $.parseJSON(message.body);
-//	       console.log(m)
-//	    });
-//	 
-//
-//	}, function(error) {
-//	   console.log(error)
-//	});
-	
-	
+	var timeModifyWin = null;
 	
 	function initEventSources() {
 		eventSources = {};
-		delEvents.length = 0;
 		$(calId).fullCalendar('removeEventSources');
 		
 		
@@ -86,37 +61,6 @@ $(function() {
 		
 		
 		
-//		eventSources['default'].events = [{
-//			title: 'E-Biz팀 회의',
-//			start: '2018-12-07T13:00',
-//			end: '2018-12-07T14:30',
-//			reserver: '남기훈'
-//		}];
-//		
-//		$(calId).fullCalendar('removeEventSource', eventSources['default']);
-//		$(calId).fullCalendar('addEventSource', eventSources['default']);
-//		
-//		common.ajaxExt({
-//    		url: '/calendar/load?startDate=' + calMStart + '&endDate=' + calMEnd + '&cate=' + category,
-//    		method: 'GET',
-//    		loadmask: {
-//    			msg: '정보로딩중...'
-//    		},
-//			success: function(jo) {
-//				//console.log(jo);
-//				if(jo.success) {
-//					if(jo.datas.length > 0) {
-//						var events = jo.datas[0];
-//						
-//						for(var k in events) {
-//							eventSources[k].events = events[k];
-//							$('#calendar').fullCalendar('removeEventSource', eventSources[k]);
-//							$('#calendar').fullCalendar('addEventSource', eventSources[k]);
-//						}
-//					}
-//				}
-//			}
-//    	});
 	}
 	
 	$(calId).fullCalendar({
@@ -158,9 +102,79 @@ $(function() {
 	     }
 	});
 	
+	function modify(rnum) {
+		var title = $.trim(TimeObj.title.getValue());
+		var startTime = $.trim(TimeObj.startTime.getRawValue());
+		var endTime = $.trim(TimeObj.endTime.getRawValue());
+		
+		if(title == '') {
+			TimeObj.title.markInvalid('제목을 입력하세요');
+			return;
+		}
+		
+		if(startTime == '') {
+			TimeObj.startTime.markInvalid('시작시간을 선택하세요');
+			return;
+		}
+		
+		if(endTime == '') {
+			TimeObj.endTime.markInvalid('종료시간을 선택하세요');
+			return;
+		}
+		
+		if(parseInt(endTime.replace(':', '')) - parseInt(startTime.replace(':', '')) <= 0) {
+			TimeObj.startTime.markInvalid('시작시간은 종료시간보다 빨라야 합니다.');
+			return;
+		}
+		
+		common.ajaxExt({
+			url: '/calendar/conference/mod/reservation',
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' }, 
+			jsonData: {
+				title: title,
+				startTime: startTime,
+				endTime: endTime,
+				ymd: getCurrentDate(),
+				rnum: rnum 
+			},
+			loadmask: {
+				msg: '수정중 입니다.'
+			},
+			success: function(jo) {
+				var data = jo.datas[0];
+				modEvent({
+					title: data.title,
+					start: data.ymd + 'T' + data.startTime,
+					end: data.ymd + 'T' + data.endTime,
+					reserver: data.reserver,
+					mine: data.mine,
+					rnum: data.rnum
+				});
+				
+				timeModifyWin.close();
+				
+			}
+		});
+	}
+	
+	function deleteReservation(rnum) {
+		common.ajaxExt({
+			url: '/calendar/conference/del/reservation?rnum=' + rnum + '&ymd=' + getCurrentDate(),
+			method: 'GET',
+			loadmask: {
+				msg: '삭제중 입니다.'
+			},
+			success: function(jo) {
+				delEvent(rnum);
+				timeModifyWin.close();
+			}
+		});
+	}
+	
 	function modifyConferenceTime(event) {
 		var rnum = event.rnum;
-		var timeModifyWin = parent.Ext.create('Ext.window.Window', {
+		timeModifyWin = parent.Ext.create('Ext.window.Window', {
 			title: '시간설정(' + getCurrentDate() + ')',
 			height: 200,
 			width: 400,
@@ -228,12 +242,12 @@ $(function() {
 			        { xtype: 'component', flex: 1 },
 			        { xtype: 'button', text: '수정', listeners: {
 			        	click: function() {
-			        		
+			        		modify(rnum);
 			        	}
 			        } },
 			        { xtype: 'button', text: '삭제', listeners: {
 			        	click: function() {
-			        		
+			        		deleteReservation(rnum);
 			        	}
 			        } },
 			        { xtype: 'button', text: '닫기', listeners: {
@@ -248,6 +262,12 @@ $(function() {
 		timeModifyWin.show();
 	}
 	
+	function delEvent(rnum) {
+		var item = $(calId).fullCalendar('removeEvents', function(evt) {
+			return evt.rnum == rnum;
+		});
+	}
+	
 	window.getCurrentDate = getCurrentDate;
 	
 	window.addEvent = function(event, key) {
@@ -255,5 +275,19 @@ $(function() {
 		
 		eventSources[key].events.push(event);
 		$(calId).fullCalendar('addEventSource', eventSources[key]);
+	}
+	
+	window.delEvent = delEvent;
+	
+	window.modEvent = function(event) {
+		var item = $(calId).fullCalendar('clientEvents', function(evt) {
+			return evt.rnum == event.rnum;
+		});
+		
+		item[0].title = event.title;
+		item[0].start = event.start;
+		item[0].end = event.end;
+		
+		$(calId).fullCalendar('updateEvent', item[0]);
 	}
 });

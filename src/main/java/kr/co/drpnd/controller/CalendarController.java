@@ -28,6 +28,7 @@ import kr.co.drpnd.domain.CalendarEvent;
 import kr.co.drpnd.domain.ConferenceReservation;
 import kr.co.drpnd.domain.Sawon;
 import kr.co.drpnd.exception.InvalidReservationTime;
+import kr.co.drpnd.exception.InvalidReservationUser;
 import kr.co.drpnd.service.CalendarService;
 import kr.co.drpnd.type.ExceptionCode;
 import kr.co.drpnd.type.TokenKey;
@@ -200,6 +201,84 @@ public class CalendarController {
 		catch(InvalidReservationTime e) {
 			vo.setSuccess(false);
 			vo.setErrCode(ExceptionCode.INVALID_RESERVATION_Time.getCode());
+			vo.setErrMsg(e.getMessage());
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+		
+		return vo;
+	}
+	
+	@PostMapping("/conference/mod/reservation")
+	@ResponseBody
+	public AjaxVO<Map<String, String>> modifyReserveConference(@RequestBody Map<String, String> param) {
+		AjaxVO vo = new AjaxVO<>();
+		
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		
+		ConferenceReservation cr = new ConferenceReservation();
+		cr.setTitle(param.get("title"));
+		cr.setStartTimeFull(param.get("ymd") + " " + param.get("startTime"));
+		cr.setEndTimeFull(param.get("ymd") + " " + param.get("endTime"));
+		cr.setStartTime(param.get("startTime"));
+		cr.setEndTime(param.get("endTime"));
+		cr.setReservationSawonCode(myInfo.getSawonCode());
+		cr.setYmd(param.get("ymd"));
+		cr.setReserveNum(param.get("rnum"));
+		
+		try {
+			calendarService.modifyReserveConference(cr);
+			vo.setSuccess(true);
+			param.put("token", myInfo.getToken(TokenKey.FLOORMAP));
+			param.put("reserver", myInfo.getSawonName());
+			param.put("mine", "Y");
+			vo.addObject(param);
+			
+			this.template.convertAndSend("/message/conference/mod/reservation", param);
+		}
+		catch(InvalidReservationTime e) {
+			vo.setSuccess(false);
+			vo.setErrCode(ExceptionCode.INVALID_RESERVATION_Time.getCode());
+			vo.setErrMsg(e.getMessage());
+		}
+		catch(InvalidReservationUser e) {
+			vo.setSuccess(false);
+			vo.setErrCode(ExceptionCode.INVALID_RESERVATION_USER.getCode());
+			vo.setErrMsg(e.getMessage());
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+		
+		return vo;
+	}
+	
+	@GetMapping("/conference/del/reservation")
+	@ResponseBody
+	public AjaxVO removeReserveConference(@RequestParam("rnum") String rnum, @RequestParam("ymd") String ymd) {
+		AjaxVO vo = new AjaxVO<>();
+		
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		
+		try {
+			ConferenceReservation cr = new ConferenceReservation();
+			cr.setReserveNum(rnum);
+			cr.setReservationSawonCode(myInfo.getSawonCode());
+			calendarService.removeReserveConference(cr);
+			vo.setSuccess(true);
+					
+			Map<String, String> param = new HashMap<>();
+			param.put("rnum", rnum);
+			param.put("ymd", ymd);
+			param.put("token", myInfo.getToken(TokenKey.FLOORMAP));
+			this.template.convertAndSend("/message/conference/del/reservation", param);
+		}
+		catch(InvalidReservationUser e) {
+			vo.setSuccess(false);
+			vo.setErrCode(ExceptionCode.INVALID_RESERVATION_USER.getCode());
 			vo.setErrMsg(e.getMessage());
 		}
 		catch(Exception e) {

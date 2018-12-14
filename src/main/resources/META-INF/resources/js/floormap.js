@@ -27,21 +27,24 @@
 	var myToken = $('#_csrfToken').val();
 	var hasSocketConntected = false;
 	var reservationContentWin = null;
+	var reconTotal = 10;
+	var reconAttemp = 0;
+	var sawonList = null;
 	
 	var socket = new SockJS('/websocket'),
 	stompClient = Stomp.over(socket);
-
-	stompClient.connect({}, function(frame) {
+	
+	function successCallback() {
 		hasSocketConntected = true;
-	    
+		reconAttemp = 0;
+		
 	    stompClient.subscribe('/message/conference/reservation', function(message){
 	       var m = $.parseJSON(message.body);
 	       console.log(m.token+ '/' + myToken)
 	       
 	       if(m.token != myToken) {
-	    	  var m = $.parseJSON(message.body);
-	    	  
-	    	  if(reservationContentWin) {
+	    	  //같은 날짜를 보고 있을경우에만 
+	    	  if(reservationContentWin && reservationContentWin.getCurrentDate() == m.ymd) {
 	    		  reservationContentWin.addEvent({
 	    			  title: m.title,
 	    			  start: m.ymd + 'T' + m.startTime,
@@ -50,14 +53,89 @@
 	    			  mine: m.mine
 				  }, 'default');  
 	    	  }
-	    	  console.log(m.title);
 	       }
 	    });
 	    
+	    stompClient.subscribe('/message/conference/del/reservation', function(message) {
+	    	var m = $.parseJSON(message.body);
+		    console.log(m.token+ '/' + myToken)
+		       
+		    if(m.token != myToken) {
+		    	//같은 날짜를 보고 있을경우에만 
+		    	if(reservationContentWin && reservationContentWin.getCurrentDate() == m.ymd) {
+		    		reservationContentWin.delEvent(m.rnum);  
+		    	  }
+		       }
+	    });
+	    
+	    stompClient.subscribe('/message/conference/mod/reservation', function(message) {
+	    	var m = $.parseJSON(message.body);
+		    console.log(m.token+ '/' + myToken)
+		       
+		    if(m.token != myToken) {
+		    	//같은 날짜를 보고 있을경우에만 
+		    	if(reservationContentWin && reservationContentWin.getCurrentDate() == m.ymd) {
+		    		reservationContentWin.modEvent({
+						title: m.title,
+						start: m.ymd + 'T' + m.startTime,
+						end: m.ymd + 'T' + m.endTime,
+						reserver: m.reserver,
+						mine: 'N',
+						rnum: m.rnum
+					});
+		    	  }
+		       }
+	    });
+	    
+//	    stompClient.subscribe('/message/conference/mod/reservation', function(message){
+//		       var m = $.parseJSON(message.body);
+//		       console.log(m.token+ '/' + myToken)
+//		       
+//		       if(m.token != myToken) {
+//		    	  var m = $.parseJSON(message.body);
+//		    	  
+//		    	  //같은 날짜를 보고 있을경우에만 
+//		    	  if(reservationContentWin && reservationContentWin.getCurrentDate() == m.ymd) {
+//		    		  reservationContentWin.modEvent({
+//		    			  title: m.title,
+//		    			  start: m.ymd + 'T' + m.startTime,
+//		    			  end: m.ymd + 'T' + m.endTime,
+//		    			  reserver: m.reserver,
+//		    			  mine: m.mine
+//					  }, 'default');  
+//		    	  }
+//		       }
+//		    });
+	}
+	
+	function reconnect() {
+		hasSocketConntected = false;
+		reconAttemp++;
+		
+		if(reconAttemp > reconTotal) return;
+		
+		var reconInv = setTimeout(function() {
+			socket = new SockJS('/websocket'),
+			stompClient = Stomp.over(socket);
+			
+			stompClient.connect({}, function(frame) {
+				clearTimeout(reconInv);
+				successCallback();	    
+			}, function(error) {
+				reconnect();
+			});
+			
+		}, 5000);
+	}
+
+	stompClient.connect({}, function(frame) {
+		successCallback();	    
 	    
 	}, function(error) {
-		hasSocketConntected = false;
+		reconnect();
 	});
+	
+	
 	
 	function Seat(x, y, isSudo) {
 		
@@ -83,11 +161,11 @@
 //			fill:innerColor,
 //		});
 		
-		var ownerTxt = draw.text('').attr({x:50, y:50});
+		var ownerTxt = draw.text('x').attr({x:50, y:50});
 		ownerTxt.font({anchor: 'middle', size: 15, family: 'Helvetica'});
 		ownerTxt.move(x + (recW/6), y + 10);
 		
-		var phoneTxt = draw.text('010-0000-0000 / 6790').attr({x:50, y:50});
+		var phoneTxt = draw.text('- / -').attr({x:50, y:50});
 		phoneTxt.font({anchor: 'middle', size: 13, family: 'Helvetica'});
 		phoneTxt.fill('#fff');
 		phoneTxt.move(x + (recW/3) + 5, y + recH + 3);
@@ -198,7 +276,12 @@
 			        	}
 			        } }
 			    ]
-			}]
+			}],
+			listeners: {
+				close: function() {
+					
+				}
+			}
 		})
 		
 		reserveWin.show();
@@ -288,14 +371,14 @@
 	}
 	
 	function reserve() {
-		if(!hasSocketConntected) {
-			common.showExtMsg({
-				msg: '소켓연결에 실패했습니다.',
-				type: 'alert'
-			});
-			
-			return;
-		}
+//		if(!hasSocketConntected) {
+//			common.showExtMsg({
+//				msg: '소켓연결에 실패했습니다.',
+//				type: 'alert'
+//			});
+//			
+//			return;
+//		}
 		
 		var title = $.trim(TimeObj.title.getValue());
 		var startTime = $.trim(TimeObj.startTime.getRawValue());
@@ -339,11 +422,13 @@
 				if(reservationContentWin) {
 					var data = jo.datas[0];
 					reservationContentWin.addEvent({
+						id: parseInt(data.rnum),
+						rnum: data.rnum,
 						title: data.title,
 						start: data.ymd + 'T' + data.startTime,
 						end: data.ymd + 'T' + data.endTime,
 						reserver: data.reserver,
-						mine: data.mine
+						mine: 'Y'
 					}, 'mine');
 					
 					timeSettingWin.close();
@@ -380,10 +465,21 @@
 		SVG.on(document, 'DOMContentLoaded', function() {
 			draw = SVG('drawing').size('100%', 800);
 			makeSeat();
+			initSawonInfo();
 		});
 	}
 	else {
 		$('#drawing').html('SVG를 지원하지 않는 브라우저 입니다.')
+	}
+	
+	function initSawonInfo() {
+		sawonList = $.parseJSON($('#list').val());
+		
+		for(var i=0, len=sawonList.length; i<len; i++) {
+			var sm = seatMap[sawonList[i].seatNum];
+			sm.ownerTxt.text(sawonList[i].sawonName);
+			sm.phoneTxt.text(sawonList[i].sawonPhone + ' / ' + sawonList[i].sawonInnerPhone);
+		}
 	}
 	
 	

@@ -82,8 +82,11 @@
 		select count(*)
 		  from [동림].[dbo].[회의실예약]
 		 where 회의년도 = #{ymd}
-		   and (시작시간_FULL >= #{startTimeFull} and 시작시간_FULL <![CDATA[<]]> #{endTimeFull})
-		    or (종료시간_FULL > #{startTimeFull} and 종료시간_FULL <![CDATA[<=]]> #{endTimeFull})
+		   and ((시작시간_FULL >= #{startTimeFull} and 시작시간_FULL <![CDATA[<]]> #{endTimeFull})
+		    or (종료시간_FULL > #{startTimeFull} and 종료시간_FULL <![CDATA[<=]]> #{endTimeFull}))
+		<if test="reserveNum != null">
+		   and 예약번호 != #{reserveNum}
+		</if>
 	</select>
 	
 	<select id="selectConferenceReservationList" parameterType="string"  resultType="map">
@@ -99,4 +102,18 @@
 		inner join [동림].[dbo].[사원] T2 on T1.예약자_사원코드 = T2.사원코드
 		where 회의년도 = #{reserveDate}
 	</select>
+	
+	<update id="updateConferenceReservation" parameterType="ConferenceReservation">
+		update [동림].[dbo].[회의실예약]
+		   set 회의제목 = #{title},
+		   	      시작시간_FULL = #{startTimeFull},
+		   	      종료시간_FULL = #{endTimeFull},
+		   	      시작시간 = #{startTime},
+		   	      종료시간 = #{endTime}
+		 where 예약번호 = #{reserveNum}    
+	</update>
+	
+	<delete id="deleteReserveConference" parameterType="ConferenceReservation">
+		delete from [동림].[dbo].[회의실예약] where 예약번호 = #{reserveNum} and 예약자_사원코드 = #{reservationSawonCode}
+	</delete>
 </mapper>

@@ -27,6 +27,8 @@ public class Sawon {
 	private boolean sawonTeamLeader;
 	private String sawonQuitDay;
 	private String regDate;
+	private int seatNum;
+	
 	private Map<TokenKey, String> token = new HashMap<>();
 
 	
@@ -182,6 +184,14 @@ public class Sawon {
 
 	public void setToken(TokenKey key, String value) {
 		this.token.put(key, value);
+	}
+	
+	public int getSeatNum() {
+		return seatNum;
+	}
+
+	public void setSeatNum(int seatNum) {
+		this.seatNum = seatNum;
 	}
 
 	@Override

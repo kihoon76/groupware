@@ -25,4 +25,8 @@ public interface CalendarDao {
 
 	List<Map<String, String>> selectConferenceReservationList(Map<String, String> param);
 
+	int updateConferenceReservation(ConferenceReservation cr);
+
+	int deleteReserveConference(ConferenceReservation cr);
+
 }

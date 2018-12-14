@@ -1,11 +1,19 @@
 package kr.co.drpnd.controller;
 
+import java.util.List;
+
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.google.gson.Gson;
+
+import kr.co.drpnd.domain.Sawon;
+import kr.co.drpnd.service.SawonService;
 import kr.co.drpnd.type.TokenKey;
 import kr.co.drpnd.util.DateUtil;
 import kr.co.drpnd.util.SessionUtil;
@@ -15,6 +23,9 @@ import kr.co.drpnd.util.StringUtil;
 @Controller
 public class DrpndController {
 
+	@Resource(name="sawonService")
+	SawonService sawonService;
+	
 	@GetMapping("main")
 	public String index(ModelMap m) {
 		m.put("currentDate", DateUtil.getCurrentDateString());
@@ -41,6 +52,11 @@ public class DrpndController {
 	@GetMapping("floormap")
 	public String floormap(ModelMap m) {
 		createToken(m, TokenKey.FLOORMAP);
+		Sawon sawon = SessionUtil.getSessionSawon();
+		
+		List<Sawon> sawonList = sawonService.getMyDepartmentAllSawon(sawon.getSawonDepartment());
+		Gson g = new Gson();
+		m.addAttribute("list", g.toJson(sawonList));
 		return "floormap";
 	}
 	

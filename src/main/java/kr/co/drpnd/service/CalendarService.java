@@ -18,6 +18,7 @@ import kr.co.drpnd.domain.CalendarEvent;
 import kr.co.drpnd.domain.ConferenceReservation;
 import kr.co.drpnd.domain.Sawon;
 import kr.co.drpnd.exception.InvalidReservationTime;
+import kr.co.drpnd.exception.InvalidReservationUser;
 import kr.co.drpnd.type.ExceptionCode;
 import kr.co.drpnd.util.SessionUtil;
 
@@ -143,6 +144,22 @@ public class CalendarService {
 
 	public List<Map<String, String>> getConferenceReservationList(Map<String, String> param) {
 		return calendarDao.selectConferenceReservationList(param);
+	}
+
+	public void modifyReserveConference(ConferenceReservation cr) {
+		//이미 예약된 시간인지 체크
+		int r = calendarDao.selectInReservation(cr);
+		if(r > 0)  throw new InvalidReservationTime(ExceptionCode.INVALID_RESERVATION_Time.getMsg());
+				
+		r = calendarDao.updateConferenceReservation(cr);
+		
+		if(r !=1) throw new InvalidReservationUser(ExceptionCode.INVALID_RESERVATION_USER.getMsg());
+	}
+
+	public void removeReserveConference(ConferenceReservation cr) {
+		int r = calendarDao.deleteReserveConference(cr);
+		
+		if(r != 1) throw new InvalidReservationUser(ExceptionCode.INVALID_RESERVATION_USER.getMsg());
 	}
 
 }

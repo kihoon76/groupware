@@ -255,16 +255,20 @@ var common = (function() {
 					var errCode = jo.errCode;
 					
 					if(!jo.success) {
-						if(errCode == null) {
-							parent.Ext.Msg.alert('오류', jo.errMsg);
-						}
-						else {
-							switch(errCode) {
-							case ErrCode.INVALID_RESERVATION_TIME :
-								parent.Ext.Msg.alert('', jo.errMsg);
-								break;
-							}
-						}
+						parent.Ext.Msg.alert('오류', jo.errMsg);
+						
+//						if(errCode == null) {
+//							parent.Ext.Msg.alert('오류', jo.errMsg);
+//						}
+//						else {
+//							switch(errCode) {
+//							case ErrCode.INVALID_RESERVATION_TIME :
+//								parent.Ext.Msg.alert('', jo.errMsg);
+//								break;
+//							case ErrCode.INVALID_RESERVATION_USER :
+//								
+//							}
+//						}
 						
 						return;
 //						if(errCode == '202') {

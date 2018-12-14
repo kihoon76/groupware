@@ -14,7 +14,7 @@
 	</resultMap>
 	
 	<select id="selectSawonInfo" parameterType="string" resultMap="RM_selectSawon">
-		select 사원코드, 사원아이디, 사원명, 비밀번호, t2.직급명, t3.부서명 
+		select 사원코드, 사원아이디, 사원명, 비밀번호, t2.직급명, t3.부서명, t1.부서코드 
 		  from [동림].[dbo].[사원] t1
 		  left outer join [동림].[dbo].[직급] t2
 		    on t1.직급코드 = t2.직급코드
@@ -47,4 +47,14 @@
 			#{sawonTeamLeader},
 			getDate())
 	</insert>
+	
+	<select id="selectMyDepartmentSawonList"  parameterType="string" resultType="Sawon">
+		select 사원코드 as sawonCode,
+			      사원명 as sawonName,
+			      연락처 as sawonPhone,
+			      내선번호 as sawonInnerPhone,
+			      좌석번호 as seatNum
+	      from [동림].[dbo].[사원]
+	     where 부서코드 = #{department}
+	</select>
 </mapper>

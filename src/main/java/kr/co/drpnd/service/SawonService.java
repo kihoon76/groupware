@@ -1,5 +1,7 @@
 package kr.co.drpnd.service;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -19,5 +21,9 @@ public class SawonService {
 
 	public boolean regist(Sawon sawon) {
 		return 1 == sawonDao.insertSawon(sawon);
+	}
+
+	public List<Sawon> getMyDepartmentAllSawon(String sawonDepartment) {
+		return sawonDao.selectMyDepartmentSawonList(sawonDepartment);
 	}
 }

@@ -1,5 +1,7 @@
 package kr.co.drpnd.dao;
 
+import java.util.List;
+
 import kr.co.drpnd.domain.Sawon;
 
 public interface SawonDao {
@@ -7,5 +9,7 @@ public interface SawonDao {
 	Sawon selectSawonInfo(String username);
 
 	int insertSawon(Sawon sawon);
+
+	List<Sawon> selectMyDepartmentSawonList(String sawonDepartment);
 
 }
