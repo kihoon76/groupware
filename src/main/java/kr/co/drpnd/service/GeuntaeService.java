@@ -7,6 +7,9 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import kr.co.drpnd.dao.GeuntaeDao;
+import kr.co.drpnd.domain.Geuntae;
+import kr.co.drpnd.exception.AlreadyGotowork;
+import kr.co.drpnd.type.ExceptionCode;
 
 @Service("geuntaeService")
 public class GeuntaeService {
@@ -14,11 +17,20 @@ public class GeuntaeService {
 	@Resource(name="geuntaeDao")
 	GeuntaeDao geuntaeDao;
 	
-	public void checkGotowork(String sawonCode) {
-		Calendar cal = Calendar.getInstance();
+	public boolean checkGotowork(String sawonCode) {
 		
-		//int r = geuntaeDao.
+		Geuntae geuntae = new Geuntae();
+		geuntae.setSawonCode(sawonCode);
+		geuntae.setOutworkYN("N");
+		geuntae.setGotoworkMethod("P");
+		geuntae.setLat(0);
+		geuntae.setLng(0);
 		
+		geuntaeDao.insertGotowork(geuntae);
+		
+		if(geuntae.getResult() == -1) throw new AlreadyGotowork(ExceptionCode.ALREADY_GOTOWORK.getMsg());
+		
+		return true;
 	}
 
 }

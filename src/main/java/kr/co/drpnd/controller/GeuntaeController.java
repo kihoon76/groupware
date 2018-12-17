@@ -9,7 +9,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.co.drpnd.domain.AjaxVO;
 import kr.co.drpnd.domain.Sawon;
+import kr.co.drpnd.exception.AlreadyGotowork;
+import kr.co.drpnd.exception.InvalidReservationTime;
 import kr.co.drpnd.service.GeuntaeService;
+import kr.co.drpnd.type.ExceptionCode;
 import kr.co.drpnd.util.SessionUtil;
 
 @RequestMapping("/geuntae")
@@ -26,8 +29,18 @@ public class GeuntaeController {
 		AjaxVO vo = new AjaxVO();
 		Sawon sawon = SessionUtil.getSessionSawon(); 
 		
-		geuntaeService.checkGotowork(sawon.getSawonCode());
-		
+		try {
+			geuntaeService.checkGotowork(sawon.getSawonCode());
+		}
+		catch(AlreadyGotowork e) {
+			vo.setSuccess(false);
+			vo.setErrCode(ExceptionCode.ALREADY_GOTOWORK.getCode());
+			vo.setErrMsg(e.getMessage());
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
 		
 		return vo;
 	}

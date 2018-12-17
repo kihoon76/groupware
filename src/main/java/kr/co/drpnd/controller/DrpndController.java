@@ -65,6 +65,11 @@ public class DrpndController {
 		return "reservation";
 	}
 	
+	@GetMapping("forbidden")
+	public String forbidden() {
+		return "forbidden";
+	}
+	
 	private void createToken(ModelMap m, TokenKey key) {
 		String token = SessionUtil.createToken();
 		SessionUtil.getSessionSawon().setToken(key, token);

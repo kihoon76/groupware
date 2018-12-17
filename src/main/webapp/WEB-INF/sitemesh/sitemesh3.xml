@@ -8,6 +8,8 @@
 	<mapping path="/floormap" decorator="/WEB-INF/views/layout/defaultiframe.jsp" />
 	<mapping path="/reservation" decorator="/WEB-INF/views/layout/defaultiframe.jsp" />
 	<mapping path="/*" decorator="/WEB-INF/views/layout/default.jsp" />
+	
+	<mapping path="/forbidden" exclude="true" />
 	<mapping path="/signin" exclude="true" />
 	<mapping path="/result" exclude="true" />
 	<mapping path="/coupon/excel" exclude="true" />
