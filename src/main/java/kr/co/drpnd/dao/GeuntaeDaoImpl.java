@@ -1,5 +1,7 @@
 package kr.co.drpnd.dao;
 
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.apache.ibatis.session.SqlSession;
@@ -17,6 +19,16 @@ public class GeuntaeDaoImpl implements GeuntaeDao {
 	@Override
 	public int insertGotowork(Geuntae geuntae) {
 		return msSqlSession.insert(namespace + ".insertGotowork", geuntae);
+	}
+
+	@Override
+	public int selectMyTodayGotowork(String sawonCode) {
+		return msSqlSession.selectOne(namespace + ".selectMyTodayGotowork", sawonCode);
+	}
+
+	@Override
+	public int selectTime(Map<String, String> param) {
+		return msSqlSession.selectOne(namespace + ".selectTime", param);
 	}
 
 

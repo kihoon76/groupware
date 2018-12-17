@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.google.gson.Gson;
 
 import kr.co.drpnd.domain.Sawon;
+import kr.co.drpnd.service.GeuntaeService;
 import kr.co.drpnd.service.SawonService;
 import kr.co.drpnd.type.TokenKey;
 import kr.co.drpnd.util.DateUtil;
@@ -26,9 +27,21 @@ public class DrpndController {
 	@Resource(name="sawonService")
 	SawonService sawonService;
 	
+	@Resource(name="geuntaeService")
+	GeuntaeService geuntaeService;
+	
 	@GetMapping("main")
 	public String index(ModelMap m) {
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		boolean checked = false;
+		
+		try {
+			checked = geuntaeService.checkMyTodayGotowork(myInfo.getSawonCode());
+		}
+		catch(Exception e) {}
+		
 		m.put("currentDate", DateUtil.getCurrentDateString());
+		m.put("isChecked", checked);
 		return "main";
 	}
 	

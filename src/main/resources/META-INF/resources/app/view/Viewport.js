@@ -4,6 +4,33 @@ Ext.define('Drpnd.view.Viewport', {
    ,initComponent: function(){
 	    var CommonFn = Drpnd.util.CommonFn;
 	    var Html = Drpnd.util.Html;
+	    var isGotowork = Ext.getBody().getAttribute('data-gotowork') || false;
+	    
+	    var toolbarObj = {
+	    	btnOffwork: null,
+	    	btnGotowork: null
+	    }
+	    
+	    function logoutClick(button) {
+	    	if(button == 'yes') {
+				CommonFn.ajax({
+					url: '/logout',
+					method:'GET',
+					success: function(jo) {
+						if(jo.success) {
+							window.location.href = CommonFn.getFullUrl(); 
+						}
+						else {
+							Ext.MessageBox.alert('info', '로그아웃에 실패했습니다.');
+						}
+					},
+				});
+			}
+	    }
+	    
+	    function offWorkClick() {
+	    	
+	    }
 	    
         Ext.apply(this, {
             id     : 'app-viewport'
@@ -28,12 +55,52 @@ Ext.define('Drpnd.view.Viewport', {
 			   '->',{
 				   xtype: 'button',
 				   text: '출근처리',
-				   iconCls: 'icon-gotowork'
+				   iconCls: 'icon-gotowork',
+				   listeners: {
+					   afterrender: function(btn) {
+						   toolbarObj.btnGotowork = btn;
+						   btn.setDisabled(isGotowork);
+					   },
+					   click: function(btn) {
+						   CommonFn.ajax({
+								url: '/geuntae/gotowork',
+								method:'GET',
+								loadmask: {
+									msg: '출근처리중 입니다.'
+								},
+								success: function(jo) {
+									if(jo.success) {
+										Ext.MessageBox.alert('알림', jo.datas[0] + '분에 출근처리 되었습니다.');
+										btn.setDisabled(true);
+										toolbarObj.btnOffwork.setDisabled(false);
+									}
+									else {
+										Ext.MessageBox.alert('alert', jo.errMsg);
+									}
+								},
+							}); 
+					   }
+				   }
 			   },{
 				   xtype: 'button',
 				   text: '퇴근처리',
 				   iconCls: 'icon-offwork',
 				   disabled: true,
+				   listeners: {
+					   afterrender: function(btn) {
+						   toolbarObj.btnOffwork = btn;
+						   btn.setDisabled(!isGotowork);
+					   },
+					   click: function() {
+						   Ext.Msg.confirm(
+								'퇴근처리',
+								'로그아웃 하시겠습니까?',
+								function(button) {
+									logoutClick(button);
+								}
+						   );
+					   }
+				   }
 				   
 			   },{
 					xtype: 'button',
@@ -47,21 +114,9 @@ Ext.define('Drpnd.view.Viewport', {
 								'로그아웃',
 								'로그아웃 하시겠습니까?',
 								function(button) {
-									if(button == 'yes') {
-										CommonFn.ajax({
-											url: '/logout',
-											method:'GET',
-											success: function(jo) {
-												if(jo.success) {
-													window.location.href = CommonFn.getFullUrl(); 
-												}
-												else {
-													Ext.MessageBox.alert('info', '로그아웃에 실패했습니다.');
-												}
-											},
-										});
-									}
-								});
+									logout(button);
+								}
+							);
 						}
 					}
 			   }]

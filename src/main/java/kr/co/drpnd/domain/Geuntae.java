@@ -26,7 +26,6 @@ public class Geuntae {
 	private String outworkContent;
 	private String gotoworkMethod;		//P (PC) M(Mobile)
 	private String offworkMethod;
-	private int result;
 	
 	public String getGeuntaeCode() {
 		return geuntaeCode;
@@ -153,11 +152,5 @@ public class Geuntae {
 	}
 	public void setOffworkMethod(String offworkMethod) {
 		this.offworkMethod = offworkMethod;
-	}
-	public int getResult() {
-		return result;
-	}
-	public void setResult(int result) {
-		this.result = result;
 	}
 }

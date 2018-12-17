@@ -27,7 +27,8 @@ public class Sawon {
 	private boolean sawonTeamLeader;
 	private String sawonQuitDay;
 	private String regDate;
-	private int seatNum;
+	private int seatNum = -1;
+	private String isGotowork;
 	
 	private Map<TokenKey, String> token = new HashMap<>();
 
@@ -192,6 +193,14 @@ public class Sawon {
 
 	public void setSeatNum(int seatNum) {
 		this.seatNum = seatNum;
+	}
+	
+	public String getIsGotowork() {
+		return isGotowork;
+	}
+
+	public void setIsGotowork(String isGotowork) {
+		this.isGotowork = isGotowork;
 	}
 
 	@Override

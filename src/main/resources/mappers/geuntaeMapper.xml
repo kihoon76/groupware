@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mappers.geuntaeMapper">
+	
+	<insert id="insertGotowork" statementType="CALLABLE" parameterType="Geuntae"  >
+		{call [동림].[dbo].[UP_출근처리](
+			#{sawonCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{outworkYN, mode=IN, jdbcType=CHAR, javaType=string},
+			#{gotoworkMethod, mode=IN, jdbcType=CHAR, javaType=string},
+			#{lat, mode=IN, jdbcType=FLOAT, javaType=float},
+			#{lng, mode=IN, jdbcType=FLOAT, javaType=float},
+			#{gotoworkTime, mode=OUT, jdbcType=VARCHAR, javaType=string}
+		)}
+	</insert>
+	
+	<select id="selectMyTodayGotowork" parameterType="string" resultType="int">
+		select count(근태코드)
+		  from [동림].[dbo].[근태]
+		 where 사원코드 = #{sawonCode}
+		   and DATEDIFF(DD, getDate(), 출근시간) = 0
+		   and datepart(hour, getDate()) between 6 and 23
+	</select>
+	
+	<select id="selectTime" parameterType="map" resultType="int">
+		<choose>
+		<when test="type == 'HOUR'">
+		select datepart(HOUR, getDate())
+		</when>
+		<when test="type == 'MINUTE'">
+		select datepart(MINUTE, @gotowork)
+		</when>
+		</choose>
+	</select>
+</mapper>

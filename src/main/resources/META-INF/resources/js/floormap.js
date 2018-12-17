@@ -87,6 +87,19 @@
 		       }
 	    });
 	    
+	    stompClient.subscribe('/message/geuntae/gotowork', function(message) {
+	    	var seatNum = $.parseJSON(message.body);
+		    
+	    	if(seatNum >= 0) {
+	    		var sm = seatMap[seatNum];
+	    		gotowork(sm);
+				/*sm.ownerTxt.text(sawonList[i].sawonName);
+				sm.phoneTxt.text(sawonList[i].sawonPhone + ' / ' + sawonList[i].sawonInnerPhone);*/
+	    	}
+		       
+		   
+	    });
+	    
 //	    stompClient.subscribe('/message/conference/mod/reservation', function(message){
 //		       var m = $.parseJSON(message.body);
 //		       console.log(m.token+ '/' + myToken)
@@ -106,6 +119,18 @@
 //		    	  }
 //		       }
 //		    });
+	}
+	
+	function gotowork(obj) {
+		if(obj) {
+			obj.rect.attr({
+    			fill: '#003'
+    		});
+    		
+    		obj.ownerTxt.font({
+    			fill: '#fff'
+    		});
+		}
 	}
 	
 	function reconnect() {
@@ -479,6 +504,10 @@
 			var sm = seatMap[sawonList[i].seatNum];
 			sm.ownerTxt.text(sawonList[i].sawonName);
 			sm.phoneTxt.text(sawonList[i].sawonPhone + ' / ' + sawonList[i].sawonInnerPhone);
+			
+			if(sawonList[i].isGotowork == 'Y') {
+				gotowork(sm);
+			}
 		}
 	}
 	

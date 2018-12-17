@@ -164,7 +164,7 @@ Ext.define('Drpnd.util.CommonFn', {
 				myMask = new Ext.LoadMask(Ext.getBody(), {msg: 'loading..'});
 			}
 			else {
-				myMask = new Ext.LoadMask(param.loadmask.el, {msg: param.loadmask.msg});
+				myMask = new Ext.LoadMask(param.loadmask.el || Ext.getBody(), {msg: param.loadmask.msg});
 			}
 			
 			myMask.show();
