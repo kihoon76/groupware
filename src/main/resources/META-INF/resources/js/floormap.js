@@ -93,6 +93,17 @@
 	    	if(seatNum >= 0) {
 	    		var sm = seatMap[seatNum];
 	    		gotowork(sm);
+	    	}
+		       
+		   
+	    });
+	    
+	    stompClient.subscribe('/message/geuntae/offwork', function(message) {
+	    	var seatNum = $.parseJSON(message.body);
+		    
+	    	if(seatNum >= 0) {
+	    		var sm = seatMap[seatNum];
+	    		offwork(sm);
 				/*sm.ownerTxt.text(sawonList[i].sawonName);
 				sm.phoneTxt.text(sawonList[i].sawonPhone + ' / ' + sawonList[i].sawonInnerPhone);*/
 	    	}
@@ -129,6 +140,18 @@
     		
     		obj.ownerTxt.font({
     			fill: '#fff'
+    		});
+		}
+	}
+	
+	function offwork(obj) {
+		if(obj) {
+			obj.rect.attr({
+    			fill: recColor
+    		});
+    		
+    		obj.ownerTxt.font({
+    			fill: '#000'
     		});
 		}
 	}
@@ -505,7 +528,7 @@
 			sm.ownerTxt.text(sawonList[i].sawonName);
 			sm.phoneTxt.text(sawonList[i].sawonPhone + ' / ' + sawonList[i].sawonInnerPhone);
 			
-			if(sawonList[i].isGotowork == 'Y') {
+			if(sawonList[i].isGotowork == 'Y' && sawonList[i].isOffwork == 'N') {
 				gotowork(sm);
 			}
 		}

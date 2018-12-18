@@ -57,7 +57,11 @@
 			      좌석번호 as seatNum,
 			   case when T2.근태코드 is null then 'N'
 			   else 'Y'
-			   end as isGotowork 
+			   end as isGotowork,
+			   case when T2.근태코드 is null then 'N'
+			        when T2.퇴근시간 is null then 'N'
+			   else 'Y'
+			   end as isOffwork
 	      from [동림].[dbo].[사원] T1
 	      left outer join [동림].[dbo].[근태] T2 on T1.사원코드 = T2.사원코드
 	       and DATEDIFF(DD, getDate(), T2.출근시간) = 0 

@@ -82,7 +82,7 @@ public class GeuntaeController {
 			vo.addObject(geuntae.getGotoworkTime());
 			vo.addObject(geuntae.getOffworkTime());
 			
-			//this.template.convertAndSend("/message/geuntae/offwork", sawon.getSeatNum());
+			this.template.convertAndSend("/message/geuntae/offwork", sawon.getSeatNum());
 		}
 		catch(AlreadyOffwork e) {
 			vo.setSuccess(false);

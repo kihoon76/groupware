@@ -29,6 +29,7 @@ public class Sawon {
 	private String regDate;
 	private int seatNum = -1;
 	private String isGotowork;
+	private String isOffwork;
 	
 	private Map<TokenKey, String> token = new HashMap<>();
 
@@ -201,6 +202,14 @@ public class Sawon {
 
 	public void setIsGotowork(String isGotowork) {
 		this.isGotowork = isGotowork;
+	}
+	
+	public String getIsOffwork() {
+		return isOffwork;
+	}
+
+	public void setIsOffwork(String isOffwork) {
+		this.isOffwork = isOffwork;
 	}
 
 	@Override
