@@ -5,6 +5,7 @@ Ext.define('Drpnd.view.Viewport', {
 	    var CommonFn = Drpnd.util.CommonFn;
 	    var Html = Drpnd.util.Html;
 	    var isGotowork = Ext.getBody().getAttribute('data-gotowork') == 'true';
+	    var isOffwork = Ext.getBody().getAttribute('data-offwork') == 'true';
 	    
 	    var toolbarObj = {
 	    	btnOffwork: null,
@@ -185,7 +186,7 @@ Ext.define('Drpnd.view.Viewport', {
 				   listeners: {
 					   afterrender: function(btn) {
 						   toolbarObj.btnOffwork = btn;
-						   btn.setDisabled(!isGotowork);
+						   btn.setDisabled(isOffwork);
 					   },
 					   click: function() {
 						   offWorkClick();

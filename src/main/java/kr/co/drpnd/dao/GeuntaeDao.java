@@ -14,4 +14,6 @@ public interface GeuntaeDao {
 
 	void updateOffwork(Geuntae geuntae);
 
+	int selectMyTodayOffwork(int sawonCode);
+
 }

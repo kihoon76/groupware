@@ -33,15 +33,18 @@ public class DrpndController {
 	@GetMapping("main")
 	public String index(ModelMap m) {
 		Sawon myInfo = SessionUtil.getSessionSawon();
-		boolean checked = false;
+		boolean gotoworkChecked = false;
+		boolean offworkChecked = false;
 		
 		try {
-			checked = geuntaeService.checkMyTodayGotowork(myInfo.getSawonCode());
+			gotoworkChecked = geuntaeService.checkMyTodayGotowork(myInfo.getSawonCode());
+			offworkChecked = geuntaeService.checkMyTodayOffwork(myInfo.getSawonCode());
 		}
 		catch(Exception e) {}
 		
 		m.put("currentDate", DateUtil.getCurrentDateString());
-		m.put("isChecked", checked);
+		m.put("isGotoworkChecked", gotoworkChecked);
+		m.put("isOffworkChecked", offworkChecked);
 		return "main";
 	}
 	

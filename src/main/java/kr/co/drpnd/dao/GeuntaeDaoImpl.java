@@ -37,5 +37,10 @@ public class GeuntaeDaoImpl implements GeuntaeDao {
 		
 	}
 
+	@Override
+	public int selectMyTodayOffwork(int sawonCode) {
+		return msSqlSession.selectOne(namespace + ".selectMyTodayOffwork", sawonCode);
+	}
+
 
 }

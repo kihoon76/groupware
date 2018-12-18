@@ -77,6 +77,11 @@ public class GeuntaeService {
 		
 		return geuntae;
 	}
+
+	public boolean checkMyTodayOffwork(String sawonCode) {
+		int r = geuntaeDao.selectMyTodayOffwork(Integer.parseInt(sawonCode));
+		return r == 0;
+	}
 	
 
 }
