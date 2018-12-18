@@ -13,12 +13,24 @@
 		)}
 	</insert>
 	
-	<select id="selectMyTodayGotowork" parameterType="string" resultType="int">
-		select count(근태코드)
+	<update id="updateOffwork" statementType="CALLABLE" parameterType="Geuntae">
+		{call [동림].[dbo].[UP_퇴근처리](
+			#{sawonCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{offworkMethod, mode=IN, jdbcType=CHAR, javaType=string},
+			#{lat, mode=IN, jdbcType=FLOAT, javaType=float},
+			#{lng, mode=IN, jdbcType=FLOAT, javaType=float},
+			#{workContent, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{outworkContent, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{offworkTime, mode=OUT, jdbcType=VARCHAR, javaType=string},
+			#{gotoworkTime, mode=OUT, jdbcType=VARCHAR, javaType=string}
+		)}
+	</update>
+	
+	<select id="selectMyTodayGotowork" parameterType="string" resultType="map">
+		select count(근태코드) as cnt, datepart(hour, getDate()) as hr
 		  from [동림].[dbo].[근태]
 		 where 사원코드 = #{sawonCode}
 		   and DATEDIFF(DD, getDate(), 출근시간) = 0
-		   and datepart(hour, getDate()) between 6 and 23
 	</select>
 	
 	<select id="selectTime" parameterType="map" resultType="int">
@@ -27,7 +39,7 @@
 		select datepart(HOUR, getDate())
 		</when>
 		<when test="type == 'MINUTE'">
-		select datepart(MINUTE, @gotowork)
+		select datepart(MINUTE, getDate())
 		</when>
 		</choose>
 	</select>

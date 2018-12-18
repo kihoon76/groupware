@@ -8,8 +8,10 @@ public interface GeuntaeDao {
 
 	int insertGotowork(Geuntae geuntae);
 
-	int selectMyTodayGotowork(String sawonCode);
+	Map<String, Integer> selectMyTodayGotowork(String sawonCode);
 
 	int selectTime(Map<String, String> param);
+
+	void updateOffwork(Geuntae geuntae);
 
 }

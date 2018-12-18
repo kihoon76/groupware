@@ -4,12 +4,19 @@ Ext.define('Drpnd.view.Viewport', {
    ,initComponent: function(){
 	    var CommonFn = Drpnd.util.CommonFn;
 	    var Html = Drpnd.util.Html;
-	    var isGotowork = Ext.getBody().getAttribute('data-gotowork') || false;
+	    var isGotowork = Ext.getBody().getAttribute('data-gotowork') == 'true';
 	    
 	    var toolbarObj = {
 	    	btnOffwork: null,
 	    	btnGotowork: null
 	    }
+	    
+	    var offworkObj = {
+	    	txtWorkContent: null,
+	    	txtOutworkContent: null	
+	    }
+	    
+	    var offWorkWin = null;
 	    
 	    function logoutClick(button) {
 	    	if(button == 'yes') {
@@ -29,7 +36,96 @@ Ext.define('Drpnd.view.Viewport', {
 	    }
 	    
 	    function offWorkClick() {
+	    	offWorkWin = Ext.create('Ext.window.Window', {
+				title: '퇴근처리',
+				height: 800,
+				width: 800,
+				layout: 'fit',
+				closeAction: 'destroy',
+				modal: true,
+				items: [{
+					xtype: 'form',
+					bodyStyle  : 'padding: 10px;',
+			        margins    : '0 0 0 0',
+			        fieldDefaults: {
+			            msgTarget: 'side',
+			            labelWidth: 85,
+			            anchor: '100%'
+			        },
+			        defaultType: 'textarea',
+			        items: [{
+			        	fieldLabel: '업무내용',
+			        	height: 350,
+			        	listeners: {
+			        		afterrender: function(txt) {
+			        			offworkObj.txtWorkContent = txt;
+			        		}
+			        	}
+			        },{
+			        	fieldLabel: '야근내용',
+			        	height: 350,
+			        	listeners: {
+			        		afterrender: function(txt) {
+			        			offworkObj.txtOutworkContent = txt;
+			        		}
+			        	}
+			        }]
+				}],
+				dockedItems: [{
+				    xtype: 'toolbar',
+				    dock: 'bottom',
+				    ui: 'footer',
+				    //defaults: {minWidth: minButtonWidth},
+				    items: [
+				        { xtype: 'component', flex: 1 },
+				        { xtype: 'button', text: '처리', listeners: {
+				        	click: function() {
+				        		offwork();
+				        	}
+				        } },
+				        { xtype: 'button', text: '닫기', listeners: {
+				        	click: function(btn) {
+				        		offWorkWin.close();
+				        	}
+				        } }
+				    ]
+				}]  
+			});
+			
+	    	offWorkWin.show();
+	    }
+	    
+	    function offwork() {
+	    	 var wcVal = Ext.String.trim(offworkObj.txtWorkContent.getValue());
+	    	 var ocVal = Ext.String.trim(offworkObj.txtOutworkContent.getValue());
+	    	 
+	    	 if(wcVal == '') {
+	    		 offworkObj.txtWorkContent.markInvalid('업무내용을 입력하세요.');
+	    		 return;
+	    	 }
 	    	
+	    	CommonFn.ajax({
+				url: '/geuntae/offwork',
+				method:'POST',
+				headers: { 'Content-Type': 'application/json' }, 
+				jsonData: {
+					workContent: wcVal,
+					outworkContent: ocVal
+				},
+				loadmask: {
+					msg: '퇴근처리중 입니다.'
+				},
+				success: function(jo) {
+					if(jo.success) {
+						Ext.MessageBox.alert('알림', jo.datas[0] + ' - '+ jo.datas[1] + ' 퇴근처리 되었습니다.');
+						toolbarObj.btnOffwork.setDisabled(true);
+						offWorkWin.close();
+					}
+					else {
+						Ext.MessageBox.alert('alert', jo.errMsg);
+					}
+				},
+			}); 
 	    }
 	    
         Ext.apply(this, {
@@ -92,13 +188,7 @@ Ext.define('Drpnd.view.Viewport', {
 						   btn.setDisabled(!isGotowork);
 					   },
 					   click: function() {
-						   Ext.Msg.confirm(
-								'퇴근처리',
-								'로그아웃 하시겠습니까?',
-								function(button) {
-									logoutClick(button);
-								}
-						   );
+						   offWorkClick();
 					   }
 				   }
 				   
@@ -114,7 +204,7 @@ Ext.define('Drpnd.view.Viewport', {
 								'로그아웃',
 								'로그아웃 하시겠습니까?',
 								function(button) {
-									logout(button);
+									logoutClick(button);
 								}
 							);
 						}

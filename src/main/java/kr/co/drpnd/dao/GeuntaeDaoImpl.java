@@ -22,13 +22,19 @@ public class GeuntaeDaoImpl implements GeuntaeDao {
 	}
 
 	@Override
-	public int selectMyTodayGotowork(String sawonCode) {
+	public Map<String, Integer> selectMyTodayGotowork(String sawonCode) {
 		return msSqlSession.selectOne(namespace + ".selectMyTodayGotowork", sawonCode);
 	}
 
 	@Override
 	public int selectTime(Map<String, String> param) {
 		return msSqlSession.selectOne(namespace + ".selectTime", param);
+	}
+
+	@Override
+	public void updateOffwork(Geuntae geuntae) {
+		msSqlSession.update(namespace + ".updateOffwork", geuntae);
+		
 	}
 
 
