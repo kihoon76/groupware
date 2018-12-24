@@ -15,9 +15,11 @@
 		<result column="제목"			property="title"	javaType="string"/>
 		<result column="시작일"		property="start"	javaType="string"/>
 		<result column="종료일"		property="end"	javaType="string"/>
-		<result column="카테고리월"		property="cateMonth"	javaType="string"/>
+		<result column="카테고리월"	property="cateMonth"	javaType="string"/>
 		<result column="카테고리코드"	property="cate"	javaType="string"/>
 		<result column="상세"			property="description"	javaType="string"/>
+		<result column="글자색"		property="txtColor"	javaType="string"/>
+		<result column="바탕색"		property="bgColor"	javaType="string"/>
 		<result column="myevent"	property="mine"	javaType="string"/>
 	</resultMap>
 	
@@ -29,11 +31,17 @@
 	</resultMap>
 	
 	<select id="selectCalendarDataList" parameterType="map" resultMap="RM_CalendarData">
-		select 제목, 시작일, 종료일, 카테고리월, 카테고리코드, 일련번호, 상세,
-			   case when 사원코드 = #{sawonCode} then 'Y'
+		select concat(T2.사원명, '(', T2.사원아이디, ') ', 제목) 제목, 시작일, 종료일, 카테고리월, 카테고리코드, 일련번호, 상세,
+			   case when T1.사원코드 = #{sawonCode} then 'Y'
 			   		else 'N'
-			   end as myevent
-		  from [동림].[dbo].[캘린더]
+			   end as myevent,
+			   isnull(T3.바탕색, '#000000') as 바탕색,
+			   isnull(T3.글자색, '#ffffff') as 글자색 
+		  from [동림].[dbo].[캘린더] T1
+		 inner join [동림].[dbo].[사원] T2
+		    on T1.사원코드 = T2.사원코드
+		  left outer join [동림].[dbo].[팀] T3
+		    on T2.팀코드 = T3.팀코드
 		 where 시작일 >= #{startDate} and 시작일 <![CDATA[<]]> #{endDate}
 		   and 카테고리코드 = #{cate}
 	</select>

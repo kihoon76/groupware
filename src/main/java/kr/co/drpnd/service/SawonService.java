@@ -5,6 +5,9 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.drpnd.dao.SawonDao;
 import kr.co.drpnd.domain.Sawon;
@@ -19,8 +22,18 @@ public class SawonService {
 		return sawonDao.selectSawonInfo(username);
 	}
 
-	public boolean regist(Sawon sawon) {
-		return 1 == sawonDao.insertSawon(sawon);
+	@Transactional(isolation=Isolation.DEFAULT, 
+			   propagation=Propagation.REQUIRED, 
+			   rollbackFor=Exception.class,
+			   timeout=10)//timeout 초단위
+	public void regist(Sawon sawon) throws Exception {
+		 sawonDao.insertSawon(sawon);
+		 
+		 if(sawon.getSawonCode() == null) throw new Exception("사원키가 생성되지 않았습니다.");
+		 
+		 int r = sawonDao.insertAuthority(sawon.getSawonCode());
+		 
+		 if(r != 1) throw new Exception("권한이 설정되지 않았습니다.");
 	}
 
 	public List<Sawon> getMyDepartmentAllSawon(String sawonDepartment) {

@@ -39,4 +39,10 @@ public class SawonDaoImpl implements SawonDao {
 		
 	}
 
+	@Override
+	public int insertAuthority(String sawonCode) {
+		return msSqlSession.insert(namespace + ".insertAuthority", sawonCode);
+		
+	}
+
 }

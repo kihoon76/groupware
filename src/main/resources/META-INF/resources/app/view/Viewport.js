@@ -109,7 +109,7 @@ Ext.define('Drpnd.view.Viewport', {
 	    				
 	    				myInfoWin = Ext.create('Ext.window.Window', {
 	    					width: 500,
-	    					height: 500,
+	    					height: 400,
 	    					closeAction: 'hide',
 	    					draggable: false,
 	    					modal: true,

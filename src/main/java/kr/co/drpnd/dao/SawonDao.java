@@ -14,4 +14,6 @@ public interface SawonDao {
 
 	void updateSawon(Sawon sawon);
 
+	int insertAuthority(String sawonCode);
+
 }

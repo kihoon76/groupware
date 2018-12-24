@@ -12,6 +12,8 @@ public class CalendarEvent {
 	private String cateMonth;
 	private String description;
 	private String mine;
+	private String txtColor;
+	private String bgColor;
 	private String sawonCode;
 	private boolean isNew;
 	private boolean isModify;
@@ -95,6 +97,18 @@ public class CalendarEvent {
 	}
 	public void setEnd(String end) {
 		this.end = end;
+	}
+	public String getTxtColor() {
+		return txtColor;
+	}
+	public void setTxtColor(String txtColor) {
+		this.txtColor = txtColor;
+	}
+	public String getBgColor() {
+		return bgColor;
+	}
+	public void setBgColor(String bgColor) {
+		this.bgColor = bgColor;
 	}
 	
 }

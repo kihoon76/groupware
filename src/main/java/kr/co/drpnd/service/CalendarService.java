@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -27,6 +28,12 @@ public class CalendarService {
 
 	@Resource(name="CalendarDao")
 	CalendarDao calendarDao;
+	
+	@Value("${colorCfg['mine_bg_color']}")
+	String bgColor;
+	
+	@Value("${colorCfg['mine_txt_color']}")
+	String txtColor;
 	
 	@Transactional(isolation=Isolation.DEFAULT, 
 			   propagation=Propagation.REQUIRED, 
@@ -122,6 +129,15 @@ public class CalendarService {
 				map.put("isDb", true);
 				map.put("allDay", true);
 				map.put("description", cal.getDescription());
+				
+				if("Y".equals(cal.getMine())) {
+					map.put("backgroundColor", bgColor);
+					map.put("textColor", txtColor);
+				}
+				else {
+					map.put("backgroundColor", cal.getBgColor());
+					map.put("textColor", cal.getTxtColor());
+				}
 			
 				m.get(cate).add(map);
 			}

@@ -62,6 +62,10 @@
 		</choose>
 			#{sawonTeamLeader},
 			getDate())
+			
+		<selectKey keyProperty="sawonCode" resultType="String" order="AFTER">
+        	SELECT IDENT_CURRENT('[동림].[dbo].[사원]')
+    	</selectKey>
 	</insert>
 	
 	<select id="selectMyDepartmentSawonList"  parameterType="string" resultType="Sawon">
@@ -106,4 +110,9 @@
 		   	       시스템등록일 = getDate()    
 		 where 사원코드 = #{sawonCode}    
 	</update>
+	
+	<insert id="insertAuthority" parameterType="string">
+		insert into [동림].[dbo].[사원권한](사원코드, 권한번호)
+		values (#{sawonCode}, 1)
+	</insert>
 </mapper>
