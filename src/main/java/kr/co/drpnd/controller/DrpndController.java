@@ -3,6 +3,7 @@ package kr.co.drpnd.controller;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.google.gson.Gson;
 
+import kr.co.drpnd.domain.AjaxVO;
 import kr.co.drpnd.domain.Sawon;
 import kr.co.drpnd.service.GeuntaeService;
 import kr.co.drpnd.service.SawonService;
@@ -84,6 +86,11 @@ public class DrpndController {
 	@GetMapping("forbidden")
 	public String forbidden() {
 		return "forbidden";
+	}
+	
+	@GetMapping("checkSession")
+	public String checkSession(ModelMap m) {
+		return result(m);
 	}
 	
 	private void createToken(ModelMap m, TokenKey key) {

@@ -4,6 +4,8 @@ Ext.define('Drpnd.view.Viewport', {
    ,initComponent: function(){
 	    var CommonFn = Drpnd.util.CommonFn;
 	    var Html = Drpnd.util.Html;
+	    var SawonRegForm = Ext.create('Drpnd.custom.SawonRegForm');
+	    
 	    var isGotowork = Ext.getBody().getAttribute('data-gotowork') == 'true';
 	    var isOffwork = Ext.getBody().getAttribute('data-offwork') == 'true';
 	    
@@ -18,6 +20,7 @@ Ext.define('Drpnd.view.Viewport', {
 	    }
 	    
 	    var offWorkWin = null;
+	    var myInfoWin = null;
 	    
 	    function logoutClick(button) {
 	    	if(button == 'yes') {
@@ -26,7 +29,7 @@ Ext.define('Drpnd.view.Viewport', {
 					method:'GET',
 					success: function(jo) {
 						if(jo.success) {
-							window.location.href = CommonFn.getFullUrl(); 
+							//window.location.href = CommonFn.getFullUrl(); 
 						}
 						else {
 							Ext.MessageBox.alert('info', '로그아웃에 실패했습니다.');
@@ -95,6 +98,289 @@ Ext.define('Drpnd.view.Viewport', {
 			
 	    	offWorkWin.show();
 	    }
+	    
+	    function myInfoClick() {
+	    	//if(myInfoWin == null) {
+	    		CommonFn.ajax({
+	    			url: '/sawon/myinfo',
+	    			method: 'GET',
+	    			success: function(jo) {
+	    				console.log(jo)
+	    				
+	    				myInfoWin = Ext.create('Ext.window.Window', {
+	    					width: 500,
+	    					height: 500,
+	    					closeAction: 'hide',
+	    					draggable: false,
+	    					modal: true,
+	    					closable: false,
+	    					resizable: false,
+	    					closeAction: 'destroy',
+	    					items: [getMyInfoForm(jo.datas[0])],
+	    					buttons: [{
+	    						text: '수정',
+	    						id: 'btnRegist',
+	    					    handler: function() {
+	    					    	modifyMyInfo();
+	    				        }
+	    					}, {
+	    						text: '닫기',
+	    					    handler: function() {
+	    					    	myInfoWin.close();
+	    				        }
+	    					}],
+	    					listeners: {
+	    						destroy: function() {
+	    							SawonRegForm.initSetting();
+	    						}
+	    					}
+	    				});
+	    				
+	    				myInfoWin.show();
+	    	    	}
+	    		});
+	    	//}
+	    }
+	    
+	    function modifyMyInfo() {
+	    	if(SawonRegForm.isValid()) {
+				CommonFn.ajax({
+					url: '/sawon/mod/myinfo',
+					method:'POST',
+					headers: { 'Content-Type': 'application/json' }, 
+					jsonData: SawonRegForm.getJsonParam(),
+					timeout:60000,
+					success: function(jo) {
+						
+						if(jo.success) {
+							Ext.Msg.alert('', '내정보가 수정되었습니다. 다시 로그인해 주세요', function() {
+								window.location.href = CommonFn.getFullUrl();
+							});
+						}
+						else {
+							var msg = '';
+							if(jo.errCode == '10000') {
+								Ext.Msg.alert('', '아이디가 중복되었습니다.', function() {
+									SawonRegForm.validIdDuplicate();
+								});
+							}
+							else {
+								console.log();
+								Ext.Msg.alert('에러', 'DB 오류입니다.');
+							}
+						}
+					}
+				});
+			}
+	    }
+	    
+	    function getMyInfoForm(info) {
+			return Ext.create('Ext.form.Panel', {
+				 frame: true,
+				 title: '내정보',
+			     anchor: '100%',
+			     bodyPadding: 5,
+
+			        fieldDefaults: {
+			            labelAlign: 'left',
+			            labelWidth: 90,
+			            anchor: '100%'
+			        },
+
+			        items: [{
+			            xtype: 'combo',
+			            name: 'sawonDepartment',
+			            id: 'sawonDepartment',
+			            fieldLabel: '부서',
+			            queryMode: 'remote',
+			            displayField: 'departmentName',
+			            valueField: 'departmentCode',
+			            editable: false,
+			            store: Ext.create('Drpnd.store.DepartmentListStore'),
+			            listeners: {
+			            	afterrender: function(combo) {
+			            		SawonRegForm.setDepartmentCombo(combo);
+			            		combo.getStore().load();
+			            		combo.setValue(info.department);
+			            	},
+			            	select: function(combo, records) {
+			            		SawonRegForm.onSelectDepartmentCombo(); 
+			            	}
+			            }
+			        },{
+			            xtype: 'combo',
+			            id: 'comboTeam',
+			            name: 'sawonTeam',
+			            fieldLabel: '소속팀',
+			            queryMode: 'remote',
+			            displayField: 'teamName',
+			            valueField: 'teamCode',
+			            editable: false,
+			            store: Ext.create('Drpnd.store.TeamListStore'),
+			            disabled: true,
+			            listeners: {
+			            	afterrender: function(combo) {
+			            		SawonRegForm.setTeamCombo(combo);
+			            		
+			            		//임원이면 설정안함
+			            		if(info.positionGubun == '3') {
+			            			combo.getStore().load();
+				            		combo.setValue(info.team);
+			            		}
+			            	},
+			            	beforequery: function(qe) {
+			            		if(SawonRegForm.getDepartmentChanged()) {
+			            			delete qe.combo.lastQuery;
+			            			SawonRegForm.setDepartmentChanged(false);
+			            		}
+			            	}
+			            }
+			        },{
+			            xtype: 'combo',
+			            name: 'sawonPosition',
+			            fieldLabel: '직급',
+			            queryMode: 'remote',
+			            displayField: 'positionName',
+			            valueField: 'positionCode',
+			            editable: false,
+			            store: Ext.create('Drpnd.store.PositionListStore'),
+			            listeners: {
+			            	afterrender: function(combo) {
+			            		SawonRegForm.setPositionCombo(combo);
+			            		combo.getStore().load();
+			            		combo.setValue(info.position);
+			            		
+			            		SawonRegForm.setImwon(info.positionGubun);
+			            	},
+			            	select: function(combo, records) {
+			            		SawonRegForm.setImwon(records[0].data.positionGubun);
+			            	}
+			            	
+			            }
+			        },{
+			            xtype: 'textfield',
+			            name: 'sawonName',
+			            fieldLabel: '사원명',
+			            listeners: {
+			            	afterrender: function(txt) {
+			            		SawonRegForm.setNameTxt(txt);
+			            		txt.setValue(info.sawonName);
+			            	}
+			            }
+			        },{
+			            xtype: 'textfield',
+			            name: 'sawonId',
+			            fieldLabel: '아이디',
+			            listeners: {
+			            	afterrender: function(txt) {
+			            		SawonRegForm.setIdTxt(txt);
+			            		txt.setValue(info.sawonId);
+			            	}
+			            }
+			        },{
+			            xtype: 'textfield',
+			            name: 'sawonPassword',
+			            inputType: 'password',
+			            fieldLabel: '비밀번호',
+			            listeners: {
+			            	afterrender: function(txt) {
+			            		SawonRegForm.setPwTxt(txt);
+			            	}
+			            }
+			        },{
+			            xtype: 'textfield',
+			            id: 'passwordConfirm',
+			            inputType: 'password',
+			            fieldLabel: '비밀번호확인',
+			            listeners: {
+			            	afterrender: function(txt) {
+			            		SawonRegForm.setPwConfirmTxt(txt);
+			            	}
+			            }
+			        },{
+			            xtype: 'textfield',
+			            name: 'sawonPhone',
+			            fieldLabel: '연락처',
+			            enableKeyEvents: true,
+			            listeners: {
+			            	afterrender: function(txt) {
+			            		SawonRegForm.setPhoneTxt(txt);
+			            		txt.setValue(info.phone);
+			            	},
+			            	keyup: function(txt, e, eOpts) {
+		                		var v = txt.getValue();
+		                		
+		                		if(!v.startsWith('010-')) {
+		                			txt.setValue('010-');
+		                		}
+		                		
+		                		//space key
+		                		if(e.keyCode == 32) {
+		                			txt.setValue(Ext.util.Format.trim(v));
+		                		}
+			            	}
+			            }
+			        },{
+			            xtype: 'textfield',
+			            name: 'sawonInnerPhone',
+			            fieldLabel: '내선번호',
+			            listeners: {
+			            	afterrender: function(txt) {
+			            		SawonRegForm.setInnerPhoneTxt(txt);
+			            		txt.setValue(info.innerPhone);
+			            	}
+			            }
+			        },{
+			            xtype: 'textfield',
+			            name: 'sawonEmail',
+			            fieldLabel: '이메일',
+			            listeners: {
+			            	afterrender: function(txt) {
+			            		SawonRegForm.setEmailTxt(txt);
+			            		txt.setValue(info.email)
+			            	}
+			            }
+			        },{
+			            xtype: 'datefield',
+			            name: 'sawonBirthday',
+			            fieldLabel: '생년월일',
+			            format:'Y-m-d',
+			            editable: false,
+			            listeners: {
+			            	afterrender: function(date) {
+			            		SawonRegForm.setBirthdayDate(date);
+			            		date.setRawValue(info.birthday);
+			            	}
+			            }
+			        },{
+			        	xtype: 'radiogroup',
+		            	fieldLabel: '팀리더',
+		            	//height: 120,
+		            	items: [{
+		            		boxLabel: '예',
+		            		boxLabelAlign: 'after',
+		            		name: 'sawonTeamLeader',
+		            		id: 'rdoSawonTeamLeaderY',
+		            		checked: info.leader == 'Y' ? true : false,
+		            		padding: '0 50 0 0',
+		            		_value: 'Y'
+		            		
+		            	},{
+		            		boxLabel: '아니오',
+		            		boxLabelAlign: 'after',
+		            		checked: info.leader == 'N' ? true : false,
+		            		name: 'sawonTeamLeader',
+		            		id: 'rdoSawonTeamLeaderN',
+		            		_value: 'N'
+		            	}],
+		            	listeners: {
+			            	afterrender: function(rdoGrp) {
+			            		SawonRegForm.setTeamLeaderRdoGrp(rdoGrp);
+			            	}
+			            }
+			        }]
+			});
+		}
 	    
 	    function offwork() {
 	    	 var wcVal = Ext.String.trim(offworkObj.txtWorkContent.getValue());
@@ -190,6 +476,16 @@ Ext.define('Drpnd.view.Viewport', {
 					   },
 					   click: function() {
 						   offWorkClick();
+					   }
+				   }
+				   
+			   },{
+				   xtype: 'button',
+				   text: '내정보',
+				   iconCls: 'icon-myinfo',
+				   listeners: {
+					   click: function() {
+						   myInfoClick();
 					   }
 				   }
 				   

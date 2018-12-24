@@ -73,7 +73,7 @@ Ext.define('Drpnd.plugins.TabClose', {
 
 				clickedTabIndex = getIndex(h.id);
 				
-				if(clickedTabIndex == 0) return;
+				if(clickedTabIndex <= 1) return;
 				closeMenu.showAt(e.getXY());
 			});
 		});

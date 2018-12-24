@@ -1,7 +1,14 @@
 var common = (function() {
 	var win = null;
 	var ErrCode = parent.Drpnd.util.ErrorCode;
+	var Context = parent.Drpnd.util.Constants.context;
 	//var ErrCode = parent.Ext.create('Drpnd.util.ErrorCode');
+	function redirect(msg) {
+		parent.Ext.Msg.alert('', msg, function() {
+			parent.window.location.href = Context + '/signin';
+		});
+	}
+	
 	return {
 		refreshExtTab: function(id, callback) {
 			//cate-notice-list-panel
@@ -255,28 +262,12 @@ var common = (function() {
 					var errCode = jo.errCode;
 					
 					if(!jo.success) {
+						if(errCode == '202') {
+							redirect('중복로그인이  발생했습니다.');
+							return;
+						}
+						
 						parent.Ext.Msg.alert('오류', jo.errMsg);
-						
-//						if(errCode == null) {
-//							parent.Ext.Msg.alert('오류', jo.errMsg);
-//						}
-//						else {
-//							switch(errCode) {
-//							case ErrCode.INVALID_RESERVATION_TIME :
-//								parent.Ext.Msg.alert('', jo.errMsg);
-//								break;
-//							case ErrCode.INVALID_RESERVATION_USER :
-//								
-//							}
-//						}
-						
-						return;
-//						if(errCode == '202') {
-//							Ext.Msg.alert('', '중복로그인이  발생했습니다.', function() {
-//								window.location.href = context + '/signin';
-//							});
-//							return;
-//						}
 					}
 					
 					if(cfg.success) {
@@ -287,9 +278,7 @@ var common = (function() {
 				catch(e) {
 					if(!parent.Ext.String.trim(response.responseText).startsWith('{')) {
 						//html로 간주
-						parent.Ext.Msg.alert('', '세션만료 되었습니다.', function() {
-							window.location.href = context + '/signin';
-						});
+						redirect('세션만료 되었습니다.');
 					}
 				}
 				finally {

@@ -12,4 +12,6 @@ public interface SawonDao {
 
 	List<Sawon> selectMyDepartmentSawonList(String sawonDepartment);
 
+	void updateSawon(Sawon sawon);
+
 }

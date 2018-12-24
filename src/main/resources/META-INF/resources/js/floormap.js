@@ -269,7 +269,7 @@
 		});
 		
 		rect.on('click', function() {
-			viewTimeline();
+			checkSession(viewTimeline);
 		})
 		.on('mouseover', function() {
 			this.fill({ color : recColor, opacity: 0.3})
@@ -285,6 +285,16 @@
 		seatMap.push({
 			rect: rect
 		});
+	}
+	
+	function checkSession(fn) {
+		common.ajaxExt({
+    		url: '/checkSession',
+    		method: 'GET',
+			success: function(jo) {
+				fn();
+			}
+    	});
 	}
 	
 	function viewTimeline() {
@@ -315,7 +325,7 @@
 			        		//setConferenceTime();
 			        		//reservationContentWin = $(iframe.el.dom).find('iframe')[0].contentWindow;
 			        		TimeObj.ymd = reservationContentWin.getCurrentDate();
-			        		setConferenceTime();
+			        		checkSession(setConferenceTime);
 			        	}
 			        } },
 			        { xtype: 'button', text: '닫기', listeners: {
@@ -333,7 +343,8 @@
 		})
 		
 		reserveWin.show();
-	
+			
+    
 	}
 	
 	function setConferenceTime() {

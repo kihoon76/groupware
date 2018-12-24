@@ -16,6 +16,7 @@ public class Sawon {
 	private String sawonDepartment;
 	private String sawonTeam;
 	private String sawonPosition;
+	private String sawonPositionName;
 	private String sawonId;
 	private String sawonPassword;
 	private String sawonPhone;
@@ -24,12 +25,14 @@ public class Sawon {
 	private String sawonBirthday;
 	private String sawonManWoman;
 	private boolean sawonQuit;
-	private boolean sawonTeamLeader;
+	private String sawonTeamLeader;
 	private String sawonQuitDay;
 	private String regDate;
 	private int seatNum = -1;
 	private String isGotowork;
 	private String isOffwork;
+	private String positionGubun;
+	private boolean isImwon;
 	
 	private Map<TokenKey, String> token = new HashMap<>();
 
@@ -79,6 +82,14 @@ public class Sawon {
 
 	public void setSawonPosition(String sawonPosition) {
 		this.sawonPosition = sawonPosition;
+	}
+
+	public String getSawonPositionName() {
+		return sawonPositionName;
+	}
+
+	public void setSawonPositionName(String sawonPositionName) {
+		this.sawonPositionName = sawonPositionName;
 	}
 
 	public String getSawonId() {
@@ -136,11 +147,11 @@ public class Sawon {
 		this.sawonQuit = sawonQuit;
 	}
 
-	public boolean isSawonTeamLeader() {
+	public String getSawonTeamLeader() {
 		return sawonTeamLeader;
 	}
 
-	public void setSawonTeamLeader(boolean sawonTeamLeader) {
+	public void setSawonTeamLeader(String sawonTeamLeader) {
 		this.sawonTeamLeader = sawonTeamLeader;
 	}
 
@@ -210,6 +221,22 @@ public class Sawon {
 
 	public void setIsOffwork(String isOffwork) {
 		this.isOffwork = isOffwork;
+	}
+	
+	public String getPositionGubun() {
+		return positionGubun;
+	}
+
+	public void setPositionGubun(String positionGubun) {
+		this.positionGubun = positionGubun;
+	}
+
+	public boolean isImwon() {
+		return isImwon;
+	}
+
+	public void setImwon(boolean isImwon) {
+		this.isImwon = isImwon;
 	}
 
 	@Override

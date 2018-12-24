@@ -165,8 +165,9 @@ Ext.define('Drpnd.custom.SawonRegForm', function(){
 				sawonInnerPhone: trim(this.innerPhoneTxt.getValue()),
 				sawonEmail: trim(this.emailTxt.getValue()),
 				sawonBirthday: trim(this.birthdayDate.getRawValue()),
-				sawonManWoman: (this.manWomanRdoGrp.getChecked())[0]._value,
-				sawonTeamLeader: (this.teamLeaderRdoGrp.getChecked())[0]._value
+				//sawonManWoman: (this.manWomanRdoGrp.getChecked())[0]._value,
+				sawonTeamLeader: (this.teamLeaderRdoGrp.getChecked())[0]._value,
+				isImwon: isImwon
 			}
 		},
 		isValid: function() {

@@ -26,4 +26,8 @@ public class SawonService {
 	public List<Sawon> getMyDepartmentAllSawon(String sawonDepartment) {
 		return sawonDao.selectMyDepartmentSawonList(sawonDepartment);
 	}
+
+	public void modifySawon(Sawon sawon) {
+		sawonDao.updateSawon(sawon);
+	}
 }

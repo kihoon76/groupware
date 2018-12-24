@@ -9,13 +9,21 @@
 		<result column="비밀번호" property="sawonPassword" javaType="string"/>
 		<result column="부서코드" property="sawonDepartment" javaType="string"/>
 		<result column="직급코드" property="sawonPosition" javaType="string"/>
+		<result column="직급명" property="sawonPositionName" javaType="string"/>
 		<result column="좌석번호" property="seatNum" javaType="int"/>
+		<result column="팀코드" property="sawonTeam" javaType="String"/>
+		<result column="연락처" property="sawonPhone" javaType="String"/>
+		<result column="내선번호" property="sawonInnerPhone" javaType="String"/>
+		<result column="이메일" property="sawonEmail" javaType="String"/>
+		<result column="생년월일" property="sawonBirthday" javaType="String"/>
+		<result column="팀리더" property="sawonTeamLeader" javaType="String"/>
+		<result column="직급구별" property="positionGubun" javaType="String"/>
 	 	<collection property="authorities" column="사원코드" javaType="java.util.ArrayList"
 	 				ofType="Authority" select="selectAuthorities" />
 	</resultMap>
 	
 	<select id="selectSawonInfo" parameterType="string" resultMap="RM_selectSawon">
-		select 사원코드, 사원아이디, 사원명, 비밀번호, t2.직급명, t3.부서명, t1.부서코드, t1.좌석번호
+		select 사원코드, 사원아이디, 사원명, 비밀번호, t1.직급코드, t2.직급명, t3.부서명, t1.부서코드, t1.좌석번호, t1.팀코드, t1.연락처, t1.내선번호, t1.이메일, t1.생년월일, t1.팀리더, t2.직급구별, t2.직급명
 		  from [동림].[dbo].[사원] t1
 		  left outer join [동림].[dbo].[직급] t2
 		    on t1.직급코드 = t2.직급코드
@@ -44,7 +52,14 @@
 			#{sawonBirthday},
 			#{sawonPosition},
 			#{sawonDepartment},
+		<choose>
+			<when test="isImwon">
+			null,
+			</when>
+			<otherwise>
 			#{sawonTeam},
+			</otherwise>
+		</choose>
 			#{sawonTeamLeader},
 			getDate())
 	</insert>
@@ -67,4 +82,28 @@
 	       and DATEDIFF(DD, getDate(), T2.출근시간) = 0 
 	     where 부서코드 = #{department}
 	</select>
+	
+	<update id="updateSawon" parameterType="Sawon">
+		update [동림].[dbo].[사원]
+		   set 사원아이디 = #{sawonId},
+		   	       사원명 = #{sawonName},
+		   	       부서코드 = #{sawonDepartment},
+		<choose>
+			<when test="isImwon">
+			       팀코드 = null,
+			</when>
+			<otherwise>
+			       팀코드 = #{sawonTeam},
+			</otherwise>
+		</choose>
+		   	       직급코드 = #{sawonPosition},
+		   	       비밀번호 = #{sawonPassword},
+		   	       연락처 = #{sawonPhone},
+		   	       내선번호 = #{sawonInnerPhone},
+		   	       이메일 = #{sawonEmail},
+		   	       생년월일 = #{sawonBirthday},
+		   	       팀리더 = #{sawonTeamLeader},
+		   	       시스템등록일 = getDate()    
+		 where 사원코드 = #{sawonCode}    
+	</update>
 </mapper>

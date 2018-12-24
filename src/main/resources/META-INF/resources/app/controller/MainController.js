@@ -11,7 +11,7 @@ Ext.define('Drpnd.controller.MainController', {
 		
 		this.addContentTabPanel(
 				'cate-drawing',
-				'자리배치도',
+				'오늘의 근태상황',
 				Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'floormap' }),
 				false);
 		

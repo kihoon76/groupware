@@ -40,9 +40,9 @@
 					delete-cookies="true"/>
 		<sec:csrf disabled="true"/>
 		
-<!-- 		<sec:session-management session-authentication-error-url="/result/202"> -->
-<!-- 			<sec:concurrency-control max-sessions="1" error-if-maximum-exceeded="false" expired-url="/result/202"/> -->
-<!-- 		</sec:session-management> -->
+		<sec:session-management session-authentication-error-url="/result/202">
+			<sec:concurrency-control max-sessions="1" error-if-maximum-exceeded="false" expired-url="/result/202"/>
+		</sec:session-management>
 	</sec:http> 
 	
 

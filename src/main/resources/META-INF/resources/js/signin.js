@@ -247,31 +247,6 @@ Ext.onReady(function() {
 		            }
 		        },{
 		        	xtype: 'radiogroup',
-	            	fieldLabel: '성별',
-	            	//height: 120,
-	            	items: [{
-	            		boxLabel: '남',
-	            		boxLabelAlign: 'after',
-	            		name: 'sawonManWoman',
-	            		checked: true,
-	            		id: 'rdoSawonMan',
-	            		padding: '0 50 0 0',
-	            		_value: 'M'
-	            		
-	            	},{
-	            		boxLabel: '여',
-	            		boxLabelAlign: 'after',
-	            		name: 'sawonManWoman',
-	            		id: 'rdoSawonWoman',
-	            		_value: 'W'
-	            	}],
-	            	listeners: {
-		            	afterrender: function(rdoGrp) {
-		            		SawonRegForm.setManWomanRdoGrp(rdoGrp);
-		            	}
-		            }
-		        },{
-		        	xtype: 'radiogroup',
 	            	fieldLabel: '팀리더',
 	            	//height: 120,
 	            	items: [{

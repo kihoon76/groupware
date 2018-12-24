@@ -33,4 +33,10 @@ public class SawonDaoImpl implements SawonDao {
 		return msSqlSession.selectList(namespace + ".selectMyDepartmentSawonList", sawonDepartment);
 	}
 
+	@Override
+	public void updateSawon(Sawon sawon) {
+		msSqlSession.update(namespace + ".updateSawon", sawon);
+		
+	}
+
 }
