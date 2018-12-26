@@ -1,6 +1,7 @@
 package kr.co.drpnd.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import kr.co.drpnd.domain.Sawon;
 
@@ -15,5 +16,7 @@ public interface SawonDao {
 	void updateSawon(Sawon sawon);
 
 	int insertAuthority(String sawonCode);
+
+	List<Map<String, Object>> selectTodayVacationAllSawon(Map<String, Integer> param);
 
 }

@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -42,6 +43,12 @@ public class CalendarController {
 	@Resource(name="calendarService")
 	CalendarService calendarService;
 	
+	@Value("${colorCfg['mine_bg_color']}")
+	String bgColor;
+	
+	@Value("${colorCfg['mine_txt_color']}")
+	String txtColor;
+	
 	@Autowired
 	private SimpMessagingTemplate template;
 	
@@ -56,7 +63,8 @@ public class CalendarController {
 		m.put("category", list);
 		m.put("defaultCate", (defaultCate == null ? list.get(0).getCode() : defaultCate));
 		m.put("categoryStr", new Gson().toJson(list));
-		
+		m.put("mineBgColor", bgColor);
+		m.put("mineTxtColor", txtColor);
 		
 		return "calendar";
 	}

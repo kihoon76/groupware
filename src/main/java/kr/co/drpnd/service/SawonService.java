@@ -1,6 +1,8 @@
 package kr.co.drpnd.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -42,5 +44,11 @@ public class SawonService {
 
 	public void modifySawon(Sawon sawon) {
 		sawonDao.updateSawon(sawon);
+	}
+
+	public List<Map<String, Object>> getTodayVacationAllSawon(String sawonDepartment) {
+		Map<String, Integer> param = new HashMap<>();
+		param.put("department", Integer.parseInt(sawonDepartment));
+		return sawonDao.selectTodayVacationAllSawon(param);
 	}
 }

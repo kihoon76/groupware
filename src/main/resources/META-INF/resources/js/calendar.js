@@ -5,6 +5,8 @@ $(document).ready(function() {
 	var calMStart = null;
 	var calMEnd = null;
 	var isModified = false;
+	var mineBgColor = $('#mineBgColor').val();
+	var mineTxtColor = $('#mineTxtColor').val();
 	
 	var eventSources = {
 //		team1: {
@@ -379,6 +381,8 @@ $(document).ready(function() {
 	
 	function addEvent(event) {
 		var teamId = event.cate;
+		event.backgroundColor = mineBgColor;
+		event.textColor = mineTxtColor;
 		$('#calendar').fullCalendar('removeEventSource', eventSources[teamId]);
 		
 		eventSources[teamId].events.push(event);

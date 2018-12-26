@@ -22,7 +22,8 @@
 <body data-url="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" 
 	  data-date="<c:out value='${currentDate}' />"
 	  data-gotowork="<c:out value='${isGotoworkChecked}' />"
-	  data-offwork="<c:out value='${isOffworkChecked}' />">
+	  data-offwork="<c:out value='${isOffworkChecked}' />"
+	  data-sawon-name="<c:out value='${sawonName}' />">
 	<sitemesh:write property="body" /> 
 	<script src="/resources/core/ver/4.1.1-rc2/js/ext-all.js"></script>
 	

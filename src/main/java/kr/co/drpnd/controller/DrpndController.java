@@ -1,6 +1,7 @@
 package kr.co.drpnd.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -47,6 +48,7 @@ public class DrpndController {
 		m.put("currentDate", DateUtil.getCurrentDateString());
 		m.put("isGotoworkChecked", gotoworkChecked);
 		m.put("isOffworkChecked", offworkChecked);
+		m.put("sawonName", myInfo.getSawonName());
 		return "main";
 	}
 	
@@ -73,8 +75,10 @@ public class DrpndController {
 		Sawon sawon = SessionUtil.getSessionSawon();
 		
 		List<Sawon> sawonList = sawonService.getMyDepartmentAllSawon(sawon.getSawonDepartment());
+		List<Map<String, Object>> todayVacationList = sawonService.getTodayVacationAllSawon(sawon.getSawonDepartment());
 		Gson g = new Gson();
 		m.addAttribute("list", g.toJson(sawonList));
+		m.addAttribute("vacation", g.toJson(todayVacationList));
 		return "floormap";
 	}
 	

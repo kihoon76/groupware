@@ -1,6 +1,7 @@
 package kr.co.drpnd.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -43,6 +44,11 @@ public class SawonDaoImpl implements SawonDao {
 	public int insertAuthority(String sawonCode) {
 		return msSqlSession.insert(namespace + ".insertAuthority", sawonCode);
 		
+	}
+
+	@Override
+	public List<Map<String, Object>> selectTodayVacationAllSawon(Map<String, Integer> param) {
+		return msSqlSession.selectList(namespace + ".selectTodayVacationAllSawon", param);
 	}
 
 }

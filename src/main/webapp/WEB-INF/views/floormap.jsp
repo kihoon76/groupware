@@ -7,6 +7,8 @@
 <content tag="script">
 <script src="/resources/lib/jquery.min.js"></script>
 <script src="/resources/os/SVG/svg.min.js"></script>
+<script src="/resources/os/SVG/svg.select.min.js"></script>
+<script src="/resources/os/SVG/svg.resize.min.js"></script>
 <script src="/resources/js/icommon.js"></script>
 <script src="/resources/js/sockjs.min.js"></script>
 <script src="/resources/js/stomp.min.js"></script>
@@ -22,4 +24,5 @@
 	<div id="drawing"></div>
 	<input type="hidden" id="_csrfToken" value="${_csrfToken}" />
 	<input type="hidden" value='${list}' id="list"/>
+	<input type="hidden" value='${vacation}' id="vacation"/>
 </body>

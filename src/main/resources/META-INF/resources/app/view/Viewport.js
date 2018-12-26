@@ -1,13 +1,15 @@
 Ext.define('Drpnd.view.Viewport', {
     extend : 'Ext.container.Viewport'
-   ,requires: ['Drpnd.util.CommonFn', 'Drpnd.util.Html']
+   ,requires: ['Drpnd.util.CommonFn', 'Drpnd.util.Html', 'Drpnd.util.Observer']
    ,initComponent: function(){
 	    var CommonFn = Drpnd.util.CommonFn;
 	    var Html = Drpnd.util.Html;
+	    window.Observer = Drpnd.util.Observer;
 	    var SawonRegForm = Ext.create('Drpnd.custom.SawonRegForm');
 	    
 	    var isGotowork = Ext.getBody().getAttribute('data-gotowork') == 'true';
 	    var isOffwork = Ext.getBody().getAttribute('data-offwork') == 'true';
+	    var sawonName = Ext.getBody().getAttribute('data-sawon-name');
 	    
 	    var toolbarObj = {
 	    	btnOffwork: null,
@@ -481,7 +483,7 @@ Ext.define('Drpnd.view.Viewport', {
 				   
 			   },{
 				   xtype: 'button',
-				   text: '내정보',
+				   text: '<span style="font-weight:bold; color:#0000ff;">'  + sawonName + '</span>님 정보',
 				   iconCls: 'icon-myinfo',
 				   listeners: {
 					   click: function() {
@@ -549,6 +551,10 @@ Ext.define('Drpnd.view.Viewport', {
             }]
         });
 
+        Ext.EventManager.onWindowResize(function(w, h) {
+    		Observer.notifyWinResize(w, h);
+    	});
+        
         this.callParent(arguments);
     }
 });

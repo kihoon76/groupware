@@ -28,4 +28,6 @@
 		</select> 
 	</div>
 	<div id="calendar"></div>
+	<input type="hidden" id="mineBgColor" value="<c:out value='${mineBgColor}'/>" />
+	<input type="hidden" id="mineTxtColor" value="<c:out value='${mineTxtColor}'/>" />
 </body>

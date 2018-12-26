@@ -2,6 +2,7 @@
 	var draw = null;
 	var recW = 200;
 	var recH = 50;
+	var recVacationW = 80;
 	var recColor = '#ccc';
 	var recPadding = 10;
 	var cellPhoneW = recW;
@@ -17,6 +18,9 @@
 	var seatSpace = recH + cellPhoneH + innerPhoneH + gap;
 	var divH = recH + cellPhoneH + innerPhoneH;
 	var seatMap = [];
+	var imwonSeatMap = [];
+	var conferenceMap = [];
+	
 	var TimeObj = {
 		title: null,
 		startTime: null,
@@ -30,6 +34,7 @@
 	var reconTotal = 10;
 	var reconAttemp = 0;
 	var sawonList = null;
+	var vacationSawonList = null;
 	
 	var socket = new SockJS('/websocket'),
 	stompClient = Stomp.over(socket);
@@ -141,6 +146,14 @@
     		obj.ownerTxt.font({
     			fill: '#fff'
     		});
+    		
+    		obj.rectVacation.attr({
+    			fill: '#003'
+    		});
+    		
+    		obj.vacationTxt.attr({
+    			fill: '#003'
+    		});
 		}
 	}
 	
@@ -152,6 +165,14 @@
     		
     		obj.ownerTxt.font({
     			fill: '#000'
+    		});
+    		
+    		obj.rectVacation.attr({
+    			fill: recColor
+    		});
+    		
+    		obj.vacationTxt.attr({
+    			fill: recColor
     		});
 		}
 	}
@@ -194,6 +215,20 @@
 			fill: isSudo ? '#033' : recColor,
 		});
 		
+//		var rect = draw.rect(recW, recH);
+//		rect.attr({
+//			x:x,
+//			y:y,
+//			fill: isSudo ? '#033' : recColor,
+//		});
+//		rect.select().resize();
+		
+		var rectVacation = draw.rect(recVacationW, recH).attr({
+			x:x+120,
+			y:y,
+			fill: recColor
+		});
+		
 		if(isSudo) {
 			rect.radius(30, 30);
 		}
@@ -217,6 +252,10 @@
 		phoneTxt.font({anchor: 'middle', size: 13, family: 'Helvetica'});
 		phoneTxt.fill('#fff');
 		phoneTxt.move(x + (recW/3) + 5, y + recH + 3);
+		
+		var vacationTxt = draw.text('휴가').attr({x:50, y:50});
+		vacationTxt.font({anchor: 'middle', size: 15, family: 'Helvetica', fill: recColor});
+		vacationTxt.move(x + (recW/6) + 125, y + 17);
 //		
 //		var lblInner = draw.text('내선전화  ').attr({x:50, y:50});
 //		lblInner.font({anchor: 'middle', size: 13, family: 'Helvetica'});
@@ -225,24 +264,32 @@
 		
 		
 		group.add(rect);
+		group.add(rectVacation);
 		group.add(rectCell);
 		//group.add(rectInnerPhone);
 		group.add(ownerTxt);
 		group.add(phoneTxt);
+		group.add(vacationTxt);
 		//group.add(lblInner);
 		
 		return {
 			rect: rect,
+			rectCell: rectCell,
+			rectVacation: rectVacation,
 			ownerTxt: ownerTxt,
-			phoneTxt: phoneTxt
+			phoneTxt: phoneTxt,
+			vacationTxt: vacationTxt
 		};
 	}
 	
 	function imwonSeat(cnt) {
 		var w = window.innerWidth;
 		var lastStartY = 0;
+		var seat = null;
 		for(var i=0; i<cnt; i++) {
-			seatMap.push(Seat(w - recW + recPadding, lastStartY = seatSpace * i));
+			seat = Seat(w - recW + recPadding, lastStartY = seatSpace * i);
+			seatMap.push(seat);
+			imwonSeatMap.push(seat);
 		}
 		
 		return lastStartY;
@@ -282,9 +329,13 @@
 		ownerTxt.font({anchor: 'middle', size: 25, family: 'Helvetica'});
 		ownerTxt.move(x + (recW/4), y + 10);
 		
-		seatMap.push({
-			rect: rect
-		});
+		var obj = {
+			rect: rect,
+			ownerTxt: ownerTxt
+		}
+		
+		conferenceMap.push(obj);
+		seatMap.push(obj);
 	}
 	
 	function checkSession(fn) {
@@ -525,6 +576,7 @@
 			draw = SVG('drawing').size('100%', 800);
 			makeSeat();
 			initSawonInfo();
+			initSawonVacationInfo();
 		});
 	}
 	else {
@@ -545,5 +597,80 @@
 		}
 	}
 	
+	function initSawonVacationInfo() {
+		vacationSawonList = $.parseJSON($('#vacation').val());
+		
+		for(var i=0, len=vacationSawonList.length; i<len; i++) {
+			var sm = seatMap[vacationSawonList[i].seatNum];
+			sm.rectVacation.attr({fill: '#033'});
+			sm.vacationTxt.font({fill: '#fff'});
+		}
+	}
+	
+	/*var Observer = parent.window.Observer;//parent.Ext.create('Drpnd.util.Observer');
+	Observer.addWinResizeObserver(function(w, h) {
+		var len = imwonSeatMap.length;
+		for(var i=0; i<len; i++) {
+			var rect = imwonSeatMap[i].rect;
+			var y = rect.y();
+			var currentX = rect.x();
+			var x = window.innerWidth; //w - recW + recPadding;
+			console.log(x + "/" + (x-recW+recPadding) + "/" + currentX);
+			rect.dmove((x-recW+recPadding) - currentX , 0);
+			//var y = rect.y();
+			
+			//rect.translate(w - recW + recPadding, y).attr({fill: recColor});
+		}
+	})*/
+	
+	var rtime;
+	var timeout = false;
+	var delta = 200;
+	var currentWinWidth = window.innerWidth;
+	
+	$(window).resize(function() {
+	    rtime = new Date();
+	    if (timeout === false) {
+	        timeout = true;
+	        setTimeout(resizeend, delta);
+	    }
+	});
+
+	function resizeend() {
+	    if (new Date() - rtime < delta) {
+	        setTimeout(resizeend, delta);
+	    } 
+	    else {
+	        timeout = false;
+	        var x = window.innerWidth;
+	        
+	        console.log(currentWinWidth + "/" + x);
+	        var len = imwonSeatMap.length;
+			for(var i=0; i<len; i++) {
+				var rect = imwonSeatMap[i].rect;
+				var rectCell = imwonSeatMap[i].rectCell;
+				var rectVacation = imwonSeatMap[i].rectVacation;
+				
+				var ownerTxt = imwonSeatMap[i].ownerTxt;
+				var phoneTxt = imwonSeatMap[i].phoneTxt;
+				var vacationTxt = imwonSeatMap[i].vacationTxt;
+				 //w - recW + recPadding;
+				console.log(Math.floor(ownerTxt.x()) + "/" + (Math.floor(ownerTxt.x()) - (currentWinWidth - x)));
+				rect.dmove((x - recW + recPadding) - rect.x() , 0);
+				rectCell.dmove((x - cellPhoneW + recPadding) - rectCell.x(), 0);
+				rectVacation.dmove((x - recVacationW + recPadding) - rectVacation.x(), 0);
+				ownerTxt.move(Math.floor(ownerTxt.x()) - (currentWinWidth - x), ownerTxt.y());
+				phoneTxt.move(Math.floor(phoneTxt.x()) - (currentWinWidth - x), phoneTxt.y());
+				vacationTxt.move(Math.floor(vacationTxt.x()) - (currentWinWidth - x), vacationTxt.y());
+			}
+			
+			var conferenceRect = conferenceMap[0].rect;
+			var conferenceOwnerTxt = conferenceMap[0].ownerTxt;
+			conferenceRect.dmove((x - recW + recPadding) - conferenceRect.x() , 0);
+			conferenceOwnerTxt.move(Math.floor(conferenceOwnerTxt.x()) - (currentWinWidth - x), conferenceOwnerTxt.y());
+			
+			currentWinWidth = x;
+	    }               
+	}
 	
 }());
