@@ -57,6 +57,9 @@ public class CalendarController {
 			@RequestParam(name="dftDate", required=false) String defaultDate,
 			@RequestParam(name="dftCate", required=false) String defaultCate,
 			ModelMap m) {
+		
+		Sawon sawon = SessionUtil.getSessionSawon();
+		
 		List<CalendarCategory> list = calendarService.getCalendarCategory();
 		
 		m.put("currentDate", (defaultDate == null ? DateUtil.getCurrentDateString() : defaultDate));
@@ -65,7 +68,7 @@ public class CalendarController {
 		m.put("categoryStr", new Gson().toJson(list));
 		m.put("mineBgColor", bgColor);
 		m.put("mineTxtColor", txtColor);
-		
+		m.put("prefix", sawon.getSawonName() + "(" + sawon.getSawonId() + ")");
 		return "calendar";
 	}
 	

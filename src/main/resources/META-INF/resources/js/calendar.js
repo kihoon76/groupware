@@ -7,6 +7,7 @@ $(document).ready(function() {
 	var isModified = false;
 	var mineBgColor = $('#mineBgColor').val();
 	var mineTxtColor = $('#mineTxtColor').val();
+	var prefix = $('#prefix').val();
 	
 	var eventSources = {
 //		team1: {
@@ -171,13 +172,18 @@ $(document).ready(function() {
 		    	 var eDate = calEvent.end.format();
 		    	 var title = calEvent.title;
 		    	 var time = '';
-		    	 
-		    	 if(category == 'C1') {
-		    		 var sIdx = title.indexOf('(');
+		    	 var sIdx = -1;
+		    	 if(category == 'C01') {
+		    		 sIdx = title.indexOf('(');
 		    		 var eIdx = title.indexOf(')');
 		    		 title = title.substring(0, sIdx);
 		    		 time = calEvent.title.substring(sIdx+1, eIdx);
 		    		 console.log(time);
+		    	 }
+		    	 else if(category == 'C02') {
+		    		 //OOO(test)_title
+		    		 sIdx = title.indexOf('_');
+		    		 title = title.substring(sIdx + 1);
 		    	 }
 	    		
 		    	 /*common.showExtMsg({
@@ -208,7 +214,7 @@ $(document).ready(function() {
 		    		 description: calEvent.description,
 		    		 time: time,
 	    			 modify: function(win, winData) {
-	    				 var title = (category == 'C1') ? winData.title + '(' + winData.time + ')' : winData.title;
+	    				 var title = (category == 'C1') ? winData.title + '(' + winData.time + ')' : prefix + '_' + winData.title;
 	    				 calEvent.title = title;
 	    				 calEvent.description = winData.desc;
 		    			
@@ -278,7 +284,7 @@ $(document).ready(function() {
 	    		 cate: category,
 	    		 add: function(win, winData) {
 	    			 console.log(winData);
-	    			 var title = (category == 'C1') ? winData.title + '(' + winData.time + ')' : winData.title;
+	    			 var title = (category == 'C1') ? winData.title + '(' + winData.time + ')' : prefix + '_' + winData.title;
 	    			 
 	    			 var event = {
 	    				 title: title,

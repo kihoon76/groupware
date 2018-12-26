@@ -55,6 +55,8 @@ public class CalendarService {
 					addL = new ArrayList<CalendarEvent>();
 				}
 				
+				//prefix 제거
+				cal.setTitle(cal.getTitle().substring(cal.getTitle().indexOf("_") + 1));
 				addL.add(cal);
 			}
 			else if(cal.isModify()) { //수정된 것
@@ -62,6 +64,7 @@ public class CalendarService {
 					modL = new ArrayList<CalendarEvent>();
 				}
 				
+				cal.setTitle(cal.getTitle().substring(cal.getTitle().indexOf("_") + 1));
 				modL.add(cal);
 			}
 			else if(cal.isDelete()) {
