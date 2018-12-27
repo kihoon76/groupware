@@ -125,7 +125,15 @@ public class CalendarService {
 				map.put("id", cal.getId());
 				map.put("cate", cal.getCate());
 				map.put("cateMonth", param.get("cateMonth"));
-				map.put("editable", ("Y".equals(cal.getMine()) ? true : false));
+				map.put("mine", cal.getMine());
+				//근태는 editable false
+				if("C01".equals(param.get("cate"))) {
+					map.put("editable", false);
+				}
+				else {
+					map.put("editable", ("Y".equals(cal.getMine()) ? true : false));
+				}
+				
 				map.put("isNew", false);
 				map.put("isModify", false);
 				map.put("isDelete", false);

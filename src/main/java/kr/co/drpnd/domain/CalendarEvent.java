@@ -11,6 +11,7 @@ public class CalendarEvent {
 	private String cate;
 	private String cateMonth;
 	private String description;
+	private String bigo;
 	private String mine;
 	private String txtColor;
 	private String bgColor;
@@ -110,5 +111,10 @@ public class CalendarEvent {
 	public void setBgColor(String bgColor) {
 		this.bgColor = bgColor;
 	}
-	
+	public String getBigo() {
+		return bigo;
+	}
+	public void setBigo(String bigo) {
+		this.bigo = bigo;
+	}
 }

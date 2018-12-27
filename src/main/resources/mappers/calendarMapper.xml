@@ -20,6 +20,7 @@
 		<result column="상세"			property="description"	javaType="string"/>
 		<result column="글자색"		property="txtColor"	javaType="string"/>
 		<result column="바탕색"		property="bgColor"	javaType="string"/>
+		<result column="비고"			property="bigo"		javaType="string"/>
 		<result column="myevent"	property="mine"	javaType="string"/>
 	</resultMap>
 	
@@ -31,6 +32,15 @@
 	</resultMap>
 	
 	<select id="selectCalendarDataList" parameterType="map" resultMap="RM_CalendarData">
+		<choose>
+		<when test="cate == 'C01'">
+		{call [동림].[dbo].[UP_근태현황](
+			#{sawonCode, mode=IN, jdbcType=INTEGER, javaType=int},
+			#{startDate, mode=IN, jdbcType=CHAR, javaType=string},
+			#{endDate, mode=IN, jdbcType=CHAR, javaType=string}
+		)}
+		</when>
+		<otherwise>
 		select concat(T2.사원명, '(', T2.사원아이디, ')_', 제목) 제목, 시작일, 종료일, 카테고리월, 카테고리코드, 일련번호, 상세,
 			   case when T1.사원코드 = #{sawonCode} then 'Y'
 			   		else 'N'
@@ -44,6 +54,8 @@
 		    on T2.팀코드 = T3.팀코드
 		 where 시작일 >= #{startDate} and 시작일 <![CDATA[<]]> #{endDate}
 		   and 카테고리코드 = #{cate}
+		</otherwise>
+		</choose>
 	</select>
 	
 	<select id="selectCalendarCategory" resultMap="RM_CalendarCate">

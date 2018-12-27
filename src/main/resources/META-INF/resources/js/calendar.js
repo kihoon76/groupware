@@ -51,6 +51,85 @@ $(document).ready(function() {
 		return id;
 	}
 	
+	function openGeuntaeWin(event) {
+		var required = '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>';
+		var buttons = [];
+		
+		if(event.mine == 'Y') {
+			buttons.push({
+				text: '수정',
+				iconCls: 'icon-modi',
+			    handler: function() {
+			    	
+		        }
+			});
+		}
+		
+		buttons.push({
+			text: '닫기',
+			iconCls: 'icon-close',
+		    handler: function() {
+		    	win.close();
+	        }
+		});
+		
+		
+		var	win = parent.Ext.create('Ext.window.Window', {
+			title: event.start.format(),
+			height: 500, 
+			width: 500,
+			layout: 'fit',
+			modal: true,
+			resizable: false,
+			closeAction: 'destroy',
+			items: [{
+				xtype: 'form',
+				bodyStyle  : 'padding: 10px;',
+		        margins    : '0 0 0 3',
+		        fieldDefaults: {
+		            msgTarget: 'side',
+		            labelWidth: 85,
+		            anchor: '100%'
+		        },
+		        defaultType: 'textfield',
+		        items: [{
+		        	fieldLabel: '제목',
+		            afterLabelTextTpl: required,
+		            id: 'ifm-cal-title',
+		            allowBlank: false,
+		        }, {
+		        	xtype: 'datefield',
+		        	id: 'ifm-cal-start',
+		        	fieldLabel: '시작일',
+		        	disabled: true,
+		        	format: 'Y-m-d',
+		        	//value: param.start
+		        }, {
+		        	xtype: 'datefield',
+		        	id: 'ifm-cal-end',
+		        	fieldLabel: '종료일',
+		        	disabled: true,
+		        	format: 'Y-m-d',
+		        	//value: param.end
+		        }, {
+		        	fieldLabel: '설명',
+		        	xtype: 'textarea',
+		        	id: 'ifm-cal-desc',
+		        	afterLabelTextTpl: required,
+		        	allowBlank: false,
+		        }],
+			}],
+			buttons: buttons,
+			listeners: {
+				afterrender: function(w) {
+					
+				}
+			}
+		});
+		
+		win.show();
+	}
+	
 	$('#calendar').fullCalendar({
 		 customButtons: {
 			 cPrev: {
@@ -131,66 +210,42 @@ $(document).ready(function() {
 	     selectable: true,
 	     eventLimit: true, // allow "more" link when too many events
 	     dayClick: function(date, jsEvent, view) {
-	    	 /*console.log(common.getYmd(date._d));
-	    	 //console.log($('#calendar').fullCalendar('getEventSources'));
-	    	 
-	    	 //var d = common.getYmd(date._d);
-	    	 var d = date._d.yyyymmdd();
-	    	 var cd = convertDate($('#calendar').fullCalendar('getDate')).substring(0, 7);
-	    	 
-	    	 if(d.substring(0, 7) != cd) return;
-	    	 
-	    	 common.showExtWin({
-	    		 x: jsEvent.pageX,
-	    		 y: jsEvent.pageY,
-	    		 //type: 
-	    		 d: d,
-	    		 add: function(win, winData) {
-	    			 console.log(winData);
-	    			 
-	    			 var event = {
-	    				 title: winData.title + '(' + winData.time + ')',
-	    				 id: createEventId(),
-	    				 start: d,
-	    				 cate: category,
-	    				 cateMonth: categoryMonth,
-	    				 editable: true,
-	    				 isNew: true,
-	    			 }
-	    			
-	    			 addEvent(event);
-	    			 win.close();
-	    		 }
-	    	 });*/
-	    	 console.log('ppp')
+	    	 console.log('dayClick');
 	     },
 	     eventClick: function(calEvent, jsEvent, view) {
 	    	 console.log(calEvent.end.format());
 	    	 
-	    	 if(calEvent.editable) {
-	    		 var sDate = calEvent.start.format();
-		    	 var eDate = calEvent.end.format();
-		    	 var title = calEvent.title;
-		    	 var time = '';
-		    	 var sIdx = -1;
-		    	 if(category == 'C01') {
-		    		 sIdx = title.indexOf('(');
-		    		 var eIdx = title.indexOf(')');
-		    		 title = title.substring(0, sIdx);
-		    		 time = calEvent.title.substring(sIdx+1, eIdx);
-		    		 console.log(time);
-		    	 }
-		    	 else if(category == 'C02') {
-		    		 //OOO(test)_title
-		    		 sIdx = title.indexOf('_');
+	    	 if(calEvent.cate == 'C01') {
+	    		 openGeuntaeWin(calEvent);
+	    	 }
+	    	 else if(calEvent.cate == 'C02'){
+	    		 if(calEvent.editable) {
+		    		 var sDate = calEvent.start.format();
+			    	 var eDate = calEvent.end.format();
+			    	 var title = calEvent.title;
+			    	 var time = '';
+			    	 //OOO(test)_title
+			    	 var sIdx = title.indexOf('_');
 		    		 title = title.substring(sIdx + 1);
-		    	 }
-	    		
-		    	 /*common.showExtMsg({
-		    		 msg: '삭제하시겠습니까?',
-		    		 type: 'confirm',
-		    		 callback: function(btn) {
-		    			 if(btn == 'ok') {
+			    		 
+		    		 common.showExtWin({
+		    			 mode: 'update',
+			    		 start: sDate,
+			    		 end: eDate,
+			    		 cate: category,
+			    		 title: title,
+			    		 description: calEvent.description,
+			    		 time: time,
+		    			 modify: function(win, winData) {
+		    				 var title = prefix + '_' + winData.title;
+		    				 calEvent.title = title;
+		    				 calEvent.description = winData.desc;
+			    			
+		    				 $('#calendar').fullCalendar('updateEvent', calEvent);
+		    				 modifyEvent(calEvent);
+			    			 win.close(); 
+		    			 },
+		    			 del: function(win) {
 		    				 if(calEvent.isDb) {
 		    					 delEvents.push({
 		    	    				 id: calEvent.id,
@@ -200,44 +255,12 @@ $(document).ready(function() {
 		    					 isModified = true;
 		    				 }
 		    				 
-		    				 deleteEvent(calEvent);
+		    				 deleteEvent(calEvent); 
+		    				 win.close();
 		    			 }
-		    		 }
-		    	 });*/
-	    		 
-	    		 common.showExtWin({
-	    			 mode: 'update',
-		    		 start: sDate,
-		    		 end: eDate,
-		    		 cate: category,
-		    		 title: title,
-		    		 description: calEvent.description,
-		    		 time: time,
-	    			 modify: function(win, winData) {
-	    				 var title = (category == 'C1') ? winData.title + '(' + winData.time + ')' : prefix + '_' + winData.title;
-	    				 calEvent.title = title;
-	    				 calEvent.description = winData.desc;
-		    			
-	    				 $('#calendar').fullCalendar('updateEvent', calEvent);
-	    				 modifyEvent(calEvent);
-		    			 win.close(); 
-	    			 },
-	    			 del: function(win) {
-	    				 if(calEvent.isDb) {
-	    					 delEvents.push({
-	    	    				 id: calEvent.id,
-	    	    				 isDelete: true
-	    					 }); 
-	    					 
-	    					 isModified = true;
-	    				 }
-	    				 
-	    				 deleteEvent(calEvent); 
-	    				 win.close();
-	    			 }
-	    		 });
+		    		 });
+		    	 } 
 	    	 }
-	    
 	     },
 	     eventDrop: function(event, delta, revertFunc) {
 	    	 /*var prev = event.start._i.substring(0, 7);
@@ -271,6 +294,8 @@ $(document).ready(function() {
    		 	getData();
 	     },
 	     select: function(start, end, jsEvent) {
+	    	 
+	    	 if(category == 'C01') return;
 	    	 var sDate = start.format();
 	    	 var eDate = end.format();
 	    	 //var eDate = end.add(-1, 'days').format();
