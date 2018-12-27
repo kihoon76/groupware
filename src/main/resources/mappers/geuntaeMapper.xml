@@ -47,4 +47,8 @@
 	<select id="selectMyTodayOffwork" parameterType="int" resultType="int">
 		select [동림].[dbo].[UF_퇴근처리](#{sawonCode})
 	</select>
+	
+	<select id="selectGeuntaeDetail" parameterType="map" resultType="map">
+	
+	</select>
 </mapper>

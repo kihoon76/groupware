@@ -51,6 +51,30 @@ $(document).ready(function() {
 		return id;
 	}
 	
+	function getGeuntaeDetail(event) {
+		common.ajaxExt({
+    		url: '/geuntae/load?startDate=' + calMStart + '&endDate=' + calMEnd + '&cate=' + category,
+    		method: 'GET',
+    		loadmask: {
+    			msg: '정보로딩중...'
+    		},
+			success: function(jo) {
+				//console.log(jo);
+				if(jo.success) {
+					if(jo.datas.length > 0) {
+						var events = jo.datas[0];
+						
+						for(var k in events) {
+							eventSources[k].events = events[k];
+							$('#calendar').fullCalendar('removeEventSource', eventSources[k]);
+							$('#calendar').fullCalendar('addEventSource', eventSources[k]);
+						}
+					}
+				}
+			}
+    	});
+	}
+	
 	function openGeuntaeWin(event) {
 		var required = '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>';
 		var buttons = [];
@@ -216,6 +240,7 @@ $(document).ready(function() {
 	    	 console.log(calEvent.end.format());
 	    	 
 	    	 if(calEvent.cate == 'C01') {
+	    		 console.log(calEvent.id);
 	    		 openGeuntaeWin(calEvent);
 	    	 }
 	    	 else if(calEvent.cate == 'C02'){

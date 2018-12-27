@@ -1,5 +1,6 @@
 package kr.co.drpnd.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -40,6 +41,11 @@ public class GeuntaeDaoImpl implements GeuntaeDao {
 	@Override
 	public int selectMyTodayOffwork(int sawonCode) {
 		return msSqlSession.selectOne(namespace + ".selectMyTodayOffwork", sawonCode);
+	}
+
+	@Override
+	public Map<String, Object> selectGeuntaeDetail(Map<String, Integer> param) {
+		return msSqlSession.selectOne(namespace + ".selectGeuntaeDetail", param);
 	}
 
 

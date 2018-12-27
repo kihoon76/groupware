@@ -1,5 +1,7 @@
 package kr.co.drpnd.controller;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -98,6 +101,19 @@ public class GeuntaeController {
 			vo.setSuccess(false);
 			vo.setErrMsg(e.getMessage());
 		}
+		
+		return vo;
+	}
+	
+	@GetMapping("detail/{geuntaeCode}")
+	@ResponseBody
+	public AjaxVO<Map<String, Object>> getGeuntaeDetail(@PathVariable("geuntaeCode") String geuntaeCode) {
+		AjaxVO<Map<String, Object>> vo = new AjaxVO<>();
+		Sawon sawon = SessionUtil.getSessionSawon();
+		Map<String, Integer> param = new HashMap<String, Integer>();
+		param.put("sawonCode", Integer.parseInt(sawon.getSawonCode()));
+		param.put("geuntaeCode", Integer.parseInt(geuntaeCode));
+		Map<String, Object> detail = geuntaeService.getGeuntaeDetail(param);
 		
 		return vo;
 	}

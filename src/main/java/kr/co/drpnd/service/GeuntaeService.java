@@ -2,6 +2,7 @@ package kr.co.drpnd.service;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -81,6 +82,10 @@ public class GeuntaeService {
 	public boolean checkMyTodayOffwork(String sawonCode) {
 		int r = geuntaeDao.selectMyTodayOffwork(Integer.parseInt(sawonCode));
 		return r == 0;
+	}
+
+	public Map<String, Object> getGeuntaeDetail(Map<String, Integer> param) {
+		return geuntaeDao.selectGeuntaeDetail(param);
 	}
 	
 
