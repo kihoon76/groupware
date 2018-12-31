@@ -113,7 +113,23 @@ public class GeuntaeController {
 		Map<String, Integer> param = new HashMap<String, Integer>();
 		param.put("sawonCode", Integer.parseInt(sawon.getSawonCode()));
 		param.put("geuntaeCode", Integer.parseInt(geuntaeCode));
-		Map<String, Object> detail = geuntaeService.getGeuntaeDetail(param);
+		
+		try{
+			Map<String, Object> detail = geuntaeService.getGeuntaeDetail(param);
+			
+			if(detail == null) {
+				vo.setSuccess(false);
+			}
+			else {
+				vo.setSuccess(true);
+				vo.addObject(detail);
+			}
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+		
 		
 		return vo;
 	}

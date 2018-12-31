@@ -48,7 +48,23 @@
 		select [동림].[dbo].[UF_퇴근처리](#{sawonCode})
 	</select>
 	
-	<select id="selectGeuntaeDetail" parameterType="map" resultType="map">
-	
+	<select id="selectGeuntaeDetail" parameterType="map" resultMap="RM_GeuntaeDetail">
+	{call [동림].[dbo].[UP_근태상세](
+		#{sawonCode, mode=IN, jdbcType=INTEGER, javaType=int},
+		#{geuntaeCode, mode=IN, jdbcType=INTEGER, javaType=int}
+	)}
 	</select>
+	
+	<resultMap type="map" id="RM_GeuntaeDetail">
+		<result column="근태코드" property="code" javaType="int"/>
+		<result column="출근시간" property="gotowork" javaType="string"/>
+		<result column="퇴근시간" property="offwork" javaType="string"/>
+		<result column="팀명" property="teamName" javaType="string"/>
+		<result column="팀리더" property="teamLeader" javaType="string"/>
+		<result column="외근여부" property="outwork" javaType="string"/>
+		<result column="근태출근처리수단" property="gotoworkMethod" javaType="string"/>
+		<result column="업무내용" property="content" javaType="string"/>
+		<result column="야근내용" property="overworkContent" javaType="string"/>
+		<result column="사원명" property="sawonName" javaType="string"/>
+	</resultMap>
 </mapper>

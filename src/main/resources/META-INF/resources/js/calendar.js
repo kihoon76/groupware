@@ -8,6 +8,7 @@ $(document).ready(function() {
 	var mineBgColor = $('#mineBgColor').val();
 	var mineTxtColor = $('#mineTxtColor').val();
 	var prefix = $('#prefix').val();
+	var map = null;
 	
 	var eventSources = {
 //		team1: {
@@ -53,7 +54,7 @@ $(document).ready(function() {
 	
 	function getGeuntaeDetail(event) {
 		common.ajaxExt({
-    		url: '/geuntae/load?startDate=' + calMStart + '&endDate=' + calMEnd + '&cate=' + category,
+    		url: '/geuntae/detail/' + event.id,
     		method: 'GET',
     		loadmask: {
     			msg: '정보로딩중...'
@@ -62,21 +63,39 @@ $(document).ready(function() {
 				//console.log(jo);
 				if(jo.success) {
 					if(jo.datas.length > 0) {
-						var events = jo.datas[0];
-						
-						for(var k in events) {
-							eventSources[k].events = events[k];
-							$('#calendar').fullCalendar('removeEventSource', eventSources[k]);
-							$('#calendar').fullCalendar('addEventSource', eventSources[k]);
-						}
+						var details = jo.datas[0];
+						openGeuntaeWin(event, details);
 					}
 				}
 			}
     	});
 	}
 	
-	function openGeuntaeWin(event) {
-		var required = '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>';
+	function updateGeuntae(geuntaeCode, details) {
+		
+	}
+	
+	function viewPositionAtMap() {
+		if(map == null) {
+			var panel = parent.Ext.create('Drpnd.view.panel.NMapPanel');
+			
+			map = parent.Ext.create('Ext.window.Window', {
+				title: '위치',
+				height: 500, 
+				width: 500,
+				layout: 'fit',
+				modal: true,
+				resizable: false,
+				closeAction: 'hide',
+				items: [panel]
+			});
+		}
+		
+		map.show();
+		
+	}
+	
+	function openGeuntaeWin(event, details) {
 		var buttons = [];
 		
 		if(event.mine == 'Y') {
@@ -84,7 +103,7 @@ $(document).ready(function() {
 				text: '수정',
 				iconCls: 'icon-modi',
 			    handler: function() {
-			    	
+			    	updateGeuntae(event.id, details);
 		        }
 			});
 		}
@@ -99,7 +118,7 @@ $(document).ready(function() {
 		
 		
 		var	win = parent.Ext.create('Ext.window.Window', {
-			title: event.start.format(),
+			title: event.start.format() + ' (' + details.sawonName + ')',
 			height: 500, 
 			width: 500,
 			layout: 'fit',
@@ -117,30 +136,50 @@ $(document).ready(function() {
 		        },
 		        defaultType: 'textfield',
 		        items: [{
-		        	fieldLabel: '제목',
-		            afterLabelTextTpl: required,
-		            id: 'ifm-cal-title',
-		            allowBlank: false,
+		        	fieldLabel: '팀명',
+		            value: details.teamName,
+		            readOnly: true
 		        }, {
-		        	xtype: 'datefield',
-		        	id: 'ifm-cal-start',
-		        	fieldLabel: '시작일',
-		        	disabled: true,
-		        	format: 'Y-m-d',
-		        	//value: param.start
+		        	fieldLabel: '팀장',
+		            value: details.teamLeader,
+		            readOnly: true
 		        }, {
-		        	xtype: 'datefield',
-		        	id: 'ifm-cal-end',
-		        	fieldLabel: '종료일',
-		        	disabled: true,
-		        	format: 'Y-m-d',
-		        	//value: param.end
+		        	fieldLabel: '이름',
+		            value: details.sawonName,
+		            readOnly: true
 		        }, {
-		        	fieldLabel: '설명',
+		        	fieldLabel: '출퇴근 시간',
+		            value: details.gotowork + ' ~ ' + details.offwork,
+		            readOnly: true
+		        }, {
+		        	fieldLabel: '업무내용',
 		        	xtype: 'textarea',
-		        	id: 'ifm-cal-desc',
-		        	afterLabelTextTpl: required,
-		        	allowBlank: false,
+		        	height: 100,
+		            value: details.content,
+		            readOnly: true
+		        }, {
+		        	fieldLabel: '야근내용',
+		        	xtype: 'textarea',
+		        	height: 100,
+		            value: details.overworkContent,
+		            readOnly: true
+		        }, {
+		        	fieldLabel: '외근',
+		            value: details.outwork == 'Y' ? '예' : '아니오',
+		            readOnly: true
+		        }, {
+		        	xtype: 'button',
+		            margin: '0 0 5 90',
+		            text: '출근위치보기',
+		            listeners: {
+		            	click: function() {
+		            		viewPositionAtMap();
+		            	}
+		            }
+		        }, {
+		        	fieldLabel: '근태처리수단',
+		            value: details.gotoworkMethod == 'P' ? 'PC' : '모바일',
+		            readOnly: true
 		        }],
 			}],
 			buttons: buttons,
@@ -241,7 +280,7 @@ $(document).ready(function() {
 	    	 
 	    	 if(calEvent.cate == 'C01') {
 	    		 console.log(calEvent.id);
-	    		 openGeuntaeWin(calEvent);
+	    		 getGeuntaeDetail(calEvent);
 	    	 }
 	    	 else if(calEvent.cate == 'C02'){
 	    		 if(calEvent.editable) {

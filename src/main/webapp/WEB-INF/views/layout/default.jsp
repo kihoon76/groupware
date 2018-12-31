@@ -30,6 +30,8 @@
 	<!-- locale -->
 	<script src="/resources/core/locale/ext-lang-ko.js"></script>
 	
+	<!-- naver map -->
+	<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=SgnlyXnzstmDsYDhele7&submodules=panorama,geocoder"></script>
 	<script>
 		Ext.onReady(function() {
 			Ext.getDoc().on('keydown', function(e, t) {
