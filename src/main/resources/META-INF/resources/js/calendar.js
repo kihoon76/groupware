@@ -80,7 +80,7 @@ $(document).ready(function() {
 			var panel = parent.Ext.create('Drpnd.view.panel.NMapPanel');
 			
 			map = parent.Ext.create('Ext.window.Window', {
-				title: '위치',
+				title: '외근위치',
 				height: 500, 
 				width: 500,
 				layout: 'fit',
