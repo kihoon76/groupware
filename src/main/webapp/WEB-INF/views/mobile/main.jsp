@@ -15,7 +15,15 @@
 		<a href="#" class="ui-btn ui-icon-gotowork ui-btn-icon-bottom" id="btnGotowork">출근처리</a>
 		</c:otherwise>
 		</c:choose>
-		<a href="#" class="ui-btn ui-icon-offwork ui-btn-icon-bottom">퇴근처리</a>
+		
+		<c:choose>
+		<c:when test="${isOffworkChecked == true}">
+		<a href="#" class="ui-btn ui-icon-offwork ui-btn-icon-bottom ui-disabled" id="btnOffwork">퇴근처리</a>
+		</c:when>
+		<c:otherwise>
+		<a href="#" class="ui-btn ui-icon-offwork ui-btn-icon-bottom" id="btnOffwork">퇴근처리</a>
+		</c:otherwise>
+		</c:choose>
 	</div>
 </div>
 </content>

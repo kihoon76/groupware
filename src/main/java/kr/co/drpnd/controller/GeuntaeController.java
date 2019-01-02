@@ -83,7 +83,7 @@ public class GeuntaeController {
 		return vo;
 	}
 	
-	@PostMapping("offwork")
+	@PostMapping(value={"offwork", "m/offwork"})
 	@ResponseBody
 	public AjaxVO<String> checkOffwork(@RequestBody Map<String, String> param) {
 		

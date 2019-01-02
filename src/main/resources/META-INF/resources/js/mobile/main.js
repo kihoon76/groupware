@@ -137,11 +137,33 @@ $(document)
 			success: function(data, textStatus, jqXHR) {
 				alert(data.datas[0] + '에 출근처리 되었습니다.');
 				$this.addClass('ui-disabled');
+				$('#btnOffwork').removeClass('ui-disabled');
 			},
 		});
 	});
 	
-	
+	$(document)
+	.off('click', '#btnOffwork')
+	.on('click', '#btnOffwork', function() {
+		var $this = $(this);
+		Common.ajax({
+			url: '/geuntae/m/offwork',
+			method: 'POST',
+			dataType: 'json',
+			data: JSON.stringify({
+				workContent: 'tt',
+				outworkContent: 'tt'
+			}),
+			headers: {'CUSTOM': 'Y'},
+			contentType: 'application/json',
+			success: function(data, textStatus, jqXHR) {
+				alert(data.datas[0] + ' - '+ data.datas[1] + ' 퇴근처리 되었습니다.');
+				$this.addClass('ui-disabled');
+			},
+		});
+		
+		
+	});
 	
 	$(document)
 	.off('click', 'a.IMG_POPUP')
