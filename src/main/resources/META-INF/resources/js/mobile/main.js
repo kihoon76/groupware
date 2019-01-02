@@ -91,7 +91,7 @@ $(document)
 	$('body>[data-role="panel"]').panel();
 	//$('#bookReservePopup').hide();
 	
-	var baseUrl = $('body').data('url');
+	var baseUrl = $('#baseUrl').val();
 	
 	(function callWorker() {
 		if(window.Worker) {
@@ -99,7 +99,7 @@ $(document)
 				Common.worker.terminate();
 			}
 			
-			Common.worker = new Worker('http://localhost/resources/js/mobile/worker.js');
+			Common.worker = new Worker(baseUrl + '/resources/js/mobile/worker.js');
 			
 			Common.worker.onmessage = function(event) {
 				var d = event.data;

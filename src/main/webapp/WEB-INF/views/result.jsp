@@ -4,7 +4,7 @@
 <%@ page import="kr.co.drpnd.domain.AjaxVO" %>
 <%@ page import="java.io.PrintWriter" %>
 <%
-	//if("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
+	if("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
 		AjaxVO vo = new AjaxVO();
 		String errCode = (String) request.getAttribute("errCode");
 		
@@ -24,6 +24,9 @@
 		o.print(new Gson().toJson(vo));
 		o.flush();
 		o.close();
-	//}
+	}
+	else {
+		response.sendRedirect("/signin");
+	}
 
 %>
