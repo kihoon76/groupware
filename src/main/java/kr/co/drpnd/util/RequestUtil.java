@@ -10,5 +10,10 @@ public class RequestUtil {
 	    String serverPort = (request.getServerPort() == 80) ? "" : ":" + request.getServerPort();
 	    String contextPath = request.getContextPath();
 	    return scheme + serverName + serverPort + contextPath;
-	  }
+	}
+	
+	public static boolean  isMobile(HttpServletRequest request) {
+		return "Y".equals(request.getAttribute("isMobile"));
+	}
+	
 }

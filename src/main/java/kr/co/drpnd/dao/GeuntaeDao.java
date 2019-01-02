@@ -19,4 +19,6 @@ public interface GeuntaeDao {
 
 	Map<String, Object> selectGeuntaeDetail(Map<String, Integer> param);
 
+	String selectCuttentTime10();
+
 }

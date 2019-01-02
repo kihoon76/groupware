@@ -30,7 +30,9 @@ public class DeviceInterceptor extends HandlerInterceptorAdapter {
         return ua != null && (mobile_tablet_b.matcher(ua).find() ||
                 ua.length() >= 4 && mobile_tablet_v.matcher(ua.substring(0, 4)).find());
     }
-	
+    
+    private String[] mobileAcceptUrl = {"/signin", "/login", "/result", "/logout", "/m/", "/resources/"};
+	private String[] pcForbiddenUrl = {"/m/"};
 	
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -42,18 +44,50 @@ public class DeviceInterceptor extends HandlerInterceptorAdapter {
 		if(request.getRequestURL().toString().indexOf("/forbidden") > -1) {
 			return true;
 		}
+//		
+//		if(isMobile(userAgent)) {
+//			if(request.getRequestURL().toString().indexOf("/resources") > -1) {
+//				return true;
+//			}
+//			
+//			response.sendRedirect(baseUrl + "/forbidden");
+//			return false;
+//		}
+//		else {
+//			return true;
+//		}
 		
-		if(isMobile(userAgent)) {
-			if(request.getRequestURL().toString().indexOf("/resources") > -1) {
-				return true;
+		boolean isMobile = isMobile(userAgent);
+		if(isMobile) {
+			request.setAttribute("isMobile", "Y");
+			if(!accept(request, mobileAcceptUrl, baseUrl)) {
+				response.sendRedirect(baseUrl + "/forbidden");
+				return false;
 			}
-			
-			response.sendRedirect(baseUrl + "/forbidden");
-			return false;
 		}
 		else {
-			return true;
+			request.setAttribute("isMobile", "N");
+			if(accept(request, pcForbiddenUrl, baseUrl)) {
+				response.sendRedirect(baseUrl + "/forbidden");
+				return false;
+			}
 		}
-		//return true;
+		
+		return true;
+	}
+	
+	private boolean accept(HttpServletRequest request, String[] urls, String baseUrl) {
+		boolean r = false;
+		
+		String path = request.getRequestURL().toString();
+		
+		for(String s : urls) {
+			if(/*baseUrl.equals(path) || */path.indexOf(s) > -1) {
+				r = true;
+				break;
+			}
+		}
+		
+		return r;
 	}
 }

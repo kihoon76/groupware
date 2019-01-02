@@ -20,6 +20,7 @@ import kr.co.drpnd.service.GeuntaeService;
 import kr.co.drpnd.service.SawonService;
 import kr.co.drpnd.type.TokenKey;
 import kr.co.drpnd.util.DateUtil;
+import kr.co.drpnd.util.RequestUtil;
 import kr.co.drpnd.util.SessionUtil;
 import kr.co.drpnd.util.StringUtil;
 
@@ -33,15 +34,18 @@ public class DrpndController {
 	@Resource(name="geuntaeService")
 	GeuntaeService geuntaeService;
 	
-	@GetMapping("main")
-	public String index(ModelMap m) {
+	@GetMapping(value={"main", "m/main"})
+	public String index(HttpServletRequest request, ModelMap m) {
 		Sawon myInfo = SessionUtil.getSessionSawon();
+		
 		boolean gotoworkChecked = false;
 		boolean offworkChecked = false;
+		String cuttentTime10 = "";
 		
 		try {
 			gotoworkChecked = geuntaeService.checkMyTodayGotowork(myInfo.getSawonCode());
 			offworkChecked = geuntaeService.checkMyTodayOffwork(myInfo.getSawonCode());
+			cuttentTime10 = geuntaeService.getCuttentTime10();
 		}
 		catch(Exception e) {}
 		
@@ -49,11 +53,21 @@ public class DrpndController {
 		m.put("isGotoworkChecked", gotoworkChecked);
 		m.put("isOffworkChecked", offworkChecked);
 		m.put("sawonName", myInfo.getSawonName());
+		m.put("currentTime10", cuttentTime10);
+		
+		if(RequestUtil.isMobile(request)) {
+			return "mobile/main";
+		}
+		
 		return "main";
 	}
 	
 	@GetMapping("signin")
-	public String signin() {
+	public String signin(HttpServletRequest request) {
+		if(RequestUtil.isMobile(request)) {
+			return "mobile/signin";
+		}
+		
 		return "signin";
 	}
 	
@@ -103,4 +117,5 @@ public class DrpndController {
 		
 		m.addAttribute("_csrfToken", token);
 	}
+	
 }

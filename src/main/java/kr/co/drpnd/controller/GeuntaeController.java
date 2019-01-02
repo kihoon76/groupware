@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -27,6 +28,8 @@ import kr.co.drpnd.exception.InvalidReservationTime;
 import kr.co.drpnd.exception.NotExistGotowork;
 import kr.co.drpnd.service.GeuntaeService;
 import kr.co.drpnd.type.ExceptionCode;
+import kr.co.drpnd.type.WorkMethod;
+import kr.co.drpnd.util.RequestUtil;
 import kr.co.drpnd.util.SessionUtil;
 
 @RequestMapping("/geuntae")
@@ -39,15 +42,24 @@ public class GeuntaeController {
 	@Autowired
 	private SimpMessagingTemplate template;
 	
-	@GetMapping("gotowork")
+	@GetMapping(value={"gotowork", "m/gotowork"})
 	@ResponseBody
-	public AjaxVO<String> checkGotowork() {
+	public AjaxVO<String> checkGotowork(HttpServletRequest request) {
 		
 		AjaxVO<String> vo = new AjaxVO<>();
 		Sawon sawon = SessionUtil.getSessionSawon(); 
 		
 		try {
-			String gotoworkTime = geuntaeService.checkGotowork(sawon.getSawonCode());
+			boolean isMobile = RequestUtil.isMobile(request);
+			
+			Geuntae geuntae = new Geuntae();
+			geuntae.setSawonCode(sawon.getSawonCode());
+			geuntae.setOutworkYN(isMobile ? "Y" : "N");
+			geuntae.setGotoworkMethod(isMobile ? WorkMethod.MOBILE.toString() : WorkMethod.PC.toString());
+			geuntae.setLat(0);
+			geuntae.setLng(0);
+			
+			String gotoworkTime = geuntaeService.checkGotowork(geuntae);
 			vo.setSuccess(true);
 			vo.addObject(gotoworkTime);
 			

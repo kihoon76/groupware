@@ -24,14 +24,7 @@ public class GeuntaeService {
 	@Resource(name="geuntaeDao")
 	GeuntaeDao geuntaeDao;
 	
-	public String checkGotowork(String sawonCode) {
-		Geuntae geuntae = new Geuntae();
-		geuntae.setSawonCode(sawonCode);
-		geuntae.setOutworkYN("N");
-		geuntae.setGotoworkMethod(WorkMethod.PC.toString());
-		geuntae.setLat(0);
-		geuntae.setLng(0);
-		
+	public String checkGotowork(Geuntae geuntae) {
 		geuntaeDao.insertGotowork(geuntae);
 		
 		if(geuntae.getGotoworkTime().equals("0")) throw new AlreadyGotowork(ExceptionCode.ALREADY_GOTOWORK.getMsg());
@@ -86,6 +79,10 @@ public class GeuntaeService {
 
 	public Map<String, Object> getGeuntaeDetail(Map<String, Integer> param) {
 		return geuntaeDao.selectGeuntaeDetail(param);
+	}
+
+	public String getCuttentTime10() {
+		return geuntaeDao.selectCuttentTime10();
 	}
 	
 

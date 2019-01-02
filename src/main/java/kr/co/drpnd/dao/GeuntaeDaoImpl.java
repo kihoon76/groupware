@@ -48,5 +48,10 @@ public class GeuntaeDaoImpl implements GeuntaeDao {
 		return msSqlSession.selectOne(namespace + ".selectGeuntaeDetail", param);
 	}
 
+	@Override
+	public String selectCuttentTime10() {
+		return msSqlSession.selectOne(namespace + ".selectCurrentTime10");
+	}
+
 
 }

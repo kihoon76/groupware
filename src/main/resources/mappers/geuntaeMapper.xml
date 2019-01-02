@@ -2,6 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mappers.geuntaeMapper">
 	
+	<select id="selectCurrentTime10" resultType="string">
+		select convert(char(19), dateadd(minute, -10, getDate()), 20) 
+	</select>
+	
 	<insert id="insertGotowork" statementType="CALLABLE" parameterType="Geuntae"  >
 		{call [동림].[dbo].[UP_출근처리](
 			#{sawonCode, mode=IN, jdbcType=VARCHAR, javaType=string},
