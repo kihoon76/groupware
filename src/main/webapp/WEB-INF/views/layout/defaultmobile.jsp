@@ -10,7 +10,7 @@
 <!--[if IE 9]><html class="ie9" lang="ko"><![endif]-->
 <!--[if gt IE 9]><!--><html lang="ko"><!--<![endif]-->
 <head>
-	<title>Home</title>
+	<title>동림피엔디</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimun-scale=1.0, user-scalable=0" />
 	<!-- 안드로이드 홈화면추가시 상단 주소창 제거 -->
 	<meta name="mobile-web-app-capable" content="yes">
@@ -19,15 +19,26 @@
 
 	
 	<link rel="stylesheet" href="/resources/lib/jqmobile/jquery.mobile-1.4.5.min.css" />
+	<link rel="stylesheet" href="/resources/os/swiper-4.4.1/css/swiper.min.css" />
 	<link rel="stylesheet" href="/resources/css/mobile/default.css" />
+	
 	
 	<script type="text/javascript" src="/resources/lib/jqmobile/jquery-1.11.1.min.js"></script>
 	<script type="text/javascript" src="/resources/lib/jqmobile/jquery.mobile-1.4.5.min.js"></script>
-	
+	<script type="text/javascript" src="/resources/os/swiper-4.4.1/js/swiper.min.js"></script>
 	<script type="text/javascript" src="/resources/lib/jqmobile/fastclick.js"></script>
 	<script type="text/javascript" src="/resources/js/mobile/main.js"></script>
 </head>
 <body onload="initFastButtons();">
+<div data-role="popup" id="popupDialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width: 400px;" data-transition="none">
+	<div id="popupHeader" data-role="header" data-theme="a"></div>
+	<div role="main" class="ui-content">
+		<div id="dvPopupContent"></div>
+		<a href="#" data-role="button" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" id="btnPopupOk" rel="external">퇴근처리</a>
+		<a href="#" data-rel="button" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" id="btnPopupCancel">닫기</a>
+	</div>
+</div>
+
 <div data-role="page" id="pg1" data-dom-cache="false">
     <div data-role="header" data-position="fixed"  data-tap-toggle="false" data-theme="a">
     	<h1></h1>
@@ -42,18 +53,7 @@
          <div data-role="navbar">
          	<ul>
          		<li><a id="footerHome" href="#" data-icon="home" data-ajax="false" <c:if test="${'home' eq footbar}">class="ui-btn-active"</c:if>>홈</a></li>
-         		<li><a href="/info" data-icon="info" <c:if test="${'info' eq footbar}">class="ui-btn-active"</c:if>>사용안내</a></li>
-         		<c:choose>
-         		<c:when test="${'event' eq footbar}">
-         		<li><a id="btnRegEvent" href="#" data-icon="action" data-ajax="false">이벤트등록</a></li>
-         		</c:when>
-         		<c:when test="${'Y' eq back}">
-         		<li><a id="footerPrevious" href="#" data-icon="back" data-ajax="false">이전</a></li>
-         		</c:when>
-         		<c:when test="${'reservation' eq footbar}">
-         		<li><a id="footerReservation" href="#" data-rel="popup" data-icon="star" data-ajax="false">예약하기</a></li>
-         		</c:when>
-         		</c:choose>
+         		<li><a href="/m/info" data-icon="info" <c:if test="${'info' eq footbar}">class="ui-btn-active"</c:if>>사용안내</a></li>
          		<li><a id="footerLogout" href="#" data-icon="user" data-ajax="false">로그아웃</a></li>
          	</ul>
          </div>
@@ -65,9 +65,9 @@
 		<ul data-role="listview" data-theme="d">
         	<li data-icon="delete"><a href="#" data-rel="close">&nbsp;</a></li>
         	<li data-role="list-divider">Menu</li>
-        	<li><a href="/book/rental_history">대여현황</a></li>
-        	<li><a href="/book/statistics/read">도서통계</a></li>
-        	<li><a href="/book/rental_manage">대여관리</a></li>
+        	<li><a href="/book/rental_history">메뉴1</a></li>
+        	<li><a href="/book/statistics/read">메뉴2</a></li>
+        	<li><a href="/book/rental_manage">메뉴3</a></li>
         </ul>
 	</div><!-- /leftpanel3 -->
 	

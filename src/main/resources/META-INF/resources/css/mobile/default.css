@@ -87,5 +87,16 @@
 } 
 
 .required {color: #ff0000;}
+
+.inlineIcon {
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    /*margin-right: 6px;*/
+}
+.inlineIcon:after {
+    background-size: 70% !important;
+}
+
 .ui-icon-gotowork:after {background-image: url('../../images/gotowork.png');}
 .ui-icon-offwork:after {background-image: url('../../images/offwork.png');}

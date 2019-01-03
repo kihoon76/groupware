@@ -56,10 +56,18 @@ public class DrpndController {
 		m.put("currentTime10", cuttentTime10);
 		
 		if(RequestUtil.isMobile(request)) {
+			m.put("footbar", "home");
 			return "mobile/main";
 		}
 		
 		return "main";
+	}
+	
+	@GetMapping("m/info")
+	public String useInfo(ModelMap m) {
+		m.put("footbar", "info");
+		
+		return "mobile/useInfo";
 	}
 	
 	@GetMapping("signin")

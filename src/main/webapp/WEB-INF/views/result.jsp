@@ -26,7 +26,13 @@
 		o.close();
 	}
 	else {
-		response.sendRedirect("/signin");
+		//response.sendRedirect("/signin");
+%>
+<script>
+	alert('중복로그인 되었습니다.');
+	window.location.href = '/siginin';
+</script>
+<%
 	}
 
 %>

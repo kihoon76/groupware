@@ -5,10 +5,11 @@
 <c:set var="url">${req.requestURL}</c:set>
 <c:set var="uri" value="${req.requestURI}" />
 <content tag="main">
-<div>
+<div id="dvGeuntae">
 	<div style="width:100%; height:30px;">
-		<span>${sawonName}</span>
-		<span id="spTime">${currentTime10}</span>
+		 <span class="ui-icon-user ui-btn-icon-notext inlineIcon"></span>
+		 <span>${sawonName}</span>
+		<span id="spTime" style="color:#0000ff;">${currentTime10}</span>
 	</div>
 	<div>
 		<c:choose>
