@@ -171,6 +171,15 @@ Ext.define('Drpnd.util.CommonFn', {
 		}
 		
 		Ext.Ajax.request(config);
+	},
+	checkSession: function(fn) {
+		this.ajax({
+    		url: '/checkSession',
+    		method: 'GET',
+			success: function(jo) {
+				fn();
+			}
+    	});
 	}
    
 });

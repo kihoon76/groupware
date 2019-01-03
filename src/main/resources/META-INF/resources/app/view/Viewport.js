@@ -42,63 +42,68 @@ Ext.define('Drpnd.view.Viewport', {
 	    }
 	    
 	    function offWorkClick() {
-	    	offWorkWin = Ext.create('Ext.window.Window', {
-				title: '퇴근처리',
-				height: 800,
-				width: 800,
-				layout: 'fit',
-				closeAction: 'destroy',
-				modal: true,
-				items: [{
-					xtype: 'form',
-					bodyStyle  : 'padding: 10px;',
-			        margins    : '0 0 0 0',
-			        fieldDefaults: {
-			            msgTarget: 'side',
-			            labelWidth: 85,
-			            anchor: '100%'
-			        },
-			        defaultType: 'textarea',
-			        items: [{
-			        	fieldLabel: '업무내용',
-			        	height: 350,
-			        	listeners: {
-			        		afterrender: function(txt) {
-			        			offworkObj.txtWorkContent = txt;
-			        		}
-			        	}
-			        },{
-			        	fieldLabel: '야근내용',
-			        	height: 350,
-			        	listeners: {
-			        		afterrender: function(txt) {
-			        			offworkObj.txtOutworkContent = txt;
-			        		}
-			        	}
-			        }]
-				}],
-				dockedItems: [{
-				    xtype: 'toolbar',
-				    dock: 'bottom',
-				    ui: 'footer',
-				    //defaults: {minWidth: minButtonWidth},
-				    items: [
-				        { xtype: 'component', flex: 1 },
-				        { xtype: 'button', text: '처리', listeners: {
-				        	click: function() {
-				        		offwork();
+	    	
+	    	CommonFn.checkSession(function() {
+	    		offWorkWin = Ext.create('Ext.window.Window', {
+					title: '퇴근처리',
+					height: 800,
+					width: 800,
+					layout: 'fit',
+					closeAction: 'destroy',
+					modal: true,
+					items: [{
+						xtype: 'form',
+						bodyStyle  : 'padding: 10px;',
+				        margins    : '0 0 0 0',
+				        fieldDefaults: {
+				            msgTarget: 'side',
+				            labelWidth: 85,
+				            anchor: '100%'
+				        },
+				        defaultType: 'textarea',
+				        items: [{
+				        	fieldLabel: '업무내용',
+				        	height: 350,
+				        	listeners: {
+				        		afterrender: function(txt) {
+				        			offworkObj.txtWorkContent = txt;
+				        		}
 				        	}
-				        } },
-				        { xtype: 'button', text: '닫기', listeners: {
-				        	click: function(btn) {
-				        		offWorkWin.close();
+				        },{
+				        	fieldLabel: '야근내용',
+				        	height: 350,
+				        	listeners: {
+				        		afterrender: function(txt) {
+				        			offworkObj.txtOutworkContent = txt;
+				        		}
 				        	}
-				        } }
-				    ]
-				}]  
-			});
-			
-	    	offWorkWin.show();
+				        }]
+					}],
+					dockedItems: [{
+					    xtype: 'toolbar',
+					    dock: 'bottom',
+					    ui: 'footer',
+					    //defaults: {minWidth: minButtonWidth},
+					    items: [
+					        { xtype: 'component', flex: 1 },
+					        { xtype: 'button', text: '처리', listeners: {
+					        	click: function() {
+					        		offwork();
+					        	}
+					        } },
+					        { xtype: 'button', text: '닫기', listeners: {
+					        	click: function(btn) {
+					        		offWorkWin.close();
+					        	}
+					        } }
+					    ]
+					}]  
+				});
+				
+		    	offWorkWin.show();
+	    	});
+	    	
+	    	
 	    }
 	    
 	    function myInfoClick() {

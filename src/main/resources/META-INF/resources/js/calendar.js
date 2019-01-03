@@ -278,53 +278,55 @@ $(document).ready(function() {
 	     eventClick: function(calEvent, jsEvent, view) {
 	    	 console.log(calEvent.end.format());
 	    	 
-	    	 if(calEvent.cate == 'C01') {
-	    		 console.log(calEvent.id);
-	    		 getGeuntaeDetail(calEvent);
-	    	 }
-	    	 else if(calEvent.cate == 'C02'){
-	    		 if(calEvent.editable) {
-		    		 var sDate = calEvent.start.format();
-			    	 var eDate = calEvent.end.format();
-			    	 var title = calEvent.title;
-			    	 var time = '';
-			    	 //OOO(test)_title
-			    	 var sIdx = title.indexOf('_');
-		    		 title = title.substring(sIdx + 1);
-			    		 
-		    		 common.showExtWin({
-		    			 mode: 'update',
-			    		 start: sDate,
-			    		 end: eDate,
-			    		 cate: category,
-			    		 title: title,
-			    		 description: calEvent.description,
-			    		 time: time,
-		    			 modify: function(win, winData) {
-		    				 var title = prefix + '_' + winData.title;
-		    				 calEvent.title = title;
-		    				 calEvent.description = winData.desc;
-			    			
-		    				 $('#calendar').fullCalendar('updateEvent', calEvent);
-		    				 modifyEvent(calEvent);
-			    			 win.close(); 
-		    			 },
-		    			 del: function(win) {
-		    				 if(calEvent.isDb) {
-		    					 delEvents.push({
-		    	    				 id: calEvent.id,
-		    	    				 isDelete: true
-		    					 }); 
-		    					 
-		    					 isModified = true;
-		    				 }
-		    				 
-		    				 deleteEvent(calEvent); 
-		    				 win.close();
-		    			 }
-		    		 });
+	    	 common.checkSession(function() {
+	    		 if(calEvent.cate == 'C01') {
+		    		 console.log(calEvent.id);
+		    		 getGeuntaeDetail(calEvent);
+		    	 }
+		    	 else if(calEvent.cate == 'C02'){
+		    		 if(calEvent.editable) {
+			    		 var sDate = calEvent.start.format();
+				    	 var eDate = calEvent.end.format();
+				    	 var title = calEvent.title;
+				    	 var time = '';
+				    	 //OOO(test)_title
+				    	 var sIdx = title.indexOf('_');
+			    		 title = title.substring(sIdx + 1);
+				    		 
+			    		 common.showExtWin({
+			    			 mode: 'update',
+				    		 start: sDate,
+				    		 end: eDate,
+				    		 cate: category,
+				    		 title: title,
+				    		 description: calEvent.description,
+				    		 time: time,
+			    			 modify: function(win, winData) {
+			    				 var title = prefix + '_' + winData.title;
+			    				 calEvent.title = title;
+			    				 calEvent.description = winData.desc;
+				    			
+			    				 $('#calendar').fullCalendar('updateEvent', calEvent);
+			    				 modifyEvent(calEvent);
+				    			 win.close(); 
+			    			 },
+			    			 del: function(win) {
+			    				 if(calEvent.isDb) {
+			    					 delEvents.push({
+			    	    				 id: calEvent.id,
+			    	    				 isDelete: true
+			    					 }); 
+			    					 
+			    					 isModified = true;
+			    				 }
+			    				 
+			    				 deleteEvent(calEvent); 
+			    				 win.close();
+			    			 }
+			    		 });
+			    	 } 
 		    	 } 
-	    	 }
+	    	 });
 	     },
 	     eventDrop: function(event, delta, revertFunc) {
 	    	 /*var prev = event.start._i.substring(0, 7);
@@ -363,33 +365,36 @@ $(document).ready(function() {
 	    	 var sDate = start.format();
 	    	 var eDate = end.format();
 	    	 //var eDate = end.add(-1, 'days').format();
-	    	 common.showExtWin({
-	    		 //x: jsEvent.pageX,
-	    		 //y: jsEvent.pageY,
-	    		 //type: 
-	    		 mode: 'insert',
-	    		 start: sDate,
-	    		 end: eDate,
-	    		 cate: category,
-	    		 add: function(win, winData) {
-	    			 console.log(winData);
-	    			 var title = (category == 'C1') ? winData.title + '(' + winData.time + ')' : prefix + '_' + winData.title;
-	    			 
-	    			 var event = {
-	    				 title: title,
-	    				 id: createEventId(),
-	    				 start: sDate,
-	    				 end: eDate,
-	    				 cate: category,
-	    				 cateMonth: categoryMonth,
-	    				 editable: true,
-	    				 isNew: true,
-	    				 description: winData.desc
-	    			 }
-	    			
-	    			 addEvent(event);
-	    			 win.close();
-	    		 }
+	    	 
+	    	 common.checkSession(function() {
+	    		 common.showExtWin({
+		    		 //x: jsEvent.pageX,
+		    		 //y: jsEvent.pageY,
+		    		 //type: 
+		    		 mode: 'insert',
+		    		 start: sDate,
+		    		 end: eDate,
+		    		 cate: category,
+		    		 add: function(win, winData) {
+		    			 console.log(winData);
+		    			 var title = (category == 'C1') ? winData.title + '(' + winData.time + ')' : prefix + '_' + winData.title;
+		    			 
+		    			 var event = {
+		    				 title: title,
+		    				 id: createEventId(),
+		    				 start: sDate,
+		    				 end: eDate,
+		    				 cate: category,
+		    				 cateMonth: categoryMonth,
+		    				 editable: true,
+		    				 isNew: true,
+		    				 description: winData.desc
+		    			 }
+		    			
+		    			 addEvent(event);
+		    			 win.close();
+		    		 }
+		    	 }); 
 	    	 });
 	     },
 	     eventRender: function(event, element) {
@@ -406,7 +411,11 @@ $(document).ready(function() {
 		width: '150',
 		select: function(event, ui) {
 			category = ui.item.value;
-			window.location.href = '/calendar/view?dftCate=' + category;
+			
+			common.checkSession(function() {
+				window.location.href = '/calendar/view?dftCate=' + category;
+			});
+	
 		},
 		
 	});

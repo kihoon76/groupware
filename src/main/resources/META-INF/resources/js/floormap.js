@@ -316,7 +316,7 @@
 		});
 		
 		rect.on('click', function() {
-			checkSession(viewTimeline);
+			common.checkSession(viewTimeline);
 		})
 		.on('mouseover', function() {
 			this.fill({ color : recColor, opacity: 0.3})
@@ -336,16 +336,6 @@
 		
 		conferenceMap.push(obj);
 		seatMap.push(obj);
-	}
-	
-	function checkSession(fn) {
-		common.ajaxExt({
-    		url: '/checkSession',
-    		method: 'GET',
-			success: function(jo) {
-				fn();
-			}
-    	});
 	}
 	
 	function viewTimeline() {
@@ -376,7 +366,7 @@
 			        		//setConferenceTime();
 			        		//reservationContentWin = $(iframe.el.dom).find('iframe')[0].contentWindow;
 			        		TimeObj.ymd = reservationContentWin.getCurrentDate();
-			        		checkSession(setConferenceTime);
+			        		common.checkSession(setConferenceTime);
 			        	}
 			        } },
 			        { xtype: 'button', text: '닫기', listeners: {

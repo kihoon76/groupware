@@ -74,7 +74,7 @@ var Common = {
 				else {
 					//성공 이후 final로 실행할 함수
 					if(jqXHR.runFinal) {
-						setTimeout(jqXHR.runFinal, 500);
+						setTimeout(jqXHR.runFinal, 100);
 					}
 				}
 				
@@ -93,6 +93,19 @@ var Common = {
 			error: function(jqXHR, textStatus, err) {
 				console.log(jqXHR)
 			}
+		});
+	},
+	checkSession: function(fn) {
+		Common.ajax({
+			url: '/checkSession',
+			method: 'GET',
+			dataType: 'json',
+			headers: {'CUSTOM': 'Y'},
+			success: function(data, textStatus, jqXHR) {
+				if(fn) {
+					jqXHR.runFinal = fn;
+				}
+			},
 		});
 	},
 	makePopup: function(header, content, datas) {
@@ -196,8 +209,10 @@ $(document)
 	$(document)
 	.off('click', '#btnOffwork')
 	.on('click', '#btnOffwork', function() {
-		Common.makePopup('', Common.offworkPopup);
-		Common.openPopup('offwork');
+		Common.checkSession(function() {
+			Common.makePopup('', Common.offworkPopup);
+			Common.openPopup('offwork');
+		});
 	});
 	
 	$(document)

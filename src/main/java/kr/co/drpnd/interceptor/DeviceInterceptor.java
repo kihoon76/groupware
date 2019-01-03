@@ -31,7 +31,7 @@ public class DeviceInterceptor extends HandlerInterceptorAdapter {
                 ua.length() >= 4 && mobile_tablet_v.matcher(ua.substring(0, 4)).find());
     }
     
-    private String[] mobileAcceptUrl = {"/signin", "/login", "/result", "/logout", "/m/", "/resources/"};
+    private String[] mobileAcceptUrl = {"/signin", "/login", "/result", "/logout", "/m/", "/resources/", "/checkSession"};
 	private String[] pcForbiddenUrl = {"/m/"};
 	
 	@Override

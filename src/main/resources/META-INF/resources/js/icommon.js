@@ -299,6 +299,15 @@ var common = (function() {
 			}
 			
 			parent.Ext.Ajax.request(param);
+		},
+		checkSession: function(fn) {
+			common.ajaxExt({
+	    		url: '/checkSession',
+	    		method: 'GET',
+				success: function(jo) {
+					fn();
+				}
+	    	});
 		}
 	}
 })();
