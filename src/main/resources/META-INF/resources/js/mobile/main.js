@@ -122,6 +122,14 @@ var Common = {
 	}
 };
 
+//모바일 홈페이지 바로가기 링크 생성 
+if(userAgent.match('iphone')) { 
+    $('head').append('<link rel="apple-touch-icon" href="/resources/images/dongrim.png" />') 
+} 
+else if(userAgent.match('android')) { 
+	$('head').append('<link rel="shortcut icon" href="/resources/images/dongrim.png" />') 
+}
+
 $(document)
 .off('pageinit')
 .on('pageinit', function () {
