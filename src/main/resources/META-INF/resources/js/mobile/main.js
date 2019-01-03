@@ -44,6 +44,12 @@ var Common = {
 							window.location.href = '/signin'
 						};
 						break;
+					case '202': 
+						msg = '중복로그인 되었습니다. <br/> 다시 로그인 해 주세요';
+						fn = function() {
+							window.location.href = '/signin'
+						};
+						break;
 					case '1002': 
 					case '1004':
 						msg = jqXHR.errMsg;
@@ -123,6 +129,7 @@ var Common = {
 };
 
 //모바일 홈페이지 바로가기 링크 생성 
+var userAgent = navigator.userAgent.toLowerCase(); // 접속 핸드폰 정보 
 if(userAgent.match('iphone')) { 
     $('head').append('<link rel="apple-touch-icon" href="/resources/images/dongrim.png" />') 
 } 
