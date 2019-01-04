@@ -31,4 +31,5 @@
 	<input type="hidden" id="mineBgColor" value="<c:out value='${mineBgColor}'/>" />
 	<input type="hidden" id="mineTxtColor" value="<c:out value='${mineTxtColor}'/>" />
 	<input type="hidden" id="prefix" value="<c:out value='${prefix}'/>" />
+	<input type="hidden" id="_csrfToken" value="${_csrfToken}" />
 </body>

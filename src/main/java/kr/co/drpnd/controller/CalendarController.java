@@ -58,6 +58,7 @@ public class CalendarController {
 			@RequestParam(name="dftCate", required=false) String defaultCate,
 			ModelMap m) {
 		
+		createToken(m, TokenKey.CALENDAR);
 		Sawon sawon = SessionUtil.getSessionSawon();
 		
 		List<CalendarCategory> list = calendarService.getCalendarCategory();
@@ -298,5 +299,12 @@ public class CalendarController {
 		}
 		
 		return vo;
+	}
+	
+	private void createToken(ModelMap m, TokenKey key) {
+		String token = SessionUtil.createToken();
+		SessionUtil.getSessionSawon().setToken(key, token);
+		
+		m.addAttribute("_csrfToken", token);
 	}
 }

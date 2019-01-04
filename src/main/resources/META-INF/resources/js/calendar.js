@@ -8,6 +8,7 @@ $(document).ready(function() {
 	var mineBgColor = $('#mineBgColor').val();
 	var mineTxtColor = $('#mineTxtColor').val();
 	var prefix = $('#prefix').val();
+	var myToken = $('#_csrfToken').val();
 	var map = null;
 	
 	var eventSources = {
@@ -30,13 +31,40 @@ $(document).ready(function() {
 	
 	var delEvents = [];
 	
-	var o = parent.Ext.create('Drpnd.custom.Socket', {
-		socketUrl: 'test',
+	
+	
+	var Socket = parent.Ext.create('Drpnd.custom.Socket', {
+		socketUrl: '/websocket',
 		subscribe: [{
-			a: 1,
-			b: 2
+			url: '/message/geuntae/modify',
+			callback: function(message, mBody) {
+				var startDate = parseInt(mBody.startDate);
+				var calMStartNum = parseInt(calMStart.replace(/-/g, ''));
+				var calMEndNum = parseInt(calMEnd.replace(/-/g, ''));
+				
+				//근태현황 같은달을 보고 있으면
+				if(category == 'C01' && startDate >= calMStartNum && startDate < calMEndNum) {
+					console.log('pp')
+					
+					console.log(event)
+					var id = mBody.geuntaeCode;
+					var eventArr = eventSources[category].events;
+					var len = eventArr.length;
+					
+					for(var i=0; i< len; i++) {
+						if(eventArr[i].id == id) {
+							eventArr[i].description = mBody.content;
+							break;
+						}
+					}
+	
+				}
+				
+			}
 		}]
 	});
+	
+	Socket.connect();
 	
 	
 	function makeSaveParam() {
@@ -80,7 +108,7 @@ $(document).ready(function() {
     	});
 	}
 	
-	function updateGeuntae(geuntaeCode, modifyObj, details) {
+	function updateGeuntae(geuntaeCode, modifyObj, details, win) {
 		var vContent = '';
 		var vOverworkContent = '';
 		
@@ -106,10 +134,27 @@ $(document).ready(function() {
 			jsonData: {
 				geuntaeCode: geuntaeCode,
 				content: vContent,
-				overworkContent: vOverworkContent 
+				overworkContent: vOverworkContent,
+				startDate: details.gotowork.substring(0, 10)
 			},
 			success: function(jo) {
 				console.log(jo);
+				if(jo.success) {
+					common.showExtMsg({
+						msg: '수정되었습니다.',
+						type: 'alert',
+						icon: parent.Ext.MessageBox.INFO,
+						callback: function() {
+							win.close();
+						}
+					});
+				}
+				else {
+					comon.showExtMsg({
+						msg: jo.errMsg,
+						type: 'alert'
+					});
+				}
 			}
     	});
 	}
@@ -146,7 +191,7 @@ $(document).ready(function() {
 				text: '수정',
 				iconCls: 'icon-modi',
 			    handler: function() {
-			    	updateGeuntae(event.id, modifyObj, details);
+			    	updateGeuntae(event.id, modifyObj, details, win);
 		        }
 			});
 		}

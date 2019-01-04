@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,7 @@ import kr.co.drpnd.exception.InvalidUser;
 import kr.co.drpnd.exception.NotExistGotowork;
 import kr.co.drpnd.service.GeuntaeService;
 import kr.co.drpnd.type.ExceptionCode;
+import kr.co.drpnd.type.TokenKey;
 import kr.co.drpnd.type.WorkMethod;
 import kr.co.drpnd.util.RequestUtil;
 import kr.co.drpnd.util.SessionUtil;
@@ -161,6 +163,11 @@ public class GeuntaeController {
 		try {
 			geuntaeService.modifyGeuntae(param);
 			vo.setSuccess(true);
+			
+			param.put("sawonCode", "");
+			param.put("token", sawon.getToken(TokenKey.CALENDAR));
+			param.put("startDate", param.get("startDate").replaceAll("-", ""));
+			this.template.convertAndSend("/message/geuntae/modify", param);
 		}
 		catch(InvalidUser e) {
 			vo.setSuccess(false);
@@ -175,4 +182,5 @@ public class GeuntaeController {
 		return vo;
 		
 	}
+	
 }
