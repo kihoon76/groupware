@@ -180,6 +180,32 @@ Ext.define('Drpnd.util.CommonFn', {
 				fn();
 			}
     	});
+	},
+	getLatLng: function(callback) {
+		var geoErrMsg = '';
+		if('geolocation' in navigator) {
+			// 지오로케이션 사용 가능 
+			var options = {
+				enableHighAccuracy: true,
+				timeout: 5000,
+				maximumAge: 0
+			};
+			
+			navigator.geolocation.getCurrentPosition(function(position) {
+				var coords = position.coords;
+				if(callback) callback(coords.latitude, coords.longitude);
+				
+			}, function(err) {
+				geoErrMsg = '브라우져가 위치정보를 차단하였습니다.';
+				//alert(geoErrMsg);
+				Ext.Msg.alert('', geoErrMsg);
+			}, options);
+		}
+		else {
+			//geoErrMsg = '사용하시는 브라우져가 위치기반 서비스를 제공하지 않습니다.';
+			//Ext.Msg.alert('', geoErrMsg);
+			callback(0, 0);
+		}
 	}
    
 });

@@ -44,7 +44,10 @@ public class GeuntaeController {
 	
 	@GetMapping(value={"gotowork", "m/gotowork"})
 	@ResponseBody
-	public AjaxVO<String> checkGotowork(HttpServletRequest request) {
+	public AjaxVO<String> checkGotowork(
+			HttpServletRequest request, 
+			@RequestParam(name="lat", required=true) float lat,
+			@RequestParam(name="lng", required=true) float lng) {
 		
 		AjaxVO<String> vo = new AjaxVO<>();
 		Sawon sawon = SessionUtil.getSessionSawon(); 
@@ -56,8 +59,8 @@ public class GeuntaeController {
 			geuntae.setSawonCode(sawon.getSawonCode());
 			geuntae.setOutworkYN(isMobile ? "Y" : "N");
 			geuntae.setGotoworkMethod(isMobile ? WorkMethod.MOBILE.toString() : WorkMethod.PC.toString());
-			geuntae.setLat(0);
-			geuntae.setLng(0);
+			geuntae.setLat(lat);
+			geuntae.setLng(lng);
 			
 			String gotoworkTime = geuntaeService.checkGotowork(geuntae);
 			vo.setSuccess(true);

@@ -75,12 +75,15 @@ $(document).ready(function() {
 		
 	}
 	
-	function viewPositionAtMap() {
+	function viewPositionAtMap(details) {
 		if(map == null) {
-			var panel = parent.Ext.create('Drpnd.view.panel.NMapPanel');
+			var panel = parent.Ext.create('Drpnd.view.panel.NMapPanel', {
+				lat: details.lat,
+				lng: details.lng
+			});
 			
 			map = parent.Ext.create('Ext.window.Window', {
-				title: '외근위치',
+				title: '출근위치',
 				height: 500, 
 				width: 500,
 				layout: 'fit',
@@ -171,9 +174,10 @@ $(document).ready(function() {
 		        	xtype: 'button',
 		            margin: '0 0 5 90',
 		            text: '출근위치보기',
+		            iconCls: 'icon-position',
 		            listeners: {
 		            	click: function() {
-		            		viewPositionAtMap();
+		            		viewPositionAtMap(details);
 		            	}
 		            }
 		        }, {

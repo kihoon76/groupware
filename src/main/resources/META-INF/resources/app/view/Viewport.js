@@ -452,23 +452,25 @@ Ext.define('Drpnd.view.Viewport', {
 						   btn.setDisabled(isGotowork);
 					   },
 					   click: function(btn) {
-						   CommonFn.ajax({
-								url: '/geuntae/gotowork',
-								method:'GET',
-								loadmask: {
-									msg: '출근처리중 입니다.'
-								},
-								success: function(jo) {
-									if(jo.success) {
-										Ext.MessageBox.alert('알림', jo.datas[0] + '분에 출근처리 되었습니다.');
-										btn.setDisabled(true);
-										toolbarObj.btnOffwork.setDisabled(false);
-									}
-									else {
-										Ext.MessageBox.alert('alert', jo.errMsg);
-									}
-								},
-							}); 
+						   CommonFn.getLatLng(function(lat, lng) {
+							   CommonFn.ajax({
+									url: '/geuntae/gotowork?lat=' + lat + '&lng=' + lng,
+									method:'GET',
+									loadmask: {
+										msg: '출근처리중 입니다.'
+									},
+									success: function(jo) {
+										if(jo.success) {
+											Ext.MessageBox.alert('알림', jo.datas[0] + '분에 출근처리 되었습니다.');
+											btn.setDisabled(true);
+											toolbarObj.btnOffwork.setDisabled(false);
+										}
+										else {
+											Ext.MessageBox.alert('alert', jo.errMsg);
+										}
+									},
+							   });  
+						   });
 					   }
 				   }
 			   },{
