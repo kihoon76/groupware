@@ -29,7 +29,7 @@ import kr.co.drpnd.domain.CalendarEvent;
 import kr.co.drpnd.domain.ConferenceReservation;
 import kr.co.drpnd.domain.Sawon;
 import kr.co.drpnd.exception.InvalidReservationTime;
-import kr.co.drpnd.exception.InvalidReservationUser;
+import kr.co.drpnd.exception.InvalidUser;
 import kr.co.drpnd.service.CalendarService;
 import kr.co.drpnd.type.ExceptionCode;
 import kr.co.drpnd.type.TokenKey;
@@ -254,7 +254,7 @@ public class CalendarController {
 			vo.setErrCode(ExceptionCode.INVALID_RESERVATION_Time.getCode());
 			vo.setErrMsg(e.getMessage());
 		}
-		catch(InvalidReservationUser e) {
+		catch(InvalidUser e) {
 			vo.setSuccess(false);
 			vo.setErrCode(ExceptionCode.INVALID_RESERVATION_USER.getCode());
 			vo.setErrMsg(e.getMessage());
@@ -287,7 +287,7 @@ public class CalendarController {
 			param.put("token", myInfo.getToken(TokenKey.FLOORMAP));
 			this.template.convertAndSend("/message/conference/del/reservation", param);
 		}
-		catch(InvalidReservationUser e) {
+		catch(InvalidUser e) {
 			vo.setSuccess(false);
 			vo.setErrCode(ExceptionCode.INVALID_RESERVATION_USER.getCode());
 			vo.setErrMsg(e.getMessage());

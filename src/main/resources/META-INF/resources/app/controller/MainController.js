@@ -1,6 +1,6 @@
 Ext.define('Drpnd.controller.MainController', {
 	extend: 'Drpnd.controller.BaseController',
-	requires: ['Drpnd.util.ErrorCode'],
+	requires: ['Drpnd.util.ErrorCode', 'Drpnd.custom.Socket'],
 	views: ['panel.CategoryPanel'],
 	onLaunch : function() {
 		this.addContentTabPanel(

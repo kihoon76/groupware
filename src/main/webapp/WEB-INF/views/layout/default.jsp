@@ -30,6 +30,9 @@
 	<!-- locale -->
 	<script src="/resources/core/locale/ext-lang-ko.js"></script>
 	
+	<script src="/resources/js/sockjs.min.js"></script>
+	<script src="/resources/js/stomp.min.js"></script>
+	
 	<!-- naver map -->
 	<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=SgnlyXnzstmDsYDhele7&submodules=panorama,geocoder"></script>
 	<script>

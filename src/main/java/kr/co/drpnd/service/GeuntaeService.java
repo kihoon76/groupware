@@ -14,6 +14,7 @@ import kr.co.drpnd.domain.Geuntae;
 import kr.co.drpnd.exception.AlreadyGotowork;
 import kr.co.drpnd.exception.AlreadyOffwork;
 import kr.co.drpnd.exception.InvalidGotoworkTime;
+import kr.co.drpnd.exception.InvalidUser;
 import kr.co.drpnd.exception.NotExistGotowork;
 import kr.co.drpnd.type.ExceptionCode;
 import kr.co.drpnd.type.WorkMethod;
@@ -83,6 +84,12 @@ public class GeuntaeService {
 
 	public String getCuttentTime10() {
 		return geuntaeDao.selectCuttentTime10();
+	}
+
+	public void modifyGeuntae(Map<String, String> param) {
+		int r = geuntaeDao.updateGeuntae(param);
+		if(r != 1) new InvalidUser(ExceptionCode.INVALID_MODIFY_USER.getMsg());
+		
 	}
 	
 

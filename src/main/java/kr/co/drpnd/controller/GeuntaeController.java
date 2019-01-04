@@ -25,6 +25,7 @@ import kr.co.drpnd.exception.AlreadyGotowork;
 import kr.co.drpnd.exception.AlreadyOffwork;
 import kr.co.drpnd.exception.InvalidGotoworkTime;
 import kr.co.drpnd.exception.InvalidReservationTime;
+import kr.co.drpnd.exception.InvalidUser;
 import kr.co.drpnd.exception.NotExistGotowork;
 import kr.co.drpnd.service.GeuntaeService;
 import kr.co.drpnd.type.ExceptionCode;
@@ -149,4 +150,29 @@ public class GeuntaeController {
 		return vo;
 	}
 	
+	@PostMapping("modify")
+	@ResponseBody
+	public AjaxVO modifyGeuntae(@RequestBody Map<String, String> param) {
+		
+		AjaxVO vo = new AjaxVO();
+		Sawon sawon = SessionUtil.getSessionSawon();
+		param.put("sawonCode", sawon.getSawonCode());
+		
+		try {
+			geuntaeService.modifyGeuntae(param);
+			vo.setSuccess(true);
+		}
+		catch(InvalidUser e) {
+			vo.setSuccess(false);
+			vo.setErrCode(ExceptionCode.INVALID_MODIFY_USER.getCode());
+			vo.setErrMsg(e.getMessage());
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+		
+		return vo;
+		
+	}
 }

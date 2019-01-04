@@ -21,4 +21,6 @@ public interface GeuntaeDao {
 
 	String selectCuttentTime10();
 
+	int updateGeuntae(Map<String, String> param);
+
 }

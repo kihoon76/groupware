@@ -30,6 +30,15 @@ $(document).ready(function() {
 	
 	var delEvents = [];
 	
+	var o = parent.Ext.create('Drpnd.custom.Socket', {
+		socketUrl: 'test',
+		subscribe: [{
+			a: 1,
+			b: 2
+		}]
+	});
+	
+	
 	function makeSaveParam() {
 		var param = null;
 		if(delEvents.length > 0) {
@@ -71,8 +80,38 @@ $(document).ready(function() {
     	});
 	}
 	
-	function updateGeuntae(geuntaeCode, details) {
+	function updateGeuntae(geuntaeCode, modifyObj, details) {
+		var vContent = '';
+		var vOverworkContent = '';
 		
+		if(modifyObj.oContent) {
+			vContent = $.trim(modifyObj.oContent.getValue());
+			
+			if(vContent == '') {
+				modifyObj.oContent.markInvalid('업무내용을 입력하세요');
+				return;
+			}
+		}
+		
+		if(modifyObj.oOverworkContent) {
+			vOverworkContent = $.trim(modifyObj.oOverworkContent.getValue());
+		}
+		else {
+			vOverworkContent = details.overworkContent;
+		}
+		
+		common.ajaxExt({
+    		url: '/geuntae/modify',
+    		headers: { 'Content-Type': 'application/json' }, 
+			jsonData: {
+				geuntaeCode: geuntaeCode,
+				content: vContent,
+				overworkContent: vOverworkContent 
+			},
+			success: function(jo) {
+				console.log(jo);
+			}
+    	});
 	}
 	
 	function viewPositionAtMap(details) {
@@ -100,13 +139,14 @@ $(document).ready(function() {
 	
 	function openGeuntaeWin(event, details) {
 		var buttons = [];
+		var modifyObj = {oContent: null, oOverworkContent: null};
 		
 		if(event.mine == 'Y') {
 			buttons.push({
 				text: '수정',
 				iconCls: 'icon-modi',
 			    handler: function() {
-			    	updateGeuntae(event.id, details);
+			    	updateGeuntae(event.id, modifyObj, details);
 		        }
 			});
 		}
@@ -159,13 +199,23 @@ $(document).ready(function() {
 		        	xtype: 'textarea',
 		        	height: 100,
 		            value: details.content,
-		            readOnly: true
+		            readOnly: event.mine == 'Y' ? false : true,
+		            listeners: {
+		            	afterrender: function(txtArea) {
+		            		modifyObj.oContent = txtArea;
+		            	}
+		            }
 		        }, {
 		        	fieldLabel: '야근내용',
 		        	xtype: 'textarea',
 		        	height: 100,
 		            value: details.overworkContent,
-		            readOnly: true
+		            readOnly: event.mine == 'Y' ? false : true,
+		            listeners: {
+		            	afterrender: function(txtArea) {
+		            		modifyObj.oOverworkContent = txtArea;
+		            	}
+		            }
 		        }, {
 		        	fieldLabel: '외근',
 		            value: details.outwork == 'Y' ? '예' : '아니오',

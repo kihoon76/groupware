@@ -10,8 +10,8 @@
 <script src="/resources/os/SVG/svg.select.min.js"></script>
 <script src="/resources/os/SVG/svg.resize.min.js"></script>
 <script src="/resources/js/icommon.js"></script>
-<script src="/resources/js/sockjs.min.js"></script>
-<script src="/resources/js/stomp.min.js"></script>
+<!-- <script src="/resources/js/sockjs.min.js"></script> -->
+<!-- <script src="/resources/js/stomp.min.js"></script> -->
 <script src="/resources/js/floormap.js"></script>
 </content>
 <head>
