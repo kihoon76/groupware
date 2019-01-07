@@ -81,4 +81,10 @@
 		 where 근태코드 = #{geuntaeCode}
 		   and 사원코드 = #{sawonCode}
 	</update>
+	
+	<select id="selectTeamList" parameterType="string" resultType="Team">
+		select 팀명 as teamName, 바탕색 as teamBackColor, 글자색 as teamFontColor
+		  from [동림].[dbo].[팀]
+		 where 부서코드 = #{teamCode}
+	</select>
 </mapper>

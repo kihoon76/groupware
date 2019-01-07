@@ -23,7 +23,8 @@
 	  data-date="<c:out value='${currentDate}' />"
 	  data-gotowork="<c:out value='${isGotoworkChecked}' />"
 	  data-offwork="<c:out value='${isOffworkChecked}' />"
-	  data-sawon-name="<c:out value='${sawonName}' />">
+	  data-sawon-name="<c:out value='${sawonName}' />"
+	  data-team="<c:out value='${team}' />">
 	<sitemesh:write property="body" /> 
 	<script src="/resources/core/ver/4.1.1-rc2/js/ext-all.js"></script>
 	

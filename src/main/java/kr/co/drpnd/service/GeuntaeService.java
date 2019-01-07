@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import kr.co.drpnd.dao.GeuntaeDao;
 import kr.co.drpnd.domain.Geuntae;
+import kr.co.drpnd.domain.Team;
 import kr.co.drpnd.exception.AlreadyGotowork;
 import kr.co.drpnd.exception.AlreadyOffwork;
 import kr.co.drpnd.exception.InvalidGotoworkTime;
@@ -90,6 +91,10 @@ public class GeuntaeService {
 		int r = geuntaeDao.updateGeuntae(param);
 		if(r != 1) new InvalidUser(ExceptionCode.INVALID_MODIFY_USER.getMsg());
 		
+	}
+
+	public List<Team> getTeamList(String sawonDepartment) {
+		return geuntaeDao.selectTeamList(sawonDepartment);
 	}
 	
 

@@ -86,10 +86,10 @@
 			}
 		},{
 			url: '/message/geuntae/gotowork',
-			callback: function(message, seatNum) {
-				if(seatNum >= 0) {
-		    		var sm = seatMap[seatNum];
-		    		gotowork(sm);
+			callback: function(message, mBody) {
+				if(mBody.seatNum >= 0) {
+		    		var sm = seatMap[mBody.seatNum];
+		    		gotowork(sm, mBody.isOutwork);
 		    	}
 			}
 		},{
@@ -206,7 +206,7 @@
 //		    });
 //	}
 	
-	function gotowork(obj) {
+	function gotowork(obj, isOutwork) {
 		if(obj) {
 			obj.rect.attr({
     			fill: '#003'
@@ -223,6 +223,17 @@
     		obj.vacationTxt.attr({
     			fill: '#003'
     		});
+    		
+    		if(isOutwork == 'Y') {
+    			obj.outworkTxt.attr({
+    				fill: '#fff'
+    			});
+    		}
+    		else {
+    			obj.outworkTxt.attr({
+    				fill: '#003'
+    			});
+    		}
 		}
 	}
 	
@@ -243,6 +254,10 @@
     		obj.vacationTxt.attr({
     			fill: recColor
     		});
+    		
+    		obj.outworkTxt.attr({
+				fill: recColor
+			});
 		}
 	}
 	
@@ -317,6 +332,11 @@
 		ownerTxt.font({anchor: 'middle', size: 15, family: 'Helvetica'});
 		ownerTxt.move(x + (recW/6), y + 10);
 		
+		var outworkTxt = draw.text('(외근)').attr({x:50, y:50});
+		outworkTxt.font({anchor: 'middle', size: 15, family: 'Helvetica'});
+		outworkTxt.fill(recColor);
+		outworkTxt.move(x + (recW/6) + 50, y + 10);
+		
 		var phoneTxt = draw.text('- / -').attr({x:50, y:50});
 		phoneTxt.font({anchor: 'middle', size: 13, family: 'Helvetica'});
 		phoneTxt.fill('#fff');
@@ -337,6 +357,7 @@
 		group.add(rectCell);
 		//group.add(rectInnerPhone);
 		group.add(ownerTxt);
+		group.add(outworkTxt);
 		group.add(phoneTxt);
 		group.add(vacationTxt);
 		//group.add(lblInner);
@@ -346,6 +367,7 @@
 			rectCell: rectCell,
 			rectVacation: rectVacation,
 			ownerTxt: ownerTxt,
+			outworkTxt: outworkTxt, 
 			phoneTxt: phoneTxt,
 			vacationTxt: vacationTxt
 		};
@@ -651,7 +673,7 @@
 			sm.phoneTxt.text(sawonList[i].sawonPhone + ' / ' + sawonList[i].sawonInnerPhone);
 			
 			if(sawonList[i].isGotowork == 'Y' && sawonList[i].isOffwork == 'N') {
-				gotowork(sm);
+				gotowork(sm, sawonList[i].isOutwork);
 			}
 		}
 	}
@@ -713,6 +735,8 @@
 				var ownerTxt = imwonSeatMap[i].ownerTxt;
 				var phoneTxt = imwonSeatMap[i].phoneTxt;
 				var vacationTxt = imwonSeatMap[i].vacationTxt;
+				var outworkTxt = imwonSeatMap[i].outworkTxt;
+				
 				 //w - recW + recPadding;
 				console.log(Math.floor(ownerTxt.x()) + "/" + (Math.floor(ownerTxt.x()) - (currentWinWidth - x)));
 				rect.dmove((x - recW + recPadding) - rect.x() , 0);
@@ -721,6 +745,7 @@
 				ownerTxt.move(Math.floor(ownerTxt.x()) - (currentWinWidth - x), ownerTxt.y());
 				phoneTxt.move(Math.floor(phoneTxt.x()) - (currentWinWidth - x), phoneTxt.y());
 				vacationTxt.move(Math.floor(vacationTxt.x()) - (currentWinWidth - x), vacationTxt.y());
+				outworkTxt.move(Math.floor(outworkTxt.x()) - (currentWinWidth - x), outworkTxt.y());
 			}
 			
 			var conferenceRect = conferenceMap[0].rect;

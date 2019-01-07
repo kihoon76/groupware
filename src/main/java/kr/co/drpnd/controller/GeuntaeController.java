@@ -69,7 +69,10 @@ public class GeuntaeController {
 			vo.setSuccess(true);
 			vo.addObject(gotoworkTime);
 			
-			this.template.convertAndSend("/message/geuntae/gotowork", sawon.getSeatNum());
+			Map<String, Object> param = new HashMap<>();
+			param.put("seatNum", sawon.getSeatNum());
+			param.put("isOutwork", isMobile ? "Y" : "N");
+			this.template.convertAndSend("/message/geuntae/gotowork", param);
 		}
 		catch(InvalidGotoworkTime e) {
 			vo.setSuccess(false);

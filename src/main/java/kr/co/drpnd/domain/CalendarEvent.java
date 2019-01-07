@@ -15,6 +15,7 @@ public class CalendarEvent {
 	private String mine;
 	private String txtColor;
 	private String bgColor;
+	private String borderColor;
 	private String sawonCode;
 	private boolean isNew;
 	private boolean isModify;
@@ -110,6 +111,13 @@ public class CalendarEvent {
 	}
 	public void setBgColor(String bgColor) {
 		this.bgColor = bgColor;
+	}
+	
+	public String getBorderColor() {
+		return borderColor;
+	}
+	public void setBorderColor(String borderColor) {
+		this.borderColor = borderColor;
 	}
 	public String getBigo() {
 		return bigo;

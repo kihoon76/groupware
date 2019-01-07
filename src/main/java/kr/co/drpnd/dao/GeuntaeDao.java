@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import kr.co.drpnd.domain.Geuntae;
+import kr.co.drpnd.domain.Team;
 
 public interface GeuntaeDao {
 
@@ -22,5 +23,7 @@ public interface GeuntaeDao {
 	String selectCuttentTime10();
 
 	int updateGeuntae(Map<String, String> param);
+
+	List<Team> selectTeamList(String sawonDepartment);
 
 }

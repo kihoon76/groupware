@@ -31,6 +31,7 @@ public class Sawon {
 	private int seatNum = -1;
 	private String isGotowork;
 	private String isOffwork;
+	private String isOutwork;
 	private String positionGubun;
 	private boolean isImwon;
 	
@@ -237,6 +238,14 @@ public class Sawon {
 
 	public void setImwon(boolean isImwon) {
 		this.isImwon = isImwon;
+	}
+	
+	public String getIsOutwork() {
+		return isOutwork;
+	}
+
+	public void setIsOutwork(String isOutwork) {
+		this.isOutwork = isOutwork;
 	}
 
 	@Override

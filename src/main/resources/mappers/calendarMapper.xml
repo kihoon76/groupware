@@ -20,6 +20,7 @@
 		<result column="상세"			property="description"	javaType="string"/>
 		<result column="글자색"		property="txtColor"	javaType="string"/>
 		<result column="바탕색"		property="bgColor"	javaType="string"/>
+		<result column="테두리색"		property="borderColor"	javaType="string"/>
 		<result column="비고"			property="bigo"		javaType="string"/>
 		<result column="myevent"	property="mine"	javaType="string"/>
 	</resultMap>
@@ -46,7 +47,8 @@
 			   		else 'N'
 			   end as myevent,
 			   isnull(T3.바탕색, '#000000') as 바탕색,
-			   isnull(T3.글자색, '#ffffff') as 글자색 
+			   isnull(T3.글자색, '#ffffff') as 글자색,
+			   isnull(T3.테두리색, '#000000') as 테두리색
 		  from [동림].[dbo].[캘린더] T1
 		 inner join [동림].[dbo].[사원] T2
 		    on T1.사원코드 = T2.사원코드

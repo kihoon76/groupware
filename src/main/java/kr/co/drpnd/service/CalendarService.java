@@ -144,10 +144,12 @@ public class CalendarService {
 				if("Y".equals(cal.getMine())) {
 					map.put("backgroundColor", bgColor);
 					map.put("textColor", txtColor);
+					map.put("borderColor", bgColor);
 				}
 				else {
 					map.put("backgroundColor", cal.getBgColor());
 					map.put("textColor", cal.getTxtColor());
+					map.put("borderColor", cal.getBorderColor());
 				}
 			
 				m.get(cate).add(map);

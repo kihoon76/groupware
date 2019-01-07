@@ -9,7 +9,7 @@ $(document).ready(function() {
 	var mineTxtColor = $('#mineTxtColor').val();
 	var prefix = $('#prefix').val();
 	var myToken = $('#_csrfToken').val();
-	var map = null;
+	//var map = null;
 	
 	var eventSources = {
 //		team1: {
@@ -30,6 +30,7 @@ $(document).ready(function() {
 	}
 	
 	var delEvents = [];
+	var eventElement = {};
 	
 	
 	
@@ -44,9 +45,7 @@ $(document).ready(function() {
 				
 				//근태현황 같은달을 보고 있으면
 				if(category == 'C01' && startDate >= calMStartNum && startDate < calMEndNum) {
-					console.log('pp')
 					
-					console.log(event)
 					var id = mBody.geuntaeCode;
 					var eventArr = eventSources[category].events;
 					var len = eventArr.length;
@@ -54,6 +53,7 @@ $(document).ready(function() {
 					for(var i=0; i< len; i++) {
 						if(eventArr[i].id == id) {
 							eventArr[i].description = mBody.content;
+							eventElement['k' + id].attr('title', mBody.content);
 							break;
 						}
 					}
@@ -160,23 +160,21 @@ $(document).ready(function() {
 	}
 	
 	function viewPositionAtMap(details) {
-		if(map == null) {
-			var panel = parent.Ext.create('Drpnd.view.panel.NMapPanel', {
-				lat: details.lat,
-				lng: details.lng
-			});
+		var panel = parent.Ext.create('Drpnd.view.panel.NMapPanel', {
+			lat: details.lat,
+			lng: details.lng
+		});
 			
-			map = parent.Ext.create('Ext.window.Window', {
-				title: '출근위치',
-				height: 500, 
-				width: 500,
-				layout: 'fit',
-				modal: true,
-				resizable: false,
-				closeAction: 'hide',
-				items: [panel]
-			});
-		}
+		var map = parent.Ext.create('Ext.window.Window', {
+			title: '출근위치',
+			height: 500, 
+			width: 500,
+			layout: 'fit',
+			modal: true,
+			resizable: false,
+			closeAction: 'destroy',
+			items: [panel]
+		});
 		
 		map.show();
 		
@@ -497,7 +495,11 @@ $(document).ready(function() {
 	    	 });
 	     },
 	     eventRender: function(event, element) {
-	    	 element.attr('title', event.description)
+	    	 console.log(element);
+	    	 var id = event.id;
+	    	 eventElement['k' + id] = element;
+	    	 
+	    	 element.attr('title', event.description);
 	    	 element.tooltip({
 	    		 classes: {
 	    			 'ui-tooltip': 'highlight'

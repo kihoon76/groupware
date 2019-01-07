@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 
 import kr.co.drpnd.domain.AjaxVO;
 import kr.co.drpnd.domain.Sawon;
+import kr.co.drpnd.domain.Team;
 import kr.co.drpnd.service.GeuntaeService;
 import kr.co.drpnd.service.SawonService;
 import kr.co.drpnd.type.TokenKey;
@@ -41,11 +42,14 @@ public class DrpndController {
 		boolean gotoworkChecked = false;
 		boolean offworkChecked = false;
 		String cuttentTime10 = "";
+		List<Team> teamList = null;
 		
 		try {
 			gotoworkChecked = geuntaeService.checkMyTodayGotowork(myInfo.getSawonCode());
 			offworkChecked = geuntaeService.checkMyTodayOffwork(myInfo.getSawonCode());
 			cuttentTime10 = geuntaeService.getCuttentTime10();
+			
+			teamList = geuntaeService.getTeamList(myInfo.getSawonDepartment());
 		}
 		catch(Exception e) {}
 		
@@ -58,6 +62,12 @@ public class DrpndController {
 		if(RequestUtil.isMobile(request)) {
 			m.put("footbar", "home");
 			return "mobile/main";
+		}
+		else {
+			if(teamList != null) {
+				Gson g = new Gson();
+				m.put("team", g.toJson(teamList));
+			}
 		}
 		
 		return "main";

@@ -9,6 +9,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import kr.co.drpnd.domain.Geuntae;
+import kr.co.drpnd.domain.Team;
 
 @Repository("geuntaeDao")
 public class GeuntaeDaoImpl implements GeuntaeDao {
@@ -56,6 +57,11 @@ public class GeuntaeDaoImpl implements GeuntaeDao {
 	@Override
 	public int updateGeuntae(Map<String, String> param) {
 		return msSqlSession.update(namespace + ".updateGeuntae", param);
+	}
+
+	@Override
+	public List<Team> selectTeamList(String sawonDepartment) {
+		return msSqlSession.selectList(namespace + ".selectTeamList", sawonDepartment);
 	}
 
 

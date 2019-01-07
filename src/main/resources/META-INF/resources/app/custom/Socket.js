@@ -10,8 +10,9 @@ Ext.define('Drpnd.custom.Socket', function() {
 		stompClient = Stomp.over(socket);
 		
 		stompClient.connect({}, function(frame) {
-			successCallback(subscribe);	    
-		    
+			setTimeout(function() {
+				successCallback(subscribe);
+			}, 100);
 		}, function(error) {
 			reconnect(url, subscribe);
 		});
