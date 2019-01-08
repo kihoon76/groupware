@@ -9,7 +9,10 @@
 	var cellPhoneH = 20;
 	var cellColor = '#00f';
 	var innerPhoneW = recW;
-	var innerPhoneH = 0; //20;
+	var innerPhoneH = 0;
+	var planH = 10; //20;
+	var planW = 10;
+	var planColor = recColor; 
 	var innerColor = '#66c';
 	var gap = 40;
 	var linePadding = 10;
@@ -322,11 +325,12 @@
 			y:y+recH,
 			fill: cellColor
 		});
-//		var rectInnerPhone = draw.rect(innerPhoneW, innerPhoneH).attr({
-//			x:x,
-//			y:y+recH+cellPhoneH,
-//			fill:innerColor,
-//		});
+		
+		var rectPlan = draw.rect(planW, planH).attr({
+			x:x,
+			y:y+(recH-planH),
+			fill:planColor,
+		});
 		
 		var ownerTxt = draw.text('x').attr({x:50, y:50});
 		ownerTxt.font({anchor: 'middle', size: 15, family: 'Helvetica'});
@@ -355,7 +359,7 @@
 		group.add(rect);
 		group.add(rectVacation);
 		group.add(rectCell);
-		//group.add(rectInnerPhone);
+		group.add(rectPlan);
 		group.add(ownerTxt);
 		group.add(outworkTxt);
 		group.add(phoneTxt);
@@ -366,6 +370,7 @@
 			rect: rect,
 			rectCell: rectCell,
 			rectVacation: rectVacation,
+			rectPlan: rectPlan,
 			ownerTxt: ownerTxt,
 			outworkTxt: outworkTxt, 
 			phoneTxt: phoneTxt,
@@ -658,6 +663,7 @@
 			makeSeat();
 			initSawonInfo();
 			initSawonVacationInfo();
+			initSawonPlanInfo();
 		});
 	}
 	else {
@@ -686,6 +692,10 @@
 			sm.rectVacation.attr({fill: '#033'});
 			sm.vacationTxt.font({fill: '#fff'});
 		}
+	}
+	
+	function initSawonPlanInfo() {
+		
 	}
 	
 	/*var Observer = parent.window.Observer;//parent.Ext.create('Drpnd.util.Observer');
@@ -731,7 +741,7 @@
 				var rect = imwonSeatMap[i].rect;
 				var rectCell = imwonSeatMap[i].rectCell;
 				var rectVacation = imwonSeatMap[i].rectVacation;
-				
+				var rectPlan = imwonSeatMap[i].rectPlan;
 				var ownerTxt = imwonSeatMap[i].ownerTxt;
 				var phoneTxt = imwonSeatMap[i].phoneTxt;
 				var vacationTxt = imwonSeatMap[i].vacationTxt;
@@ -742,6 +752,8 @@
 				rect.dmove((x - recW + recPadding) - rect.x() , 0);
 				rectCell.dmove((x - cellPhoneW + recPadding) - rectCell.x(), 0);
 				rectVacation.dmove((x - recVacationW + recPadding) - rectVacation.x(), 0);
+				rectPlan.dmove((x - recW + recPadding) - rectPlan.x(), 0);
+				
 				ownerTxt.move(Math.floor(ownerTxt.x()) - (currentWinWidth - x), ownerTxt.y());
 				phoneTxt.move(Math.floor(phoneTxt.x()) - (currentWinWidth - x), phoneTxt.y());
 				vacationTxt.move(Math.floor(vacationTxt.x()) - (currentWinWidth - x), vacationTxt.y());

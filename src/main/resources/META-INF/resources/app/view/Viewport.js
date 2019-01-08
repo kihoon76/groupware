@@ -119,7 +119,7 @@ Ext.define('Drpnd.view.Viewport', {
 	    				
 	    				myInfoWin = Ext.create('Ext.window.Window', {
 	    					width: 500,
-	    					height: 400,
+	    					height: 380,
 	    					closeAction: 'hide',
 	    					draggable: false,
 	    					modal: true,
@@ -362,7 +362,7 @@ Ext.define('Drpnd.view.Viewport', {
 			            		date.setRawValue(info.birthday);
 			            	}
 			            }
-			        },{
+			        }/*,{
 			        	xtype: 'radiogroup',
 		            	fieldLabel: '팀리더',
 		            	//height: 120,
@@ -388,7 +388,7 @@ Ext.define('Drpnd.view.Viewport', {
 			            		SawonRegForm.setTeamLeaderRdoGrp(rdoGrp);
 			            	}
 			            }
-			        }]
+			        }*/]
 			});
 		}
 	    

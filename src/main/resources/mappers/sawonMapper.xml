@@ -60,7 +60,7 @@
 			#{sawonTeam},
 			</otherwise>
 		</choose>
-			#{sawonTeamLeader},
+			'N',<!-- #{sawonTeamLeader},-->
 			getDate())
 			
 		<selectKey keyProperty="sawonCode" resultType="String" order="AFTER">

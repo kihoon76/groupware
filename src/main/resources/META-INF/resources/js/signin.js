@@ -245,7 +245,7 @@ Ext.onReady(function() {
 		            		SawonRegForm.setBirthdayDate(date);
 		            	}
 		            }
-		        },{
+		        }/*,{
 		        	xtype: 'radiogroup',
 	            	fieldLabel: '팀리더',
 	            	//height: 120,
@@ -270,7 +270,7 @@ Ext.onReady(function() {
 		            		SawonRegForm.setTeamLeaderRdoGrp(rdoGrp);
 		            	}
 		            }
-		        }]
+		        }*/]
 		});
 	}
 	
