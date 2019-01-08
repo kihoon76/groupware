@@ -25,4 +25,5 @@
 	<input type="hidden" id="_csrfToken" value="${_csrfToken}" />
 	<input type="hidden" value='${list}' id="list"/>
 	<input type="hidden" value='${vacation}' id="vacation"/>
+	<input type="hidden" value='${plan}' id="plan"/>
 </body>

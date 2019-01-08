@@ -73,4 +73,9 @@ public class CalendarDaoImpl implements CalendarDao {
 		return msSqlSession.delete(namespace + ".deleteReserveConference", cr);
 	}
 
+	@Override
+	public Map<String, String> selectPlanContent(Map<String, String> param) {
+		return msSqlSession.selectOne(namespace + ".selectPlanContent", param);
+	}
+
 }

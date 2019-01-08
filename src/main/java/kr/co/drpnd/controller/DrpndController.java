@@ -108,9 +108,12 @@ public class DrpndController {
 		
 		List<Sawon> sawonList = sawonService.getMyDepartmentAllSawon(sawon.getSawonDepartment());
 		List<Map<String, Object>> todayVacationList = sawonService.getTodayVacationAllSawon(sawon.getSawonDepartment());
+		List<Map<String, Object>> todayPlanList = sawonService.getTodayPlanAllSawon(sawon.getSawonDepartment());
+		
 		Gson g = new Gson();
 		m.addAttribute("list", g.toJson(sawonList));
 		m.addAttribute("vacation", g.toJson(todayVacationList));
+		m.addAttribute("plan", g.toJson(todayPlanList));
 		return "floormap";
 	}
 	

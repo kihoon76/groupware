@@ -51,4 +51,10 @@ public class SawonService {
 		param.put("department", Integer.parseInt(sawonDepartment));
 		return sawonDao.selectTodayVacationAllSawon(param);
 	}
+
+	public List<Map<String, Object>> getTodayPlanAllSawon(String sawonDepartment) {
+		Map<String, Integer> param = new HashMap<>();
+		param.put("department", Integer.parseInt(sawonDepartment));
+		return sawonDao.selectTodayPlanAllSawon(param);
+	}
 }

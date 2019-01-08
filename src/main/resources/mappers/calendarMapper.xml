@@ -138,4 +138,13 @@
 	<delete id="deleteReserveConference" parameterType="ConferenceReservation">
 		delete from [동림].[dbo].[회의실예약] where 예약번호 = #{reserveNum} and 예약자_사원코드 = #{reservationSawonCode}
 	</delete>
+	
+	<select id="selectPlanContent" parameterType="map" resultType="map">
+		  select 상세 detail, 사원명 sawonName
+    		from [동림].[dbo].[캘린더] T1
+   		   inner join [동림].[dbo].[사원] T2 
+   		   	  on T1.사원코드 = T2.사원코드
+   		   where 일련번호 = #{planCode}
+     		 and T2.부서코드 = #{department} 
+	</select>
 </mapper>

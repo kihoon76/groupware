@@ -94,6 +94,12 @@
 		)}
 	</select>
 	
+	<select id="selectTodayPlanAllSawon" statementType="CALLABLE" parameterType="map" resultType="map">
+		{call [동림].[dbo].[UP_사원일정](
+			#{department, mode=IN, jdbcType=INTEGER, javaType=int}
+		)}
+	</select>
+	
 	<update id="updateSawon" parameterType="Sawon">
 		update [동림].[dbo].[사원]
 		   set 사원아이디 = #{sawonId},

@@ -191,4 +191,8 @@ public class CalendarService {
 		if(r != 1) throw new InvalidUser(ExceptionCode.INVALID_RESERVATION_USER.getMsg());
 	}
 
+	public Map<String, String> getPlanContent(Map<String, String> param) {
+		return calendarDao.selectPlanContent(param);
+	}
+
 }

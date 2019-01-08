@@ -29,4 +29,6 @@ public interface CalendarDao {
 
 	int deleteReserveConference(ConferenceReservation cr);
 
+	Map<String, String> selectPlanContent(Map<String, String> param);
+
 }

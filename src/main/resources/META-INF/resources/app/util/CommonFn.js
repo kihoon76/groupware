@@ -172,14 +172,22 @@ Ext.define('Drpnd.util.CommonFn', {
 		
 		Ext.Ajax.request(config);
 	},
-	checkSession: function(fn) {
-		this.ajax({
-    		url: '/checkSession',
+	checkSession: function(fn, hasMask) {
+		var param = {
+			url: '/checkSession',
     		method: 'GET',
 			success: function(jo) {
 				fn();
-			}
-    	});
+			}	
+		};
+		
+		if(hasMask) {
+			param.loadmask = {
+				msg: '세션체크 중입니다.'
+			};
+		}
+		
+		this.ajax(param);
 	},
 	getLatLng: function(callback) {
 		var geoErrMsg = '';

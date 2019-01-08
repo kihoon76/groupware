@@ -104,7 +104,7 @@ Ext.define('Drpnd.view.Viewport', {
 				});
 				
 		    	offWorkWin.show();
-	    	});
+	    	}, true);
 	    	
 	    	
 	    }

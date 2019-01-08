@@ -51,4 +51,9 @@ public class SawonDaoImpl implements SawonDao {
 		return msSqlSession.selectList(namespace + ".selectTodayVacationAllSawon", param);
 	}
 
+	@Override
+	public List<Map<String, Object>> selectTodayPlanAllSawon(Map<String, Integer> param) {
+		return msSqlSession.selectList(namespace + ".selectTodayPlanAllSawon", param);
+	}
+
 }

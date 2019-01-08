@@ -19,4 +19,6 @@ public interface SawonDao {
 
 	List<Map<String, Object>> selectTodayVacationAllSawon(Map<String, Integer> param);
 
+	List<Map<String, Object>> selectTodayPlanAllSawon(Map<String, Integer> param);
+
 }

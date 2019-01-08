@@ -15,6 +15,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -130,6 +131,31 @@ public class CalendarController {
 		try {
 			vo.setSuccess(true);
 			vo.setDatas(calendarService.getCalendarCategory());
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+		
+		return vo;
+	}
+	
+	@GetMapping("plan/{planCode}")
+	@ResponseBody
+	public AjaxVO<Map<String, String>> getPlanContent(@PathVariable("planCode") String planCode) {
+		Sawon sawon = SessionUtil.getSessionSawon();
+		
+		AjaxVO<Map<String, String>> vo = new AjaxVO<>();
+		
+		Map<String, String> param = new HashMap<>();
+		param.put("planCode", planCode);
+		param.put("department", sawon.getSawonDepartment());
+		
+		
+		try {
+			Map<String, String> planMap = calendarService.getPlanContent(param);
+			vo.setSuccess(true);
+			vo.addObject(planMap);
 		}
 		catch(Exception e) {
 			vo.setSuccess(false);

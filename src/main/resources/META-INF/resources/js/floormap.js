@@ -10,8 +10,8 @@
 	var cellColor = '#00f';
 	var innerPhoneW = recW;
 	var innerPhoneH = 0;
-	var planH = 10; //20;
-	var planW = 10;
+	var planH = 15; //20;
+	var planW = 60;
 	var planColor = recColor; 
 	var innerColor = '#66c';
 	var gap = 40;
@@ -38,6 +38,7 @@
 	//var reconAttemp = 0;
 	var sawonList = null;
 	var vacationSawonList = null;
+	var sawonPlanList = null;
 	
 	//var socket = new SockJS('/websocket'),
 	//stompClient = Stomp.over(socket);
@@ -695,7 +696,69 @@
 	}
 	
 	function initSawonPlanInfo() {
+		sawonPlanList = $.parseJSON($('#plan').val());
 		
+		for(var i=0, len=sawonPlanList.length; i<len; i++) {
+			var sm = seatMap[sawonPlanList[i].seatNum];
+			sm.rectPlan.attr({fill: '#ff0000'});
+			sm.rectPlan
+			.off('click')
+			.off('mouseover')
+			.off('mouseout')
+			.on('click', (function(code) {
+				return function() {
+					planMarkClick(code);
+				}
+			})(sawonPlanList[i].planCode))
+			.on('mouseover', function() {
+				this.fill({ color : '#ff0000', opacity: 0.8})
+			})
+			.on('mouseout', function() {
+				this.fill({ color : '#ff0000', opacity: 1})
+			});
+		}
+	}
+	
+	function planMarkClick(planCode) {
+		common.ajaxExt({
+			url: '/calendar/plan/' + planCode,
+			method: 'GET',
+			headers: { 'Content-Type': 'application/json' }, 
+			loadmask: {
+				msg: '일정로딩중 입니다.'
+			},
+			success: function(jo) {
+				console.log(jo);
+				var data = jo.datas[0];
+				if(data) {
+					openPlanWin(data);
+				}
+				else {
+					common.showExtMsg({
+						type: 'alert',
+						msg: '정보가 없습니다.'
+					});
+				}
+			}
+		});
+	}
+	
+	function openPlanWin(data) {
+		var planWin = parent.Ext.create('Ext.window.Window', {
+			title: '<span style="color:#0000FF;">' + data.sawonName + '</span>님의 오늘 일정',
+			height: 600,
+			width: 600,
+			layout: 'fit',
+			closeAction: 'destroy',
+			modal: true,
+			items: [{
+				xtype: 'textarea',
+				value: data.detail,
+				readOnly: true
+			}]  
+		});
+		
+		planWin.show();
 	}
 	
 	/*var Observer = parent.window.Observer;//parent.Ext.create('Drpnd.util.Observer');
@@ -735,7 +798,7 @@
 	        timeout = false;
 	        var x = window.innerWidth;
 	        
-	        console.log(currentWinWidth + "/" + x);
+	        //console.log(currentWinWidth + "/" + x);
 	        var len = imwonSeatMap.length;
 			for(var i=0; i<len; i++) {
 				var rect = imwonSeatMap[i].rect;
