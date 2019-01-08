@@ -10,6 +10,9 @@ Ext.define('Drpnd.view.Viewport', {
 	    var isGotowork = Ext.getBody().getAttribute('data-gotowork') == 'true';
 	    var isOffwork = Ext.getBody().getAttribute('data-offwork') == 'true';
 	    var sawonName = Ext.getBody().getAttribute('data-sawon-name');
+	    var currentTime10 = Ext.get('hdnTime').getValue();
+	    var hasWorker = false;
+	    var worker = null;
 	    
 	    var toolbarObj = {
 	    	btnOffwork: null,
@@ -31,7 +34,7 @@ Ext.define('Drpnd.view.Viewport', {
 					method:'GET',
 					success: function(jo) {
 						if(jo.success) {
-							//window.location.href = CommonFn.getFullUrl(); 
+							window.location.href = CommonFn.getFullUrl(); 
 						}
 						else {
 							Ext.MessageBox.alert('info', '로그아웃에 실패했습니다.');
@@ -422,6 +425,21 @@ Ext.define('Drpnd.view.Viewport', {
 			}); 
 	    }
 	    
+	    if(window.Worker) {
+	    	hasWorker = true;
+			if(worker) {
+				worker.terminate();
+			}
+			
+			worker = new Worker(CommonFn.getFullUrl() + '/resources/js/mobile/worker.js');
+			
+			worker.onmessage = function(event) {
+				var d = event.data;
+				Ext.getCmp('timer').setValue(d);
+			}
+		}
+	    
+	    
         Ext.apply(this, {
             id     : 'app-viewport'
            ,layout : {
@@ -443,6 +461,35 @@ Ext.define('Drpnd.view.Viewport', {
 				   html: Html.logo
 			   }, 
 			   '->',{
+				   xtype: 'textfield',
+				   id: 'timer',
+				   readOnly: true,
+				   fieldStyle: 'background-color: #ddd; background-image: none; color:#0000ff;',
+				   listeners: {
+					   afterrender: function(txt) {
+						   if(hasWorker) {
+							   var time = currentTime10;
+							   var ymd = time.split(' ');
+							   var ymdSplit = ymd[0].split('-');
+							   var hmsSplit = ymd[1].split(':');
+								
+							   var timeObj = {
+								   year: ymdSplit[0],
+								   month: ymdSplit[1],
+								   day: ymdSplit[2],
+								   hour: hmsSplit[0],
+								   min: hmsSplit[1],
+								   sec: hmsSplit[2]
+							   }
+								
+							   worker.postMessage(timeObj);   
+						   }
+						   else {
+							   txt.setValue(currentTime10);
+						   }
+					   }
+				   }
+			   },{
 				   xtype: 'button',
 				   text: '출근처리',
 				   iconCls: 'icon-gotowork',

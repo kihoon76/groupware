@@ -88,17 +88,17 @@ var common = (function() {
 			
 			var buttons = [];
 			
-			if(param.cate == 'C1') {
-				items.push({
-		        	fieldLabel: '시간',
-		        	xtype: 'timefield',
-		        	id: 'ifm-cal-time',
-		        	afterLabelTextTpl: required,
-		        	allowBlank: false,
-		        	editable: false,
-		            increment: 60,
-		        });
-			}
+//			if(param.cate == 'C1') {
+//				items.push({
+//		        	fieldLabel: '시간',
+//		        	xtype: 'timefield',
+//		        	id: 'ifm-cal-time',
+//		        	afterLabelTextTpl: required,
+//		        	allowBlank: false,
+//		        	editable: false,
+//		            increment: 60,
+//		        });
+//			}
 			
 			if(param.mode == 'insert') {
 				buttons.push({
@@ -113,10 +113,10 @@ var common = (function() {
 				    	if(!title.validate()) return;
 				    	if(!desc.validate()) return;
 				    	
-				    	if(param.cate == 'C1') {
-				    		time = parent.Ext.getCmp('ifm-cal-time');
-				    	  	if(!time.validate()) return;
-				    	}
+//				    	if(param.cate == 'C1') {
+//				    		time = parent.Ext.getCmp('ifm-cal-time');
+//				    	  	if(!time.validate()) return;
+//				    	}
 				    	
 				    	param.add(win, {
 				    		title: title.getValue(),
@@ -133,21 +133,21 @@ var common = (function() {
 				    handler: function() {
 				    	var title = parent.Ext.getCmp('ifm-cal-title');
 				    	var desc = parent.Ext.getCmp('ifm-cal-desc');
-				    	var time = null;
+				    	//var time = null;
 				    	//var team = parent.Ext.getCmp('ifm-cal-team');
 				    	
 				    	if(!title.validate()) return;
 				    	if(!desc.validate()) return;
 				    	
-				    	if(param.cate == 'C1') {
-				    		time = parent.Ext.getCmp('ifm-cal-time');
-				    	  	if(!time.validate()) return;
-				    	}
+//				    	if(param.cate == 'C1') {
+//				    		time = parent.Ext.getCmp('ifm-cal-time');
+//				    	  	if(!time.validate()) return;
+//				    	}
 				    	
 				    	param.modify(win, {
 				    		title: title.getValue(),
 				    		desc: desc.getValue(), 
-				    		time: time == null ? '' : time.getRawValue()
+				    		//time: time == null ? '' : time.getRawValue()
 				    	});
 			        }
 				}, {
@@ -170,13 +170,13 @@ var common = (function() {
 			
 			var	win = parent.Ext.create('Ext.window.Window', {
 					title: param.d,
-					height: param.cate == 'C1' ? 250 : 230, 
+					height: 250, 
 					width: 400,
 					layout: 'fit',
 					modal: true,
 					resizable: false,
 					closeAction: 'destroy',
-					animateTarget: param.aniTarget,
+					//animateTarget: param.aniTarget,
 					items: [{
 						xtype: 'form',
 						bodyStyle  : 'padding: 10px;',
@@ -195,12 +195,12 @@ var common = (function() {
 							if(param.mode == 'update') {
 								var title = parent.Ext.getCmp('ifm-cal-title');
 						    	var desc = parent.Ext.getCmp('ifm-cal-desc');
-						    	var time = null;
+						    	//var time = null;
 						    	
-						    	if(param.cate == 'C1') {
-						    		time = parent.Ext.getCmp('ifm-cal-time');
-						    		time.setValue(param.time);
-						    	}
+//						    	if(param.cate == 'C1') {
+//						    		time = parent.Ext.getCmp('ifm-cal-time');
+//						    		time.setValue(param.time);
+//						    	}
 						    	
 						    	title.setValue(param.title);
 						    	desc.setValue(param.description);

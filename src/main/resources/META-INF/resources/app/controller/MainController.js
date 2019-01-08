@@ -5,13 +5,13 @@ Ext.define('Drpnd.controller.MainController', {
 	onLaunch : function() {
 		this.addContentTabPanel(
 				'cate-main',
-				'일정관리',
+				'캘린더',
 				Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'calendar/view' }),
 				false);
 		
 		this.addContentTabPanel(
 				'cate-drawing',
-				'오늘의 근태상황',
+				'오늘의 근태',
 				Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'floormap' }),
 				false);
 		

@@ -7,7 +7,7 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
     	var addedCategoryMap = {};
     	var teamList = Ext.getBody().getAttribute('data-team');
     	var teamJson = teamList ? Ext.decode(teamList) : '';
-    	var treeItems = [{
+    	var treeItems = [/*{
 			 text: '근태관리', expand: true, iconCls : 'tree-expand'
 			,children : [{
 				text: '근태리스트', leaf : true, cate : 'guntae', id : 'cate-guntae-list'
@@ -17,7 +17,7 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
 			,children : [{
 				text: '사원리스트', leaf : true, cate : 'sawon', id : 'cate-sawon-list'
 			}]
-    	}];
+    	}*/];
     	
     	if(teamJson) {
     		var len = teamJson.length;
@@ -46,22 +46,7 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
     		 store : Ext.create('Ext.data.TreeStore', {
     	    	 root : {
     	    		  expanded : true
-					 ,children : treeItems/*[{
-						 text: '근태관리', expand: true, iconCls : 'tree-expand'
-						,children : [{
-							text: '근태리스트', leaf : true, cate : 'guntae', id : 'cate-guntae-list'
-						}]
-					 }, {
-						 text: '<span style="color:red; background:#0000ff;">사원관리</span>', expand: true, iconCls : 'tree-expand'
-						,children : [{
-							text: '사원리스트', leaf : true, cate : 'sawon', id : 'cate-sawon-list'
-						}]
-					 }, {
-						 text: '팀목록', expand: true, iconCls : 'tree-expand'
-						,children : [{
-							text: '사원리스트', leaf : true, cate : 'sawon', id : 'cate-sawon-list'
-						}]
-					 }]*/
+					 ,children : treeItems
     	    	 }
     	    })
     	    ,rootVisible : false
@@ -84,12 +69,41 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
     	    		n.set('iconCls', 'tree-expand');
     	    	}
     	       ,itemcollapse : function(n, opt) {
-    	    	   console.log(n)
     	    	   n.set('iconCls', 'tree-collapse');
+    	       },
+    	       afterrender: function(tree) {
+    	    	   tree.expandAll();
     	       }
     	    }
     	});
 
     	this.callParent(arguments);
-    }
+    },
+    /*updateTreeView : function(tree, fn) {
+        var view = tree.getView();
+        view.getStore().loadRecords(fn(tree.getRootNode()));
+        view.refresh();
+    },
+    collapseAll : function(tree) {
+        this.updateTreeView(tree, function(root) {
+            root.cascadeBy(function(node) {
+                if (!node.isRoot() || tree.rootVisible) {
+                    node.data.expanded = false;
+                }
+            });
+            return tree.rootVisible ? [root] : root.childNodes;
+        });
+    },
+    expandAll : function(tree) {
+        this.updateTreeView(tree, function(root) {
+            var nodes = [];
+            root.cascadeBy(function(node) {
+                if (!node.isRoot() || tree.rootVisible) {
+                    node.data.expanded = true;
+                    nodes.push(node);
+                }
+            });
+            return nodes;
+        });
+    }*/
 });

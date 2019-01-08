@@ -52,5 +52,6 @@
 	
 	<!-- App Files -->
 	<script src="/resources/app.js" charset="utf-8"></script>
+	<input type="hidden" id="hdnTime" value="<c:out value='${currentTime10}' />" />
 </body>
 </html>

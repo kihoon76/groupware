@@ -81,7 +81,7 @@ public class CalendarController {
 		
 		try {
 			ObjectMapper om = new ObjectMapper();
-			System.err.println(om.writeValueAsString(list));
+			//System.err.println(om.writeValueAsString(list));
 			calendarService.saveCalendar(list);
 			vo.setSuccess(true);
 		}

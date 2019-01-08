@@ -9,7 +9,7 @@
 	<div style="width:100%; height:30px;">
 		 <span class="ui-icon-user ui-btn-icon-notext inlineIcon"></span>
 		 <span>${sawonName}</span>
-		<span id="spTime" style="color:#0000ff;">${currentTime10}</span>
+		 <span id="spTime" style="color:#0000ff;">${currentTime10}</span>
 	</div>
 	<div>
 		<c:choose>

@@ -11,24 +11,7 @@ $(document).ready(function() {
 	var myToken = $('#_csrfToken').val();
 	//var map = null;
 	
-	var eventSources = {
-//		team1: {
-//			events:[],
-//			color: 'red',
-//			textColor: 'black'
-//		},
-//		team2: {
-//			events:[],
-//			color: 'green',
-//			textColor: 'yellow'
-//		},
-//		team3: {
-//			events:[],
-//			color: 'blue',
-//			textColor: 'white'
-//		}
-	}
-	
+	var eventSources = {}
 	var delEvents = [];
 	var eventElement = {};
 	
@@ -380,7 +363,7 @@ $(document).ready(function() {
 		    		 console.log(calEvent.id);
 		    		 getGeuntaeDetail(calEvent);
 		    	 }
-		    	 else if(calEvent.cate == 'C02'){
+		    	 else if(calEvent.cate == 'C02' || calEvent.cate == 'C03'){
 		    		 if(calEvent.editable) {
 			    		 var sDate = calEvent.start.format();
 				    	 var eDate = calEvent.end.format();
@@ -426,18 +409,6 @@ $(document).ready(function() {
 	    	 });
 	     },
 	     eventDrop: function(event, delta, revertFunc) {
-	    	 /*var prev = event.start._i.substring(0, 7);
-	    	 var cur = event.start.format().substring(0, 7);
-	    	 
-	    	 if(prev != cur) {
-	    		 revertFunc(); 
-	    	 }
-	    	 else {
-	    		 $('#calendar').fullCalendar('updateEvent', event);
-		    	 
-		    	 modifyEvent(event);
-		    	 console.log(eventSources ); 
-	    	 }*/
 	    	 $('#calendar').fullCalendar('updateEvent', event);
 	    	 modifyEvent(event);
 	     },
@@ -542,6 +513,7 @@ $(document).ready(function() {
 		var len = json.length;
 		
 		eventSources = {};
+		eventElement = {};
 		delEvents.length = 0;
 		$('#calendar').fullCalendar('removeEventSources');
 		
@@ -555,8 +527,6 @@ $(document).ready(function() {
 					textColor: cate.textColor
 				} 
 			}
-			
-			//
 		}
 	}
 	
