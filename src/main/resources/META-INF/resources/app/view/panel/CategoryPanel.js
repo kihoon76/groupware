@@ -17,7 +17,9 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
 			,children : [{
 				text: '사원리스트', leaf : true, cate : 'sawon', id : 'cate-sawon-list'
 			}]
-    	}*/];
+    	}*/{
+    		text: '조직도', leaf : true, cate : 'system', id: 'system-list'
+    	}];
     	
     	if(teamJson) {
     		var len = teamJson.length;
