@@ -40,5 +40,22 @@ Ext.define('Drpnd.controller.MainController', {
 				this.contentPanel.setActiveTab(recObj.id + '-panel');
 			}
 		}
+		else if(recObj.leaf && recObj.cate == 'statistics') {
+			if(!this.categoryPanel.isAttachedCategory(recObj.id)) {
+				switch(recObj.id) {
+				case 'statistics-overwork' :
+					this.addContentTabPanel(recObj.id, recObj.text, {
+						xtype: 'panel',
+						html: ''
+					});
+					break;
+				default :
+					break;
+				}
+			}
+			else {
+				this.contentPanel.setActiveTab(recObj.id + '-panel');
+			}
+		}
 	}
 });

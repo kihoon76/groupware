@@ -7,17 +7,7 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
     	var addedCategoryMap = {};
     	var teamList = Ext.getBody().getAttribute('data-team');
     	var teamJson = teamList ? Ext.decode(teamList) : '';
-    	var treeItems = [/*{
-			 text: '근태관리', expand: true, iconCls : 'tree-expand'
-			,children : [{
-				text: '근태리스트', leaf : true, cate : 'guntae', id : 'cate-guntae-list'
-			}]
-    	},{
-			 text: '사원관리', expand: true, iconCls : 'tree-expand'
-			,children : [{
-				text: '사원리스트', leaf : true, cate : 'sawon', id : 'cate-sawon-list'
-			}]
-    	}*/{
+    	var treeItems = [{
     		text: '조직도', leaf : true, cate : 'system', id: 'system-list'
     	}];
     	
@@ -43,6 +33,13 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
     			treeItems.push(item);
     		}
     	}
+    	
+    	treeItems.push({
+			 text: '통계', expand: true, iconCls : 'tree-expand'
+			,children : [{
+				text: '야근', leaf : true, cate : 'statistics', id : 'statistics-overwork'
+			}]
+    	});
     	
     	Ext.apply(this, {
     		 store : Ext.create('Ext.data.TreeStore', {

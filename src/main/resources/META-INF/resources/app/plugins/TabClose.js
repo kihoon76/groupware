@@ -43,7 +43,7 @@ Ext.define('Drpnd.plugins.TabClose', {
 
 			var removeOthers = function(currentIndex) {
 				var els = [];
-				for(var x = 1, count = tp.items.getCount(); x < count; x++) {
+				for(var x = 2, count = tp.items.getCount(); x < count; x++) {
 					if(x != currentIndex) els.push(tp.items.getAt(x));
 				}
 
@@ -58,8 +58,8 @@ Ext.define('Drpnd.plugins.TabClose', {
 			
 			var removeAll = function() {
 				var len = tp.items.getCount();
-				if(len > 1) {
-					for(var t=len-1; t>=1; t--) {
+				if(len > 2) {
+					for(var t=len-1; t>=2; t--) {
 						getRemoveEl(t);
 					}
 				}
