@@ -1,7 +1,7 @@
 Ext.define('Drpnd.controller.MainController', {
 	extend: 'Drpnd.controller.BaseController',
 	requires: ['Drpnd.util.ErrorCode', 'Drpnd.custom.Socket', 'Drpnd.util.Html'],
-	views: ['panel.CategoryPanel'],
+	views: ['panel.CategoryPanel', 'panel.OverworkChartPanel'],
 	onLaunch : function() {
 		this.addContentTabPanel(
 				'cate-main',
@@ -45,8 +45,7 @@ Ext.define('Drpnd.controller.MainController', {
 				switch(recObj.id) {
 				case 'statistics-overwork' :
 					this.addContentTabPanel(recObj.id, recObj.text, {
-						xtype: 'panel',
-						html: ''
+						xtype: 'overworkpanel',
 					});
 					break;
 				default :

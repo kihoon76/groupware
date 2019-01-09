@@ -12,7 +12,8 @@
 	var innerPhoneH = 0;
 	var planH = 15; //20;
 	var planW = 60;
-	var planColor = recColor; 
+	var planColor = recColor;
+	var planActiveColor = '#ff0000';
 	var innerColor = '#66c';
 	var gap = 40;
 	var linePadding = 10;
@@ -228,6 +229,10 @@
     			fill: '#003'
     		});
     		
+    		obj.rectPlan.attr({
+    			fill: '#003'
+    		});
+    		
     		if(isOutwork == 'Y') {
     			obj.outworkTxt.attr({
     				fill: '#fff'
@@ -262,6 +267,17 @@
     		obj.outworkTxt.attr({
 				fill: recColor
 			});
+    		
+    		if(obj.hasPlan) {
+    			obj.rectPlan.attr({
+    				fill: planActiveColor
+    			});
+    		}
+    		else {
+    			obj.rectPlan.attr({
+    				fill: recColor
+    			});
+    		}
 		}
 	}
 	
@@ -375,7 +391,8 @@
 			ownerTxt: ownerTxt,
 			outworkTxt: outworkTxt, 
 			phoneTxt: phoneTxt,
-			vacationTxt: vacationTxt
+			vacationTxt: vacationTxt,
+			hasPlan: false
 		};
 	}
 	
@@ -700,7 +717,8 @@
 		
 		for(var i=0, len=sawonPlanList.length; i<len; i++) {
 			var sm = seatMap[sawonPlanList[i].seatNum];
-			sm.rectPlan.attr({fill: '#ff0000'});
+			sm.hasPlan = true;
+			sm.rectPlan.attr({fill: planActiveColor});
 			sm.rectPlan
 			.off('click')
 			.off('mouseover')
@@ -711,10 +729,10 @@
 				}
 			})(sawonPlanList[i].planCode))
 			.on('mouseover', function() {
-				this.fill({ color : '#ff0000', opacity: 0.8})
+				this.fill({ color : planActiveColor, opacity: 0.5})
 			})
 			.on('mouseout', function() {
-				this.fill({ color : '#ff0000', opacity: 1})
+				this.fill({ color : planActiveColor, opacity: 1})
 			});
 		}
 	}

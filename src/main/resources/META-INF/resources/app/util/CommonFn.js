@@ -214,6 +214,17 @@ Ext.define('Drpnd.util.CommonFn', {
 			//Ext.Msg.alert('', geoErrMsg);
 			callback(0, 0);
 		}
+	},
+	getMonthComboData: function() {
+		var data = [];
+		for(var i=0; i<12; i++) {
+			data.push({
+				name: (i+1) + '월',
+				value: i+1
+			});
+		}
+		
+		return data;
 	}
    
 });
