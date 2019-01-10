@@ -26,7 +26,20 @@ Ext.define('Drpnd.util.CommonFn', {
 			 
 			if(!Ext.String.trim(rText).startsWith('{')) {
 				//html로 간주
-				Ext.Msg.alert('', '세션만료로 인해 다시 로그인해주세요', function() {
+				var status = response.status;
+				var msg = '';
+				
+				switch(status) {
+				case 404:
+					msg = '존재하지 않는 요청입니다';
+					break;
+				default:
+					msg = '세션만료로 인해 다시 로그인해주세요';
+					break;
+				}
+				
+				Ext.Msg.alert('', msg, function() {
+					if(status == 404) return;
 					window.location.href = context + '/signin';
 				});
 				

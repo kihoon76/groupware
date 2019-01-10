@@ -8,7 +8,20 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
 		var currentYear = dateObj.getFullYear();
 		var currentMonth = dateObj.getMonth();
 		
-		function generateData(n, floor){
+		var overworkStore = Ext.create('Drpnd.store.StatisticListStore');
+		//_store.getProxy().extraParams({id: '4'});
+		overworkStore.load({
+			params: {
+				searchYear: currentYear,
+				searchMonth: currentMonth
+			}
+		});
+		
+		
+		this.callParent(arguments);
+		//var _store = Ext.create('Drpnd.store.StatisticListStore');
+		
+		/*function generateData(n, floor){
 	        var data = [],
 	            p = (Math.random() *  11) + 1,
 	            i;
@@ -16,18 +29,29 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
 	        floor = (!floor && floor !== 0)? 20 : floor;
 	        
 	        for (i = 0; i < (n || 6); i++) {
-	            data.push({
-	                name: '계획' + (i + 1) + '팀',
-	                data1: Math.floor(Math.max((Math.random() * 100), floor)),
-	                data2: Math.floor(Math.max((Math.random() * 100), floor)),
-	                data3: Math.floor(Math.max((Math.random() * 100), floor)),
-	                data4: Math.floor(Math.max((Math.random() * 100), floor)),
-	                data5: Math.floor(Math.max((Math.random() * 100), floor)),
-	                data6: Math.floor(Math.max((Math.random() * 100), floor)),
-	                data7: Math.floor(Math.max((Math.random() * 100), floor)),
-	                data8: Math.floor(Math.max((Math.random() * 100), floor)),
-	                data9: Math.floor(Math.max((Math.random() * 100), floor))
-	            });
+	        	if(i == 0) {
+	        		data.push({
+		                name: '계획' + (i + 1) + '팀',
+		                data1: Math.floor(Math.max((Math.random() * 100), floor)),
+		                data2: Math.floor(Math.max((Math.random() * 100), floor)),
+		                data3: Math.floor(Math.max((Math.random() * 100), floor))
+		            });
+	        	}
+	        	else {
+	        		data.push({
+		                name: '계획' + (i + 1) + '팀',
+		                data1: Math.floor(Math.max((Math.random() * 100), floor)),
+		                data2: Math.floor(Math.max((Math.random() * 100), floor)),
+		                data3: Math.floor(Math.max((Math.random() * 100), floor)),
+		                data4: Math.floor(Math.max((Math.random() * 100), floor)),
+		                data5: Math.floor(Math.max((Math.random() * 100), floor)),
+		                data6: Math.floor(Math.max((Math.random() * 100), floor)),
+		                data7: Math.floor(Math.max((Math.random() * 100), floor)),
+		                data8: Math.floor(Math.max((Math.random() * 100), floor)),
+		                data9: Math.floor(Math.max((Math.random() * 100), floor))
+		            });
+	        	}
+	            
 	        }
 	        return data;
 	    };
@@ -67,7 +91,24 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
                 type: 'bar',
                 axis: 'bottom',
                 xField: 'name',
-                yField: ['data1', 'data2', 'data3', 'data4']
+                tips: {
+                    trackMouse: true,
+                    width: 140,
+                    height: 28,
+                    renderer: function(storeItem, item) {
+                      this.setTitle('남기');
+                    }
+                },
+                label: {
+                	display: 'insideEnd',
+                    field: ['data1', 'data2', 'data3', 'data4'],
+                    renderer: Ext.util.Format.numberRenderer('0'),
+                    orientation: 'horizontal',
+                    color: '#333',
+                    'text-anchor': 'middle'
+                },
+                yField: ['data1', 'data2', 'data3', 'data4'],
+                title: ['팀별 총야근시간', '팀장', '팀원1', '팀원2', '팀원3', '팀원4'],
             }]
 			
 		});
@@ -118,6 +159,6 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
 			items:[chart]
 		});
 		
-		this.callParent(arguments);
+		this.callParent(arguments);*/
 	}
 });
