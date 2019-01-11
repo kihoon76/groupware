@@ -17,8 +17,10 @@
 	</resultMap>
 	
 	<select id="selectOverwork" statementType="CALLABLE" parameterType="map" resultMap="RM_TeamOverwork, RM_SawonOverwork">
-	{ call [서비스].[dbo].[SEL_수지분석_01](
-		#{pnu, mode=IN, jdbcType=NVARCHAR, javaType=string}
+	{ call [동림].[dbo].[UP_야근통계](
+		#{sawonCode, mode=IN, jdbcType=INTEGER, javaType=int},
+		#{searchYear, mode=IN, jdbcType=INTEGER, javaType=int},
+		#{searchMonth, mode=IN, jdbcType=INTEGER, javaType=int}
 	)}
 	</select>
 	

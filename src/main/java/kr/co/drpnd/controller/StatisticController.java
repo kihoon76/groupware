@@ -1,6 +1,7 @@
 package kr.co.drpnd.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -11,6 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import kr.co.drpnd.domain.ExtjsStoreVO;
 import kr.co.drpnd.domain.Sawon;
 import kr.co.drpnd.service.StatisticService;
 import kr.co.drpnd.util.SessionUtil;
@@ -24,7 +29,7 @@ public class StatisticController {
 
 	@PostMapping("overwork")
 	@ResponseBody
-	public void getOverwork(
+	public ExtjsStoreVO<Map<String, Object>> getOverwork(
 			@RequestParam("searchYear") int searchYear,
 			@RequestParam("searchMonth") int searchMonth
 			
@@ -36,5 +41,23 @@ public class StatisticController {
 		param.put("searchYear", searchYear);
 		param.put("searchMonth", searchMonth);
 		param.put("sawonCode", Integer.parseInt(myInfo.getSawonCode()));
+		
+		
+		List<Map<String, Object>> result = statisticService.getOverwork(param);
+		
+		ExtjsStoreVO<Map<String, Object>> extjsVo = new ExtjsStoreVO<>();
+		extjsVo.setTotal(result.size());
+		extjsVo.setDatas(result);
+		
+		ObjectMapper om = new ObjectMapper();
+		
+		try {
+			System.err.println(om.writeValueAsString(result));
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return extjsVo;
 	}
 }

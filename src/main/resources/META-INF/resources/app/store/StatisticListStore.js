@@ -15,6 +15,21 @@ Ext.define('Drpnd.store.StatisticListStore',  {
 		   }
 	   },
 	},
-	fields : ['authNum', 'authName', 'authNameKor', 'description'],
+	fields : [
+	          'teamName', 
+	          'teamTotal', 
+	          'teamTotal_tips', 
+	          'teamLeader',
+	          'teamLeader_tips',
+	          'sawon1', 
+	          'sawon1_tips', 
+	          'sawon2',
+	          'sawon2_tips', 
+	          'sawon3', 
+	          'sawon3_tips', 
+	          'sawon4', 
+	          'sawon4_tips', 
+	          'sawon5',
+	          'sawon5_tips'],
 	autoLoad : false
 });

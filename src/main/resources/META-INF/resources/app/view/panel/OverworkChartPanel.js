@@ -9,16 +9,13 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
 		var currentMonth = dateObj.getMonth();
 		
 		var overworkStore = Ext.create('Drpnd.store.StatisticListStore');
-		//_store.getProxy().extraParams({id: '4'});
 		overworkStore.load({
 			params: {
 				searchYear: currentYear,
-				searchMonth: currentMonth
+				searchMonth: currentMonth + 1
 			}
 		});
 		
-		
-		this.callParent(arguments);
 		//var _store = Ext.create('Drpnd.store.StatisticListStore');
 		
 		/*function generateData(n, floor){
@@ -59,55 +56,56 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
 		var store = Ext.create('Ext.data.JsonStore', {
 			fields: ['name', 'data1', 'data2', 'data3', 'data4', 'data5', 'data6', 'data7', 'data9', 'data9'],
 	        data: generateData()
-		});
+		});*/
 		
 		var chart = Ext.create('Ext.chart.Chart', {
 			xtype: 'chart',
-			width: 800,
+			width: 1000,
 		    height: 800,
 			animate: true,
 			shadow: true,
-			store: store,
+			store: overworkStore,
 			legend: {
 				position: 'right'
 			},
 			axes: [{
 				type: 'Numeric',
 				position: 'bottom',
-				fields: ['data1', 'data2', 'data3', 'data4'],
+				fields: ['teamTotal', 'teamLeader', 'sawon1', 'sawon2', 'sawon3', 'sawon4'],
 				minimum: 0,
 				label: {
                     renderer: Ext.util.Format.numberRenderer('0,0')
                 },
                 grid: true,
-                title: '야근시간'
+                title: '야근시간(분)'
 			},{
                 type: 'Category',
                 position: 'left',
-                fields: ['name'],
+                fields: ['teamName'],
                 title: '도시계획부 팀'
             }],
             series: [{
                 type: 'bar',
                 axis: 'bottom',
-                xField: 'name',
+                xField: 'teamName',
                 tips: {
                     trackMouse: true,
-                    width: 140,
-                    height: 28,
+                    width: 300,
+                    height: 50,
                     renderer: function(storeItem, item) {
-                      this.setTitle('남기');
+                    	var yField = item.yField;
+                    	this.setTitle(storeItem.data[yField + '_tips']);
                     }
                 },
                 label: {
                 	display: 'insideEnd',
-                    field: ['data1', 'data2', 'data3', 'data4'],
+                    field: ['teamTotal', 'teamLeader', 'sawon1', 'sawon2', 'sawon3', 'sawon4'],
                     renderer: Ext.util.Format.numberRenderer('0'),
                     orientation: 'horizontal',
                     color: '#333',
                     'text-anchor': 'middle'
                 },
-                yField: ['data1', 'data2', 'data3', 'data4'],
+                yField: ['teamTotal', 'teamLeader', 'sawon1', 'sawon2', 'sawon3', 'sawon4'],
                 title: ['팀별 총야근시간', '팀장', '팀원1', '팀원2', '팀원3', '팀원4'],
             }]
 			
@@ -159,6 +157,6 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
 			items:[chart]
 		});
 		
-		this.callParent(arguments);*/
+		this.callParent(arguments);
 	}
 });
