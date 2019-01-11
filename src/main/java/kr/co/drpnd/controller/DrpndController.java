@@ -132,6 +132,11 @@ public class DrpndController {
 		return result(m);
 	}
 	
+	@GetMapping("signatureview")
+	public String viewSignature() {
+		return "signature";
+	}
+	
 	private void createToken(ModelMap m, TokenKey key) {
 		String token = SessionUtil.createToken();
 		SessionUtil.getSessionSawon().setToken(key, token);

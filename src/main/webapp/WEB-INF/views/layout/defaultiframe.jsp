@@ -11,6 +11,7 @@
 	<meta charset="UTF-8">
 	<sitemesh:write property="head" />
 	<link rel="stylesheet" href="/resources/css/iframe.css" />
+	<sitemesh:write property="page.link" />
 </head>
 
 <body data-url="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}/"

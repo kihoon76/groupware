@@ -232,11 +232,11 @@
 		    <version>${xmlbeans-version}</version>
 		</dependency>
 		
-		<dependency>
-		    <groupId>org.apache.poi</groupId>
-		    <artifactId>poi-ooxml</artifactId>
-		    <version>${poi.ooxml-version}</version>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 		    <groupId>org.apache.poi</groupId> -->
+<!-- 		    <artifactId>poi-ooxml</artifactId> -->
+<!-- 		    <version>${poi.ooxml-version}</version> -->
+<!-- 		</dependency> -->
 		
 		<!-- view template -->
 		<!-- sitemesh -->
