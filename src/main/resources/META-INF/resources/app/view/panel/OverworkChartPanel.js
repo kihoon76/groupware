@@ -7,6 +7,9 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
 		var dateObj = new Date();
 		var currentYear = dateObj.getFullYear();
 		var currentMonth = dateObj.getMonth();
+		var yearNumField = null;
+		var comboSel = null;
+		var comboMonth = null;
 		
 		var overworkStore = Ext.create('Drpnd.store.StatisticListStore');
 		overworkStore.load({
@@ -15,6 +18,18 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
 				searchMonth: currentMonth + 1
 			}
 		});
+		
+		function search() {
+			var searchYear = yearNumField.getValue();
+			var searchMonth = comboMonth.getValue();
+			
+			overworkStore.load({
+				params: {
+					searchYear: searchYear,
+					searchMonth: searchMonth
+				}
+			});
+		}
 		
 		//var _store = Ext.create('Drpnd.store.StatisticListStore');
 		
@@ -120,7 +135,12 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
 				xtype: 'numberfield',
 				value: currentYear,
 				width: 100,
-				editable: false
+				editable: false,
+				listeners: {
+					afterrender: function(num) {
+						yearNumField = num;
+					}
+				}
 			},'년',{
 				xtype: 'combobox',
 				queryMode: 'local',
@@ -131,7 +151,12 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
 					fields : ['name', 'value'],
 					data: [{name:'월간통계', value: 'm'}]
 				}),
-				value: 'm'
+				value: 'm',
+				listeners: {
+					afterrender: function(combo) {
+						comboSel = combo;
+					}
+				}
 			},{
 				xtype: 'combobox',
 				queryMode: 'local',
@@ -143,11 +168,21 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
 					fields : ['name', 'value'],
 					data: CommonFn.getMonthComboData()
 				}),
-				value:currentMonth + 1
+				value:currentMonth + 1,
+				listeners: {
+					afterrender: function(combo) {
+						comboMonth = combo;
+					}
+				}
 			},{
 				xtype: 'button',
 				iconCls: 'icon-search',
-				text: '검색'
+				text: '검색',
+				listeners: {
+					click: function(btn) {
+						search();
+					}
+				}
 			},{
 				xtype: 'datefield',
 				format: 'Y-m-d',
