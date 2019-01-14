@@ -6,6 +6,7 @@
 <c:set var="uri" value="${req.requestURI}" />
 <content tag="link">
 <link rel="stylesheet" href="/resources/os/smoothsignature/jquery.signaturepad.css" />
+<link rel="stylesheet" href="/resources/os/jQuery-Upload-File/4.0.11/uploadfile.css" />
 </content>
 <content tag="script">
 <script src="/resources/os/smoothsignature/jquery-1.11.3.min.js"></script>
@@ -19,12 +20,11 @@
 <body>
 	<div class="sigPad" id="smoothed" style="width:404px;">
 	<ul class="sigNav">
-<!-- 	<li class="drawIt"><a href="#draw-it" >Draw It</a></li> -->
-	<li class="clearButton"><a href="#clear">지우기</a></li>
+	<li class="clearButton"><a id="btnClear" href="#clear">지우기</a></li>
 	</ul>
 	<div class="sig sigWrapper" style="height:auto;">
 	<div class="typed"></div>
-	<canvas class="pad" width="400" height="200"></canvas>
+	<canvas id="canvasSign" class="pad" width="400" height="200"></canvas>
 	<input type="hidden" name="output-2" class="output">
 	</div>
 </body>

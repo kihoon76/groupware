@@ -33,6 +33,7 @@ public class Sawon {
 	private String isOffwork;
 	private String isOutwork;
 	private String positionGubun;
+	private String signature;
 	private boolean isImwon;
 	
 	private Map<TokenKey, String> token = new HashMap<>();
@@ -246,6 +247,14 @@ public class Sawon {
 
 	public void setIsOutwork(String isOutwork) {
 		this.isOutwork = isOutwork;
+	}
+
+	public String getSignature() {
+		return signature;
+	}
+
+	public void setSignature(String signature) {
+		this.signature = signature;
 	}
 
 	@Override

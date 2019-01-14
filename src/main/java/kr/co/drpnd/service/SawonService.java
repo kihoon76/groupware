@@ -6,13 +6,16 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 
 import kr.co.drpnd.dao.SawonDao;
 import kr.co.drpnd.domain.Sawon;
+import kr.co.drpnd.util.DataUtil;
 
 @Service("sawonService")
 public class SawonService {
@@ -21,7 +24,15 @@ public class SawonService {
 	SawonDao sawonDao;
 	
 	public Sawon getSawonInfo(String username) {
-		return sawonDao.selectSawonInfo(username);
+		Sawon info = sawonDao.selectSawonInfo(username);
+		
+		if(info.getSignature() != null) {
+			byte[] signByte = DataUtil.hexStringToByteArray(info.getSignature()); 
+			String sign64 = Base64Utils.encodeToString(signByte);
+			info.setSignature(sign64);
+		}
+		
+		return info;
 	}
 
 	@Transactional(isolation=Isolation.DEFAULT, 
@@ -56,5 +67,20 @@ public class SawonService {
 		Map<String, Integer> param = new HashMap<>();
 		param.put("department", Integer.parseInt(sawonDepartment));
 		return sawonDao.selectTodayPlanAllSawon(param);
+	}
+
+	public void regSignature(Map<String, String> m) {
+		try{
+			byte[] signByte = Base64.decodeBase64(m.get("sign"));
+			Map<String, Object> param = new HashMap<>();
+			param.put("sawonCode", m.get("sawonCode"));
+			param.put("sign", signByte);
+			
+			sawonDao.updateSawonSign(param);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e.getMessage());
+		}
 	}
 }

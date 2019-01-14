@@ -24,6 +24,9 @@
 		<cglib-version>3.2.4</cglib-version>
 		<commons.lang-version>3.4</commons.lang-version>
 		<commons.collections4-version>4.1</commons.collections4-version>
+		<common.fileupload-version>1.3.1</common.fileupload-version>
+		<commons.codec-version>1.10</commons.codec-version>
+		
 		<poi.ooxml-version>3.16</poi.ooxml-version>
 		<jstl-version>1.2</jstl-version>
 		<jsp-version>2.1</jsp-version>
@@ -231,6 +234,21 @@
 		    <artifactId>xmlbeans</artifactId>
 		    <version>${xmlbeans-version}</version>
 		</dependency>
+		
+		<!-- common fileupload -->
+		<dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+           	<version>${common.fileupload-version}</version>
+        </dependency>
+        
+        <!-- commons-codec -->
+		<dependency>
+		    <groupId>commons-codec</groupId>
+		    <artifactId>commons-codec</artifactId>
+		    <version>${commons.codec-version}</version>
+		</dependency>
+        
 		
 <!-- 		<dependency> -->
 <!-- 		    <groupId>org.apache.poi</groupId> -->

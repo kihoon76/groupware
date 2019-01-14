@@ -21,4 +21,6 @@ public interface SawonDao {
 
 	List<Map<String, Object>> selectTodayPlanAllSawon(Map<String, Integer> param);
 
+	void updateSawonSign(Map<String, Object> param);
+
 }
