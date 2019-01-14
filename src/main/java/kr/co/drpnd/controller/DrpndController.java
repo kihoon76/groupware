@@ -160,6 +160,8 @@ public class DrpndController {
 			m.put("sawonCode", myInfo.getSawonCode());
 			m.put("sign", sign);
 			sawonService.regSignature(m);
+			
+			myInfo.setSignature(sign);
 			vo.setSuccess(true);
 		}
 		catch(Exception e) {

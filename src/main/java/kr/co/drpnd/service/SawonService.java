@@ -1,5 +1,6 @@
 package kr.co.drpnd.service;
 
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,8 +29,13 @@ public class SawonService {
 		
 		if(info.getSignature() != null) {
 			byte[] signByte = DataUtil.hexStringToByteArray(info.getSignature()); 
-			String sign64 = Base64Utils.encodeToString(signByte);
-			info.setSignature(sign64);
+			//String sign64 = Base64Utils.encodeToString(signByte).replace("dataimage/pngbase64", "");
+			
+			System.err.println(new String(signByte, Charset.forName("UTF-8")));
+			info.setSignature(new String(signByte, Charset.forName("UTF-8")));
+		}
+		else {
+			info.setSignature("NOSIGN");
 		}
 		
 		return info;
@@ -71,7 +77,8 @@ public class SawonService {
 
 	public void regSignature(Map<String, String> m) {
 		try{
-			byte[] signByte = Base64.decodeBase64(m.get("sign"));
+			//byte[] signByte = Base64.decodeBase64(m.get("sign"));
+			byte[] signByte = m.get("sign").getBytes(Charset.forName("UTF-8"));
 			Map<String, Object> param = new HashMap<>();
 			param.put("sawonCode", m.get("sawonCode"));
 			param.put("sign", signByte);

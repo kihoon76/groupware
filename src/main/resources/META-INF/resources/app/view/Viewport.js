@@ -163,7 +163,7 @@ Ext.define('Drpnd.view.Viewport', {
 	    				
 	    				myInfoWin = Ext.create('Ext.window.Window', {
 	    					width: 500,
-	    					height: 380,
+	    					height: 500,
 	    					draggable: false,
 	    					modal: true,
 	    					closable: false,
@@ -228,6 +228,12 @@ Ext.define('Drpnd.view.Viewport', {
 	    }
 	    
 	    function getMyInfoForm(info) {
+	    	var signSrc = info.sign;
+	    	
+	    	if(signSrc == 'NOSIGN') {
+	    		signSrc = 'http://placehold.it/200x80?text=NO SIGN'
+	    	}
+	    	
 			return Ext.create('Ext.form.Panel', {
 				 frame: true,
 				 title: '내정보',
@@ -405,6 +411,12 @@ Ext.define('Drpnd.view.Viewport', {
 			            		date.setRawValue(info.birthday);
 			            	}
 			            }
+			        },{
+			        	xtype: 'image',
+						width: 200,
+						height: 80,
+						margin: '10 0 10 95',
+						src: signSrc
 			        }/*,{
 			        	xtype: 'radiogroup',
 		            	fieldLabel: '팀리더',

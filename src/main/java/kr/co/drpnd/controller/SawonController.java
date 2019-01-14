@@ -66,6 +66,7 @@ public class SawonController {
 		info.put("leader", sawon.getSawonTeamLeader() == null ? "N" : sawon.getSawonTeamLeader());
 		info.put("positionGubun", sawon.getPositionGubun());
 		info.put("positionName", sawon.getSawonPositionName());
+		info.put("sign", sawon.getSignature());
 		
 		AjaxVO<Map<String, String>> vo = new AjaxVO<>();
 		vo.setSuccess(true);
