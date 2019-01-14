@@ -4,6 +4,7 @@
         <tag-rule-bundle class="org.sitemesh.content.tagrules.html.Sm2TagRuleBundle" />
     </content-processor>
 
+	<mapping path="/gyeoljae/*" decorator="/WEB-INF/views/layout/defaultiframe.jsp" />
 	<mapping path="/calendar/view" decorator="/WEB-INF/views/layout/defaultiframe.jsp" />
 	<mapping path="/signatureview" decorator="/WEB-INF/views/layout/defaultiframe.jsp" />
 	<mapping path="/floormap" decorator="/WEB-INF/views/layout/defaultiframe.jsp" />

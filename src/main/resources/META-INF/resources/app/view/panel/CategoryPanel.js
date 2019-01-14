@@ -41,6 +41,10 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
 			}]
     	});
     	
+    	treeItems.push({
+    		 text: '결재', leaf : true, cate : 'gyeoljae', id: 'gyeoljae'
+    	});
+    	
     	Ext.apply(this, {
     		 store : Ext.create('Ext.data.TreeStore', {
     	    	 root : {

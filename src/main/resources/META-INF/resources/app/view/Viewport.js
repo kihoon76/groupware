@@ -111,46 +111,50 @@ Ext.define('Drpnd.view.Viewport', {
 	    }
 	    
 	    function mySignClick() {
-	    	var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: '/signatureview', load: function(dom) {
-	    		signatureContentWin = dom.contentWindow;;
-	    	} });
-	    	var mySignWin = Ext.create('Ext.window.Window', {
-	    		title: '싸인등록',
-	    		width: 440,
-				height: 350,
-				layout: 'fit',
-				closeAction: 'destroy',
-				modal: true,
-				draggable: true,
-				resizable: false,
-				items: [iframe],
-				dockedItems: [{
-				    xtype: 'toolbar',
-				    dock: 'bottom',
-				    ui: 'footer',
-				    //defaults: {minWidth: minButtonWidth},
-				    items: [
-				        { xtype: 'component', flex: 1 },
-				        { xtype: 'button', text: '등록', listeners: {
-				        	click: function(btn) {
-				        		signatureContentWin.regSignature(mySignWin);
-				        	}
-				        } },
-				        { xtype: 'button', text: '닫기', listeners: {
-				        	click: function(btn) {
-				        		mySignWin.close();
-				        	}
-				        } }
-				    ]
-				}],
-				listeners: {
-					close: function() {
-						
+	    	
+	    	CommonFn.checkSession(function() {
+	    		var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: '/signatureview', load: function(dom) {
+		    		signatureContentWin = dom.contentWindow;;
+		    	} });
+		    	var mySignWin = Ext.create('Ext.window.Window', {
+		    		title: '싸인등록',
+		    		width: 440,
+					height: 350,
+					layout: 'fit',
+					closeAction: 'destroy',
+					modal: true,
+					draggable: true,
+					resizable: false,
+					items: [iframe],
+					dockedItems: [{
+					    xtype: 'toolbar',
+					    dock: 'bottom',
+					    ui: 'footer',
+					    //defaults: {minWidth: minButtonWidth},
+					    items: [
+					        { xtype: 'component', flex: 1 },
+					        { xtype: 'button', text: '등록', listeners: {
+					        	click: function(btn) {
+					        		signatureContentWin.regSignature(mySignWin);
+					        	}
+					        } },
+					        { xtype: 'button', text: '닫기', listeners: {
+					        	click: function(btn) {
+					        		mySignWin.close();
+					        	}
+					        } }
+					    ]
+					}],
+					listeners: {
+						close: function() {
+							
+						}
 					}
-				}
-			});
-			
-	    	mySignWin.show();
+				});
+				
+		    	mySignWin.show();
+	    	});
+	    	
 	    }
 	    
 	    function myInfoClick() {
