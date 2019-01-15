@@ -95,7 +95,7 @@ public class GyeoljaeController {
 		vo.addObject(map1);
 		vo.setSuccess(true);
 		
-		Thread.sleep(5000);
+		//Thread.sleep(5000);
 		return vo;
 	}
 }

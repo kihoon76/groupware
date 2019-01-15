@@ -3,6 +3,8 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 	alias: 'widget.gyeoljaepanel',
 	requires:['Drpnd.util.CommonFn'],
 	initComponent: function() {
+		var CommonFn = Drpnd.util.CommonFn;
+		
 		var itemObj = {
 			html: 'yy'
 		};
@@ -30,15 +32,18 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 		}
 		
 		function newGyeoljaeClick() {
-			var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'gyeoljae/view/new' });
-			addItem(iframe);
+			CommonFn.checkSession(function() {
+				var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'gyeoljae/view/new' });
+				addItem(iframe);
+			});
 		}
 		
 		function overviewClick() {
-			var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'gyeoljae/view/overview' });
-			addItem(iframe);
+			CommonFn.checkSession(function() {
+				var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'gyeoljae/view/overview' });
+				addItem(iframe);
+			});
 		}
-		
 		
 		Ext.apply(this, {
 			items: itemObj,
