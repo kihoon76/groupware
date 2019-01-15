@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mappers.gyeoljaeMapper">
+	
+		
+	<select id="selectGyeoljaeSawonList" parameterType="map" resultType="map">
+		select 사원코드 sawonCode,
+			       사원명 sawonName,
+			       이메일 email,
+			       직급명 sawonPosition,
+			       사원아이디 sawonId
+		  from [동림].[dbo].[사원] T1
+		 inner join [동림].[dbo].[직급] T2 on T1.직급코드 = T2.직급코드
+		 where T1.부서코드 = #{department}
+		 <if test="searchSawonName != null">
+		   and T1.사원명 = #{searchSawonName}
+		 </if>
+		 <if test="excludeSawonList != null">
+		   and T1.사원코드  not in  
+		 <foreach collection="excludeSawonList" item="sawonCode" separator="," open="(" close=")">
+			#{sawonCode}
+		</foreach>
+		 </if>
+		 order by T1.사원명
+	</select>
+	
+	
+</mapper>
