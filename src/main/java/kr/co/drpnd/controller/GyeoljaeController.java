@@ -83,6 +83,9 @@ public class GyeoljaeController {
 		
 		AjaxVO<Map<String, Object>> vo = new AjaxVO<>();
 		
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		
+		List<Map<String, Object>> list = gyeoljaeService.getMyDefaultGyeoljaeLine(myInfo.getSawonCode());
 		Map<String, Object> map1 = new HashMap<>();
 		//Map<String, Object> map2 = new HashMap<>();
 		
