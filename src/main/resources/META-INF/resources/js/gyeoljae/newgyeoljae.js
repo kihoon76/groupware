@@ -5,6 +5,7 @@ $(document).ready(function() {
 	var $txtSearchSawon = $('#txtSearchSawon');
 	var $gianTitle = $('#gianTitle');
 	var $gyeoljaeFileUp = $('#gyeoljaeFileUp');
+	var $gyeoljaeContent = $('#gyeoljaeContent');
 	var gyeoljaeAddObj = {};
 	var delImgUrl = '/resources/images/delete.png';
 	var gyeoljaeSelectedFiles = {};
@@ -72,6 +73,10 @@ $(document).ready(function() {
 	
 	function validateGyeoljaeLine() {
 		return excludeSawonData() != '';
+	}
+	
+	function validateGyeoljaeContent() {
+		return !$gyeoljaeContent.summernote('isEmpty');
 	}
 	
 	function clearGyeoljaeFile() {
@@ -198,6 +203,17 @@ $(document).ready(function() {
 				msg: '결재자를 입력하세요',
 				callback: function() {
 					$txtSearchSawon.focus();
+				}
+			});
+			return;
+		}
+		
+		if(!validateGyeoljaeContent()) {
+			common.showExtMsg({
+				type: 'alert',
+				msg: '결재내용을 입력하세요',
+				callback: function() {
+					$gyeoljaeContent.summernote('focus');
 				}
 			});
 			return;
@@ -365,7 +381,7 @@ $(document).ready(function() {
 	});
 	
 	
-	$('#summernote').summernote({
+	$gyeoljaeContent.summernote({
 		lang: 'ko-KR',
 		height: 300,
 		toolbar: [

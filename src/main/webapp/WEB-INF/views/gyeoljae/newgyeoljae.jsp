@@ -66,7 +66,7 @@
   		<div class="divMT divMB">
   			<span style="font-size:1.5em;"><span class="badge badge-pill badge-danger">내용</span></span>
   		</div>
-  		<textarea id="summernote" name="editordata"></textarea>
+  		<textarea id="gyeoljaeContent" name="editordata"></textarea>
 		
 		<div class="divMT divMB">
 			<div id="gyeoljaeFileUp" style="width:300px;">등록</div>
