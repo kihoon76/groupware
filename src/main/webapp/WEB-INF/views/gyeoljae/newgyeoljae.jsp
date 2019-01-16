@@ -6,25 +6,23 @@
 <c:set var="uri" value="${req.requestURI}" />
 <content tag="script">
 <script src="/resources/lib/jquery.min.js"></script>
+<script src="/resources/os/summernote/popper-1.11.0.min.js"></script>
 <script src="/resources/lib/bootstrap.min.js"></script>
 <script src="/resources/os/tabulator-4.1/js/tabulator.min.js"></script>
-<script src="/resources/os/Quill-Editor-Bootstrap-4/sprite.svg.js"></script>
-<script src="/resources/os/Quill-Editor-Bootstrap-4/bootstrap-quill.js"></script>
 <script src="/resources/os/jQuery-Upload-File/4.0.11/jquery.form.js"></script>
 <script src="/resources/os/jQuery-Upload-File/4.0.11/jquery.uploadfile.js"></script>
+<script src="/resources/os/summernote/summernote-bs4.min.js"></script>
+<script src="/resources/os/summernote/lang/summernote-ko-KR.min.js"></script>
 <script src="/resources/js/icommon.js"></script>
 <script src="/resources/js/gyeoljae/newgyeoljae.js"></script>
+
 </content>
 <head>
 	<link rel="stylesheet" href="/resources/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="/resources/os/summernote/summernote-bs4.css" />
 	<link rel="stylesheet" href="/resources/os/font-awesome/css/font-awesome.min.css" />
 	 <!-- tabulator -->
     <link rel="stylesheet" href="/resources/os/tabulator-4.1/css/tabulator_simple.min.css" />
-    
-    
-    <link rel="stylesheet" href="/resources/os/Quill-Editor-Bootstrap-4/css/quill.css">
-  	<link rel="stylesheet" href="/resources/os/Quill-Editor-Bootstrap-4/css/quill.snow.css">
-  	<link rel="stylesheet" href="/resources/os/Quill-Editor-Bootstrap-4/css/quill.bubble.css">
   	<link rel="stylesheet" href="/resources/os/jQuery-Upload-File/4.0.11/uploadfile.css">
   	<link rel="stylesheet" href="/resources/css/uploadfilecustom.css">
 	<style>
@@ -68,9 +66,8 @@
   		<div class="divMT divMB">
   			<span style="font-size:1.5em;"><span class="badge badge-pill badge-danger">내용</span></span>
   		</div>
-  		<div class="editor-full">
-  			<div id="document-full" class="ql-scroll-y" style="height: 300px;"></div>
-		</div>
+  		<textarea id="summernote" name="editordata"></textarea>
+		
 		<div class="divMT divMB">
 			<div id="gyeoljaeFileUp" style="width:300px;">등록</div>
 		</div>

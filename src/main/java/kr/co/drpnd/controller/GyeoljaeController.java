@@ -60,6 +60,12 @@ public class GyeoljaeController {
 		return "gyeoljae/overview";
 	}
 	
+	@GetMapping("view/keepbox")
+	public String viewKeepBox() {
+		
+		return "gyeoljae/keepbox";
+	}
+	
 	@PostMapping("search/sawon")
 	@ResponseBody
 	public AjaxVO<Map<String, String>> getSearchSawon(@RequestBody Map<String, Object> param) {

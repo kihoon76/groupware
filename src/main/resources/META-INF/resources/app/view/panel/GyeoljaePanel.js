@@ -45,6 +45,13 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 			});
 		}
 		
+		function keepBoxClick() {
+			CommonFn.checkSession(function() {
+				var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'gyeoljae/view/keepbox' });
+				addItem(iframe);
+			});
+		}
+		
 		Ext.apply(this, {
 			items: itemObj,
 			layout: 'fit',
@@ -64,7 +71,12 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 				text: '상신함'
 			}, '-', {
 				xtype: 'button',
-				text: '보관함'
+				text: '보관함',
+				listeners: {
+					click: function() {
+						keepBoxClick();
+					}
+				}
 			}, '-', {
 				xtype: 'button',
 				text: '새결재',
