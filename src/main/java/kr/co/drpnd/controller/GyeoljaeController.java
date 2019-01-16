@@ -1,5 +1,7 @@
 package kr.co.drpnd.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,17 +12,27 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import kr.co.drpnd.domain.AjaxVO;
+import kr.co.drpnd.domain.AttachFile;
+import kr.co.drpnd.domain.Sangsin;
 import kr.co.drpnd.domain.Sawon;
 import kr.co.drpnd.service.GyeoljaeService;
 import kr.co.drpnd.util.SessionUtil;
@@ -105,6 +117,79 @@ public class GyeoljaeController {
 		vo.setSuccess(true);
 		
 		//Thread.sleep(5000);
+		return vo;
+	}
+	
+	@PostMapping("reg/newgyeoljae_nofile")
+	@ResponseBody
+	public AjaxVO regNewGyeoljaeNoFile(@RequestBody Sangsin sangsin) {
+		AjaxVO vo = new AjaxVO();
+		
+		vo.setSuccess(true);
+		
+		ObjectMapper om = new ObjectMapper();
+		try {
+			System.err.println(om.writeValueAsString(sangsin));
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return vo;
+	}
+	
+	@PostMapping("reg/newgyeoljaeWithfile")
+	@ResponseBody
+	public AjaxVO regNewGyeoljaeWithFile(
+			@RequestParam("title") String title,
+			@RequestParam("gyeoljaeLines") String gyeoljaeLines,
+			@RequestParam("content") String content,
+			@RequestParam("file") MultipartFile[] files) {
+		AjaxVO vo = new AjaxVO();
+		
+		vo.setSuccess(true);
+		
+		System.err.println("title ==>" + title);
+		System.err.println("gyeoljaeLines ==>" + gyeoljaeLines);
+		System.err.println("content ==>" + content);
+		
+		try {
+			Gson gson = new Gson();
+			List<Map<String, Object>> lines = gson.fromJson(gyeoljaeLines, new TypeToken<List<Map<String, Object>>>(){}.getType());
+			Sangsin sangsin = new Sangsin();
+			sangsin.setTitle(title);
+			sangsin.setGyeoljaeLines(lines);
+			
+			
+			
+			List<AttachFile> attachFiles = new ArrayList<>();
+			
+			for(MultipartFile file: files) {
+				AttachFile attachFile = new AttachFile();
+				attachFile.setName(file.getOriginalFilename());
+				attachFile.setSize(file.getSize());
+				attachFile.setExt(FilenameUtils.getExtension(file.getOriginalFilename()));
+				attachFile.setFileByte(file.getBytes());
+				
+				attachFiles.add(attachFile);
+				
+				
+				System.err.println("fileName ==>" + file.getOriginalFilename());
+				System.err.println("fileSize ==>" + file.getSize());
+				System.err.println("fileExt ==>" + FilenameUtils.getExtension(file.getOriginalFilename()));
+				//FileCopyUtils.copy(file.getBytes(), new File(UPLOAD_LOCATION + file.getOriginalFilename()));
+			}
+			
+			sangsin.setAttachFiles(attachFiles);
+			
+//			ObjectMapper om = new ObjectMapper();
+//			System.err.println(om.writeValueAsString(sangsin.getAttachFiles()));
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+		
 		return vo;
 	}
 }

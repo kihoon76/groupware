@@ -1,10 +1,161 @@
 $(document).ready(function() {
 	
 	var $btnSearchSawon = $('#btnSearchSawon');
+	var $btnSangsin = $('#btnSangsin');
 	var $txtSearchSawon = $('#txtSearchSawon');
+	var $gianTitle = $('#gianTitle');
+	var $gyeoljaeFileUp = $('#gyeoljaeFileUp');
 	var gyeoljaeAddObj = {};
 	var delImgUrl = '/resources/images/delete.png';
+	var gyeoljaeSelectedFiles = {};
 	
+	function hasFileInGyeoljae() {
+        for(var k in gyeoljaeSelectedFiles) {
+            if(gyeoljaeSelectedFiles[k]) return true;
+        }
+
+        return false;
+    }
+	
+	function getSangsinParams(isString) {
+		var gyeoljaeLineData = getGyeoljaeLineData();
+		var len = gyeoljaeLineData.length;
+		var gyeoljaeParam = [];
+		
+		for(var i=0; i<len; i++) {
+			gyeoljaeParam.push({
+				sawonCode: String(gyeoljaeLineData[i].sawonCode),
+				order: String(i+1)
+			});
+		}
+		
+		if(isString) {
+			gyeoljaeParam = JSON.stringify(gyeoljaeParam);
+		}
+		
+		return {
+			title: $.trim($gianTitle.val()),
+			gyeoljaeLines: gyeoljaeParam,
+			content: '',
+		}
+	}
+	
+	function sangsin() {
+		if(hasFileInGyeoljae()) {
+			$gyeoljaeFileUp.startUpload();
+	    }
+		else {
+			common.ajaxExt({
+				url: '/gyeoljae/reg/newgyeoljae_nofile',
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' }, 
+				jsonData: getSangsinParams(),
+				loadmask: {
+					msg: '상신중 입니다.'
+				},
+				success: function(jo) {
+					common.showExtMsg({
+						type: 'alert',
+						msg: '상신되었습니다.',
+						callback: function() {
+							window.location.reload();
+						}
+					});
+				}
+			});
+		}
+	}
+	
+	function validateGyeoljaeTitle() {
+		return $.trim($gianTitle.val()) != '';
+	}
+	
+	function validateGyeoljaeLine() {
+		return excludeSawonData() != '';
+	}
+	
+	function clearGyeoljaeFile() {
+		$gyeoljaeFileUp.reset();
+		gyeoljaeSelectedFiles = {};
+	}
+	
+	$gyeoljaeFileUp.uploadFile({
+		fileName: 'file',
+		showCancel: true,
+		showDone: true,
+		autoSubmit: false,
+		showPreview: true,
+		maxFileCount: 2,
+		returnType: 'json',
+		url: '/gyeoljae/reg/newgyeoljaeWithfile',
+		dragdropWidth: '500px',
+		previewHeight: '100px',
+		previewWidth: '100px',
+		statusBarWidth: '300px',
+		//allowedTypes: 'jpg,png,gif',
+		dynamicFormData: function() {
+            return getSangsinParams(true);
+        },
+		onSuccess: function(files, data, xhr) {
+			console.log(data)
+			if(data.success) {
+				common.showExtMsg({
+					type: 'alert',
+					icon: parent.Ext.MessageBox.INFO,
+					msg: '상신되었습니다.',
+					callback: function() {
+						window.location.reload();
+					}
+				});
+			}
+			else {
+				common.showExtMsg({
+					type: 'alert',
+					msg: '상신중 오류가 발생했습니다.',
+					callback: function() {
+						clearGyeoljaeFile();
+					}
+				});
+			}
+		},
+		onError: function(files, status, errMsg, pd) {
+			//세션만료
+			if(status == 'parsererror') {
+				common.showExtMsg({
+					type: 'alert',
+					msg: '세션만료 되었습니다.',
+					callback: function() {
+						parent.window.location.href = '/signin';
+					}
+				});
+			}
+			else {
+				common.showExtMsg({
+					type: 'alert',
+					msg: '상신중 오류가 발생했습니다.',
+					callback: function() {
+						clearGyeoljaeFile();
+					}
+				});
+			}
+		},
+		onSelect: function(files) {
+			if(gyeoljaeSelectedFiles[files[0].name]) {
+				common.showExtMsg({
+					type: 'alert',
+					msg: '같은 이름의 파일이 있습니다.'
+				});
+	            return false;
+	        }
+			
+			gyeoljaeSelectedFiles[files[0].name] = files[0];
+			return true;
+		},
+		onCancel: function(files) {
+			 delete gyeoljaeSelectedFiles[files[0].name];
+		}
+	});
+	   
 	$btnSearchSawon.on('click', function() {
 		var searchSawonName = $.trim($txtSearchSawon.val());
 		var param = {excludeSawon: excludeSawonData()};
@@ -20,7 +171,7 @@ $(document).ready(function() {
 				headers: { 'Content-Type': 'application/json' },
 				jsonData: param,
 				loadmask: {
-					msg: '사원검색중 입니다.'
+					msg: '결재자검색중 입니다.'
 				},
 				success: function(jo) {
 					openSawonSearchWin(jo.datas);
@@ -29,10 +180,36 @@ $(document).ready(function() {
 		});
 	});
 	
+	$btnSangsin.on('click', function() {
+		if(!validateGyeoljaeTitle()) {
+			common.showExtMsg({
+				type: 'alert',
+				msg: '기안제목을 입력하세요',
+				callback: function() {
+					$gianTitle.focus();
+				}
+			});
+			return;
+		}
+		
+		if(!validateGyeoljaeLine()) {
+			common.showExtMsg({
+				type: 'alert',
+				msg: '결재자를 입력하세요',
+				callback: function() {
+					$txtSearchSawon.focus();
+				}
+			});
+			return;
+		}
+		
+		sangsin();
+	});
+	
 	function addSawonClick(win) {
 		if($.isEmptyObject(gyeoljaeAddObj)) {
 			common.showExtMsg({
-				msg: '결재라인에 추가할 사원을 선택해 주세요.',
+				msg: '결재라인에 추가할 결재자를 선택해 주세요.',
 				type: 'alert'
 			});
 			
@@ -82,7 +259,7 @@ $(document).ready(function() {
 			}
 			
 			var win = parent.Ext.create('Ext.window.Window', {
-				title: '사원검색결과',
+				title: '결재자검색결과',
 				iconCls: 'icon-search',
 				width: 600,
 				height: 400,
@@ -143,11 +320,6 @@ $(document).ready(function() {
 		
 	}
 	
-	var tableData = [
-	    {sawonCode: '1', sawonName: '남기훈', sawonId: 'khnam', sawonPosition: '부장', email: 'test@tyty.com', del: delImgUrl},
-	    {sawonCode: '2', sawonName: '박승석', sawonId: 'sspark', sawonPosition: '차장', email: 'test@tyty.com', del: delImgUrl},
-	];
-	
 	var gyeoljaeLine = new Tabulator('#gyeoljaeLine', {
 		ajaxURL: '/gyeoljae/myline',
 		ajaxResponse: function(url, params, response) {
@@ -193,65 +365,32 @@ $(document).ready(function() {
 		}
 	});
 	
-	console.log(gyeoljaeLine.getData());
 	
 	var toolbarOptions = [
-	                      [{
-	                        'header': [1, 2, 3, 4, 5, 6, false]
-	                      }],
-	                      ['bold', 'italic', 'underline', 'strike'], // toggled buttons
-	                      ['blockquote', 'code-block'],
+	    [{'header': [1, 2, 3, 4, 5, 6, false]}],
+	    ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+	    ['blockquote', 'code-block'],
+        [{'header': 1},{'header': 2}], // custom button values
+	    [{'list': 'ordered'},{'list': 'bullet'}],
+	    [{'script': 'sub'},{'script': 'super'}], // superscript/subscript
+	    [{'indent': '-1'},{'indent': '+1'}], // outdent/indent
+	    [{'direction': 'rtl'}], // text direction
+        [{'size': ['small', false, 'large', 'huge']}], // custom dropdown
+        [{'color': []},{'background': []}], // dropdown with defaults from theme
+	    [{'font': []}],
+	    [{'align': []}],
+	    ['link', 'image'],
+        ['clean'] // remove formatting button
+	];
 
-	                      [{
-	                        'header': 1
-	                      }, {
-	                        'header': 2
-	                      }], // custom button values
-	                      [{
-	                        'list': 'ordered'
-	                      }, {
-	                        'list': 'bullet'
-	                      }],
-	                      [{
-	                        'script': 'sub'
-	                      }, {
-	                        'script': 'super'
-	                      }], // superscript/subscript
-	                      [{
-	                        'indent': '-1'
-	                      }, {
-	                        'indent': '+1'
-	                      }], // outdent/indent
-	                      [{
-	                        'direction': 'rtl'
-	                      }], // text direction
-
-	                      [{
-	                        'size': ['small', false, 'large', 'huge']
-	                      }], // custom dropdown
-
-	                      [{
-	                        'color': []
-	                      }, {
-	                        'background': []
-	                      }], // dropdown with defaults from theme
-	                      [{
-	                        'font': []
-	                      }],
-	                      [{
-	                        'align': []
-	                      }],
-	                      ['link', 'image'],
-
-	                      ['clean'] // remove formatting button
-	                    ];
-
-	                  var quillFull = new Quill('#document-full', {
-	                    modules: {
-	                      toolbar: toolbarOptions,
-	                      autoformat: true
-	                    },
-	                    theme: 'snow',
-	                    placeholder: "Write something..."
-	                  });
+	var quillFull = new Quill('#document-full', {
+		modules: {
+			toolbar: toolbarOptions,
+			autoformat: true
+	    },
+	    theme: 'snow',
+	    placeholder: "Write something..."
+	});
+	                  
+	             
 });

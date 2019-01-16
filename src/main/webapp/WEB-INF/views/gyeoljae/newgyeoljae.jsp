@@ -10,6 +10,8 @@
 <script src="/resources/os/tabulator-4.1/js/tabulator.min.js"></script>
 <script src="/resources/os/Quill-Editor-Bootstrap-4/sprite.svg.js"></script>
 <script src="/resources/os/Quill-Editor-Bootstrap-4/bootstrap-quill.js"></script>
+<script src="/resources/os/jQuery-Upload-File/4.0.11/jquery.form.js"></script>
+<script src="/resources/os/jQuery-Upload-File/4.0.11/jquery.uploadfile.js"></script>
 <script src="/resources/js/icommon.js"></script>
 <script src="/resources/js/gyeoljae/newgyeoljae.js"></script>
 </content>
@@ -23,6 +25,8 @@
     <link rel="stylesheet" href="/resources/os/Quill-Editor-Bootstrap-4/css/quill.css">
   	<link rel="stylesheet" href="/resources/os/Quill-Editor-Bootstrap-4/css/quill.snow.css">
   	<link rel="stylesheet" href="/resources/os/Quill-Editor-Bootstrap-4/css/quill.bubble.css">
+  	<link rel="stylesheet" href="/resources/os/jQuery-Upload-File/4.0.11/uploadfile.css">
+  	<link rel="stylesheet" href="/resources/css/uploadfilecustom.css">
 	<style>
 	form {padding:10px 10px 10px 10px;}
 	.divMT {margin-top:10px;}
@@ -47,22 +51,28 @@
     		<input type="text" class="form-control" id="gianTitle" placeholder="기안제목">
   		</div>
   		<div class="input-group">
-    		<input type="text" class="form-control" placeholder="이름 입력해서 검색함" id="txtSearchSawon">
+    		<input type="text" class="form-control" placeholder="이름 입력해서  결재자 검색" id="txtSearchSawon">
     		<div class="input-group-append">
       			<button class="btn btn-secondary" type="button" id="btnSearchSawon" disabled>
         			<i class="fa fa-search"></i>
       			</button>
     		</div>
   		</div>
-  		<div class="divMT"><h3><span class="badge badge-danger">결재라인</span></h3></div>
+  		<div class="divMT">
+  			<span style="font-size:1.5em;"><span class="badge badge-pill badge-danger">결재라인</span></span>
+  			<span style="font-size:1.2em;"><span class="badge badge-pill badge-info">※입력된 순서대로 순차적으로 결재가 진행됩니다.</span></span>
+  		</div>
   		<div class="divMT divMB">
   			<div id="gyeoljaeLine"></div>
   		</div>
-  		<div class="divMT"><h3><span class="badge badge-danger">내용</span></h3></div>
+  		<div class="divMT divMB">
+  			<span style="font-size:1.5em;"><span class="badge badge-pill badge-danger">내용</span></span>
+  		</div>
   		<div class="editor-full">
-  			<div id="document-full" class="ql-scroll-y" style="height: 300px;">
-    			<h1>jQueryScript.Net</h1>
-			</div>
+  			<div id="document-full" class="ql-scroll-y" style="height: 300px;"></div>
+		</div>
+		<div class="divMT divMB">
+			<div id="gyeoljaeFileUp" style="width:300px;">등록</div>
 		</div>
   		<div class="divMT">
   			<button type="button" class="btn btn-primary" disabled id="btnSangsin">상신</button>

@@ -14,7 +14,7 @@ Ext.define('Drpnd.custom.Socket', function() {
 				successCallback(subscribe);
 			}, 100);
 		}, function(error) {
-			reconnect(url, subscribe);
+			//reconnect(url, subscribe);
 		});
     }
     
