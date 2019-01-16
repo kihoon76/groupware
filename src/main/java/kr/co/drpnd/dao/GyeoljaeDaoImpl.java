@@ -22,8 +22,7 @@ public class GyeoljaeDaoImpl implements GyeoljaeDao {
 	}
 
 	@Override
-	public List<Map<String, Object>> selectMyDefaultGyeoljaeLine(String sawonCode) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Map<String, Object>> selectMyDefaultGyeoljaeLine(Map<String, String> param) {
+		return msSqlSession.selectList(namespace + ".selectMyDefaultGyeoljaeLine", param);
 	} 
 }

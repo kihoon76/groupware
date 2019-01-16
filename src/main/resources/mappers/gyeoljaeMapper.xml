@@ -12,6 +12,7 @@
 		  from [동림].[dbo].[사원] T1
 		 inner join [동림].[dbo].[직급] T2 on T1.직급코드 = T2.직급코드
 		 where T1.부서코드 = #{department}
+		   and (T1.팀리더 = 'Y' or T1.사원코드 in (select 사원코드  from [동림].[dbo].[관리팀] where 부서코드 = #{department}))
 		 <if test="searchSawonName != null">
 		   and T1.사원명 = #{searchSawonName}
 		 </if>
@@ -22,6 +23,25 @@
 		</foreach>
 		 </if>
 		 order by T1.사원명
+	</select>
+	
+	<select id="selectMyDefaultGyeoljaeLine" parameterType="map" resultType="map">
+		select T1.사원코드 sawonCode, T1.사원명 sawonName, T1.사원아이디 sawonId, T2.직급명 sawonPosition, T1.이메일 email
+		  from [동림].[dbo].[사원] T1
+		 inner join [동림].[dbo].[직급] T2 on T1.직급코드 = T2.직급코드
+		 where T1.부서코드 = #{department}
+		 <if test="teamCode != null">
+		   and ((T1.팀코드 = #{teamCode} and T1.팀리더 = 'Y')
+		    or (T1.사원코드 in (select 사원코드 from [동림].[dbo].[관리팀] where 팀코드  = #{teamCode})))
+		 </if>
+		 <if test='teamCode == null and position != "1"'>
+		   and (T1.사원코드 = #{sawonCode}
+		    or T2.직급코드 = 1)
+		 </if>
+		 <if test='teamCode == null and position == "1"'>
+		   and T2.직급코드 = 1
+		 </if>
+		 order by T2.직급코드 desc
 	</select>
 	
 	

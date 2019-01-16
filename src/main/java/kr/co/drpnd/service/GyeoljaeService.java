@@ -19,8 +19,8 @@ public class GyeoljaeService {
 		return gyeoljaeDao.selectGyeoljaeSawonList(param);
 	}
 
-	public List<Map<String, Object>> getMyDefaultGyeoljaeLine(String sawonCode) {
-		return gyeoljaeDao.selectMyDefaultGyeoljaeLine(sawonCode);
+	public List<Map<String, Object>> getMyDefaultGyeoljaeLine(Map<String, String> param) {
+		return gyeoljaeDao.selectMyDefaultGyeoljaeLine(param);
 	}
 
 }

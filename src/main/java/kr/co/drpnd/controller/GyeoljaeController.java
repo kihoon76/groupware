@@ -85,17 +85,23 @@ public class GyeoljaeController {
 		
 		Sawon myInfo = SessionUtil.getSessionSawon();
 		
-		List<Map<String, Object>> list = gyeoljaeService.getMyDefaultGyeoljaeLine(myInfo.getSawonCode());
-		Map<String, Object> map1 = new HashMap<>();
-		//Map<String, Object> map2 = new HashMap<>();
+		Map<String, String> param = new HashMap<>();
+		param.put("sawonCode", myInfo.getSawonCode());
+		param.put("department", myInfo.getSawonDepartment());
+		param.put("teamCode", myInfo.getSawonTeam());
+		param.put("position", myInfo.getSawonPosition());
 		
-		map1.put("sawonCode", "1");
-		map1.put("sawonName", "남기훈");
-		map1.put("sawonId", "khnam");
-		map1.put("sawonPosition", "차장");
-		map1.put("email", "test@tyty.com");
-		
-		vo.addObject(map1);
+		List<Map<String, Object>> list = gyeoljaeService.getMyDefaultGyeoljaeLine(param);
+//		Map<String, Object> map1 = new HashMap<>();
+//		
+//		map1.put("sawonCode", "1");
+//		map1.put("sawonName", "남기훈");
+//		map1.put("sawonId", "khnam");
+//		map1.put("sawonPosition", "차장");
+//		map1.put("email", "test@tyty.com");
+//		
+//		vo.addObject(map1);
+		vo.setDatas(list);
 		vo.setSuccess(true);
 		
 		//Thread.sleep(5000);

@@ -116,7 +116,7 @@ $(document).ready(function() {
 		}
 		else {
 			common.showExtMsg({
-				msg: '결재라인에 있거나 존재하지 않는 사원입니다.',
+				msg: '결재라인에 있거나 결재권한이 없거나 존재하지 않는 사원입니다.',
 				type: 'alert'
 			});
 		}
