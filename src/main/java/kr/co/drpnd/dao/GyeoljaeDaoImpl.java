@@ -42,5 +42,10 @@ public class GyeoljaeDaoImpl implements GyeoljaeDao {
 	@Override
 	public int insertGyeoljaeAttachFiles(Sangsin sangsin) {
 		return msSqlSession.insert(namespace + ".insertGyeoljaeAttachFiles", sangsin);
+	}
+
+	@Override
+	public List<Map<String, String>> selectMySangsin(String sawonCode) {
+		return msSqlSession.selectList(namespace + ".selectMySangsin", sawonCode);
 	} 
 }

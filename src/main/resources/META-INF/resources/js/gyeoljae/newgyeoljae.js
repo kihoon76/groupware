@@ -45,29 +45,31 @@ $(document).ready(function() {
 	}
 	
 	function sangsin() {
-		if(hasFileInGyeoljae()) {
-			$gyeoljaeFileUp.startUpload();
-	    }
-		else {
-			common.ajaxExt({
-				url: '/gyeoljae/reg/newgyeoljae_nofile',
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' }, 
-				jsonData: getSangsinParams(),
-				loadmask: {
-					msg: '상신중 입니다.'
-				},
-				success: function(jo) {
-					common.showExtMsg({
-						type: 'alert',
-						msg: '상신되었습니다.',
-						callback: function() {
-							window.location.reload();
-						}
-					});
-				}
-			});
-		}
+		common.checkSession(function() {
+			if(hasFileInGyeoljae()) {
+				$gyeoljaeFileUp.startUpload();
+		    }
+			else {
+				common.ajaxExt({
+					url: '/gyeoljae/reg/newgyeoljae_nofile',
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' }, 
+					jsonData: getSangsinParams(),
+					loadmask: {
+						msg: '상신중 입니다.'
+					},
+					success: function(jo) {
+						common.showExtMsg({
+							type: 'alert',
+							msg: '상신되었습니다.',
+							callback: function() {
+								window.location.reload();
+							}
+						});
+					}
+				});
+			}
+		});
 	}
 	
 	function validateGyeoljaeTitle() {

@@ -21,7 +21,7 @@
 	<link rel="stylesheet" href="/resources/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="/resources/os/summernote/summernote-bs4.css" />
 	<link rel="stylesheet" href="/resources/os/font-awesome/css/font-awesome.min.css" />
-	 <!-- tabulator -->
+	<!-- tabulator -->
     <link rel="stylesheet" href="/resources/os/tabulator-4.1/css/tabulator_simple.min.css" />
   	<link rel="stylesheet" href="/resources/os/jQuery-Upload-File/4.0.11/uploadfile.css">
   	<link rel="stylesheet" href="/resources/css/uploadfilecustom.css">
@@ -66,7 +66,7 @@
   		<div class="divMT divMB">
   			<span style="font-size:1.5em;"><span class="badge badge-pill badge-danger">내용</span></span>
   		</div>
-  		<textarea id="gyeoljaeContent" name="editordata"></textarea>
+  		<textarea id="gyeoljaeContent" name="editordata" style="display:none;"></textarea>
 		
 		<div class="divMT divMB">
 			<div id="gyeoljaeFileUp" style="width:300px;">등록</div>

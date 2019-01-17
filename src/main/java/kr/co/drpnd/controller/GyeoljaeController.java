@@ -212,4 +212,24 @@ public class GyeoljaeController {
 		
 		return vo;
 	}
+	
+	@GetMapping("mysangsin")
+	@ResponseBody
+	public AjaxVO<Map<String, String>> getMySangsin() {
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		
+		AjaxVO<Map<String, String>> vo = new AjaxVO<>();
+		try {
+			List<Map<String, String>> list = gyeoljaeService.getMySangsin(myInfo.getSawonCode());
+			vo.setSuccess(true);
+			vo.setDatas(list);
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+	
+		return vo;
+		
+	}
 }

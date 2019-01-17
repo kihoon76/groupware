@@ -57,4 +57,8 @@ public class GyeoljaeService {
 		}
 	}
 
+	public List<Map<String, String>> getMySangsin(String sawonCode) {
+		return gyeoljaeDao.selectMySangsin(sawonCode);
+	}
+
 }

@@ -6,8 +6,28 @@
 <c:set var="uri" value="${req.requestURI}" />
 <content tag="script">
 <script src="/resources/lib/jquery.min.js"></script>
+<script src="/resources/lib/bootstrap.min.js"></script>
+<script src="/resources/os/tabulator-4.1/js/tabulator.min.js"></script>
 <script src="/resources/js/icommon.js"></script>
+<script src="/resources/js/gyeoljae/overview.js"></script>
 </content>
+<head>
+	<link rel="stylesheet" href="/resources/css/bootstrap.min.css" />
+	<!-- tabulator -->
+    <link rel="stylesheet" href="/resources/os/tabulator-4.1/css/tabulator_simple.min.css" />
+    <style>
+    form {padding:10px 10px 10px 10px;}
+    .divMT {margin-top:10px;}
+	.divMB {margin-bottom:10px;}
+    </style>
+</head>
 <body>
-	요약
+	<form>
+		<div class="divMT">
+  			<span style="font-size:1.5em;"><span class="badge badge-pill badge-info">내가 올린 결재</span></span>
+  		</div>
+		<div class="divMT divMB">
+  			<div id="myGian"></div>
+  		</div>
+	</form>
 </body>
