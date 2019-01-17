@@ -24,7 +24,14 @@
 <body>
 	<form>
 		<div class="divMT">
-  			<span style="font-size:1.5em;"><span class="badge badge-pill badge-info">내가 올린 결재</span></span>
+  			<span style="font-size:1.5em;"><span class="badge badge-pill badge-info">결재 대기중</span></span>
+  		</div>
+		<div class="divMT divMB">
+  			<div id="myGyeoljae"></div>
+  		</div>
+  		
+		<div class="divMT">
+  			<span style="font-size:1.5em;"><span class="badge badge-pill badge-info">내가 올린 기안</span></span>
   		</div>
 		<div class="divMT divMB">
   			<div id="myGian"></div>
