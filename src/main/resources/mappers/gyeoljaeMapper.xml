@@ -44,5 +44,28 @@
 		 order by T2.직급코드 desc
 	</select>
 	
+	<insert id="insertNewGyeoljae" parameterType="Sangsin">
+		insert into [동림].[dbo].[상신](기안제목, 기안내용_CODE, 기안내용_PLAIN, 결재처리자, 기안자, 처리상태, 최종처리, 기안작성일) 
+		values (#{title}, #{content}, #{plainContent}, #{gyeoljaeja}, #{gianja}, 'P', 'P', getDate())
+		<selectKey keyProperty="sangsinNum" resultType="int" order="AFTER">
+        	SELECT IDENT_CURRENT('[동림].[dbo].[상신]')
+    	</selectKey>
+	</insert>
+	
+	<insert id="insertGyeoljaeLines" parameterType="Sangsin">
+		insert into [동림].[dbo].[결재라인](상신코드, 결재처리자, 결재순서, 처리상태)
+		values 
+		<foreach collection="gyeoljaeLines" item="lines" separator=" , ">
+		(#{sangsinNum}, #{lines.sawonCode}, #{lines.order}, 'W')
+		</foreach>
+	</insert>
+	
+	<insert id="insertGyeoljaeAttachFiles" parameterType="Sangsin">
+		insert into [동림].[dbo].[상신첨부파일](파일명, 파일크기, 파일확장자, 파일내용, 상신코드)
+		values 
+		<foreach collection="attachFiles" item="file" separator=" , ">
+		(#{file.name}, #{file.size}, #{file.ext}, #{file.fileByte}, #{sangsinNum})
+		</foreach>
+	</insert>
 	
 </mapper>

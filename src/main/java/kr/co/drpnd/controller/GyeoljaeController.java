@@ -109,18 +109,15 @@ public class GyeoljaeController {
 		param.put("teamCode", myInfo.getSawonTeam());
 		param.put("position", myInfo.getSawonPosition());
 		
-		List<Map<String, Object>> list = gyeoljaeService.getMyDefaultGyeoljaeLine(param);
-//		Map<String, Object> map1 = new HashMap<>();
-//		
-//		map1.put("sawonCode", "1");
-//		map1.put("sawonName", "남기훈");
-//		map1.put("sawonId", "khnam");
-//		map1.put("sawonPosition", "차장");
-//		map1.put("email", "test@tyty.com");
-//		
-//		vo.addObject(map1);
-		vo.setDatas(list);
-		vo.setSuccess(true);
+		try{
+			List<Map<String, Object>> list = gyeoljaeService.getMyDefaultGyeoljaeLine(param);
+			vo.setDatas(list);
+			vo.setSuccess(true);
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
 		
 		//Thread.sleep(5000);
 		return vo;
@@ -150,6 +147,7 @@ public class GyeoljaeController {
 			@RequestParam("title") String title,
 			@RequestParam("gyeoljaeLines") String gyeoljaeLines,
 			@RequestParam("content") String content,
+			@RequestParam("plainContent") String plainContent,
 			@RequestParam("file") MultipartFile[] files) {
 		AjaxVO vo = new AjaxVO();
 		
@@ -160,13 +158,26 @@ public class GyeoljaeController {
 		System.err.println("content ==>" + content);
 		
 		try {
+			Sawon myInfo = SessionUtil.getSessionSawon();
+			
 			Gson gson = new Gson();
 			List<Map<String, Object>> lines = gson.fromJson(gyeoljaeLines, new TypeToken<List<Map<String, Object>>>(){}.getType());
+			
+			String gyeoljaeja = "";
+			for(Map<String, Object> line: lines) {
+				if("1".equals(line.get("order"))) {
+					gyeoljaeja = String.valueOf(line.get("sawonCode"));
+					break;
+				}
+			}
+			
 			Sangsin sangsin = new Sangsin();
 			sangsin.setTitle(title);
+			sangsin.setContent(content);
+			sangsin.setPlainContent(plainContent);
 			sangsin.setGyeoljaeLines(lines);
-			
-			
+			sangsin.setGianja(myInfo.getSawonCode());
+			sangsin.setGyeoljaeja(gyeoljaeja);
 			
 			List<AttachFile> attachFiles = new ArrayList<>();
 			
@@ -179,7 +190,6 @@ public class GyeoljaeController {
 				
 				attachFiles.add(attachFile);
 				
-				
 				System.err.println("fileName ==>" + file.getOriginalFilename());
 				System.err.println("fileSize ==>" + file.getSize());
 				System.err.println("fileExt ==>" + FilenameUtils.getExtension(file.getOriginalFilename()));
@@ -187,6 +197,10 @@ public class GyeoljaeController {
 			}
 			
 			sangsin.setAttachFiles(attachFiles);
+			
+			gyeoljaeService.regNewGyeoljae(sangsin);
+			
+			vo.setSuccess(true);
 			
 //			ObjectMapper om = new ObjectMapper();
 //			System.err.println(om.writeValueAsString(sangsin.getAttachFiles()));

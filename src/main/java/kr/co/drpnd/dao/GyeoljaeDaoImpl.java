@@ -8,6 +8,8 @@ import javax.annotation.Resource;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import kr.co.drpnd.domain.Sangsin;
+
 @Repository("gyeoljaeDao")
 public class GyeoljaeDaoImpl implements GyeoljaeDao {
 
@@ -24,5 +26,21 @@ public class GyeoljaeDaoImpl implements GyeoljaeDao {
 	@Override
 	public List<Map<String, Object>> selectMyDefaultGyeoljaeLine(Map<String, String> param) {
 		return msSqlSession.selectList(namespace + ".selectMyDefaultGyeoljaeLine", param);
+	}
+
+	@Override
+	public void insertNewGyeoljae(Sangsin sangsin) {
+		msSqlSession.insert(namespace + ".insertNewGyeoljae", sangsin);
+		
+	}
+
+	@Override
+	public int insertGyeoljaeLines(Sangsin sangsin) {
+		return msSqlSession.insert(namespace + ".insertGyeoljaeLines", sangsin);
+	}
+
+	@Override
+	public int insertGyeoljaeAttachFiles(Sangsin sangsin) {
+		return msSqlSession.insert(namespace + ".insertGyeoljaeAttachFiles", sangsin);
 	} 
 }

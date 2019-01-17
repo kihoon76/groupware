@@ -3,12 +3,18 @@ package kr.co.drpnd.domain;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.type.Alias;
+
+@Alias("Sangsin")
 public class Sangsin {
 
-	private int gyeoljaeNum;
+	private int sangsinNum;
 	private String title;
 	private List<Map<String, Object>> gyeoljaeLines;
 	private String content;
+	private String plainContent;
+	private String gyeoljaeja;//결재처리자
+	private String gianja;  //p-r-c 처리
 	private List<AttachFile> attachFiles;
 	
 	public String getTitle() {
@@ -35,10 +41,29 @@ public class Sangsin {
 	public void setAttachFiles(List<AttachFile> attachFiles) {
 		this.attachFiles = attachFiles;
 	}
-	public int getGyeoljaeNum() {
-		return gyeoljaeNum;
+	public int getSangsinNum() {
+		return sangsinNum;
 	}
-	public void setNum(int gyeoljaeNum) {
-		this.gyeoljaeNum = gyeoljaeNum;
+	public void setSangsinNum(int sangsinNum) {
+		this.sangsinNum = sangsinNum;
 	}
+	public String getPlainContent() {
+		return plainContent;
+	}
+	public void setPlainContent(String plainContent) {
+		this.plainContent = plainContent;
+	}
+	public String getGyeoljaeja() {
+		return gyeoljaeja;
+	}
+	public void setGyeoljaeja(String gyeoljaeja) {
+		this.gyeoljaeja = gyeoljaeja;
+	}
+	public String getGianja() {
+		return gianja;
+	}
+	public void setGianja(String gianja) {
+		this.gianja = gianja;
+	}
+	
 }

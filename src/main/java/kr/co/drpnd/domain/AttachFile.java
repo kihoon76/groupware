@@ -5,18 +5,18 @@ import org.apache.ibatis.type.Alias;
 @Alias("AttachFile")
 public class AttachFile {
 
-	private String num;
+	private int code;
 	private String name;
 	private long size;
 	private String ext;
-	private int gyeoljaeNum;
+	private int sangsinNum;
 	private byte[] fileByte;
 	
-	public String getNum() {
-		return num;
+	public int getCode() {
+		return code;
 	}
-	public void setNum(String num) {
-		this.num = num;
+	public void setCode(int code) {
+		this.code = code;
 	}
 	public String getName() {
 		return name;
@@ -36,11 +36,11 @@ public class AttachFile {
 	public void setExt(String ext) {
 		this.ext = ext;
 	}
-	public int getGyeoljaeNum() {
-		return gyeoljaeNum;
+	public int getSangsinNum() {
+		return sangsinNum;
 	}
-	public void setGyeoljaeNum(int gyeoljaeNum) {
-		this.gyeoljaeNum = gyeoljaeNum;
+	public void setSangsinNum(int sangsinNum) {
+		this.sangsinNum = sangsinNum;
 	}
 	public byte[] getFileByte() {
 		return fileByte;

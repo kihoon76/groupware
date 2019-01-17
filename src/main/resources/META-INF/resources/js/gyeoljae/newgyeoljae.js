@@ -34,10 +34,13 @@ $(document).ready(function() {
 			gyeoljaeParam = JSON.stringify(gyeoljaeParam);
 		}
 		
+		var codeContent = $gyeoljaeContent.summernote('code');
+		
 		return {
 			title: $.trim($gianTitle.val()),
 			gyeoljaeLines: gyeoljaeParam,
-			content: '',
+			content: codeContent,
+			plainContent: $(codeContent).text()
 		}
 	}
 	
@@ -384,6 +387,9 @@ $(document).ready(function() {
 	$gyeoljaeContent.summernote({
 		lang: 'ko-KR',
 		height: 300,
+		placeholder: '기안내용',
+		dialogsFade: true,
+		fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New'],
 		toolbar: [
 		    ['style', ['bold', 'italic', 'underline', 'clear']],
 		    ['font', ['strikethrough', 'superscript', 'subscript']],
@@ -401,6 +407,15 @@ $(document).ready(function() {
 	    	link: [
 	    	    ['link', ['linkDialogShow', 'unlink']]
 	    	],
+	    },
+	    callbacks: {
+	    	onBlur: function() {
+	    		var codeContent = $gyeoljaeContent.summernote('code');
+	    		var plainTxt = $(codeContent).text();
+	    		
+	    		console.log(codeContent);
+	    		console.log(plainTxt);
+	    	}
 	    }
 	});
 });

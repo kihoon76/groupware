@@ -143,23 +143,35 @@ $(document).ready(function() {
 	}
 	
 	function viewPositionAtMap(details) {
-		var panel = parent.Ext.create('Drpnd.view.panel.NMapPanel', {
-			lat: details.lat,
-			lng: details.lng
-		});
-			
-		var map = parent.Ext.create('Ext.window.Window', {
-			title: '출근위치',
-			height: 500, 
-			width: 500,
-			layout: 'fit',
-			modal: true,
-			resizable: false,
-			closeAction: 'destroy',
-			items: [panel]
-		});
+		var map = null;
 		
-		map.show();
+		try {
+			var panel = parent.Ext.create('Drpnd.view.panel.NMapPanel', {
+				lat: details.lat,
+				lng: details.lng
+			});
+				
+			map = parent.Ext.create('Ext.window.Window', {
+				title: '출근위치',
+				height: 500, 
+				width: 500,
+				layout: 'fit',
+				modal: true,
+				resizable: false,
+				closeAction: 'destroy',
+				items: [panel]
+			});
+			
+			map.show();
+		}
+		catch(e) {
+			map.close();
+			
+			common.showExtMsg({
+				type: 'alert',
+				msg: '맵이 로드되지 않았습니다. 브라우저를 새로고침 해 주세요'
+			});
+		}
 		
 	}
 	
