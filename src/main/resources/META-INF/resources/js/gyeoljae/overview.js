@@ -120,23 +120,29 @@ $(document).ready(function() {
 			width: 800,
 			layout: 'fit',
 			closeAction: 'destroy',
+			closable: false,
 			modal: true,
-			draggable: true,
+			draggable: false,
 			resizable: false,
 			items: form,
 			dockedItems: [{
 			    xtype: 'toolbar',
-			    dock: 'bottom',
+			    dock: 'top',
 			    ui: 'footer',
 			    //defaults: {minWidth: minButtonWidth},
 			    items: [
 			        { xtype: 'component', flex: 1 },
-			        { xtype: 'button', text: '결재', listeners: {
+			        { xtype: 'button', text: '결재', iconCls: 'icon-gyeoljae', listeners: {
+			        	click: function() {
+			        		gyeoljaeClick();
+			        	}
+			        } },
+			        { xtype: 'button', text: '반려', iconCls: 'icon-reject', listeners: {
 			        	click: function() {
 			        		
 			        	}
 			        } },
-			        { xtype: 'button', text: '닫기', listeners: {
+			        { xtype: 'button', text: '닫기', iconCls: 'icon-close', listeners: {
 			        	click: function(btn) {
 			        		win.close();
 			        	}
@@ -153,6 +159,13 @@ $(document).ready(function() {
 		win.show();
 	}
 	
+	function gyeoljaeClick() {
+		common.checkSession(function() {
+			
+		});
+	}
+	
+
 	//내가 결재해야 할 목록
 	var myGyeoljae = new Tabulator('#myGyeoljae', {
 		ajaxURL: '/gyeoljae/mygyeoljae',
