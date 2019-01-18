@@ -124,6 +124,7 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 			tbar: [{
 				xtype: 'button',
 				text: '요약',
+				iconCls: 'icon-gyeoljae-overview',
 				listeners: {
 					click: function(btn) {
 						overviewClick();
@@ -135,6 +136,7 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 			}, '-', {
 				xtype: 'button',
 				text: '수신함',
+				iconCls: 'icon-gyeoljae-receive',
 				listeners: {
 					click: function() {
 						receiveBoxClick();
@@ -146,6 +148,7 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 			}, '-', {
 				xtype: 'button',
 				text: '상신함',
+				iconCls: 'icon-gyeoljae-sangsin',
 				listeners: {
 					click: function() {
 						sangsinBoxClick();
@@ -157,6 +160,7 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 			}, '-', {
 				xtype: 'button',
 				text: '보관함',
+				iconCls: 'icon-gyeoljae-keepbox',
 				listeners: {
 					click: function() {
 						keepBoxClick();
