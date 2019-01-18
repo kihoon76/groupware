@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -254,5 +255,29 @@ public class GyeoljaeController {
 	
 		return vo;
 		
+	}
+	
+	@GetMapping("mygyeoljae/{sangsinNum}")
+	@ResponseBody
+	public AjaxVO<Sangsin> getMyGyeoljaeDetail(@PathVariable("sangsinNum") String sangsinNum) {
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		
+		Map<String, String> param = new HashMap<>();
+		param.put("sawonCode", myInfo.getSawonCode());
+		param.put("sangsinNum", sangsinNum);
+		
+		AjaxVO<Sangsin> vo = new AjaxVO<>();
+		
+		try {
+			Sangsin gyeoljaeDetail = gyeoljaeService.getMyGyeoljaeDetail(param);
+			vo.setSuccess(true);
+			vo.addObject(gyeoljaeDetail);
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+		
+		return vo;
 	}
 }

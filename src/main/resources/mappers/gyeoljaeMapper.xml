@@ -88,4 +88,36 @@
 			#{sawonCode, mode=IN, jdbcType=INTEGER, javaType=int}
 		)}
 	</select>
+	
+	
+	<resultMap id="RM_Sangsin" type="Sangsin">
+		<result column="상신코드" property="sangsinNum" javaType="int"/>
+		<result column="기안제목" property="title" javaType="string"/>
+		<result column="기안내용_CODE" property="content" javaType="string"/>
+		<result column="기안내용_PLAIN" property="plainContent" javaType="string"/>
+		<result column="기안자" property="gianja" javaType="string"/>
+		<result column="기안작성일" property="writeDate" javaType="string"/>
+		<collection property="attachFiles" column="상신코드" 
+					javaType="java.util.ArrayList"
+					ofType="AttachFile" 
+					select="selectSangsinAttachFiles"
+					/>
+	</resultMap>
+	
+	<select id="selectMyGyeoljaeDetail" parameterType="map" resultMap="RM_Sangsin">
+		select T1.상신코드, 기안제목, 기안내용_CODE, T3.사원명 as 기안자, convert(char(16), 기안작성일, 20) 기안작성일
+		  from [동림].[dbo].[상신] T1
+		 inner join [동림].[dbo].[결재라인] T2
+		    on T1.상신코드 = T2.상신코드
+		 inner join [동림].[dbo].[사원] T3
+		    on T1.기안자 = T3.사원코드
+		 where T1.상신코드 = #{sangsinNum}
+		   and T2.결재처리자 = #{sawonCode}
+	</select> 
+	
+	<select id="selectSangsinAttachFiles" parameterType="string" resultType="AttachFile">
+		select 파일명  name, 파일코드 code, 파일확장자 ext, 파일크기 size, 상신코드 sangsinNum
+		  from [동림].[dbo].[상신첨부파일]
+		 where 상신코드 = #{sangsinNum}
+	</select>
 </mapper>

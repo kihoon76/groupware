@@ -65,4 +65,8 @@ public class GyeoljaeService {
 		return gyeoljaeDao.selectMyGyeoljae(param);
 	}
 
+	public Sangsin getMyGyeoljaeDetail(Map<String, String> param) {
+		return gyeoljaeDao.selectMyGyeoljaeDetail(param);
+	}
+
 }

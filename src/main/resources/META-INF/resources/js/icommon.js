@@ -2,6 +2,8 @@ var common = (function() {
 	var win = null;
 	var ErrCode = parent.Drpnd.util.ErrorCode;
 	var Context = parent.Drpnd.util.Constants.context;
+	var loadMask = null;
+	
 	//var ErrCode = parent.Ext.create('Drpnd.util.ErrorCode');
 	function redirect(msg) {
 		parent.Ext.Msg.alert('', msg, function() {

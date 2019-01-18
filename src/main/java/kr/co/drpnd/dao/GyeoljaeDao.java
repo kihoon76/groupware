@@ -19,4 +19,6 @@ public interface GyeoljaeDao {
 	List<Map<String, String>> selectMySangsin(String sawonCode);
 
 	List<Map<String, String>> selectMyGyeoljae(Map<String, Object> param);
+
+	Sangsin selectMyGyeoljaeDetail(Map<String, String> param);
 }
