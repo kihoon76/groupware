@@ -5,9 +5,7 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 	initComponent: function() {
 		var CommonFn = Drpnd.util.CommonFn;
 		
-		var itemObj = {
-			html: 'yy'
-		};
+		var itemObj = {};
 		var that = this;
 		
 		function clearItems() {
@@ -38,11 +36,18 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 			});
 		}
 		
-		function overviewClick() {
-			CommonFn.checkSession(function() {
+		function overviewClick(isNotSessionCheck) {
+			
+			if(isNotSessionCheck) {
 				var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'gyeoljae/view/overview' });
 				addItem(iframe);
-			});
+			}
+			else {
+				CommonFn.checkSession(function() {
+					var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'gyeoljae/view/overview' });
+					addItem(iframe);
+				});
+			}
 		}
 		
 		function keepBoxClick() {
@@ -86,7 +91,12 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 						newGyeoljaeClick();
 					}
 				}
-			}]
+			}],
+			listeners: {
+				afterrender: function() {
+					overviewClick(true);
+				}
+			}
 		});
 		
 		this.callParent(arguments);

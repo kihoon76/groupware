@@ -17,4 +17,6 @@ public interface GyeoljaeDao {
 	int insertGyeoljaeAttachFiles(Sangsin sangsin);
 
 	List<Map<String, String>> selectMySangsin(String sawonCode);
+
+	List<Map<String, String>> selectMyGyeoljae(Map<String, Object> param);
 }

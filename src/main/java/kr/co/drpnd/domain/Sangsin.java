@@ -16,6 +16,8 @@ public class Sangsin {
 	private String gyeoljaeja;//결재처리자
 	private String gianja;  //p-r-c 처리
 	private List<AttachFile> attachFiles;
+	private String status;
+	private String writeDate;
 	
 	public String getTitle() {
 		return title;
@@ -64,6 +66,12 @@ public class Sangsin {
 	}
 	public void setGianja(String gianja) {
 		this.gianja = gianja;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 }

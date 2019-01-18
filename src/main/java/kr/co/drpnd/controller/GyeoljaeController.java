@@ -240,7 +240,10 @@ public class GyeoljaeController {
 		
 		AjaxVO<Map<String, String>> vo = new AjaxVO<>();
 		try {
-			List<Map<String, String>> list = gyeoljaeService.getMyGyeoljae(myInfo.getSawonCode());
+			Map<String, Object> param = new HashMap<>();
+			param.put("sawonCode", Integer.parseInt(myInfo.getSawonCode()));
+			
+			List<Map<String, String>> list = gyeoljaeService.getMyGyeoljae(param);
 			vo.setSuccess(true);
 			vo.setDatas(list);
 		}

@@ -82,4 +82,10 @@
 		 where 기안자 = #{gianja}
 		 order by 기안작성일 desc
 	</select>
+	
+	<select id="selectMyGyeoljae" statementType="CALLABLE" parameterType="map" resultType="map">
+		{call [동림].[dbo].[UP_내결재건](
+			#{sawonCode, mode=IN, jdbcType=INTEGER, javaType=int}
+		)}
+	</select>
 </mapper>
