@@ -24,4 +24,6 @@ public interface GyeoljaeDao {
 	Sangsin selectMyGyeoljaeDetail(Map<String, String> param);
 
 	AttachFile selectAttachFile(Map<String, String> param);
+
+	int updateMyGyeoljae(Map map);
 }

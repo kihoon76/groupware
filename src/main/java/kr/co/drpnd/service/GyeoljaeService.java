@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import kr.co.drpnd.dao.GyeoljaeDao;
 import kr.co.drpnd.domain.AttachFile;
 import kr.co.drpnd.domain.Sangsin;
+import kr.co.drpnd.exception.InvalidUser;
+import kr.co.drpnd.type.ExceptionCode;
 
 @Service("gyeoljaeService")
 public class GyeoljaeService {
@@ -72,6 +74,18 @@ public class GyeoljaeService {
 
 	public AttachFile getAttachFile(Map<String, String> param) {
 		return gyeoljaeDao.selectAttachFile(param);
+	}
+
+	public void commitGyeoljae(Map map) {
+		gyeoljaeDao.updateMyGyeoljae(map);
+		
+		String r = String.valueOf(map.get("result"));
+		if("-2".equals(r)) {
+			throw new InvalidUser(ExceptionCode.INVALID_GYEOLJAE_USER.getMsg());
+		}
+		else if("-1".equals(r)) {
+			throw new RuntimeException("오류가 발생했습니다.");
+		}
 	}
 
 }

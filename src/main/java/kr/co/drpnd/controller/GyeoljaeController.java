@@ -43,7 +43,9 @@ import kr.co.drpnd.domain.AjaxVO;
 import kr.co.drpnd.domain.AttachFile;
 import kr.co.drpnd.domain.Sangsin;
 import kr.co.drpnd.domain.Sawon;
+import kr.co.drpnd.exception.InvalidUser;
 import kr.co.drpnd.service.GyeoljaeService;
+import kr.co.drpnd.type.ExceptionCode;
 import kr.co.drpnd.util.SessionUtil;
 
 @RequestMapping("/gyeoljae")
@@ -324,5 +326,32 @@ public class GyeoljaeController {
 			out.write(file.getFileByte());
 			out.flush();
 		}
+	}
+	
+	@PostMapping("commit")
+	@ResponseBody
+	public AjaxVO commit(@RequestBody Map map) {
+		AjaxVO vo = new AjaxVO<>();
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		
+		map.put("sawonCode", Integer.parseInt(myInfo.getSawonCode()));
+		map.put("result", -2);
+		
+		try {
+			gyeoljaeService.commitGyeoljae(map);
+			vo.setSuccess(true);
+		}
+		catch(InvalidUser e) {
+			vo.setSuccess(false);
+			vo.setErrCode(ExceptionCode.INVALID_GYEOLJAE_USER.getCode());
+			vo.setErrMsg(e.getMessage());
+		}
+		catch(RuntimeException e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+		
+		return vo;
+		
 	}
 }

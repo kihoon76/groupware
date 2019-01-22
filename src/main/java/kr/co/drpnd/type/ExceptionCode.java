@@ -8,7 +8,8 @@ public enum ExceptionCode {
 	INVALID_GOTOWORK_TIME("1003", "처리할수 없는 시간입니다.(가능시간[07:00 ~ 23:59])"),
 	ALREADY_OFFWORK("1004", "이미 퇴근처리 되었습니다"),
 	NOT_EXIST_GOTOWORK("1005", "출근정보가 없습니다."),
-	INVALID_MODIFY_USER("1006", "수정권한이 없습니다.");
+	INVALID_MODIFY_USER("1006", "수정권한이 없습니다."),
+	INVALID_GYEOLJAE_USER("1007", "결재권한이 없습니다");
 	
 	private String code;
 	private String msg;

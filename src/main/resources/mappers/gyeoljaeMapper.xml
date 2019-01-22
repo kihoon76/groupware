@@ -151,4 +151,12 @@
 		 where T1.파일코드 = #{attachFileCode}
 		   and (T2.기안자 = #{sawonCode} or T3.결재처리자  = #{sawonCode})
 	</select>
+	
+	<update id="updateMyGyeoljae" statementType="CALLABLE" parameterType="map">
+		{call [동림].[dbo].[UP_결재승인](
+			#{sangsinCode, mode=IN, jdbcType=INTEGER, javaType=int},
+			#{sawonCode, mode=IN, jdbcType=INTEGER, javaType=int},
+			#{result, mode=OUT, jdbcType=INTEGER, javaType=int}
+		)}
+	</update>
 </mapper>

@@ -162,7 +162,7 @@ $(document).ready(function() {
 			layout: 'fit',
 			closeAction: 'destroy',
 			closable: false,
-			//modal: true,
+			modal: true,
 			draggable: false,
 			resizable: false,
 			items: form,
@@ -175,7 +175,7 @@ $(document).ready(function() {
 			        { xtype: 'component', flex: 1 },
 			        { xtype: 'button', text: '결재', iconCls: 'icon-gyeoljae', listeners: {
 			        	click: function() {
-			        		gyeoljaeClick();
+			        		gyeoljaeClick(sangsin);
 			        	}
 			        } },
 			        { xtype: 'button', text: '반려', iconCls: 'icon-reject', listeners: {
@@ -200,9 +200,74 @@ $(document).ready(function() {
 		win.show();
 	}
 	
-	function gyeoljaeClick() {
+	function gyeoljaeClick(sangsin) {
+		var txtField = null;
 		common.checkSession(function() {
+			var win = parent.Ext.create('Ext.window.Window', {
+				title: '결재',
+				iconCls: 'icon-window',
+				width: 400,
+				height: 400,
+				autoScroll: true,
+				closeAction: 'destroy',
+				//bodyPadding: '10 10 10 10',
+				resizable: false,
+				modal: true,
+				items: [{
+					xtype: 'textarea',
+					width: '100%',
+					height: 330,
+					emptyText: '의견을 입력하세요',
+					listeners: {
+						afterrender: function(txt) {
+							txtField = txt;
+						}
+					}
+				}],
+				buttons:[{
+					text: '결재',
+					iconCls: 'icon-window',
+					listeners: {
+						click: function() {
+							var opinion = $.trim(txtField.getValue());
+							if(opinion == '') {
+								txtField.markInvalid('의견을 입력하세요.');
+							}
+							else {
+								gyeoljae(win, sangsin, opinion);
+							}
+						}
+					}
+				},{
+					text: '닫기',
+					iconCls: 'icon-close',
+					listeners: {
+						click: function() {
+							win.close();
+						}
+					}
+				}]
+			});
 			
+			win.show();
+		});
+	}
+	
+	function gyeoljae(win, sangsin, opinion) {
+		common.ajaxExt({
+			url: '/gyeoljae/commit/',
+			headers: { 'Content-Type': 'application/json' }, 
+			jsonData: {
+				sangsinCode: sangsin.sangsinNum,
+				opinion: opinion
+			},
+			loadmask: {
+				msg: '결재중 입니다.'
+			},
+			success: function(jo) {
+				console.log(jo);
+				var data = jo.datas[0];
+			}
 		});
 	}
 	

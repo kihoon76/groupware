@@ -63,5 +63,10 @@ public class GyeoljaeDaoImpl implements GyeoljaeDao {
 	@Override
 	public AttachFile selectAttachFile(Map<String, String> param) {
 		return msSqlSession.selectOne(namespace + ".selectAttachFile", param);
+	}
+
+	@Override
+	public int updateMyGyeoljae(Map map) {
+		return msSqlSession.update(namespace + ".updateMyGyeoljae", map);
 	} 
 }
