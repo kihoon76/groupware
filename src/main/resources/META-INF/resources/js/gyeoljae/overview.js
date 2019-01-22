@@ -1,6 +1,8 @@
 $(document).ready(function() {
 	
 	var clipImg = '/resources/images/attachment.png';
+	var fileFormatPath = '<img style="width:20px; height:20px;" src="/resources/images/format_icons/';
+	
 	var commonColumns = [
  		{title: '첨부', field:'attCnt', width:50, headerSort:false, formatter: function(cell) {
 			if(cell.getValue() > 0) {
@@ -108,20 +110,59 @@ $(document).ready(function() {
 				    	var kb = Math.round((value/1024) * 10) / 10;
 				    	return kb + 'K';
 				    }},
+				    {text: '다운로드', width: 100, dataIndex: 'ext', align: 'center', renderer: function(value) {
+				    	switch(value) {
+				    	case 'xls':
+				    	case 'xlsx':
+				    		value = fileFormatPath + 'xls.png" />';
+				    		break;
+				    	case 'ppt':
+				    	case 'pptx':
+				    		value = fileFormatPath + 'ppt.png" />';
+				    		break;
+				    	default:
+				    		value = fileFormatPath + 'default.png" />';
+				    		break;
+				    	}
+				    	
+				    	return value;
+				    }},
 				],
 				width: '100%',
-				height: 80
+				height: 80,
+				listeners: {
+					cellclick: function(grid, td, cellIndex, record) {
+						var code = record.data.code;
+						
+						common.checkSession(function() {
+							if(code) {
+								var form = document.createElement('form');
+								form.action = '/gyeoljae/file/' + code;
+								form.method = 'POST';
+								form.target = '_blank';
+								
+								var input = document.createElement('input');
+								input.type = 'hidden';
+							   
+							    form.appendChild(input);
+								form.style.display = 'none';
+								document.body.appendChild(form);
+								form.submit();
+							}
+						});
+					
+					}
+				}
 			}]
 		});
 		
 		var win = parent.Ext.create('Ext.window.Window', {
-			title: '',
 			height: 800,
 			width: 800,
 			layout: 'fit',
 			closeAction: 'destroy',
 			closable: false,
-			modal: true,
+			//modal: true,
 			draggable: false,
 			resizable: false,
 			items: form,

@@ -3,6 +3,7 @@ package kr.co.drpnd.dao;
 import java.util.List;
 import java.util.Map;
 
+import kr.co.drpnd.domain.AttachFile;
 import kr.co.drpnd.domain.Sangsin;
 
 public interface GyeoljaeDao {
@@ -21,4 +22,6 @@ public interface GyeoljaeDao {
 	List<Map<String, String>> selectMyGyeoljae(Map<String, Object> param);
 
 	Sangsin selectMyGyeoljaeDetail(Map<String, String> param);
+
+	AttachFile selectAttachFile(Map<String, String> param);
 }

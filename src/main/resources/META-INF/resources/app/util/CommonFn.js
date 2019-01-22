@@ -238,6 +238,48 @@ Ext.define('Drpnd.util.CommonFn', {
 		}
 		
 		return data;
+	},
+	checkBrower: function() {
+    	var b = {
+			msie: false,
+			msedge: false,
+			msie_ver: '',
+			chrome: false,
+			firefox: false,
+			safari: false,
+			opera: false
+    	};
+    	
+    	var ua = navigator.userAgent;
+    	
+    	if(ua.search('Chrome') >= 0 && ua.search('Edge') < 0) {
+    		b.chrome = true;
+    	}
+    	else if(ua.search('Firefox') >= 0) {
+    		b.firefox = true;
+    	}
+    	else if(ua.search('Safari') >= 0 && ua.search('Chrome') < 0) {
+    		b.safari = true;
+    	}
+    	else if(ua.search('Opera') >= 0) {
+    		b.opera = true;
+    	}
+    	else if(ua.search('Trident') >=0) {
+    		b.msie = true;
+    		if(ua.search('Trident/7.0') >=0) {
+    			b.msie_ver = '11';
+    		}
+    		else if(ua.search('Trident/6.0') >=0) {
+    			b.msie_ver = '10';
+    		}
+    		else if(ua.search('Trident/5.0') >=0) {
+    			b.msie_ver = '9';
+    		}
+    	}
+    	else if(ua.search('Edge') >=0) {
+    		b.msedge = true;
+    	}
+    	
+    	return b;
 	}
-   
 });

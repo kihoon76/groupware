@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.drpnd.dao.GyeoljaeDao;
+import kr.co.drpnd.domain.AttachFile;
 import kr.co.drpnd.domain.Sangsin;
 
 @Service("gyeoljaeService")
@@ -67,6 +68,10 @@ public class GyeoljaeService {
 
 	public Sangsin getMyGyeoljaeDetail(Map<String, String> param) {
 		return gyeoljaeDao.selectMyGyeoljaeDetail(param);
+	}
+
+	public AttachFile getAttachFile(Map<String, String> param) {
+		return gyeoljaeDao.selectAttachFile(param);
 	}
 
 }

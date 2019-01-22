@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import kr.co.drpnd.domain.AttachFile;
 import kr.co.drpnd.domain.Sangsin;
 
 @Repository("gyeoljaeDao")
@@ -57,5 +58,10 @@ public class GyeoljaeDaoImpl implements GyeoljaeDao {
 	@Override
 	public Sangsin selectMyGyeoljaeDetail(Map<String, String> param) {
 		return msSqlSession.selectOne(namespace + ".selectMyGyeoljaeDetail", param);
+	}
+
+	@Override
+	public AttachFile selectAttachFile(Map<String, String> param) {
+		return msSqlSession.selectOne(namespace + ".selectAttachFile", param);
 	} 
 }

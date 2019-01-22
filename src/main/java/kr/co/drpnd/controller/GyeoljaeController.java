@@ -1,7 +1,10 @@
 package kr.co.drpnd.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +14,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +35,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import kr.co.drpnd.domain.AjaxVO;
@@ -168,7 +176,10 @@ public class GyeoljaeController {
 			for(Map<String, Object> line: lines) {
 				if("1".equals(line.get("order"))) {
 					gyeoljaeja = String.valueOf(line.get("sawonCode"));
-					break;
+					line.put("status", "D");
+				}
+				else {
+					line.put("status", "W");
 				}
 			}
 			
@@ -279,5 +290,39 @@ public class GyeoljaeController {
 		}
 		
 		return vo;
+	}
+	
+	@PostMapping("/file/{code}")
+	public void downloadReport(@PathVariable("code") String code, 
+							   HttpServletRequest request, HttpServletResponse response) throws Exception  {
+		
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		
+		Map<String, String> param = new HashMap<>();
+		param.put("sawonCode", myInfo.getSawonCode());
+		param.put("attachFileCode", code);
+		
+		AttachFile file = gyeoljaeService.getAttachFile(param);
+		String fileName = file.getName().substring(0, file.getName().lastIndexOf("."));
+		
+		
+		//한글파일명 라우저 별 처리
+		if(file != null) {
+			if(request.getHeader("User-Agent").contains("MSIE") || request.getHeader("User-Agent").contains("Trident")) {
+				fileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");
+			}
+			else {
+				fileName = new String(fileName.getBytes("UTF-8"), "ISO-8859-1");
+			}
+			
+			response.setHeader("Content-Transper-Encoding", "binary");
+			response.setHeader("Content-Disposition", "inline; filename=" + fileName + "." + file.getExt());
+			response.setContentType("application/octet-stream");
+			
+			
+			ServletOutputStream out = response.getOutputStream();
+			out.write(file.getFileByte());
+			out.flush();
+		}
 	}
 }
