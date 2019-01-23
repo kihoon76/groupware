@@ -1,7 +1,8 @@
 $(document).ready(function() {
 	
 	var clipImg = '/resources/images/attachment.png';
-	var fileFormatPath = '<img style="width:20px; height:20px;" src="/resources/images/format_icons/';
+	//var fileFormatPath = '<img style="width:20px; height:20px;" src="/resources/images/format_icons/';
+	var accRejectWin = null;
 	
 	var commonColumns = [
  		{title: '첨부', field:'attCnt', width:50, headerSort:false, formatter: function(cell) {
@@ -111,21 +112,7 @@ $(document).ready(function() {
 				    	return kb + 'K';
 				    }},
 				    {text: '다운로드', width: 100, dataIndex: 'ext', align: 'center', renderer: function(value) {
-				    	switch(value) {
-				    	case 'xls':
-				    	case 'xlsx':
-				    		value = fileFormatPath + 'xls.png" />';
-				    		break;
-				    	case 'ppt':
-				    	case 'pptx':
-				    		value = fileFormatPath + 'ppt.png" />';
-				    		break;
-				    	default:
-				    		value = fileFormatPath + 'default.png" />';
-				    		break;
-				    	}
-				    	
-				    	return value;
+				    	return common.getFileFormatIcon(value);
 				    }},
 				],
 				width: '100%',
@@ -156,7 +143,7 @@ $(document).ready(function() {
 			}]
 		});
 		
-		var win = parent.Ext.create('Ext.window.Window', {
+		accRejectWin = parent.Ext.create('Ext.window.Window', {
 			height: 800,
 			width: 800,
 			layout: 'fit',
@@ -185,7 +172,7 @@ $(document).ready(function() {
 			        } },
 			        { xtype: 'button', text: '닫기', iconCls: 'icon-close', listeners: {
 			        	click: function(btn) {
-			        		win.close();
+			        		accRejectWin.close();
 			        	}
 			        } }
 			    ]
@@ -197,7 +184,7 @@ $(document).ready(function() {
 			}
 		})
 		
-		win.show();
+		accRejectWin.show();
 	}
 	
 	function gyeoljaeClick(sangsin) {
@@ -258,7 +245,7 @@ $(document).ready(function() {
 			url: '/gyeoljae/commit/',
 			headers: { 'Content-Type': 'application/json' }, 
 			jsonData: {
-				sangsinCode: sangsin.sangsinNum,
+				sangsinCode: String(sangsin.sangsinNum),
 				opinion: opinion
 			},
 			loadmask: {
@@ -266,7 +253,19 @@ $(document).ready(function() {
 			},
 			success: function(jo) {
 				console.log(jo);
-				var data = jo.datas[0];
+				var param = {type: 'alert'};
+				if(jo.success) {
+					param.msg = '결재되었습니다.';
+					param.callback = function() {
+						win.close();
+						accRejectWin.close();
+						window.location.reload();
+					}
+				}
+				else {
+					param.msg = jo.errMsg;
+				}
+				common.showExtMsg(param);
 			}
 		});
 	}

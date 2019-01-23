@@ -496,6 +496,8 @@ Ext.define('Drpnd.view.Viewport', {
 				var d = event.data;
 				Ext.getCmp('timer').setValue(d);
 			}
+			
+			worker.postMessage('SESSION');
 		}
 	    
 	    

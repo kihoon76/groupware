@@ -13,7 +13,7 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 		var btnSansinBox = null;
 		var btnKeepBox = null;
 		var btnNewGyeoljae = null;
-		var activeColor = '#17a2b8';
+		var activeColor = '#ccffff';
 		
 		function activeButtonCSS(activeBtn) {
 			if(activeBtn == 'OVERVIEW') {

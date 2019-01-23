@@ -13,8 +13,7 @@ public class Sangsin {
 	private List<Map<String, Object>> gyeoljaeLines;
 	private String content;
 	private String plainContent;
-	private String gyeoljaeja;//결재처리자
-	private String gianja;  //p-r-c 처리
+	private String gianja;  
 	private List<AttachFile> attachFiles;
 	private String status;
 	private String writeDate;
@@ -55,12 +54,6 @@ public class Sangsin {
 	public void setPlainContent(String plainContent) {
 		this.plainContent = plainContent;
 	}
-	public String getGyeoljaeja() {
-		return gyeoljaeja;
-	}
-	public void setGyeoljaeja(String gyeoljaeja) {
-		this.gyeoljaeja = gyeoljaeja;
-	}
 	public String getGianja() {
 		return gianja;
 	}
@@ -72,6 +65,12 @@ public class Sangsin {
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public String getWriteDate() {
+		return writeDate;
+	}
+	public void setWriteDate(String writeDate) {
+		this.writeDate = writeDate;
 	}
 	
 }

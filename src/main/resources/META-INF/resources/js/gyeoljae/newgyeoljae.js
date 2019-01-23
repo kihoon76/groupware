@@ -59,13 +59,19 @@ $(document).ready(function() {
 						msg: '상신중 입니다.'
 					},
 					success: function(jo) {
-						common.showExtMsg({
-							type: 'alert',
-							msg: '상신되었습니다.',
-							callback: function() {
+						var param = {type: 'alert'};
+						if(jo.success) {
+							param.icon = parent.Ext.MessageBox.INFO;
+							param.callback = function() {
 								window.location.reload();
-							}
-						});
+							};
+							param.msg = '상신되었습니다.';
+						}
+						else {
+							param.msg = jo.errMsg;
+						}
+						
+						common.showExtMsg(param);
 					}
 				});
 			}

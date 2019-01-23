@@ -1,9 +1,18 @@
 var time = null;
 var maxDayInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+var sessionUrl = '';
+
 onmessage = function(event) {
 	var receiveData = event.data;
-	time = receiveData;
-	calcTime();
+	
+	if(receiveData == 'SESSION') {
+		sessionUrl = '/checkSession';
+		sessionPush();
+	}
+	else {
+		time = receiveData;
+		calcTime();
+	}
 }
 
 function calcTime() {
@@ -90,6 +99,31 @@ function calcTime() {
 	}, 1000);
 }
 
-function returnDay() {
-	
+function sessionPush(callback) {
+	setTimeout(function() {
+		var xhr;
+		if(typeof XMLHttpRequest !== 'undefined') xhr = new XMLHttpRequest();
+		
+		if(xhr == null) return; 
+			
+		xhr.onreadystatechange = ensureReadiness;
+			
+		function ensureReadiness() {
+			if(xhr.readyState < 4) {
+				return;
+			}
+				
+			if(xhr.status !== 200) {
+				return;
+			}
+
+			// all is well	
+			if(xhr.readyState === 4) {
+				sessionPush();
+			}			
+		}
+			
+		xhr.open('GET', sessionUrl, true);
+		xhr.send('');
+	}, 600000);
 }

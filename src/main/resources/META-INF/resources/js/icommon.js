@@ -3,6 +3,7 @@ var common = (function() {
 	var ErrCode = parent.Drpnd.util.ErrorCode;
 	var Context = parent.Drpnd.util.Constants.context;
 	var loadMask = null;
+	var fileFormatPath = '<img style="width:20px; height:20px;" src="/resources/images/format_icons/';
 	
 	//var ErrCode = parent.Ext.create('Drpnd.util.ErrorCode');
 	function redirect(msg) {
@@ -310,6 +311,61 @@ var common = (function() {
 					fn();
 				}
 	    	});
+		},
+		getFileFormatIcon: function(ext) {
+			switch(ext) {
+	    	case 'xls':
+	    	case 'xlsx':
+	    		ext = fileFormatPath + 'xls.png" />';
+	    		break;
+	    	case 'ppt':
+	    	case 'pptx':
+	    		ext = fileFormatPath + 'ppt.png" />';
+	    		break;
+	    	case 'hwp':
+	    		ext = fileFormatPath + 'hwp.png" />';
+	    		break;
+	    	case 'doc':
+	    	case 'docx':
+	    		ext = fileFormatPath + 'docx.png" />';
+	    		break;
+	    	case 'pdf':
+	    		ext = fileFormatPath + 'pdf.png" />';
+	    		break;
+	    	case 'txt':
+	    		ext = fileFormatPath + 'txt.png" />';
+	    		break;
+	    	case 'psd':
+	    		ext = fileFormatPath + 'photoshop.png" />';
+	    		break;
+	    	case 'csv':
+	    		ext = fileFormatPath + 'csv.png" />';
+	    		break;
+	    	case 'csv':
+	    		ext = fileFormatPath + 'csv.png" />';
+	    		break;
+	    	case 'png':
+	    		ext = fileFormatPath + 'png.png" />';
+	    		break;
+	    	case 'jpg':
+	    	case 'jpeg':
+	    		ext = fileFormatPath + 'jpg.png" />';
+	    		break;
+	    	case 'ai':
+	    		ext = fileFormatPath + 'ai.png" />';
+	    		break;
+	    	case 'zip':
+	    		ext = fileFormatPath + 'zip.png" />';
+	    		break;
+	    	case 'gif':
+	    		ext = fileFormatPath + 'gif.png" />';
+	    		break;
+	    	default:
+	    		ext = fileFormatPath + 'default.png" />';
+	    		break;
+	    	}
+			
+			return ext;
 		}
 	}
 })();

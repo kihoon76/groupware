@@ -137,16 +137,32 @@ public class GyeoljaeController {
 	@PostMapping("reg/newgyeoljae_nofile")
 	@ResponseBody
 	public AjaxVO regNewGyeoljaeNoFile(@RequestBody Sangsin sangsin) {
-		AjaxVO vo = new AjaxVO();
 		
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		AjaxVO vo = new AjaxVO();
 		vo.setSuccess(true);
 		
-		ObjectMapper om = new ObjectMapper();
+		//ObjectMapper om = new ObjectMapper();
 		try {
-			System.err.println(om.writeValueAsString(sangsin));
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//System.err.println(om.writeValueAsString(sangsin));
+
+			List<Map<String, Object>> lines = sangsin.getGyeoljaeLines();
+			
+			for(Map<String, Object> line: lines) {
+				if("1".equals(line.get("order"))) {
+					line.put("status", "D");
+				}
+				else {
+					line.put("status", "W");
+				}
+			}
+			
+			sangsin.setGianja(myInfo.getSawonCode());
+			gyeoljaeService.regNewGyeoljae(sangsin);
+		} 
+		catch (Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
 		}
 		
 		return vo;
@@ -164,9 +180,9 @@ public class GyeoljaeController {
 		
 		vo.setSuccess(true);
 		
-		System.err.println("title ==>" + title);
-		System.err.println("gyeoljaeLines ==>" + gyeoljaeLines);
-		System.err.println("content ==>" + content);
+//		System.err.println("title ==>" + title);
+//		System.err.println("gyeoljaeLines ==>" + gyeoljaeLines);
+//		System.err.println("content ==>" + content);
 		
 		try {
 			Sawon myInfo = SessionUtil.getSessionSawon();
@@ -174,10 +190,8 @@ public class GyeoljaeController {
 			Gson gson = new Gson();
 			List<Map<String, Object>> lines = gson.fromJson(gyeoljaeLines, new TypeToken<List<Map<String, Object>>>(){}.getType());
 			
-			String gyeoljaeja = "";
 			for(Map<String, Object> line: lines) {
 				if("1".equals(line.get("order"))) {
-					gyeoljaeja = String.valueOf(line.get("sawonCode"));
 					line.put("status", "D");
 				}
 				else {
@@ -191,7 +205,6 @@ public class GyeoljaeController {
 			sangsin.setPlainContent(plainContent);
 			sangsin.setGyeoljaeLines(lines);
 			sangsin.setGianja(myInfo.getSawonCode());
-			sangsin.setGyeoljaeja(gyeoljaeja);
 			
 			List<AttachFile> attachFiles = new ArrayList<>();
 			
@@ -204,17 +217,14 @@ public class GyeoljaeController {
 				
 				attachFiles.add(attachFile);
 				
-				System.err.println("fileName ==>" + file.getOriginalFilename());
-				System.err.println("fileSize ==>" + file.getSize());
-				System.err.println("fileExt ==>" + FilenameUtils.getExtension(file.getOriginalFilename()));
+//				System.err.println("fileName ==>" + file.getOriginalFilename());
+//				System.err.println("fileSize ==>" + file.getSize());
+//				System.err.println("fileExt ==>" + FilenameUtils.getExtension(file.getOriginalFilename()));
 				//FileCopyUtils.copy(file.getBytes(), new File(UPLOAD_LOCATION + file.getOriginalFilename()));
 			}
 			
 			sangsin.setAttachFiles(attachFiles);
-			
 			gyeoljaeService.regNewGyeoljae(sangsin);
-			
-			vo.setSuccess(true);
 			
 //			ObjectMapper om = new ObjectMapper();
 //			System.err.println(om.writeValueAsString(sangsin.getAttachFiles()));
@@ -330,15 +340,18 @@ public class GyeoljaeController {
 	
 	@PostMapping("commit")
 	@ResponseBody
-	public AjaxVO commit(@RequestBody Map map) {
+	public AjaxVO commit(@RequestBody Map<String, String> map) {
 		AjaxVO vo = new AjaxVO<>();
 		Sawon myInfo = SessionUtil.getSessionSawon();
 		
-		map.put("sawonCode", Integer.parseInt(myInfo.getSawonCode()));
-		map.put("result", -2);
+		Map<String, Object> param = new HashMap<>();
+		param.put("sawonCode", Integer.parseInt(myInfo.getSawonCode()));
+		param.put("sangsinCode", Integer.parseInt(map.get("sangsinCode")));
+		param.put("result", -2);
+		param.put("opinion", map.get("opinion"));
 		
 		try {
-			gyeoljaeService.commitGyeoljae(map);
+			gyeoljaeService.commitGyeoljae(param);
 			vo.setSuccess(true);
 		}
 		catch(InvalidUser e) {
