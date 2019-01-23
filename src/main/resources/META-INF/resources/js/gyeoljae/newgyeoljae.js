@@ -374,11 +374,11 @@ $(document).ready(function() {
 		columns: [
 		    {rowHandle:true, formatter:'handle', headerSort:false, frozen:true, width:30, minWidth:30},
 		    {title:'사원코드', field:'sawonCode', visible: false},
-		    {title:'사원명', field:'sawonName', width:150,  headerSort:false},
-		    {title:'사원아이디', field:'sawonId', width:200,  headerSort:false},
-		    {title:'직급', field:'sawonPosition', width:100,  headerSort:false},
-		    {title:'이메일', field:'email', width:200,  headerSort:false},
-		    {title:'삭제', field:'del', width:40,  headerSort:false, formatter: 'image', formatterParams: {
+		    {title:'사원명', field:'sawonName', width:150,  headerSort:false, align:'center'},
+		    {title:'사원아이디', field:'sawonId', width:200,  headerSort:false, align:'center'},
+		    {title:'직급', field:'sawonPosition', width:100,  headerSort:false, align:'center'},
+		    {title:'이메일', field:'email', widthGrow:4,  headerSort:false, align:'center'},
+		    {title:'삭제', field:'del', width:60,  headerSort:false, align:'center', formatter: 'image', formatterParams: {
 		    	width: '20px', height: '20px'
 		    }, cellClick:function(e, cell) {
 		    	var row = cell.getRow();

@@ -15,6 +15,7 @@
 	<link rel="stylesheet" href="/resources/css/bootstrap.min.css" />
 	<!-- tabulator -->
     <link rel="stylesheet" href="/resources/os/tabulator-4.1/css/tabulator_simple.min.css" />
+    <link rel="stylesheet" href="/resources/css/gyeoljae.css" />
     <style>
     form {padding:10px 10px 10px 10px;}
     .divMT {margin-top:10px;}
