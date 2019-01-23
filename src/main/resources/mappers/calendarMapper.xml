@@ -46,9 +46,9 @@
 			   case when T1.사원코드 = #{sawonCode} then 'Y'
 			   		else 'N'
 			   end as myevent,
-			   isnull(T3.바탕색, '#000000') as 바탕색,
+			   isnull(T3.바탕색, '#996600') as 바탕색,
 			   isnull(T3.글자색, '#ffffff') as 글자색,
-			   isnull(T3.테두리색, '#000000') as 테두리색
+			   isnull(T3.테두리색, '#996600') as 테두리색
 		  from [동림].[dbo].[캘린더] T1
 		 inner join [동림].[dbo].[사원] T2
 		    on T1.사원코드 = T2.사원코드

@@ -131,6 +131,7 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
 		});
 		
 		Ext.apply(this, {
+			autoScroll: true,
 			tbar:[{
 				xtype: 'numberfield',
 				value: currentYear,
