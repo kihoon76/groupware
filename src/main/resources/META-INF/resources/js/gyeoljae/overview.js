@@ -1,13 +1,11 @@
 $(document).ready(function() {
 	
-	var clipImg = '/resources/images/attachment.png';
-	//var fileFormatPath = '<img style="width:20px; height:20px;" src="/resources/images/format_icons/';
 	var accRejectWin = null;
 	
 	var commonColumns = [
  		{title: '첨부', field:'attCnt', width:50, headerSort:false, align:'center', formatter: function(cell) {
 			if(cell.getValue() > 0) {
-				return '<img src="' + clipImg + '" style="width:25px; height:25px;"/>';
+				return '<img src="' + common.getClipImage() + '" style="width:25px; height:25px;"/>';
 			}
 			
 			return '';
@@ -20,7 +18,9 @@ $(document).ready(function() {
 	
 	
 	var myGian = new Tabulator('#myGian', {
+		//pagination: 'remote',
 		ajaxURL: '/gyeoljae/mysangsin',
+		paginationSize:10,
 		ajaxResponse: function(url, params, response) {
 			if(response.success) {
 				var datas = response.datas;

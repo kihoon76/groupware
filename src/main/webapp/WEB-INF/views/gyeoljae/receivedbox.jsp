@@ -9,7 +9,7 @@
 <script src="/resources/lib/bootstrap.min.js"></script>
 <script src="/resources/os/tabulator-4.1/js/tabulator.min.js"></script>
 <script src="/resources/js/icommon.js"></script>
-<script src="/resources/js/gyeoljae/keepbox.js"></script>
+<script src="/resources/js/gyeoljae/receivedbox.js"></script>
 </content>
 <head>
 	<link rel="stylesheet" href="/resources/css/bootstrap.min.css" />
@@ -25,10 +25,10 @@
 <body>
 	<form>
 		<div class="divMT">
-  			<span style="font-size:1.5em;"><span class="badge badge-pill badge-info">내 결재완료된 기안</span></span>
+  			<span style="font-size:1.5em;"><span class="badge badge-pill badge-info">결재 대기중</span></span>
   		</div>
 		<div class="divMT divMB">
-  			<div id="myKeepBox"></div>
+  			<div id="myGyeoljae"></div>
   		</div>
 	</form>
 </body>

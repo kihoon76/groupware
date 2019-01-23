@@ -4,6 +4,7 @@ var common = (function() {
 	var Context = parent.Drpnd.util.Constants.context;
 	var loadMask = null;
 	var fileFormatPath = '<img style="width:20px; height:20px;" src="/resources/images/format_icons/';
+	var clipImg = '/resources/images/attachment.png';
 	
 	//var ErrCode = parent.Ext.create('Drpnd.util.ErrorCode');
 	function redirect(msg) {
@@ -366,6 +367,9 @@ var common = (function() {
 	    	}
 			
 			return ext;
+		},
+		getClipImage: function() {
+			return clipImg;
 		}
 	}
 })();

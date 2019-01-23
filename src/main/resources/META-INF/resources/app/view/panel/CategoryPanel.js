@@ -8,7 +8,7 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
     	var teamList = Ext.getBody().getAttribute('data-team');
     	var teamJson = teamList ? Ext.decode(teamList) : '';
     	var treeItems = [{
-    		text: '조직도', leaf : true, cate : 'system', id: 'system-list'
+    		text: '조직도', leaf : true, cate : 'system', id: 'system-list', iconCls: 'icon-organization'
     	}];
     	
     	if(teamJson) {
@@ -26,7 +26,8 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
     				item.children.push({
     					text: '<span style="color:' + teamJson[i].teamFontColor + ';background:' + teamJson[i].teamBackColor + ';">' + teamJson[i].teamName + '</span>',
     					leaf: true,
-    					cate: 'team'
+    					cate: 'team',
+    					iconCls: 'icon-team'
     				});
         		}
     			
@@ -37,12 +38,12 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
     	treeItems.push({
 			 text: '통계', expand: true, iconCls : 'tree-expand'
 			,children : [{
-				text: '야근', leaf : true, cate : 'statistics', id : 'statistics-overwork'
+				text: '야근', leaf : true, cate : 'statistics', id : 'statistics-overwork', iconCls: 'icon-bars-chart'
 			}]
     	});
     	
     	treeItems.push({
-    		 text: '결재', leaf : true, cate : 'gyeoljae', id: 'gyeoljae'
+    		 text: '결재', leaf : true, cate : 'gyeoljae', id: 'gyeoljae', iconCls: 'icon-approve'
     	});
     	
     	Ext.apply(this, {

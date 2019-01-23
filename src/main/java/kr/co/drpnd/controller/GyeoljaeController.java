@@ -77,6 +77,17 @@ public class GyeoljaeController {
 		return "gyeoljae/keepbox";
 	}
 	
+	@GetMapping("view/sangsinbox")
+	public String viewSangsinBox() {
+		return "gyeoljae/sangsinbox";
+	}
+	
+	@GetMapping("view/receivedbox")
+	public String viewReceivedBox() {
+		
+		return "gyeoljae/receivedbox";
+	}
+	
 	@PostMapping("search/sawon")
 	@ResponseBody
 	public AjaxVO<Map<String, String>> getSearchSawon(@RequestBody Map<String, Object> param) {
@@ -278,6 +289,29 @@ public class GyeoljaeController {
 	
 		return vo;
 		
+	}
+	
+	
+	@GetMapping("mycommited")
+	@ResponseBody
+	public AjaxVO<Map<String, String>> getMyCommitedGyeoljae() {
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		
+		AjaxVO<Map<String, String>> vo = new AjaxVO<>();
+		try {
+			Map<String, Object> param = new HashMap<>();
+			param.put("sawonCode", Integer.parseInt(myInfo.getSawonCode()));
+			
+			List<Map<String, String>> list = gyeoljaeService.getMyCommitedGyeoljae(param);
+			vo.setSuccess(true);
+			vo.setDatas(list);
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+		
+		return vo;
 	}
 	
 	@GetMapping("mygyeoljae/{sangsinNum}")

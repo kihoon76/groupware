@@ -26,4 +26,6 @@ public interface GyeoljaeDao {
 	AttachFile selectAttachFile(Map<String, String> param);
 
 	int updateMyGyeoljae(Map map);
+
+	List<Map<String, String>> selectMyCommitedGyeoljae(Map<String, Object> param);
 }

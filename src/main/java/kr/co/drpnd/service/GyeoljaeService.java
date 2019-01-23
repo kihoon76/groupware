@@ -88,4 +88,8 @@ public class GyeoljaeService {
 		}
 	}
 
+	public List<Map<String, String>> getMyCommitedGyeoljae(Map<String, Object> param) {
+		return gyeoljaeDao.selectMyCommitedGyeoljae(param);
+	}
+
 }

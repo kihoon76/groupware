@@ -115,6 +115,23 @@
 	   and (T2.처리상태 = 'D' or T2.처리상태 = 'S')
 	</select>
 	
+	<select id="selectMyCommitedGyeoljae" parameterType="map" resultType="map">
+		select T1.상신코드 sangsinNum, T1.기안제목 title, T4.사원명 gianja, 
+		   '결재완료' status,
+		   convert(char(16), 기안작성일, 20) writeDate,
+		   T3.첨부파일수 attCnt
+	  from [동림].[dbo].[상신] T1
+	  left outer join (
+	  	   select count(파일코드) 첨부파일수, 상신코드
+		     from [동림].[dbo].[상신첨부파일]
+		    group by 상신코드
+	 ) T3  on T1.상신코드 = T3.상신코드
+	 inner join [동림].[dbo].[사원] T4
+	    on T1.기안자 = T4.사원코드 
+	 where T1.기안자 = #{sawonCode}
+	   and T1.처리상태 = 'C'
+	</select>
+	
 	<resultMap id="RM_Sangsin" type="Sangsin">
 		<result column="상신코드" property="sangsinNum" javaType="int"/>
 		<result column="기안제목" property="title" javaType="string"/>

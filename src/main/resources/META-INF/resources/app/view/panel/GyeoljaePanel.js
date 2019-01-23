@@ -102,11 +102,19 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 		//수신함
 		function receiveBoxClick() {
 			activeButtonCSS('RECEIVE_BOX');
+			CommonFn.checkSession(function() {
+				var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'gyeoljae/view/receivedbox' });
+				addItem(iframe);
+			});
 		}
 		
 		//상신함
 		function sangsinBoxClick() {
 			activeButtonCSS('SANGSIN_BOX');
+			CommonFn.checkSession(function() {
+				var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'gyeoljae/view/sangsinbox' });
+				addItem(iframe);
+			});
 		}
 		
 		//보관함
