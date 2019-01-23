@@ -401,4 +401,34 @@ public class GyeoljaeController {
 		return vo;
 		
 	}
+	
+	@PostMapping("reject")
+	@ResponseBody
+	public AjaxVO reject(@RequestBody Map<String, String> map) {
+		AjaxVO vo = new AjaxVO<>();
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		
+		Map<String, Object> param = new HashMap<>();
+		param.put("sawonCode", Integer.parseInt(myInfo.getSawonCode()));
+		param.put("sangsinCode", Integer.parseInt(map.get("sangsinCode")));
+		param.put("result", -2);
+		param.put("opinion", map.get("opinion"));
+		
+		try {
+			gyeoljaeService.rejectGyeoljae(param);
+			vo.setSuccess(true);
+		}
+		catch(InvalidUser e) {
+			vo.setSuccess(false);
+			vo.setErrCode(ExceptionCode.INVALID_GYEOLJAE_USER.getCode());
+			vo.setErrMsg(e.getMessage());
+		}
+		catch(RuntimeException e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+		
+		return vo;
+		
+	}
 }

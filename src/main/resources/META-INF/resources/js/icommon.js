@@ -254,6 +254,7 @@ var common = (function() {
 				timeout: cfg.timeout || 60000
 			};
 			var myMask = null;
+			var that = this;
 			
 			if(cfg.params) param.params = cfg.params;
 			if(cfg.headers) param.headers = cfg.headers;
@@ -292,7 +293,11 @@ var common = (function() {
 			
 			param.failure = function(response) {
 				if(myMask) myMask.hide();
-				parent.Ext.Msg.alert('', '오류가 발생했습니다.');
+				//parent.Ext.Msg.alert('', '오류가 발생했습니다.');
+				that.showExtMsg({
+					type: 'alert',
+					msg: '오류가 발생했습니다.'
+				});
 				
 				if(cfg.failure) cfg.failure(response);
 			}

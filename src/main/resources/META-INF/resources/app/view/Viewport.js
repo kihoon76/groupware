@@ -35,7 +35,7 @@ Ext.define('Drpnd.view.Viewport', {
 					method:'GET',
 					success: function(jo) {
 						if(jo.success) {
-							//window.location.href = CommonFn.getFullUrl(); 
+							window.location.href = CommonFn.getFullUrl(); 
 						}
 						else {
 							Ext.MessageBox.alert('info', '로그아웃에 실패했습니다.');

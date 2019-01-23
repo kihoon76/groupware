@@ -12,7 +12,13 @@ $(document).ready(function() {
 		}},
 	    {title:'제목', field:'title', widthGrow:4, align:'center', headerSort:false},
 	    {title:'작성자', field:'gianja', width:100, align:'center', headerSort:false},
-	    {title:'상태', field:'status', width:150, align:'center', headerSort:false},
+	    {title:'상태', field:'status', width:150, align:'center', headerSort:false, formatter: function(cell) {
+	    	if(cell.getValue() == '반려') {
+	    		return '<span style="color: #ff0000;">' + cell.getValue() + '</span>';
+	    	}
+	    	
+	    	return cell.getValue();
+	    }},
 	    {title:'작성일자', field:'writeDate', width:200, align:'center', headerSort:false}
 	];
 	
@@ -167,7 +173,7 @@ $(document).ready(function() {
 			        } },
 			        { xtype: 'button', text: '반려', iconCls: 'icon-reject', listeners: {
 			        	click: function() {
-			        		
+			        		rejectClick(sangsin);
 			        	}
 			        } },
 			        { xtype: 'button', text: '닫기', iconCls: 'icon-close', listeners: {
@@ -192,7 +198,7 @@ $(document).ready(function() {
 		common.checkSession(function() {
 			var win = parent.Ext.create('Ext.window.Window', {
 				title: '결재',
-				iconCls: 'icon-window',
+				iconCls: 'icon-gyeoljae',
 				width: 400,
 				height: 400,
 				autoScroll: true,
@@ -213,7 +219,7 @@ $(document).ready(function() {
 				}],
 				buttons:[{
 					text: '결재',
-					iconCls: 'icon-window',
+					iconCls: 'icon-gyeoljae',
 					listeners: {
 						click: function() {
 							var opinion = $.trim(txtField.getValue());
@@ -222,6 +228,59 @@ $(document).ready(function() {
 							}
 							else {
 								gyeoljae(win, sangsin, opinion);
+							}
+						}
+					}
+				},{
+					text: '닫기',
+					iconCls: 'icon-close',
+					listeners: {
+						click: function() {
+							win.close();
+						}
+					}
+				}]
+			});
+			
+			win.show();
+		});
+	}
+	
+	function rejectClick(sangsin) {
+		var txtField = null;
+		common.checkSession(function() {
+			var win = parent.Ext.create('Ext.window.Window', {
+				title: '반려',
+				iconCls: 'icon-reject',
+				width: 400,
+				height: 400,
+				autoScroll: true,
+				closeAction: 'destroy',
+				//bodyPadding: '10 10 10 10',
+				resizable: false,
+				modal: true,
+				items: [{
+					xtype: 'textarea',
+					width: '100%',
+					height: 330,
+					emptyText: '반려사유를 입력하세요',
+					listeners: {
+						afterrender: function(txt) {
+							txtField = txt;
+						}
+					}
+				}],
+				buttons:[{
+					text: '반려',
+					iconCls: 'icon-reject',
+					listeners: {
+						click: function() {
+							var opinion = $.trim(txtField.getValue());
+							if(opinion == '') {
+								txtField.markInvalid('반려사유를 입력하세요.');
+							}
+							else {
+								reject(win, sangsin, opinion);
 							}
 						}
 					}
@@ -264,6 +323,37 @@ $(document).ready(function() {
 				}
 				else {
 					param.msg = jo.errMsg;
+				}
+				common.showExtMsg(param);
+			}
+		});
+	}
+	
+	function reject(win, sangsin, opinion) {
+		common.ajaxExt({
+			url: '/gyeoljae/reject/',
+			headers: { 'Content-Type': 'application/json' }, 
+			jsonData: {
+				sangsinCode: String(sangsin.sangsinNum),
+				opinion: opinion
+			},
+			loadmask: {
+				msg: '반려중 입니다.'
+			},
+			success: function(jo) {
+				console.log(jo);
+				var param = {type: 'alert'};
+				if(jo.success) {
+					param.msg = '반려되었습니다.';
+					param.callback = function() {
+						win.close();
+						accRejectWin.close();
+						window.location.reload();
+					}
+				}
+				else {
+					param.msg = jo.errMsg;
+					param.icon = parent.Ext.MessageBox.WARNING;
 				}
 				common.showExtMsg(param);
 			}

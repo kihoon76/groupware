@@ -77,7 +77,7 @@ public class GyeoljaeService {
 	}
 
 	public void commitGyeoljae(Map map) {
-		gyeoljaeDao.updateMyGyeoljae(map);
+		gyeoljaeDao.updateCommitMyGyeoljae(map);
 		
 		String r = String.valueOf(map.get("result"));
 		if("-2".equals(r)) {
@@ -90,6 +90,18 @@ public class GyeoljaeService {
 
 	public List<Map<String, String>> getMyCommitedGyeoljae(Map<String, Object> param) {
 		return gyeoljaeDao.selectMyCommitedGyeoljae(param);
+	}
+
+	public void rejectGyeoljae(Map map) {
+		gyeoljaeDao.updateRejectMyGyeoljae(map);
+		
+		String r = String.valueOf(map.get("result"));
+		if("-2".equals(r)) {
+			throw new InvalidUser(ExceptionCode.INVALID_GYEOLJAE_USER.getMsg());
+		}
+		else if("-1".equals(r)) {
+			throw new RuntimeException("오류가 발생했습니다.");
+		}
 	}
 
 }

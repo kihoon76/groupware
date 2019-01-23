@@ -133,12 +133,20 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 				xtype: 'button',
 				text: '요약',
 				iconCls: 'icon-gyeoljae-overview',
+				qtip: 'test',
 				listeners: {
 					click: function(btn) {
 						overviewClick();
 					},
 					afterrender: function(btn) {
 						btnOverview = btn;
+					},
+					render: function(c) {
+						Ext.QuickTips.register({
+		                    target: c.getEl(),
+		                    text: c.qtip,
+		                    showDelay: 1 
+		                });
 					}
 				}
 			}, '-', {
