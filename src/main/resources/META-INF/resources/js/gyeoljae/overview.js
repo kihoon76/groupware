@@ -185,6 +185,9 @@ $(document).ready(function() {
 				columns: [
 				    {text: '첨부파일명', dataIndex: 'name', flex:1},
 				    {text: '파일크기', dataIndex: 'size', renderer: function(value) {
+				    	if(value < 1024) {
+				    		return value + 'Byte';
+				    	}
 				    	var kb = Math.round((value/1024) * 10) / 10;
 				    	return kb + 'K';
 				    }},
@@ -321,6 +324,9 @@ $(document).ready(function() {
 				columns: [
 				    {text: '첨부파일명', dataIndex: 'name', flex:1},
 				    {text: '파일크기', dataIndex: 'size', renderer: function(value) {
+				    	if(value < 1024) {
+				    		return value + 'Byte';
+				    	}
 				    	var kb = Math.round((value/1024) * 10) / 10;
 				    	return kb + 'K';
 				    }},
