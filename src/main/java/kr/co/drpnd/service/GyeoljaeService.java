@@ -104,4 +104,8 @@ public class GyeoljaeService {
 		}
 	}
 
+	public Sangsin getMySangsinDetail(Map<String, String> param) {
+		return gyeoljaeDao.selectMySangsinDetail(param);
+	}
+
 }

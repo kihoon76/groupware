@@ -265,7 +265,31 @@ public class GyeoljaeController {
 		}
 	
 		return vo;
+	}
+	
+	@GetMapping("mysangsin/{sangsinNum}")
+	@ResponseBody
+	public AjaxVO<Sangsin> getMySangsinDetail(@PathVariable("sangsinNum") String sangsinNum) {
+		Sawon myInfo = SessionUtil.getSessionSawon();
 		
+		Map<String, String> param = new HashMap<>();
+		param.put("sawonCode", myInfo.getSawonCode());
+		param.put("sangsinNum", sangsinNum);
+		
+		AjaxVO<Sangsin> vo = new AjaxVO<>();
+		
+		try {
+			Sangsin gyeoljaeDetail = gyeoljaeService.getMySangsinDetail(param);
+			if(gyeoljaeDetail != null) gyeoljaeDetail.setGianja(myInfo.getSawonName());
+			vo.setSuccess(true);
+			vo.addObject(gyeoljaeDetail);
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+		
+		return vo;
 	}
 	
 	@GetMapping("mygyeoljae")

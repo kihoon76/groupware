@@ -30,4 +30,6 @@ public interface GyeoljaeDao {
 	List<Map<String, String>> selectMyCommitedGyeoljae(Map<String, Object> param);
 
 	void updateRejectMyGyeoljae(Map map);
+
+	Sangsin selectMySangsinDetail(Map<String, String> param);
 }

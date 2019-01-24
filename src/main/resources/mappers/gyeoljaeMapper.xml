@@ -69,7 +69,7 @@
 	</insert>
 	
 	<select id="selectMySangsin" parameterType="string" resultType="map">
-		select 기안제목 title, T2.사원명 gianja,
+		select T1.상신코드  sangsinNum, 기안제목 title, T2.사원명 gianja,
 			   case when 처리상태 = 'D' then '기안'
 			        when 처리상태 = 'S' then '결재중'
 			        when 처리상태 = 'C' then '결재완료'
@@ -170,6 +170,13 @@
 		 where T1.상신코드 = #{sangsinNum}
 		   and T2.결재처리자 = #{sawonCode}
 	</select> 
+	
+	<select id="selectMySangsinDetail" parameterType="map" resultMap="RM_Sangsin">
+		select T1.상신코드, 기안제목, 기안내용_CODE, convert(char(16), 기안작성일, 20) 기안작성일
+		  from [동림].[dbo].[상신] T1
+		 where T1.상신코드 = #{sangsinNum}
+		   and T1.기안자 = #{sawonCode}
+	</select>
 	
 	<select id="selectSangsinAttachFiles" parameterType="string" resultType="AttachFile">
 		select 파일명  name, 파일코드 code, 파일확장자 ext, 파일크기 size, 상신코드 sangsinNum

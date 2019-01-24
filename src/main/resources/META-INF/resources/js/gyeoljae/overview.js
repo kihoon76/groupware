@@ -103,6 +103,157 @@ $(document).ready(function() {
 		});
 	}
 	
+	function getMyGianDetail(rowData) {
+		common.checkSession(function() {
+			common.ajaxExt({
+				url: '/gyeoljae/mysangsin/' + rowData.sangsinNum,
+				method: 'GET',
+				loadmask: {
+					msg: '나의 상신문서를 로딩중입니다.'
+				},
+				success: function(jo) {
+					openMyGianWin(jo.datas[0]);
+				}
+			});
+		});
+	}
+	
+	function openMyGianWin(sangsin) {
+		var fileStore = parent.Ext.create('Ext.data.JsonStore', {
+			fields: ['code', 'name', 'size', 'ext'],
+			data:sangsin.attachFiles
+		});
+		
+		var renderTpl = makeGyeoljaeHtml(sangsin.gyeoljaeLines);
+		var gyeoljaeLineComponent = new parent.Ext.container.Container({
+		    width: 700,
+		    height: 100,
+		    layout: 'fit',
+		    items: {
+		        xtype: 'component',
+		        renderTpl: renderTpl
+		    },
+		    
+		});
+		
+		var form = parent.Ext.widget('form', {
+			layout: {
+				type: 'vbox',
+				align: 'strech'
+			},
+			border: false,
+			bodyPadding: 10,
+			fieldDefaults: {
+				labelAlign: 'top',
+				labelWidth: 100,
+				labelStyle: 'font-weight:bold',
+			},
+			items: [{
+				xtype: 'textfield',
+				fieldLabel: '기안제목',
+				readOnly: true,
+				width: '100%',
+				value: sangsin.title
+			},{
+				xtype: 'textfield',
+				fieldLabel: '기안자',
+				readOnly: true,
+				width: '100%',
+				value: sangsin.gianja
+			},{
+				xtype: 'textfield',
+				fieldLabel: '기안작성일자',
+				readOnly: true,
+				width: '100%',
+				value: sangsin.writeDate
+			},{
+				xtype: 'fieldcontainer',
+				fieldLabel: '결재상황',
+				layout: 'hbox',
+				items:gyeoljaeLineComponent
+			},{
+				xtype: 'htmleditor',
+				fieldLabel: '기안내용',
+				width: '99.9%',
+				height: 300,
+				readOnly: true,
+				value: sangsin.content
+			},{
+				xtype: 'grid',
+				fieldLabel: '첨부파일',
+				store: fileStore,
+				columns: [
+				    {text: '첨부파일명', dataIndex: 'name', flex:1},
+				    {text: '파일크기', dataIndex: 'size', renderer: function(value) {
+				    	var kb = Math.round((value/1024) * 10) / 10;
+				    	return kb + 'K';
+				    }},
+				    {text: '다운로드', width: 100, dataIndex: 'ext', align: 'center', renderer: function(value) {
+				    	return common.getFileFormatIcon(value);
+				    }},
+				],
+				width: '100%',
+				height: 80,
+				listeners: {
+					cellclick: function(grid, td, cellIndex, record) {
+						var code = record.data.code;
+						
+						common.checkSession(function() {
+							if(code) {
+								var form = document.createElement('form');
+								form.action = '/gyeoljae/file/' + code;
+								form.method = 'POST';
+								form.target = '_blank';
+								
+								var input = document.createElement('input');
+								input.type = 'hidden';
+							   
+							    form.appendChild(input);
+								form.style.display = 'none';
+								document.body.appendChild(form);
+								form.submit();
+							}
+						});
+					
+					}
+				}
+			}]
+		});
+		
+		var win = parent.Ext.create('Ext.window.Window', {
+			height: 800,
+			width: 800,
+			layout: 'fit',
+			closeAction: 'destroy',
+			closable: false,
+			modal: true,
+			draggable: false,
+			resizable: false,
+			items: form,
+			dockedItems: [{
+			    xtype: 'toolbar',
+			    dock: 'bottom',
+			    ui: 'footer',
+			    //defaults: {minWidth: minButtonWidth},
+			    items: [
+			        { xtype: 'component', flex: 1 },
+			        { xtype: 'button', text: '닫기', iconCls: 'icon-close', listeners: {
+			        	click: function(btn) {
+			        		win.close();
+			        	}
+			        } }
+			    ]
+			}],
+			listeners: {
+				afterrender: function() {
+					
+				}
+			}
+		})
+		
+		win.show();
+	}
+	
 	function openMyGyeoljaeWin(sangsin) {
 		var fileStore = parent.Ext.create('Ext.data.JsonStore', {
 			fields: ['code', 'name', 'size', 'ext'],

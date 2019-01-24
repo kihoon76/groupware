@@ -79,5 +79,10 @@ public class GyeoljaeDaoImpl implements GyeoljaeDao {
 	public void updateRejectMyGyeoljae(Map map) {
 		msSqlSession.update(namespace + ".updateRejectMyGyeoljae", map);
 		
+	}
+
+	@Override
+	public Sangsin selectMySangsinDetail(Map<String, String> param) {
+		return msSqlSession.selectOne(namespace + ".selectMySangsinDetail", param);
 	} 
 }
