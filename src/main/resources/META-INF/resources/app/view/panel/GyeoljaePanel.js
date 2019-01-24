@@ -188,7 +188,7 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 			}, '-', {
 				xtype: 'button',
 				text: '새결재',
-				iconCls: 'icon-add',
+				iconCls: 'icon-gyeoljae-new',
 				listeners: {
 					click: function(btn) {
 						newGyeoljaeClick();
