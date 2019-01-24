@@ -199,6 +199,7 @@ $(document).ready(function() {
 			var win = parent.Ext.create('Ext.window.Window', {
 				title: '결재',
 				iconCls: 'icon-gyeoljae',
+				layout: 'fit',
 				width: 400,
 				height: 400,
 				autoScroll: true,
@@ -208,8 +209,6 @@ $(document).ready(function() {
 				modal: true,
 				items: [{
 					xtype: 'textarea',
-					width: '100%',
-					height: 330,
 					emptyText: '의견을 입력하세요',
 					listeners: {
 						afterrender: function(txt) {
@@ -254,6 +253,7 @@ $(document).ready(function() {
 				iconCls: 'icon-reject',
 				width: 400,
 				height: 400,
+				layout: 'fit',
 				autoScroll: true,
 				closeAction: 'destroy',
 				//bodyPadding: '10 10 10 10',
@@ -261,8 +261,6 @@ $(document).ready(function() {
 				modal: true,
 				items: [{
 					xtype: 'textarea',
-					width: '100%',
-					height: 330,
 					emptyText: '반려사유를 입력하세요',
 					listeners: {
 						afterrender: function(txt) {

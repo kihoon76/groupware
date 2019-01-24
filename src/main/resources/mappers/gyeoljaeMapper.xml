@@ -145,7 +145,20 @@
 					ofType="AttachFile" 
 					select="selectSangsinAttachFiles"
 					/>
+		<collection property="gyeoljaeLines" column="상신코드"
+					javaType="java.util.ArrayList"
+					ofType="map"
+					select="selectGyeoljaeLines" />
 	</resultMap>
+	
+	<select id="selectGyeoljaeLines" parameterType="string" resultType="map">
+		select T2.사원명 gyeoljaeja, 결재순서 gyeoljaeOrder, 처리상태 status
+		  from [동림].[dbo].[결재라인] T1
+		 inner join [동림].[dbo].[사원] T2 
+		    on T1.결재처리자 = T2.사원코드 
+		 where T1.상신코드 = #{sangsinNum} 
+		 order by 결재순서 
+	</select>
 	
 	<select id="selectMyGyeoljaeDetail" parameterType="map" resultMap="RM_Sangsin">
 		select T1.상신코드, 기안제목, 기안내용_CODE, T3.사원명 as 기안자, convert(char(16), 기안작성일, 20) 기안작성일

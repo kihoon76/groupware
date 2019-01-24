@@ -91,6 +91,13 @@ $(document).ready(function() {
     	});
 	}
 	
+	function getPlanDetail(event) {
+		console.log(event)
+		var nameIdx = event.title.indexOf('_');
+		var name = event.title.substring(0, nameIdx);
+		openPlanDetailWin(name, event.description);
+	}
+	
 	function updateGeuntae(geuntaeCode, modifyObj, details, win) {
 		var vContent = '';
 		var vOverworkContent = '';
@@ -173,6 +180,36 @@ $(document).ready(function() {
 			});
 		}
 		
+	}
+	
+	function openPlanDetailWin(title, content) {
+		console.log(content)
+		var	win = parent.Ext.create('Ext.window.Window', {
+			title: '<span style="color:#0000ff">' + title + '</span>님 일정',
+			iconCls: 'icon-window',
+			height: 500, 
+			width: 500,
+			layout: 'fit',
+			modal: true,
+			resizable: false,
+			closeAction: 'destroy',
+			items: [{
+				xtype: 'textarea',
+				anchor: '100%',
+				//height: 400,
+				readOnly: true,
+				value: content
+			}],
+			buttons: [{
+				text: '닫기',
+				iconCls: 'icon-close',
+			    handler: function() {
+			    	win.close();
+		        }
+			}],
+		});
+		
+		win.show();
 	}
 	
 	function openGeuntaeWin(event, details) {
@@ -416,7 +453,13 @@ $(document).ready(function() {
 			    				 win.close();
 			    			 }
 			    		 });
-			    	 } 
+			    	 }
+		    		 else if(calEvent.cate == 'C03') {
+		    			 getPlanDetail(calEvent);
+		    		 }
+		    		 else if(calEvent.cate == 'C02') {
+		    			 //getVacationDetail(calEvent); 
+		    		 }
 		    	 } 
 	    	 });
 	     },

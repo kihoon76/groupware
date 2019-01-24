@@ -200,7 +200,7 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 			}],
 			listeners: {
 				afterrender: function() {
-					overviewClick(true);
+					overviewClick();
 				}
 			}
 		});
