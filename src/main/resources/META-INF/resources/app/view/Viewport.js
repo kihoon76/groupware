@@ -416,12 +416,23 @@ Ext.define('Drpnd.view.Viewport', {
 			            	}
 			            }
 			        },{
+			        	xtype: 'fieldcontainer',
+	                    fieldLabel: '서명',
+	                    layout: 'hbox',
+	                    items: [{
+	                    	xtype: 'image',
+							width: 200,
+							height: 80,
+							src: signSrc
+	                    }]
+	                    
+			        }/*,{
 			        	xtype: 'image',
 						width: 200,
 						height: 80,
 						margin: '10 0 10 95',
 						src: signSrc
-			        }/*,{
+			        }*//*,{
 			        	xtype: 'radiogroup',
 		            	fieldLabel: '팀리더',
 		            	//height: 120,
