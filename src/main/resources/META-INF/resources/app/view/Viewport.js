@@ -117,10 +117,11 @@ Ext.define('Drpnd.view.Viewport', {
 		    		signatureContentWin = dom.contentWindow;;
 		    	} });
 		    	var mySignWin = Ext.create('Ext.window.Window', {
-		    		title: '싸인등록',
+		    		title: '서명등록',
 		    		width: 440,
 					height: 350,
 					layout: 'fit',
+					iconCls: 'icon-sign',
 					closeAction: 'destroy',
 					modal: true,
 					draggable: true,
@@ -133,12 +134,12 @@ Ext.define('Drpnd.view.Viewport', {
 					    //defaults: {minWidth: minButtonWidth},
 					    items: [
 					        { xtype: 'component', flex: 1 },
-					        { xtype: 'button', text: '등록', listeners: {
+					        { xtype: 'button', iconCls: 'icon-sign', text: '등록', listeners: {
 					        	click: function(btn) {
 					        		signatureContentWin.regSignature(mySignWin);
 					        	}
 					        } },
-					        { xtype: 'button', text: '닫기', listeners: {
+					        { xtype: 'button', iconCls: 'icon-close', text: '닫기', listeners: {
 					        	click: function(btn) {
 					        		mySignWin.close();
 					        	}
@@ -619,7 +620,7 @@ Ext.define('Drpnd.view.Viewport', {
 				   
 			   },{
 				   xtype: 'button',
-				   text: '싸인등록',
+				   text: '서명등록',
 				   iconCls: 'icon-sign',
 				   listeners: {
 					   click: function() {

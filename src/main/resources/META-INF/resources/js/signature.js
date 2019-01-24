@@ -29,7 +29,7 @@ $(document).ready(function() {
 		
 		if(!drawed) {
 			common.showExtMsg({
-				msg: '싸인해 주세요',
+				msg: '서명해 주세요',
 				type: 'alert'
 			});
 			return;
