@@ -1,7 +1,6 @@
 $(document).ready(function() {
 	
 	var accRejectWin = null;
-	
 	var commonColumns = [
  		{title: '첨부', field:'attCnt', width:50, headerSort:false, align:'center', formatter: function(cell) {
 			if(cell.getValue() > 0) {
@@ -22,6 +21,46 @@ $(document).ready(function() {
 	    {title:'작성일자', field:'writeDate', width:200, align:'center', headerSort:false}
 	];
 	
+	function makeGyeoljaeHtml(data) {
+		var style = '', name = '', status = '', color = '';
+		
+		var html = [];
+		for(var i=0; i<data.length; i++) {
+			switch(data[i].status) {
+			case 'D':
+			case 'S':
+				status = '결재중';
+				style = 'border:5px solid green;';
+				color = 'green';
+				break;
+			case 'C':
+				status = '결재완료';
+				style = 'border:5px solid black;';
+				color = 'black';
+				break;
+			case 'R':
+				status = '반려';
+				style = 'border:5px solid red;';
+				color = 'red';
+				break;
+			default:
+				status = '';
+				style = 'border:1px dotted green;';
+				color = '';
+				break;
+			}
+			html.push(getMalformedHtml(style, data[i].gyeoljaeja, status, color));
+		}
+		
+		return html;
+	}
+	
+	function getMalformedHtml(style, name, status, color) {
+		return '<div style="float:left;width:100px;height:80px;margin-right:50px;' + style + '">' +
+		'<div>' + name + '</div>' + 
+		'<div style="margin-top:13px; text-align:center; font-size:1.5em; font-weight: bold; color:' + color + '">' + status + '</div>' + 
+		'</div>';
+	}
 	
 	var myGian = new Tabulator('#myGian', {
 		//pagination: 'remote',
@@ -45,7 +84,7 @@ $(document).ready(function() {
 		height: '200px',
 		columns: commonColumns,
 		rowClick: function(e, row) {
-			
+			getMyGianDetail(row.getData());
 		}
 	});
 	
@@ -68,6 +107,18 @@ $(document).ready(function() {
 		var fileStore = parent.Ext.create('Ext.data.JsonStore', {
 			fields: ['code', 'name', 'size', 'ext'],
 			data:sangsin.attachFiles
+		});
+		
+		var renderTpl = makeGyeoljaeHtml(sangsin.gyeoljaeLines);
+		var gyeoljaeLineComponent = new parent.Ext.container.Container({
+		    width: 700,
+		    height: 100,
+		    layout: 'fit',
+		    items: {
+		        xtype: 'component',
+		        renderTpl: renderTpl
+		    },
+		    
 		});
 		
 		var form = parent.Ext.widget('form', {
@@ -101,10 +152,15 @@ $(document).ready(function() {
 				width: '100%',
 				value: sangsin.writeDate
 			},{
+				xtype: 'fieldcontainer',
+				fieldLabel: '결재상황',
+				layout: 'hbox',
+				items:gyeoljaeLineComponent
+			},{
 				xtype: 'htmleditor',
 				fieldLabel: '기안내용',
 				width: '99.9%',
-				height: 400,
+				height: 300,
 				readOnly: true,
 				value: sangsin.content
 			},{
