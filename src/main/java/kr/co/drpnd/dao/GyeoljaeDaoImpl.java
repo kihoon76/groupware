@@ -84,5 +84,10 @@ public class GyeoljaeDaoImpl implements GyeoljaeDao {
 	@Override
 	public Sangsin selectMySangsinDetail(Map<String, String> param) {
 		return msSqlSession.selectOne(namespace + ".selectMySangsinDetail", param);
+	}
+
+	@Override
+	public String selectGyeoljaeComment(Map<String, String> param) {
+		return msSqlSession.selectOne(namespace + ".selectGyeoljaeComment", param);
 	} 
 }

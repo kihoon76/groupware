@@ -152,7 +152,7 @@
 	</resultMap>
 	
 	<select id="selectGyeoljaeLines" parameterType="string" resultType="map">
-		select T2.사원명 gyeoljaeja, 결재순서 gyeoljaeOrder, 처리상태 status
+		select T2.사원명 gyeoljaeja, 결재순서 gyeoljaeOrder, 처리상태 status, T1.결재라인코드 code
 		  from [동림].[dbo].[결재라인] T1
 		 inner join [동림].[dbo].[사원] T2 
 		    on T1.결재처리자 = T2.사원코드 
@@ -212,4 +212,13 @@
 			#{result, mode=OUT, jdbcType=INTEGER, javaType=int}
 		)}
 	</update>
+	
+	<select id="selectGyeoljaeComment" parameterType="map" resultType="string">
+		select 의견
+		  from [동림].[dbo].[결재내역] T1
+		 inner join [동림].[dbo].[상신] T2
+		    on T1.상신코드 = T2.상신코드
+		 where T2.기안자 = #{sawonCode}
+		   and T1.결재라인코드 = #{gyeoljaeLineCode}
+	</select>
 </mapper>

@@ -455,4 +455,28 @@ public class GyeoljaeController {
 		return vo;
 		
 	}
+	
+	@GetMapping("comment/{gyeoljaeLineCode}")
+	@ResponseBody
+	public AjaxVO<String> getGyeoljaeComment(@PathVariable("gyeoljaeLineCode") String gyeoljaeLineCode) {
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		
+		Map<String, String> param = new HashMap<>();
+		param.put("sawonCode", myInfo.getSawonCode());
+		param.put("gyeoljaeLineCode", gyeoljaeLineCode);
+		
+		AjaxVO<String> vo = new AjaxVO<>();
+		
+		try {
+			String comment = gyeoljaeService.getGyeoljaeComment(param);
+			vo.setSuccess(true);
+			vo.addObject(comment);
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+		
+		return vo;
+	}
 }

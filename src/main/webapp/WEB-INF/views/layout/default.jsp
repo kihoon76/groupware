@@ -15,6 +15,7 @@
 	<link rel="stylesheet" href="/resources/core/ver/4.1.1-rc2/css/ext-all-gray.css"/>
 	<link rel="stylesheet" href="/resources/css/default.css"/>
 	<link rel="stylesheet" href="/resources/css/icon.css"/>
+	<link rel="stylesheet" href="/resources/css/step.css"/>
 	<!-- <link rel="stylesheet" href="/resources/ux/css/CheckHeader.css"/> -->
     
 	<sitemesh:write property="head" />

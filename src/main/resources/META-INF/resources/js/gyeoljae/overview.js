@@ -22,44 +22,42 @@ $(document).ready(function() {
 	];
 	
 	function makeGyeoljaeHtml(data) {
-		var style = '', name = '', status = '', color = '';
-		
-		var html = [];
+		var style = '', name = '', status = '', code = '';
+		var html = ['<div class="gyeoljae"><div class="wrapper"><div class="arrow-steps clearfix">'];
 		for(var i=0; i<data.length; i++) {
 			switch(data[i].status) {
 			case 'D':
 			case 'S':
 				status = '결재중';
-				style = 'border:5px solid green;';
-				color = 'green';
+				style = 'submission';
+				code = '-1';
 				break;
 			case 'C':
 				status = '결재완료';
-				style = 'border:5px solid black;';
-				color = 'black';
+				style = 'commit';
+				code = data[i].code;
 				break;
 			case 'R':
 				status = '반려';
-				style = 'border:5px solid red;';
-				color = 'red';
+				style = 'reject';
+				code = data[i].code;
 				break;
 			default:
-				status = '';
-				style = 'border:1px dotted green;';
-				color = '';
+				status = '&nbsp;';
+				style = '';
+				code = '-1';
 				break;
 			}
-			html.push(getMalformedHtml(style, data[i].gyeoljaeja, status, color));
+			html.push(getMalformedHtml(style, data[i].gyeoljaeja, status, code));
 		}
+		
+		html.push('</div></div></div>');
 		
 		return html;
 	}
 	
-	function getMalformedHtml(style, name, status, color) {
-		return '<div style="float:left;width:100px;height:80px;margin-right:50px;' + style + '">' +
-		'<div>' + name + '</div>' + 
-		'<div style="margin-top:13px; text-align:center; font-size:1.5em; font-weight: bold; color:' + color + '">' + status + '</div>' + 
-		'</div>';
+	function getMalformedHtml(style, name, status, code) {
+		return '<div class="step ' + style + '" data-code="' + code + '"> <span>' + status + ' (' + name + ')</span> </div>';
 	}
 	
 	var myGian = new Tabulator('#myGian', {
@@ -81,7 +79,7 @@ $(document).ready(function() {
 		layout:'fitColumns',
 	    autoResize:true,
 	    selectable:1,
-		height: '200px',
+		height: '500px',
 		columns: commonColumns,
 		rowClick: function(e, row) {
 			getMyGianDetail(row.getData());
@@ -124,17 +122,68 @@ $(document).ready(function() {
 			data:sangsin.attachFiles
 		});
 		
+		function clickFn(e) {
+			var target = e.target;
+			var nodeName = target.nodeName.toLowerCase();
+			var divNode = nodeName == 'span' ? target.parentNode : target;
+			
+			var code = divNode.getAttribute('data-code');
+			if(code != null && code != '-1') {
+				common.checkSession(function() {
+					common.ajaxExt({
+						url: '/gyeoljae/comment/' + code,
+						method: 'GET',
+						loadmask: {
+							msg: '의견을 로딩중입니다.'
+						},
+						success: function(jo) {
+							if(jo.success) {
+								parent.Ext.create('Ext.window.Window', {
+									title: '',
+									height: 200,
+									width: 200,
+									//animateTarget: target,
+									layout: 'fit',
+									closeAction: 'destroy',
+									modal: true,
+									draggable: false,
+									resizable: false,
+									items: [{
+										xtype: 'textarea',
+										readOnly: true,
+										value: jo.datas[0]
+									}]
+								}).show();
+							}
+						}
+					});
+				});
+			}
+		}
+		
 		var renderTpl = makeGyeoljaeHtml(sangsin.gyeoljaeLines);
 		var gyeoljaeLineComponent = new parent.Ext.container.Container({
 		    width: 700,
-		    height: 100,
+		    height: 50,
 		    layout: 'fit',
 		    items: {
 		        xtype: 'component',
-		        renderTpl: renderTpl
+		        renderTpl: renderTpl,
+		        listeners: {
+		        	render: function(c) {
+		        		c.getEl().on({
+		        			click: clickFn
+		        		});
+		        	},
+		        	destroy: function(c) {
+		        		c.getEl().un('click', clickFn);
+		        	}
+		        }
 		    },
+		   
 		    
 		});
+		
 		
 		var form = parent.Ext.widget('form', {
 			layout: {
@@ -168,7 +217,8 @@ $(document).ready(function() {
 				value: sangsin.writeDate
 			},{
 				xtype: 'fieldcontainer',
-				fieldLabel: '결재상황',
+				fieldLabel: '결재상황(결재완료나 반려일 경우 클릭하시면 의견을 보실수 있습니다)',
+				labelWidth: 500,
 				layout: 'hbox',
 				items:gyeoljaeLineComponent
 			},{

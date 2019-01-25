@@ -108,4 +108,8 @@ public class GyeoljaeService {
 		return gyeoljaeDao.selectMySangsinDetail(param);
 	}
 
+	public String getGyeoljaeComment(Map<String, String> param) {
+		return gyeoljaeDao.selectGyeoljaeComment(param);
+	}
+
 }
