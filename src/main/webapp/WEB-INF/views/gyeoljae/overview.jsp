@@ -33,6 +33,7 @@
   		
 		<div class="divMT">
   			<span style="font-size:1.5em;"><span class="badge badge-pill badge-info">내가 올린 기안</span></span>
+  			<span style="font-size:1.2em;"><span class="badge badge-pill badge-danger">※최근 5개까지만 보여줍니다.</span></span>
   		</div>
 		<div class="divMT divMB">
   			<div id="myGian"></div>

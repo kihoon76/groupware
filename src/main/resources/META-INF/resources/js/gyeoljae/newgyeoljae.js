@@ -108,6 +108,7 @@ $(document).ready(function() {
 		previewHeight: '100px',
 		previewWidth: '100px',
 		statusBarWidth: '300px',
+		maxFileSize: 50000000,
 		//allowedTypes: 'jpg,png,gif',
 		dynamicFormData: function() {
             return getSangsinParams(true);

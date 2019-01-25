@@ -25,7 +25,11 @@
 <body>
 	<form>
 		<div class="divMT">
-  			<span style="font-size:1.5em;"><span class="badge badge-pill badge-info">내가 올린 기안</span></span>
+  			<span style="font-size:1.5em;">
+  				<span class="badge badge-pill badge-info">
+  					내가 올린 기안 <span id="spBadge" class="badge badge-light">0</span>
+  				</span>
+  			</span>
   		</div>
 		<div class="divMT">
   			<div id="myGian"></div>

@@ -17,7 +17,7 @@ public interface GyeoljaeDao {
 
 	int insertGyeoljaeAttachFiles(Sangsin sangsin);
 
-	List<Map<String, String>> selectMySangsin(String sawonCode);
+	List<Map<String, String>> selectMySangsin(Map<String, Object> param);
 
 	List<Map<String, String>> selectMyGyeoljae(Map<String, Object> param);
 
@@ -34,4 +34,6 @@ public interface GyeoljaeDao {
 	Sangsin selectMySangsinDetail(Map<String, String> param);
 
 	String selectGyeoljaeComment(Map<String, String> param);
+
+	Map<String, Object> selectMySangsinTotalCount(Map<String, Object> param);
 }

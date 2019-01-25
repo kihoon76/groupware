@@ -51,7 +51,7 @@
 	<!-- upload -->
 	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<!-- the maximum file size in bytes  5MB -->
-		<beans:property name="maxUploadSize" value="5000000" />
+		<beans:property name="maxUploadSize" value="50000000" />
 	</beans:bean>
 	
 	<util:properties id="colorCfg" location="classpath:/config/color.properties" />

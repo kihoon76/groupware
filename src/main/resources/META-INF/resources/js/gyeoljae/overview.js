@@ -15,6 +15,9 @@ $(document).ready(function() {
 	    	if(cell.getValue() == '반려') {
 	    		return '<span style="color: #ff0000;">' + cell.getValue() + '</span>';
 	    	}
+	    	else if(cell.getValue() == '결재중') {
+	    		return '<span style="color: #17a2b8;">' + cell.getValue() + '</span>';
+	    	}
 	    	
 	    	return cell.getValue();
 	    }},
@@ -61,9 +64,8 @@ $(document).ready(function() {
 	}
 	
 	var myGian = new Tabulator('#myGian', {
-		//pagination: 'remote',
 		ajaxURL: '/gyeoljae/mysangsin',
-		paginationSize:10,
+		ajaxParams: {summary:'5'},
 		ajaxResponse: function(url, params, response) {
 			if(response.success) {
 				var datas = response.datas;
@@ -79,7 +81,7 @@ $(document).ready(function() {
 		layout:'fitColumns',
 	    autoResize:true,
 	    selectable:1,
-		height: '500px',
+		height: '300px',
 		columns: commonColumns,
 		rowClick: function(e, row) {
 			getMyGianDetail(row.getData());
@@ -122,12 +124,29 @@ $(document).ready(function() {
 			data:sangsin.attachFiles
 		});
 		
+		function getGyeoljae(c) {
+			var lines = sangsin.gyeoljaeLines;
+			var len = lines.length;
+			for(var i=0; i<len; i++) {
+				if(lines[i].code == c) {
+					if(lines[i].status == 'C') {
+						return lines[i].gyeoljaeja + '(결재의견)';
+					}
+					
+					return lines[i].gyeoljaeja + '(반려사유)';
+				}
+			}
+			
+			return '';
+		}
+		
 		function clickFn(e) {
 			var target = e.target;
 			var nodeName = target.nodeName.toLowerCase();
 			var divNode = nodeName == 'span' ? target.parentNode : target;
-			
 			var code = divNode.getAttribute('data-code');
+			
+			 
 			if(code != null && code != '-1') {
 				common.checkSession(function() {
 					common.ajaxExt({
@@ -138,22 +157,35 @@ $(document).ready(function() {
 						},
 						success: function(jo) {
 							if(jo.success) {
-								parent.Ext.create('Ext.window.Window', {
-									title: '',
-									height: 200,
-									width: 200,
-									//animateTarget: target,
-									layout: 'fit',
-									closeAction: 'destroy',
-									modal: true,
-									draggable: false,
-									resizable: false,
-									items: [{
-										xtype: 'textarea',
-										readOnly: true,
-										value: jo.datas[0]
-									}]
-								}).show();
+								if(jo.datas.length == 1) {
+									parent.Ext.create('Ext.window.Window', {
+										title: getGyeoljae(code),
+										height: 200,
+										width: 200,
+										layout: 'fit',
+										closeAction: 'destroy',
+										modal: true,
+										draggable: false,
+										resizable: false,
+										items: [{
+											xtype: 'textarea',
+											readOnly: true,
+											value: jo.datas[0]
+										}]
+									}).show();
+								}
+								else {
+									common.showExtMsg({
+										type: 'alert',
+										msg: '의견이 없습니다.'
+									});
+								}
+							}
+							else {
+								common.showExtMsg({
+									type: 'alert',
+									msg: jo.errMsg
+								});
 							}
 						}
 					});

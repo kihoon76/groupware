@@ -133,7 +133,7 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 				xtype: 'button',
 				text: '요약',
 				iconCls: 'icon-gyeoljae-overview',
-				qtip: 'test',
+				qtip: '★ 상신함,수신함 최근 5개만 요약해서 보여줍니다.<br/>★ 전체 항목이나 검색기능은 각각 보관함에서 처리하세요. ',
 				listeners: {
 					click: function(btn) {
 						overviewClick();
@@ -152,6 +152,7 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 			}, '-', {
 				xtype: 'button',
 				text: '수신함',
+				qtip: '★ 내가 결재해야 할 기안 보관함',
 				iconCls: 'icon-gyeoljae-receive',
 				listeners: {
 					click: function() {
@@ -159,11 +160,19 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 					},
 					afterrender: function(btn) {
 						btnReceiveBox = btn;
+					},
+					render: function(c) {
+						Ext.QuickTips.register({
+		                    target: c.getEl(),
+		                    text: c.qtip,
+		                    showDelay: 1 
+		                });
 					}
 				}
 			}, '-', {
 				xtype: 'button',
 				text: '상신함',
+				qtip: '★ 내가 올린 기안 보관함',
 				iconCls: 'icon-gyeoljae-sangsin',
 				listeners: {
 					click: function() {
@@ -171,18 +180,34 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 					},
 					afterrender: function(btn) {
 						btnSansinBox = btn;
+					},
+					render: function(c) {
+						Ext.QuickTips.register({
+		                    target: c.getEl(),
+		                    text: c.qtip,
+		                    showDelay: 1 
+		                });
 					}
+					
 				}
 			}, '-', {
 				xtype: 'button',
 				text: '보관함',
 				iconCls: 'icon-gyeoljae-keepbox',
+				qtip: '★ 결재완료된 내 기안 보관함<br/>★ 반려된 내 기안은 상신함이나 요약에서 확인하세요',
 				listeners: {
 					click: function() {
 						keepBoxClick();
 					},
 					afterrender: function(btn) {
 						btnKeepBox = btn;
+					},
+					render: function(c) {
+						Ext.QuickTips.register({
+		                    target: c.getEl(),
+		                    text: c.qtip,
+		                    showDelay: 1 
+		                });
 					}
 				}
 			}, '-', {

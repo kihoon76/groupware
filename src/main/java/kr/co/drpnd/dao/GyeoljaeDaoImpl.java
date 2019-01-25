@@ -46,8 +46,8 @@ public class GyeoljaeDaoImpl implements GyeoljaeDao {
 	}
 
 	@Override
-	public List<Map<String, String>> selectMySangsin(String sawonCode) {
-		return msSqlSession.selectList(namespace + ".selectMySangsin", sawonCode);
+	public List<Map<String, String>> selectMySangsin(Map<String, Object> param) {
+		return msSqlSession.selectList(namespace + ".selectMySangsin", param);
 	}
 
 	@Override
@@ -89,5 +89,10 @@ public class GyeoljaeDaoImpl implements GyeoljaeDao {
 	@Override
 	public String selectGyeoljaeComment(Map<String, String> param) {
 		return msSqlSession.selectOne(namespace + ".selectGyeoljaeComment", param);
+	}
+
+	@Override
+	public Map<String, Object> selectMySangsinTotalCount(Map<String, Object> param) {
+		return msSqlSession.selectOne(namespace + ".selectMySangsinTotalCount", param);
 	} 
 }

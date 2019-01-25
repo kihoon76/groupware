@@ -60,8 +60,8 @@ public class GyeoljaeService {
 		}
 	}
 
-	public List<Map<String, String>> getMySangsin(String sawonCode) {
-		return gyeoljaeDao.selectMySangsin(sawonCode);
+	public List<Map<String, String>> getMySangsin(Map<String, Object> param) {
+		return gyeoljaeDao.selectMySangsin(param);
 	}
 
 	public List<Map<String, String>> getMyGyeoljae(Map<String, Object> param) {
@@ -110,6 +110,10 @@ public class GyeoljaeService {
 
 	public String getGyeoljaeComment(Map<String, String> param) {
 		return gyeoljaeDao.selectGyeoljaeComment(param);
+	}
+
+	public Map<String, Object> getMySangsinTotalCount(Map<String, Object> param) {
+		return gyeoljaeDao.selectMySangsinTotalCount(param);
 	}
 
 }

@@ -10,6 +10,8 @@ public class AjaxVO<T> {
 	private String errMsg;
 	private String token;
 	private List<T> datas;
+	private int totalPage;
+	private int totalRow;
 	
 	public AjaxVO() {
 		datas = new ArrayList<T>();
@@ -55,4 +57,24 @@ public class AjaxVO<T> {
 	public void setToken(String token) {
 		this.token = token;
 	}
+
+	public int getTotalPage() {
+		return totalPage;
+	}
+
+	public void setTotalPage(int totalPage) {
+		this.totalPage = totalPage;
+	}
+
+	public int getTotalRow() {
+		return totalRow;
+	}
+
+	public void setTotalRow(int totalRow) {
+		this.totalRow = totalRow;
+	}
+
+	
+	
+	
 }

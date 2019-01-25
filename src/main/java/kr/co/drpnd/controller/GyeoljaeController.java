@@ -250,14 +250,38 @@ public class GyeoljaeController {
 	
 	@GetMapping("mysangsin")
 	@ResponseBody
-	public AjaxVO<Map<String, String>> getMySangsin() {
+	public AjaxVO<Map<String, String>> getMySangsin(
+			@RequestParam(name="summary", required=false) String summary,
+			@RequestParam(name="page", required=false) Integer page,
+			@RequestParam(name="size", required=false) Integer size) {
 		Sawon myInfo = SessionUtil.getSessionSawon();
 		
 		AjaxVO<Map<String, String>> vo = new AjaxVO<>();
 		try {
-			List<Map<String, String>> list = gyeoljaeService.getMySangsin(myInfo.getSawonCode());
+			Map<String, Object> param = new HashMap<>();
+			param.put("gianja", myInfo.getSawonCode());
+			int totalPage = 0;
+			int totalRow = 0;
+			
+			if(summary == null) {
+				int start = ((page-1)*size) + 1;
+				param.put("summary", -1);
+				param.put("start", start);
+				param.put("end", start + size);
+				param.put("size", size);
+				Map<String, Object> r = gyeoljaeService.getMySangsinTotalCount(param);
+				totalPage = Integer.parseInt(String.valueOf(r.get("page")));
+				totalRow = Integer.parseInt(String.valueOf(r.get("total")));
+			}
+			else {
+				param.put("summary", Integer.parseInt(summary));
+			}
+			
+			List<Map<String, String>> list = gyeoljaeService.getMySangsin(param);
 			vo.setSuccess(true);
 			vo.setDatas(list);
+			vo.setTotalPage(totalPage);
+			vo.setTotalRow(totalRow);
 		}
 		catch(Exception e) {
 			vo.setSuccess(false);
@@ -470,7 +494,7 @@ public class GyeoljaeController {
 		try {
 			String comment = gyeoljaeService.getGyeoljaeComment(param);
 			vo.setSuccess(true);
-			vo.addObject(comment);
+			if(comment != null)	vo.addObject(comment);
 		}
 		catch(Exception e) {
 			vo.setSuccess(false);
