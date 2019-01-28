@@ -31,7 +31,7 @@ $(document).ready(function() {
 	var myGian = new Tabulator('#myGian', {
 		pagination: 'remote',
 		ajaxURL: '/gyeoljae/mysangsin',
-		paginationSize:5,
+		paginationSize:10,
 		paginationDataReceived: {
 			'last_page':'totalPage',
 			'data':'datas'
