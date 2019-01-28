@@ -94,7 +94,7 @@
 					        when 처리상태 = 'C' then '결재완료'
 					        when 처리상태 = 'R' then '반려'
 					   end status, 
-					   convert(char(10), 기안작성일, 20) writeDate, 첨부파일수 attCnt
+					   convert(char(16), 기안작성일, 20) writeDate, 첨부파일수 attCnt
 				  from [동림].[dbo].[상신] T1
 				 inner join [동림].[dbo].[사원] T2
 				    on T1.기안자 = T2.사원코드
@@ -124,7 +124,7 @@
 			        when 처리상태 = 'C' then '결재완료'
 			        when 처리상태 = 'R' then '반려'
 			   end status, 
-			   convert(char(10), 기안작성일, 20) writeDate, 첨부파일수 attCnt
+			   convert(char(16), 기안작성일, 20) writeDate, 첨부파일수 attCnt
 		  from [동림].[dbo].[상신] T1
 		 inner join [동림].[dbo].[사원] T2
 		    on T1.기안자 = T2.사원코드
