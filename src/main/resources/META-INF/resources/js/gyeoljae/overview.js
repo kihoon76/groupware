@@ -1,5 +1,4 @@
 $(document).ready(function() {
-	
 	var accRejectWin = null;
 	var commonColumns = [
  		{title: '첨부', field:'attCnt', width:50, headerSort:false, align:'center', formatter: function(cell) {
@@ -257,7 +256,7 @@ $(document).ready(function() {
 				xtype: 'htmleditor',
 				fieldLabel: '기안내용',
 				width: '99.9%',
-				height: 300,
+				height: 400,
 				readOnly: true,
 				value: sangsin.content
 			},{
@@ -396,7 +395,7 @@ $(document).ready(function() {
 				xtype: 'htmleditor',
 				fieldLabel: '기안내용',
 				width: '99.9%',
-				height: 300,
+				height: 400,
 				readOnly: true,
 				value: sangsin.content
 			},{
@@ -678,4 +677,26 @@ $(document).ready(function() {
 			getMyGyeoljaeDetail(row.getData());
 		}
 	});
+	
+	$('#btnSansin').on('click', function() {
+		if(sangsinExtBtn) {
+			sangsinExtBtn.fireEvent('click')
+		}
+	});
+	
+	$('#btnReceived').on('click', function() {
+		if(receivedExtBtn) {
+			receivedExtBtn.fireEvent('click')
+		}
+	});
 });
+var receivedExtBtn = null;
+var sangsinExtBtn = null;
+var keepboxExtBtn = null;
+
+
+function setGyeoljaeButton(received, sangsin, keepbox) {
+	receivedExtBtn = received;
+	sangsinExtBtn = sangsin;
+	keepboxExtBtn = keepbox;
+}

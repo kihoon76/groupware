@@ -101,7 +101,7 @@ $(document).ready(function() {
 		showDone: true,
 		autoSubmit: false,
 		showPreview: true,
-		maxFileCount: 2,
+		maxFileCount: 1,
 		returnType: 'json',
 		url: '/gyeoljae/reg/newgyeoljaeWithfile',
 		dragdropWidth: '500px',
@@ -165,7 +165,10 @@ $(document).ready(function() {
 	            return false;
 	        }
 			
-			gyeoljaeSelectedFiles[files[0].name] = files[0];
+			if(files[0].size <= 50000000) {
+				gyeoljaeSelectedFiles[files[0].name] = files[0];
+			}
+			
 			return true;
 		},
 		onCancel: function(files) {

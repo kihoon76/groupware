@@ -114,7 +114,7 @@ Ext.define('Drpnd.view.Viewport', {
 	    	
 	    	CommonFn.checkSession(function() {
 	    		var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: '/signatureview', load: function(dom) {
-		    		signatureContentWin = dom.contentWindow;;
+		    		signatureContentWin = dom.contentWindow;
 		    	} });
 		    	var mySignWin = Ext.create('Ext.window.Window', {
 		    		title: '서명등록',

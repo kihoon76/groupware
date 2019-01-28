@@ -7,12 +7,15 @@
 <content tag="script">
 <script src="/resources/lib/jquery.min.js"></script>
 <script src="/resources/lib/bootstrap.min.js"></script>
+<script src="/resources/os/bootstrap-datepicker-1.6.4/js/bootstrap-datepicker.min.js"></script>
+<script src="/resources/os/bootstrap-datepicker-1.6.4/locales/bootstrap-datepicker.ko.min.js" charset="UTF-8"></script>
 <script src="/resources/os/tabulator-4.1/js/tabulator.min.js"></script>
 <script src="/resources/js/icommon.js"></script>
 <script src="/resources/js/gyeoljae/sangsinbox.js"></script>
 </content>
 <head>
 	<link rel="stylesheet" href="/resources/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="/resources/os/bootstrap-datepicker-1.6.4/css/bootstrap-datepicker.standalone.min.css" />
 	<!-- tabulator -->
     <link rel="stylesheet" href="/resources/os/tabulator-4.1/css/tabulator_simple.min.css" />
     <link rel="stylesheet" href="/resources/css/gyeoljae.css" />
@@ -20,6 +23,7 @@
     form {padding:10px 10px 10px 10px;}
     .divMT {margin-top:10px;}
 	.divMB {margin-bottom:10px;}
+	.divMR {margin-right:10px;}
     </style>
 </head>
 <body>
@@ -31,6 +35,30 @@
   				</span>
   			</span>
   		</div>
+  		<div class="form-inline divMT">
+	        <div class="form-group divMR">
+ 				<select class="form-control" id="from_year">
+		        	<option value="title">제목</option>
+		        </select>		
+			</div>
+			<div class="form-group divMR">
+ 				<input type="text" class="form-control  input-sm" >		
+			</div>
+		   	<div class="form-group divMR">
+ 				<select class="form-control" id="status">
+ 					<option value="A">모두보기</option>
+		        	<option value="D">기안</option>
+		        	<option value="S">결재중</option>
+		        	<option value="R">반려</option>
+		        	<option value="C">결재완료</option>
+		        </select>		
+			</div>
+			<div class="input-daterange form-group" id="datepicker">
+    			<input type="text" class="input-sm form-control" name="start" autocomplete="off"/>
+    			<span class="input-group-addon">to</span>
+    			<input type="text" class="input-sm form-control" name="end" autocomplete="off"/>
+			</div>
+		</div>
 		<div class="divMT">
   			<div id="myGian"></div>
   		</div>

@@ -14,6 +14,7 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 		var btnKeepBox = null;
 		var btnNewGyeoljae = null;
 		var activeColor = '#ccffff';
+		var overviewWin = null;
 		
 		function activeButtonCSS(activeBtn) {
 			if(activeBtn == 'OVERVIEW') {
@@ -84,16 +85,26 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 			});
 		}
 		
+		var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: '/signatureview', load: function(dom) {
+    		signatureContentWin = dom.contentWindow;;
+    	} });
+		
 		//요약
 		function overviewClick(isNotSessionCheck) {
 			activeButtonCSS('OVERVIEW');
 			if(isNotSessionCheck) {
-				var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'gyeoljae/view/overview' });
+				var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'gyeoljae/view/overview', load: function(dom) {
+					overviewWin = dom.contentWindow; 
+					overviewWin.setGyeoljaeButton(btnReceiveBox, btnSansinBox, btnKeepBox);
+				} });
 				addItem(iframe);
 			}
 			else {
 				CommonFn.checkSession(function() {
-					var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'gyeoljae/view/overview' });
+					var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'gyeoljae/view/overview', load: function(dom) {
+						overviewWin = dom.contentWindow;
+						overviewWin.setGyeoljaeButton(btnReceiveBox, btnSansinBox, btnKeepBox);
+					} });
 					addItem(iframe);
 				});
 			}
