@@ -47,6 +47,7 @@ import kr.co.drpnd.exception.InvalidUser;
 import kr.co.drpnd.service.GyeoljaeService;
 import kr.co.drpnd.type.ExceptionCode;
 import kr.co.drpnd.util.SessionUtil;
+import kr.co.drpnd.util.StringUtil;
 
 @RequestMapping("/gyeoljae")
 @Controller
@@ -67,7 +68,6 @@ public class GyeoljaeController {
 	
 	@GetMapping("view/overview")
 	public String overviewGyeoljae() {
-		
 		return "gyeoljae/overview";
 	}
 	
@@ -78,7 +78,10 @@ public class GyeoljaeController {
 	}
 	
 	@GetMapping("view/sangsinbox")
-	public String viewSangsinBox() {
+	public String viewSangsinBox(ModelMap m) {
+		Map<String, String> map = StringUtil.getMonthStartEnd();
+		m.addAttribute("start", map.get("start"));
+		m.addAttribute("end", map.get("end"));
 		return "gyeoljae/sangsinbox";
 	}
 	
@@ -253,7 +256,12 @@ public class GyeoljaeController {
 	public AjaxVO<Map<String, String>> getMySangsin(
 			@RequestParam(name="summary", required=false) String summary,
 			@RequestParam(name="page", required=false) Integer page,
-			@RequestParam(name="size", required=false) Integer size) {
+			@RequestParam(name="size", required=false) Integer size,
+			@RequestParam(name="searchStatus", required=false) String searchStatus,
+			@RequestParam(name="searchTextType", required=false) String searchTextType,
+			@RequestParam(name="searchText", required=false) String searchText,
+			@RequestParam(name="searchStartDate", required=false) String searchStartDate,
+			@RequestParam(name="searchEndDate", required=false) String searchEndDate) {
 		Sawon myInfo = SessionUtil.getSessionSawon();
 		
 		AjaxVO<Map<String, String>> vo = new AjaxVO<>();
@@ -269,6 +277,11 @@ public class GyeoljaeController {
 				param.put("start", start);
 				param.put("end", start + size);
 				param.put("size", size);
+				param.put("searchStatus", searchStatus);
+				param.put("searchTextType", searchTextType);
+				param.put("searchText", StringUtil.escapeMsSql(searchText));
+				param.put("searchStartDate", searchStartDate);
+				param.put("searchEndDate", searchEndDate);
 				Map<String, Object> r = gyeoljaeService.getMySangsinTotalCount(param);
 				totalPage = Integer.parseInt(String.valueOf(r.get("page")));
 				totalRow = Integer.parseInt(String.valueOf(r.get("total")));

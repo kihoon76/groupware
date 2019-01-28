@@ -72,6 +72,15 @@
 		select ceiling((count(상신코드) + 0.0)/(${size}+0.0)) page, count(상신코드) total
 		  from [동림].[dbo].[상신]
 		 where 기안자 = #{gianja}
+		 <if test='searchStatus neq "A"'>
+		   and 처리상태 = #{searchStatus}
+		 </if>
+		 <choose>
+		 <when test='searchTextType eq "T"'>
+		   and 기안제목 like #{searchText}  {escape '`'}
+		 </when>
+		 </choose>
+		   and 기안작성일 >= #{searchStartDate} and 기안작성일 <![CDATA[<]]>= #{searchEndDate}
 	</select>
 	
 	<select id="selectMySangsin" parameterType="map" resultType="map">
@@ -96,6 +105,15 @@
 				  ) T3
 				    on T1.상신코드 = T3.상신코드
 				 where 기안자 = #{gianja}
+				 <if test='searchStatus neq "A"'>
+		   		   and 처리상태 = #{searchStatus}
+		 		</if>
+		 		<choose>
+		 		<when test='searchTextType eq "T"'>
+		   		   and 기안제목 like #{searchText}  {escape '`'}
+		 		</when>
+		 		</choose>
+		 		   and 기안작성일 >= #{searchStartDate} and 기안작성일 <![CDATA[<]]>= #{searchEndDate}
 		  ) T1
 		  where rnum >= #{start} and rnum <![CDATA[<]]> #{end}
 		</when>
@@ -120,7 +138,6 @@
 		 order by 기안작성일 desc
 		</otherwise>
 		</choose>
-		
 	</select>
 	
 <!-- 	<select id="selectMyGyeoljae" statementType="CALLABLE" parameterType="map" resultType="map"> -->

@@ -3,7 +3,7 @@ $(document).ready(function() {
 	var commonColumns = [
  		{title: '첨부', field:'attCnt', width:50, headerSort:false, align:'center', formatter: function(cell) {
 			if(cell.getValue() > 0) {
-				return '<img src="' + common.getClipImage() + '" style="width:25px; height:25px;"/>';
+				return '<img src="' + common.getClipImage() + '" style="width:15px; height:15px;"/>';
 			}
 			
 			return '';

@@ -1,4 +1,10 @@
 $(document).ready(function() {
+	var $txtSearchContent = $('#txtSearchContent');
+	var $txtStartDate = $('#txtStartDate');
+	var $txtEndDate = $('#txtEndDate');
+	var searchStatus = 'A';
+	var searchTextType = 'A';
+	
 	var columns = [
   		{title: '첨부', field:'attCnt', width:50, headerSort:false, align:'center', formatter: function(cell) {
  			if(cell.getValue() > 0) {
@@ -29,6 +35,13 @@ $(document).ready(function() {
 		paginationDataReceived: {
 			'last_page':'totalPage',
 			'data':'datas'
+		},
+		ajaxParams: {
+			searchStatus: searchStatus,
+			searchTextType: searchTextType,
+			searchText: $.trim($txtSearchContent.val()),
+			searchStartDate: $.trim($txtStartDate.val()),
+			searchEndDate: $.trim($txtEndDate.val())
 		},
 		ajaxResponse: function(url, params, response) {
 			if(response.success) {
@@ -329,6 +342,51 @@ $(document).ready(function() {
 	}
 	
 	$('.input-daterange').datepicker({
-		language: 'ko'
+		language: 'ko',
+		autoclose: true,
+		
+	});
+	
+	$('#status').on('change', function() {
+		searchStatus = $(this).val();
+		console.log(searchStatus);
+	});
+	
+	$('#selSearchTxt').on('change', function() {
+		searchTextType = $(this).val();
+		
+		if(searchTextType == 'A') {
+			$txtSearchContent.prop('disabled', true);
+			$txtSearchContent.val('');
+		}
+		else {
+			$txtSearchContent.prop('disabled', false);
+		}
+	});
+	
+	$('#btnSearch').on('click', function() {
+		if(searchTextType != 'A') {
+			if($.trim($txtSearchContent.val()) == '') {
+				common.showExtMsg({
+					type: 'alert',
+					msg: '검색할 제목을 입력하세요',
+					callback: function() {
+						$txtSearchContent.focus();
+					}
+				});
+				
+				return;
+			}
+		}
+		
+		
+		myGian.setData('/gyeoljae/mysangsin', {
+			searchStatus: searchStatus,
+			searchTextType: searchTextType,
+			searchText: $.trim($txtSearchContent.val()),
+			searchStartDate: $.trim($txtStartDate.val()),
+			searchEndDate: $.trim($txtEndDate.val())
+		});
+		
 	});
 });

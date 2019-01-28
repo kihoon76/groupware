@@ -18,12 +18,14 @@
 	<link rel="stylesheet" href="/resources/os/bootstrap-datepicker-1.6.4/css/bootstrap-datepicker.standalone.min.css" />
 	<!-- tabulator -->
     <link rel="stylesheet" href="/resources/os/tabulator-4.1/css/tabulator_simple.min.css" />
+    <link rel="stylesheet" href="/resources/os/font-awesome/css/font-awesome.min.css" />
     <link rel="stylesheet" href="/resources/css/gyeoljae.css" />
     <style>
     form {padding:10px 10px 10px 10px;}
     .divMT {margin-top:10px;}
 	.divMB {margin-bottom:10px;}
 	.divMR {margin-right:10px;}
+	#datepicker .input-group-text {border-radius: 0em;}
     </style>
 </head>
 <body>
@@ -37,12 +39,13 @@
   		</div>
   		<div class="form-inline divMT">
 	        <div class="form-group divMR">
- 				<select class="form-control" id="from_year">
-		        	<option value="title">제목</option>
+ 				<select class="form-control" id="selSearchTxt">
+ 					<option value="A">모두보기</option>
+		        	<option value="T">제목</option>
 		        </select>		
 			</div>
 			<div class="form-group divMR">
- 				<input type="text" class="form-control  input-sm" >		
+ 				<input type="text" class="form-control  input-sm" id="txtSearchContent" disabled>		
 			</div>
 		   	<div class="form-group divMR">
  				<select class="form-control" id="status">
@@ -53,10 +56,17 @@
 		        	<option value="C">결재완료</option>
 		        </select>		
 			</div>
-			<div class="input-daterange form-group" id="datepicker">
-    			<input type="text" class="input-sm form-control" name="start" autocomplete="off"/>
-    			<span class="input-group-addon">to</span>
-    			<input type="text" class="input-sm form-control" name="end" autocomplete="off"/>
+			<div class="input-daterange form-group divMR" id="datepicker">
+				<div class="input-group-prepend">
+	    			<input type="text" class="input-sm form-control" id="txtStartDate" autocomplete="off" readOnly value="<c:out value='${start}' />"/>
+	    			<span class="input-group-text"> ~ </span>
+	    			<input type="text" class="input-sm form-control" id="txtEndDate" autocomplete="off" readOnly value="<c:out value='${end}' />"/>
+	    		</div>
+			</div>
+			<div class="form-group divMR">
+ 				<button type="button" class="btn btn-secondary" id="btnSearch">
+ 					<i class="fa fa-search"></i>
+ 				</button>
 			</div>
 		</div>
 		<div class="divMT">
