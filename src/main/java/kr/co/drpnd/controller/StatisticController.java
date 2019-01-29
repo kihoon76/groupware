@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+//import com.fasterxml.jackson.core.JsonProcessingException;
+//import com.fasterxml.jackson.databind.ObjectMapper;
 
 import kr.co.drpnd.domain.ExtjsStoreVO;
 import kr.co.drpnd.domain.Sawon;
@@ -48,15 +48,6 @@ public class StatisticController {
 		ExtjsStoreVO<Map<String, Object>> extjsVo = new ExtjsStoreVO<>();
 		extjsVo.setTotal(result.size());
 		extjsVo.setDatas(result);
-		
-		ObjectMapper om = new ObjectMapper();
-		
-		try {
-			System.err.println(om.writeValueAsString(result));
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		return extjsVo;
 	}
