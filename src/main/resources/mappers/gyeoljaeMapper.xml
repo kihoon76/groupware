@@ -323,11 +323,16 @@
 	</update>
 	
 	<select id="selectGyeoljaeComment" parameterType="map" resultType="string">
-		select 의견
-		  from [동림].[dbo].[결재내역] T1
-		 inner join [동림].[dbo].[상신] T2
-		    on T1.상신코드 = T2.상신코드
-		 where T2.기안자 = #{sawonCode}
-		   and T1.결재라인코드 = #{gyeoljaeLineCode}
+		select distinct 의견
+		  from (
+				select T1.상신코드, T2.기안자, 의견
+		  		  from [동림].[dbo].[결재내역] T1
+		 		 inner join [동림].[dbo].[상신] T2
+		    		on T1.상신코드 = T2.상신코드
+		 		 where T1.결재라인코드 = #{gyeoljaeLineCode}
+		  ) T1
+		  inner join [동림].[dbo].[결재라인] T2
+		     on T1.상신코드 = T2.상신코드
+		  where 기안자 = #{sawonCode} or T2.결재처리자 = #{sawonCode}
 	</select>
 </mapper>
