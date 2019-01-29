@@ -22,7 +22,7 @@ public class SSLInterceptor extends HandlerInterceptorAdapter {
 			if(portIdx > -1) {
 				s = s.substring(0, portIdx);
 			}
-			response.sendRedirect("https://" + s + ":28443");
+			response.sendRedirect("https://" + s + ":58443");
 			return false;
 		}
 		
