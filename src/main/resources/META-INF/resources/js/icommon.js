@@ -375,6 +375,6 @@ var common = (function() {
 		},
 		getClipImage: function() {
 			return clipImg;
-		}
+		},
 	}
 })();

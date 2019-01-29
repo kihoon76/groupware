@@ -9,6 +9,7 @@
 <script src="/resources/lib/bootstrap.min.js"></script>
 <script src="/resources/os/tabulator-4.1/js/tabulator.min.js"></script>
 <script src="/resources/js/icommon.js"></script>
+<script src="/resources/js/gyeoljae/gyeoljae.js"></script>
 <script src="/resources/js/gyeoljae/overview.js"></script>
 </content>
 <head>
