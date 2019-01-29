@@ -116,4 +116,8 @@ public class GyeoljaeService {
 		return gyeoljaeDao.selectMySangsinTotalCount(param);
 	}
 
+	public Map<String, Object> getMyGyeoljaeTotalCount(Map<String, Object> param) {
+		return gyeoljaeDao.selectMyGyeoljaeTotalCount(param);
+	}
+
 }

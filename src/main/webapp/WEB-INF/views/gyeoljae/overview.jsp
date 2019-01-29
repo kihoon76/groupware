@@ -17,16 +17,12 @@
 	<!-- tabulator -->
     <link rel="stylesheet" href="/resources/os/tabulator-4.1/css/tabulator_simple.min.css" />
     <link rel="stylesheet" href="/resources/css/gyeoljae.css" />
-    <style>
-    form {padding:10px 10px 10px 10px;}
-    .divMT {margin-top:10px;}
-	.divMB {margin-bottom:10px;}
-    </style>
 </head>
 <body>
 	<form>
 		<div class="divMT">
   			<span style="font-size:1.5em;"><span class="badge badge-pill badge-info">결재 대기중</span></span>
+  			<span style="font-size:1.2em;"><span class="badge badge-pill badge-danger">※최근 5개까지만 보여줍니다.</span></span>
   			<div class="text-right">
   				<button type="button" class="btn btn-secondary btn-sm" id="btnReceived">수신함</button>
   			</div>

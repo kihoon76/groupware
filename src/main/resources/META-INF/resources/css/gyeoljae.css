@@ -156,4 +156,11 @@ table tr.contentViewBox td .contentBox select {max-width:100%;}
 	content:'\e957';
 }
 
+form {padding:10px 10px 10px 10px;}
+.divMT {margin-top:10px;}
+.divMB {margin-bottom:10px;}
+.divMR {margin-right:10px;}
+#datepicker .input-group-text {border-radius: 0em;}
+
+
 

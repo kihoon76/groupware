@@ -83,6 +83,24 @@
 		   and 기안작성일 >= #{searchStartDate} and 기안작성일 <![CDATA[<]]>= #{searchEndDate}
 	</select>
 	
+	<select id="selectMyGyeoljaeTotalCount" parameterType="map" resultType="map">
+		select ceiling((count(T1.상신코드) + 0.0)/(${size}+0.0)) page, count(T1.상신코드) total
+		  from [동림].[dbo].[상신] T1
+		 inner join [동림].[dbo].[결재라인] T2
+	    	on T1.상신코드 = T2.상신코드 
+		 where 결재처리자  = #{sawonCode}
+		   and (T2.처리상태 = 'D' or T2.처리상태 = 'S')
+		 <if test='searchStatus neq "A"'>
+		   and T1.처리상태 = #{searchStatus}
+		 </if>
+		 <choose>
+		 <when test='searchTextType eq "T"'>
+		   and 기안제목 like #{searchText}  {escape '`'}
+		 </when>
+		 </choose>
+		   and 기안작성일 >= #{searchStartDate} and 기안작성일 <![CDATA[<]]>= #{searchEndDate}
+	</select>
+	
 	<select id="selectMySangsin" parameterType="map" resultType="map">
 		<choose>
 		<when test="summary == -1">
@@ -140,6 +158,8 @@
 		</choose>
 	</select>
 	
+	
+	
 <!-- 	<select id="selectMyGyeoljae" statementType="CALLABLE" parameterType="map" resultType="map"> -->
 <!-- 		{call [동림].[dbo].[UP_내결재건]( -->
 <!-- 			#{sawonCode, mode=IN, jdbcType=INTEGER, javaType=int} -->
@@ -147,24 +167,62 @@
 <!-- 	</select> -->
 	
 	<select id="selectMyGyeoljae" parameterType="map" resultType="map">
-		select T1.상신코드 sangsinNum, T1.기안제목 title, T4.사원명 gianja, 
-		   case when T1.처리상태='D' then '기안'
-				when T1.처리상태='S' then '결재중'
-		   end as status,
-		   convert(char(16), 기안작성일, 20) writeDate,
-		   T3.첨부파일수 attCnt
-	  from [동림].[dbo].[상신] T1
-	 inner join [동림].[dbo].[결재라인] T2
-	    on T1.상신코드 = T2.상신코드
-	  left outer join (
-	  	   select count(파일코드) 첨부파일수, 상신코드
-		     from [동림].[dbo].[상신첨부파일]
-		    group by 상신코드
-	 ) T3  on T1.상신코드 = T3.상신코드
-	 inner join [동림].[dbo].[사원] T4
-	    on T1.기안자 = T4.사원코드 
-	 where T2.결재처리자 = #{sawonCode}
-	   and (T2.처리상태 = 'D' or T2.처리상태 = 'S')
+		<choose>
+		<when test="summary == -1">
+		select sangsinNum, title, gianja, status, attCnt, writeDate, attCnt
+		  from (
+				select row_number() over(order by 기안작성일 desc) as rnum, T1.상신코드 sangsinNum, T1.기안제목 title, T4.사원명 gianja, 
+					   case when T1.처리상태='D' then '기안'
+							when T1.처리상태='S' then '결재중'
+					   end as status,
+					   convert(char(16), 기안작성일, 20) writeDate,
+					   T3.첨부파일수 attCnt
+				  from [동림].[dbo].[상신] T1
+				 inner join [동림].[dbo].[결재라인] T2
+				    on T1.상신코드 = T2.상신코드
+				  left outer join (
+				  	   select count(파일코드) 첨부파일수, 상신코드
+					     from [동림].[dbo].[상신첨부파일]
+					    group by 상신코드
+				 ) T3  on T1.상신코드 = T3.상신코드
+				 inner join [동림].[dbo].[사원] T4
+				    on T1.기안자 = T4.사원코드 
+				 where T2.결재처리자 = #{sawonCode}
+				   and (T2.처리상태 = 'D' or T2.처리상태 = 'S')
+				   <if test='searchStatus neq "A"'>
+		   		   and T1.처리상태 = #{searchStatus}
+				   </if>
+				   <choose>
+				   <when test='searchTextType eq "T"'>
+		   		   and 기안제목 like #{searchText}  {escape '`'}
+		 		   </when>
+		 		   </choose>
+		 		   and 기안작성일 >= #{searchStartDate} and 기안작성일 <![CDATA[<]]>= #{searchEndDate}
+		) T1
+		where rnum >= #{start} and rnum <![CDATA[<]]> #{end}
+		</when>
+		<otherwise>
+		select top ${summary} T1.상신코드 sangsinNum, T1.기안제목 title, T4.사원명 gianja, 
+			   case when T1.처리상태='D' then '기안'
+					when T1.처리상태='S' then '결재중'
+			   end as status,
+			   convert(char(16), 기안작성일, 20) writeDate,
+			   T3.첨부파일수 attCnt
+		  from [동림].[dbo].[상신] T1
+		 inner join [동림].[dbo].[결재라인] T2
+		    on T1.상신코드 = T2.상신코드
+		  left outer join (
+		  	   select count(파일코드) 첨부파일수, 상신코드
+			     from [동림].[dbo].[상신첨부파일]
+			    group by 상신코드
+		 ) T3  on T1.상신코드 = T3.상신코드
+		 inner join [동림].[dbo].[사원] T4
+		    on T1.기안자 = T4.사원코드 
+		 where T2.결재처리자 = #{sawonCode}
+		   and (T2.처리상태 = 'D' or T2.처리상태 = 'S')
+		 order by 기안작성일 desc
+		</otherwise>
+		</choose>
 	</select>
 	
 	<select id="selectMyCommitedGyeoljae" parameterType="map" resultType="map">

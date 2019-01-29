@@ -26,9 +26,10 @@
 		var myGyeoljae = Gyeoljae.createTabulator({
 			id: '#myGyeoljae',
 			ajaxURL: '/mygyeoljae',
+			ajaxParams: {summary:'5'},
 			placeholder: '내가 처리할 결재가 존재하지 않습니다.',
 			selectable:1,
-			height: '200px',
+			height: '300px',
 			rowClick: function(e, row) {
 				Gyeoljae.getMyGyeoljaeDetail(row.getData().sangsinNum);
 			}

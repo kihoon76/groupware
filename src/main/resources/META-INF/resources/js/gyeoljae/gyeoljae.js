@@ -475,14 +475,7 @@ var Gyeoljae = (function() {
 		});
 	}
 	
-	function getSearchParams() {
-		
-		return {
-			
-		}
-	}
-	
-	function initSearchToolbar(tabObj) {
+	function initSearchToolbar(url, tabObj) {
 		var $txtSearchContent = $('#txtSearchContent');
 		var $txtStartDate = $('#txtStartDate');
 		var $txtEndDate = $('#txtEndDate');
@@ -526,8 +519,7 @@ var Gyeoljae = (function() {
 				}
 			}
 			
-			
-			tabObj.setData('/gyeoljae/mysangsin', {
+			tabObj.setData('/gyeoljae' + url, {
 				searchStatus: searchStatus,
 				searchTextType: searchTextType,
 				searchText: $.trim($txtSearchContent.val()),
@@ -586,7 +578,7 @@ var Gyeoljae = (function() {
 			var tab = new Tabulator(cfg.id, param);
 			
 			if(cfg.toolbar) {
-				initSearchToolbar(tab);
+				initSearchToolbar(cfg.ajaxURL, tab);
 			}
 			
 			return tab;
