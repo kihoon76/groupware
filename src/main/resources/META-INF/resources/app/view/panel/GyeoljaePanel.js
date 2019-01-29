@@ -144,7 +144,7 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 				xtype: 'button',
 				text: '요약',
 				iconCls: 'icon-gyeoljae-overview',
-				qtip: '★ 상신함,수신함 최근 5개만 요약해서 보여줍니다.<br/>★ 전체 항목이나 검색기능은 각각 보관함에서 처리하세요. ',
+				qtip: '★ 상신함,수신함 최근 5개만 요약해서 보여줍니다.<br/>★ 전체 항목이나 검색기능은 각각 보관함에서 가능합니다.',
 				listeners: {
 					click: function(btn) {
 						overviewClick();

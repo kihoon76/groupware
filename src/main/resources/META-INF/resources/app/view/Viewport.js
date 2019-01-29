@@ -236,7 +236,7 @@ Ext.define('Drpnd.view.Viewport', {
 	    	var signSrc = info.sign;
 	    	
 	    	if(signSrc == 'NOSIGN') {
-	    		signSrc = 'http://placehold.it/200x80?text=NO SIGN'
+	    		signSrc = '/resources/images/nosign.png'; //'http://placehold.it/200x80?text=NO SIGN'
 	    	}
 	    	
 			return Ext.create('Ext.form.Panel', {
