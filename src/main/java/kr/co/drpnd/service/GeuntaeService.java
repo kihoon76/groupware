@@ -41,7 +41,8 @@ public class GeuntaeService {
 		
 		if(r.get("cnt") == 0) {
 			if(hour >= 0 && hour <=6) {
-				throw new InvalidGotoworkTime(ExceptionCode.INVALID_GOTOWORK_TIME.getMsg());
+				//throw new InvalidGotoworkTime(ExceptionCode.INVALID_GOTOWORK_TIME.getMsg());
+				return true;
 			}
 			
 			return false;

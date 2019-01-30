@@ -54,9 +54,10 @@ public class DrpndController {
 		List<Team> teamList = null;
 		
 		try {
+			cuttentTime10 = geuntaeService.getCuttentTime10();
 			gotoworkChecked = geuntaeService.checkMyTodayGotowork(myInfo.getSawonCode());
 			offworkChecked = geuntaeService.checkMyTodayOffwork(myInfo.getSawonCode());
-			cuttentTime10 = geuntaeService.getCuttentTime10();
+			
 			
 			teamList = geuntaeService.getTeamList(myInfo.getSawonDepartment());
 		}
