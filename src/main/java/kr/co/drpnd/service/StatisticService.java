@@ -28,7 +28,20 @@ public class StatisticService {
 	}
 	
 	private String getTipsMessage(Object time) {
-		return " (총 야근시간: " + String.valueOf(time) + ")";
+		String timeStr = String.valueOf(time);
+		int timeInt = Integer.parseInt(timeStr);
+		int timeH = 0;
+		int timeM = 0;
+		if(timeInt >= 60) {
+			timeH = timeInt/60;
+			timeM = timeInt%60;
+			timeStr = String.valueOf(time) + "분/" + timeH + "시간" + timeM + "분";
+		}
+		else {
+			timeStr = timeStr + "분";
+		}
+		
+		return " (총 야근시간: " + timeStr + ")";
 	}
 	
 	public List<Map<String, Object>> getOverwork(Map<String, Object> param) {
