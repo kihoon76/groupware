@@ -461,6 +461,7 @@
 		//$(iframe.el.dom).find('iframe')[0].contentWindow.t();
 		var reserveWin = parent.Ext.create('Ext.window.Window', {
 			title: '회의실 예약현황',
+			iconCls: 'icon-reserved',
 			height: 800,
 			width: 800,
 			layout: 'fit',
@@ -475,7 +476,7 @@
 			    //defaults: {minWidth: minButtonWidth},
 			    items: [
 			        { xtype: 'component', flex: 1 },
-			        { xtype: 'button', text: '시간설정', listeners: {
+			        { xtype: 'button', text: '시간설정', iconCls: 'icon-timer', listeners: {
 			        	click: function() {
 			        		//setConferenceTime();
 			        		//reservationContentWin = $(iframe.el.dom).find('iframe')[0].contentWindow;
@@ -483,7 +484,7 @@
 			        		common.checkSession(setConferenceTime);
 			        	}
 			        } },
-			        { xtype: 'button', text: '닫기', listeners: {
+			        { xtype: 'button', text: '닫기', iconCls: 'icon-close', listeners: {
 			        	click: function(btn) {
 			        		reserveWin.close();
 			        	}
@@ -505,6 +506,7 @@
 	function setConferenceTime() {
 		timeSettingWin = parent.Ext.create('Ext.window.Window', {
 			title: '시간설정(' + TimeObj.ymd + ')',
+			iconCls: 'icon-timer',
 			height: 200,
 			width: 400,
 			layout: 'fit',
@@ -567,12 +569,12 @@
 			    //defaults: {minWidth: minButtonWidth},
 			    items: [
 			        { xtype: 'component', flex: 1 },
-			        { xtype: 'button', text: '예약', listeners: {
+			        { xtype: 'button', text: '예약', iconCls: 'icon-reserved', listeners: {
 			        	click: function() {
 			        		reserve();
 			        	}
 			        } },
-			        { xtype: 'button', text: '닫기', listeners: {
+			        { xtype: 'button', text: '닫기', iconCls: 'icon-close', listeners: {
 			        	click: function(btn) {
 			        		timeSettingWin.close();
 			        	}

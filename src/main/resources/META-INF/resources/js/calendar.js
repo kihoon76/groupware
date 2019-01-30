@@ -160,6 +160,7 @@ $(document).ready(function() {
 				
 			map = parent.Ext.create('Ext.window.Window', {
 				title: '출근위치',
+				iconCls: 'icon-position',
 				height: 500, 
 				width: 500,
 				layout: 'fit',
@@ -186,7 +187,7 @@ $(document).ready(function() {
 		console.log(content)
 		var	win = parent.Ext.create('Ext.window.Window', {
 			title: '<span style="color:#0000ff">' + title + '</span>님 일정',
-			iconCls: 'icon-window',
+			iconCls: 'icon-calendar',
 			height: 500, 
 			width: 500,
 			layout: 'fit',
@@ -237,6 +238,7 @@ $(document).ready(function() {
 		
 		var	win = parent.Ext.create('Ext.window.Window', {
 			title: event.start.format() + ' (' + details.sawonName + ')',
+			iconCls: 'icon-calendar',
 			height: 500, 
 			width: 500,
 			layout: 'fit',

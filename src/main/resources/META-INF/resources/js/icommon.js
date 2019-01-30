@@ -174,6 +174,7 @@ var common = (function() {
 			
 			var	win = parent.Ext.create('Ext.window.Window', {
 					title: param.d,
+					iconCls: 'icon-calendar',
 					height: 250, 
 					width: 400,
 					layout: 'fit',
