@@ -38,4 +38,6 @@ public interface GyeoljaeDao {
 	Map<String, Object> selectMySangsinTotalCount(Map<String, Object> param);
 
 	Map<String, Object> selectMyGyeoljaeTotalCount(Map<String, Object> param);
+
+	Map<String, Object> selectMyCommitedGyeoljaeTotalCount(Map<String, Object> param);
 }

@@ -2,14 +2,17 @@
 	var receivedExtBtn = null;
 	var sangsinExtBtn = null;
 	var keepboxExtBtn = null;
+	var extMask = null;
 	
-	window.setGyeoljaeButton = function(received, sangsin, keepbox) {
+	window.setGyeoljaeButton = function(received, sangsin, keepbox, mask) {
 		receivedExtBtn = received;
 		sangsinExtBtn = sangsin;
 		keepboxExtBtn = keepbox;
+		extMask = mask;
 	}
 
 	$(document).ready(function() {
+		if(extMask) extMask.hide();
 		var myGian = Gyeoljae.createTabulator({
 			id: '#myGian',
 			ajaxURL: '/mysangsin',

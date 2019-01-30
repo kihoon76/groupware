@@ -15,6 +15,9 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 		var btnNewGyeoljae = null;
 		var activeColor = '#ccffff';
 		var overviewWin = null;
+		var receivedWin = null;
+		var sangsinWin = null;
+		var keepboxWin = null;
 		
 		function activeButtonCSS(activeBtn) {
 			if(activeBtn == 'OVERVIEW') {
@@ -92,10 +95,12 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 		//요약
 		function overviewClick(isNotSessionCheck) {
 			activeButtonCSS('OVERVIEW');
+			var mask = null;//new Ext.LoadMask(Ext.getBody(), {msg: '수신함을 로딩중입니다.'});
+			//mask.show();
 			if(isNotSessionCheck) {
 				var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'gyeoljae/view/overview', load: function(dom) {
 					overviewWin = dom.contentWindow; 
-					overviewWin.setGyeoljaeButton(btnReceiveBox, btnSansinBox, btnKeepBox);
+					overviewWin.setGyeoljaeButton(btnReceiveBox, btnSansinBox, btnKeepBox, mask);
 				} });
 				addItem(iframe);
 			}
@@ -103,7 +108,7 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 				CommonFn.checkSession(function() {
 					var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'gyeoljae/view/overview', load: function(dom) {
 						overviewWin = dom.contentWindow;
-						overviewWin.setGyeoljaeButton(btnReceiveBox, btnSansinBox, btnKeepBox);
+						overviewWin.setGyeoljaeButton(btnReceiveBox, btnSansinBox, btnKeepBox, mask);
 					} });
 					addItem(iframe);
 				});
@@ -113,8 +118,13 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 		//수신함
 		function receiveBoxClick() {
 			activeButtonCSS('RECEIVE_BOX');
+			var mask = null;//new Ext.LoadMask(Ext.getBody(), {msg: '수신함을 로딩중입니다.'});
+			//mask.show();
 			CommonFn.checkSession(function() {
-				var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'gyeoljae/view/receivedbox' });
+				var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'gyeoljae/view/receivedbox', load: function(dom) {
+					receivedWin = dom.contentWindow;
+					receivedWin.setParam(mask);
+				} });
 				addItem(iframe);
 			});
 		}
@@ -122,8 +132,13 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 		//상신함
 		function sangsinBoxClick() {
 			activeButtonCSS('SANGSIN_BOX');
+			var mask = null;//new Ext.LoadMask(Ext.getBody(), {msg: '상신함을 로딩중입니다.'});
+			//mask.show();
 			CommonFn.checkSession(function() {
-				var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'gyeoljae/view/sangsinbox' });
+				var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'gyeoljae/view/sangsinbox', load: function(dom) {
+					sangsinWin = dom.contentWindow;
+					sangsinWin.setParam(mask);
+				} });
 				addItem(iframe);
 			});
 		}
@@ -131,8 +146,13 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 		//보관함
 		function keepBoxClick() {
 			activeButtonCSS('KEEP_BOX');
+			var mask = null;//new Ext.LoadMask(Ext.getBody(), {msg: '보관함을 로딩중입니다.'});
+			//mask.show();
 			CommonFn.checkSession(function() {
-				var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'gyeoljae/view/keepbox' });
+				var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'gyeoljae/view/keepbox', load: function(dom) {
+					keepboxWin = dom.contentWindow;
+					keepboxWin.setParam(mask);
+				} });
 				addItem(iframe);
 			});
 		}

@@ -120,4 +120,8 @@ public class GyeoljaeService {
 		return gyeoljaeDao.selectMyGyeoljaeTotalCount(param);
 	}
 
+	public Map<String, Object> getMyCommitedGyeoljaeTotalCount(Map<String, Object> param) {
+		return gyeoljaeDao.selectMyCommitedGyeoljaeTotalCount(param);
+	}
+
 }

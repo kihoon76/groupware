@@ -14,6 +14,7 @@
 	<div class="form-group divMR">
 		<input type="text" class="form-control  input-sm" id="txtSearchContent" disabled>		
 	</div>
+	<c:if test="${tab ne 'keepbox'}">
 	<div class="form-group divMR">
 		<c:choose>
 		<c:when test="${tab eq 'sangsinbox'}">
@@ -33,8 +34,8 @@
 		</select>	
 		</c:when>
 		</c:choose>
-			
 	</div>
+	</c:if>
 	<div class="input-daterange form-group divMR" id="datepicker">
 		<div class="input-group-prepend">
 	  		<input type="text" class="input-sm form-control" id="txtStartDate" autocomplete="off" readOnly value="<c:out value='${start}' />"/>
