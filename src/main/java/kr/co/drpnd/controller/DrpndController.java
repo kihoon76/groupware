@@ -67,6 +67,7 @@ public class DrpndController {
 		m.put("isGotoworkChecked", gotoworkChecked);
 		m.put("isOffworkChecked", offworkChecked);
 		m.put("sawonName", myInfo.getSawonName());
+		m.put("sawonCode", myInfo.getSawonCode());
 		m.put("currentTime10", cuttentTime10);
 		
 		if(RequestUtil.isMobile(request)) {

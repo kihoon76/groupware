@@ -10,6 +10,7 @@ Ext.define('Drpnd.view.Viewport', {
 	    var isGotowork = Ext.getBody().getAttribute('data-gotowork') == 'true';
 	    var isOffwork = Ext.getBody().getAttribute('data-offwork') == 'true';
 	    var sawonName = Ext.getBody().getAttribute('data-sawon-name');
+	    var sawonCode = Ext.getBody().getAttribute('data-sawon-code');
 	    var currentTime10 = Ext.get('hdnTime').getValue();
 	    var hasWorker = false;
 	    var worker = null;
@@ -27,6 +28,38 @@ Ext.define('Drpnd.view.Viewport', {
 	    var offWorkWin = null;
 	    var myInfoWin = null;
 	    var signatureContentWin = null;
+	    var msgCt = null;
+	    
+	    function createAlarmBox(t, s) {
+	    	 return '<div class="msg ' + Ext.baseCSSPrefix + 'border-box"><h3>' + t + '</h3><p>' + s + '</p></div>';
+	    }
+	    
+	    function createSocket() {
+	    	setTimeout(function() {
+	        	var Socket = Ext.create('Drpnd.custom.Socket', {
+	        		socketUrl: '/websocket',
+	             	subscribe: [{
+	             		url: '/message/gyeoljae/received/' + sawonCode + '/alarm',
+	             		callback: function(message, mBody) {
+	             			console.log(mBody)
+	             		}
+	             	},{
+	             		url: '/message/gyeoljae/mygyeoljae/' + sawonCode + '/alarm',
+	             		callback: function(message, mBody) {
+	             			console.log(mBody)
+	             			if(!msgCt){
+	                            msgCt = Ext.DomHelper.insertFirst(document.body, {id:'msg-div'}, true);
+	                        }
+	                        var m = Ext.DomHelper.overwrite(msgCt, createAlarmBox('알람', mBody.msg), true);
+	                        m.hide();
+	                        m.slideIn('t').ghost('t', { delay: 3000, remove: false});
+	             		}
+	             	}]
+	        	});
+	             	
+	            Socket.connect();
+	    	}, 2000);
+        }
 	    
 	    function logoutClick(button) {
 	    	if(button == 'yes') {
@@ -684,7 +717,12 @@ Ext.define('Drpnd.view.Viewport', {
                 	  //Ext.getCmp('app-results').collapse(Ext.Component.DIRECTION_BOTTOM, true);
                   }
                }
-            }]
+            }],
+            listeners: {
+            	afterlayout: function() {
+            		createSocket();
+            	}
+            }
         });
 
         Ext.EventManager.onWindowResize(function(w, h) {

@@ -16,6 +16,7 @@
 	<link rel="stylesheet" href="/resources/css/default.css"/>
 	<link rel="stylesheet" href="/resources/css/icon.css"/>
 	<link rel="stylesheet" href="/resources/css/step.css"/>
+	<link rel="stylesheet" href="/resources/css/alarm.css"/>
 	<!-- <link rel="stylesheet" href="/resources/ux/css/CheckHeader.css"/> -->
     
 	<sitemesh:write property="head" />
@@ -25,6 +26,7 @@
 	  data-gotowork="<c:out value='${isGotoworkChecked}' />"
 	  data-offwork="<c:out value='${isOffworkChecked}' />"
 	  data-sawon-name="<c:out value='${sawonName}' />"
+	  data-sawon-code="<c:out value='${sawonCode}' />"
 	  data-team="<c:out value='${team}' />">
 	<sitemesh:write property="body" /> 
 	<script src="/resources/core/ver/4.1.1-rc2/js/ext-all.js"></script>

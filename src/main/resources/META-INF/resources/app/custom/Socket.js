@@ -12,7 +12,7 @@ Ext.define('Drpnd.custom.Socket', function() {
 		stompClient.connect({}, function(frame) {
 			setTimeout(function() {
 				successCallback(subscribe);
-			}, 100);
+			}, 500);
 		}, function(error) {
 			//reconnect(url, subscribe);
 		});

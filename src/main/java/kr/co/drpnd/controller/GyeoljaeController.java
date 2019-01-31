@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +38,7 @@ import kr.co.drpnd.domain.Sangsin;
 import kr.co.drpnd.domain.Sawon;
 import kr.co.drpnd.exception.InvalidUser;
 import kr.co.drpnd.service.GyeoljaeService;
+import kr.co.drpnd.service.SawonService;
 import kr.co.drpnd.type.ExceptionCode;
 import kr.co.drpnd.util.SessionUtil;
 import kr.co.drpnd.util.StringUtil;
@@ -46,6 +49,12 @@ public class GyeoljaeController {
 
 	@Resource(name="gyeoljaeService")
 	GyeoljaeService gyeoljaeService;
+	
+	@Resource(name="sawonService")
+	SawonService sawonService;
+	
+	@Autowired
+	private SimpMessagingTemplate template;
 	
 	@GetMapping("view/new")
 	public String viewNewGyeoljae(ModelMap m) {
@@ -154,15 +163,14 @@ public class GyeoljaeController {
 		AjaxVO vo = new AjaxVO();
 		vo.setSuccess(true);
 		
-		//ObjectMapper om = new ObjectMapper();
 		try {
-			//System.err.println(om.writeValueAsString(sangsin));
-
 			List<Map<String, Object>> lines = sangsin.getGyeoljaeLines();
+			String firstGyeoljaejaCode = null;
 			
 			for(Map<String, Object> line: lines) {
 				if("1".equals(line.get("order"))) {
 					line.put("status", "D");
+					firstGyeoljaejaCode = String.valueOf(line.get("sawonCode"));
 				}
 				else {
 					line.put("status", "W");
@@ -171,6 +179,14 @@ public class GyeoljaeController {
 			
 			sangsin.setGianja(myInfo.getSawonCode());
 			gyeoljaeService.regNewGyeoljae(sangsin);
+			try {
+				Map<String, String> socketMap = new HashMap<>();
+				socketMap.put("msg", myInfo.getSawonName() + "님이 올린 결재건이 도착했습니다.");
+				this.template.convertAndSend("/message/gyeoljae/mygyeoljae/" + firstGyeoljaejaCode + "/alarm", (new Gson()).toJson(socketMap));
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+			}
 		} 
 		catch (Exception e) {
 			vo.setSuccess(false);
