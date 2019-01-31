@@ -39,20 +39,43 @@ Ext.define('Drpnd.view.Viewport', {
 	        	var Socket = Ext.create('Drpnd.custom.Socket', {
 	        		socketUrl: '/websocket',
 	             	subscribe: [{
-	             		url: '/message/gyeoljae/received/' + sawonCode + '/alarm',
-	             		callback: function(message, mBody) {
-	             			console.log(mBody)
-	             		}
-	             	},{
-	             		url: '/message/gyeoljae/mygyeoljae/' + sawonCode + '/alarm',
+	             		url: '/message/gyeoljae/keepbox/' + sawonCode + '/alarm',
 	             		callback: function(message, mBody) {
 	             			console.log(mBody)
 	             			if(!msgCt){
 	                            msgCt = Ext.DomHelper.insertFirst(document.body, {id:'msg-div'}, true);
 	                        }
-	                        var m = Ext.DomHelper.overwrite(msgCt, createAlarmBox('알람', mBody.msg), true);
+	             			var s = '<span style="color:#ff0000;">' + mBody.msg + '</span>님이 올린 결재가  완료되었습니다<br/>'
+	             			      + '<span style="color:#0000ff;">보관함</span>에서 확인하세요.';
+	                        var m = Ext.DomHelper.overwrite(msgCt, createAlarmBox('알림', s), true);
 	                        m.hide();
-	                        m.slideIn('t').ghost('t', { delay: 3000, remove: false});
+	                        m.slideIn('t').ghost('t', { delay: 5000, remove: true});
+	             		}
+	             	},{
+	             		url: '/message/gyeoljae/received/' + sawonCode + '/alarm',
+	             		callback: function(message, mBody) {
+	             			console.log(mBody)
+	             			if(!msgCt){
+	                            msgCt = Ext.DomHelper.insertFirst(document.body, {id:'msg-div'}, true);
+	                        }
+	             			var s = '<span style="color:#ff0000;">' + mBody.msg + '</span>님이 올린 결재건이 도착했습니다<br/>'
+	             			      + '<span style="color:#0000ff;">결재수신함</span>에서 확인하세요.';
+	                        var m = Ext.DomHelper.overwrite(msgCt, createAlarmBox('알림', s), true);
+	                        m.hide();
+	                        m.slideIn('t').ghost('t', { delay: 5000, remove: true});
+	             		}
+	             	},{
+	             		url: '/message/gyeoljae/reject/' + sawonCode + '/alarm',
+	             		callback: function(message, mBody) {
+	             			console.log(mBody)
+	             			if(!msgCt){
+	                            msgCt = Ext.DomHelper.insertFirst(document.body, {id:'msg-div'}, true);
+	                        }
+	             			var s = '<span style="color:#ff0000;">' + mBody.msg + '</span>님이 올린 결재가  <span style="color:#ff0000;">반려</span>되었습니다<br/>'
+	             			      + '<span style="color:#0000ff;">상신함</span>에서 확인하세요.';
+	                        var m = Ext.DomHelper.overwrite(msgCt, createAlarmBox('알림', s), true);
+	                        m.hide();
+	                        m.slideIn('t').ghost('t', { delay: 5000, remove: true});
 	             		}
 	             	}]
 	        	});

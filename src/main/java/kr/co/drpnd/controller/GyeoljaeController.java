@@ -181,8 +181,8 @@ public class GyeoljaeController {
 			gyeoljaeService.regNewGyeoljae(sangsin);
 			try {
 				Map<String, String> socketMap = new HashMap<>();
-				socketMap.put("msg", myInfo.getSawonName() + "님이 올린 결재건이 도착했습니다.");
-				this.template.convertAndSend("/message/gyeoljae/mygyeoljae/" + firstGyeoljaejaCode + "/alarm", (new Gson()).toJson(socketMap));
+				socketMap.put("msg", myInfo.getSawonName());
+				this.template.convertAndSend("/message/gyeoljae/received/" + firstGyeoljaejaCode + "/alarm", (new Gson()).toJson(socketMap));
 			}
 			catch(Exception e) {
 				e.printStackTrace();
@@ -214,6 +214,7 @@ public class GyeoljaeController {
 		
 		try {
 			Sawon myInfo = SessionUtil.getSessionSawon();
+			String firstGyeoljaejaCode = null;
 			
 			Gson gson = new Gson();
 			List<Map<String, Object>> lines = gson.fromJson(gyeoljaeLines, new TypeToken<List<Map<String, Object>>>(){}.getType());
@@ -221,6 +222,7 @@ public class GyeoljaeController {
 			for(Map<String, Object> line: lines) {
 				if("1".equals(line.get("order"))) {
 					line.put("status", "D");
+					firstGyeoljaejaCode = String.valueOf(line.get("sawonCode"));
 				}
 				else {
 					line.put("status", "W");
@@ -254,8 +256,14 @@ public class GyeoljaeController {
 			sangsin.setAttachFiles(attachFiles);
 			gyeoljaeService.regNewGyeoljae(sangsin);
 			
-//			ObjectMapper om = new ObjectMapper();
-//			System.err.println(om.writeValueAsString(sangsin.getAttachFiles()));
+			try {
+				Map<String, String> socketMap = new HashMap<>();
+				socketMap.put("msg", myInfo.getSawonName());
+				this.template.convertAndSend("/message/gyeoljae/received/" + firstGyeoljaejaCode + "/alarm", gson.toJson(socketMap));
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+			}
 		}
 		catch(Exception e) {
 			vo.setSuccess(false);
@@ -295,7 +303,7 @@ public class GyeoljaeController {
 				param.put("searchTextType", searchTextType);
 				param.put("searchText", StringUtil.escapeMsSql(searchText));
 				param.put("searchStartDate", searchStartDate);
-				param.put("searchEndDate", searchEndDate);
+				param.put("searchEndDate", searchEndDate + " 23:59:59");
 				Map<String, Object> r = gyeoljaeService.getMySangsinTotalCount(param);
 				totalPage = Integer.parseInt(String.valueOf(r.get("page")));
 				totalRow = Integer.parseInt(String.valueOf(r.get("total")));
@@ -374,7 +382,7 @@ public class GyeoljaeController {
 				param.put("searchTextType", searchTextType);
 				param.put("searchText", StringUtil.escapeMsSql(searchText));
 				param.put("searchStartDate", searchStartDate);
-				param.put("searchEndDate", searchEndDate);
+				param.put("searchEndDate", searchEndDate + " 23:59:59");
 				
 				Map<String, Object> r = gyeoljaeService.getMyGyeoljaeTotalCount(param);
 				totalPage = Integer.parseInt(String.valueOf(r.get("page")));
@@ -433,7 +441,7 @@ public class GyeoljaeController {
 				param.put("searchTextType", searchTextType);
 				param.put("searchText", StringUtil.escapeMsSql(searchText));
 				param.put("searchStartDate", searchStartDate);
-				param.put("searchEndDate", searchEndDate);
+				param.put("searchEndDate", searchEndDate + " 23:59:59");
 				
 				Map<String, Object> r = gyeoljaeService.getMyCommitedGyeoljaeTotalCount(param);
 				totalPage = Integer.parseInt(String.valueOf(r.get("page")));
@@ -526,9 +534,30 @@ public class GyeoljaeController {
 		param.put("sangsinCode", Integer.parseInt(map.get("sangsinCode")));
 		param.put("result", -2);
 		param.put("opinion", map.get("opinion"));
+		param.put("gianja", -1);
+		param.put("nextGyeoljaeja", -1);
+		param.put("gianjaName", "");
 		
 		try {
 			gyeoljaeService.commitGyeoljae(param);
+			
+			try {
+				Map<String, String> socketMap = new HashMap<>();
+				socketMap.put("msg", String.valueOf(param.get("gianjaName")));
+				
+				String result = String.valueOf(param.get("result"));
+				
+				if("0".equals(result)) {//다음결재자로 알림
+					this.template.convertAndSend("/message/gyeoljae/received/" + String.valueOf(param.get("nextGyeoljaeja")) + "/alarm", (new Gson()).toJson(socketMap));
+				}
+				else if("1".equals(result)) { //최종결재됨
+					this.template.convertAndSend("/message/gyeoljae/keepbox/" + String.valueOf(param.get("gianja")) + "/alarm", (new Gson()).toJson(socketMap));
+				}
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+			}
+			
 			vo.setSuccess(true);
 		}
 		catch(InvalidUser e) {
@@ -555,10 +584,22 @@ public class GyeoljaeController {
 		param.put("sawonCode", Integer.parseInt(myInfo.getSawonCode()));
 		param.put("sangsinCode", Integer.parseInt(map.get("sangsinCode")));
 		param.put("result", -2);
+		param.put("gianja", -1);
+		param.put("gianjaName", "");
 		param.put("opinion", map.get("opinion"));
 		
 		try {
 			gyeoljaeService.rejectGyeoljae(param);
+			
+			try {
+				Map<String, String> socketMap = new HashMap<>();
+				socketMap.put("msg", String.valueOf(param.get("gianjaName")));
+				this.template.convertAndSend("/message/gyeoljae/reject/" + String.valueOf(param.get("gianja")) + "/alarm", (new Gson()).toJson(socketMap));
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+			}
+			
 			vo.setSuccess(true);
 		}
 		catch(InvalidUser e) {

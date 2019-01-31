@@ -328,7 +328,10 @@
 			#{sangsinCode, mode=IN, jdbcType=INTEGER, javaType=int},
 			#{sawonCode, mode=IN, jdbcType=INTEGER, javaType=int},
 			#{opinion, mode=IN, jdbcType=NVARCHAR, javaType=string},
-			#{result, mode=OUT, jdbcType=INTEGER, javaType=int}
+			#{result, mode=OUT, jdbcType=INTEGER, javaType=int},
+			#{gianja, mode=OUT, jdbcType=INTEGER, javaType=int},
+			#{gianjaName, mode=OUT, jdbcType=NVARCHAR, javaType=string},
+			#{nextGyeoljaeja, mode=OUT, jdbcType=INTEGER, javaType=int}
 		)}
 	</update>
 	
@@ -337,7 +340,9 @@
 			#{sangsinCode, mode=IN, jdbcType=INTEGER, javaType=int},
 			#{sawonCode, mode=IN, jdbcType=INTEGER, javaType=int},
 			#{opinion, mode=IN, jdbcType=NVARCHAR, javaType=string},
-			#{result, mode=OUT, jdbcType=INTEGER, javaType=int}
+			#{result, mode=OUT, jdbcType=INTEGER, javaType=int},
+			#{gianja, mode=OUT, jdbcType=INTEGER, javaType=int},
+			#{gianjaName, mode=OUT, jdbcType=NVARCHAR, javaType=string}
 		)}
 	</update>
 	
