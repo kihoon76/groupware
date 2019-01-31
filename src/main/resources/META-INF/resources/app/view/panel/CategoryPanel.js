@@ -46,6 +46,10 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
     		 text: '결재', leaf : true, cate : 'gyeoljae', id: 'gyeoljae', iconCls: 'icon-approve'
     	});
     	
+    	treeItems.push({
+	   		 text: '프로젝트', leaf : true, cate : 'project', id: 'project', iconCls: 'icon-project'
+	   	});
+    	
     	Ext.apply(this, {
     		 store : Ext.create('Ext.data.TreeStore', {
     	    	 root : {
