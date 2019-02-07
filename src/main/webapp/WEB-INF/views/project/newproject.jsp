@@ -11,6 +11,7 @@
 <script src="/resources/os/fullcalendar-3.9.0/fullcalendar.min.js"></script>
 <script src="/resources/os/fullcalendar-3.9.0/locale/ko.js"></script>
 <script src="/resources/os/fullcalendar-3.9.0/scheduler-1.9.4.min.js"></script>
+<script src="/resources/os/jQuery-Contextmenu-2.7.1/jquery.contextMenu.js"></script>
 <script src="/resources/js/icommon.js"></script>
 <script src="/resources/js/project/newproject.js"></script>
 </content>
@@ -19,6 +20,7 @@
 	<link rel="stylesheet" href="/resources/css/calendar.css" />
 	<link rel="stylesheet" href="/resources/os/fullcalendar-3.9.0/fullcalendar.min.css" />
 	<link rel="stylesheet" href="/resources/os/fullcalendar-3.9.0/scheduler-1.9.4.min.css" />
+	<link rel="stylesheet" href="/resources/os/jQuery-Contextmenu-2.7.1/jquery.contextMenu.css" />
 	<style>
 		 body {
     margin-top: 10px;
@@ -48,7 +50,7 @@
 
     <div id='external-events'>
 <!--       <h4>Draggable Events</h4> -->
-      <div class='fc-event'>My Event 1</div>
+      <div class='fc-event'>드래그 하세요!!</div>
 <!--       <div class='fc-event'>My Event 2</div> -->
 <!--       <div class='fc-event'>My Event 3</div> -->
 <!--       <div class='fc-event'>My Event 4</div> -->
