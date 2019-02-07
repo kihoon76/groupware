@@ -60,7 +60,8 @@
 			    			start: mBody.ymd + 'T' + mBody.startTime,
 			    			end: mBody.ymd + 'T' + mBody.endTime,
 			    			reserver: mBody.reserver,
-			    			mine: mBody.mine
+			    			mine: mBody.mine,
+			    			rnum: mBody.rnum
 			    		}, 'default');  
 			    	}
 				}
