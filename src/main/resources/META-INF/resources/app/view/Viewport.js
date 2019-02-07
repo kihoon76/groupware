@@ -232,15 +232,18 @@ Ext.define('Drpnd.view.Viewport', {
 	    					closable: false,
 	    					resizable: false,
 	    					closeAction: 'destroy',
+	    					layout: 'fit',
 	    					items: [getMyInfoForm(jo.datas[0])],
 	    					buttons: [{
 	    						text: '수정',
 	    						id: 'btnRegist',
+	    						iconCls: 'icon-modi',
 	    					    handler: function() {
 	    					    	modifyMyInfo();
 	    				        }
 	    					}, {
 	    						text: '닫기',
+	    						iconCls: 'icon-close',
 	    					    handler: function() {
 	    					    	myInfoWin.close();
 	    				        }
@@ -302,6 +305,7 @@ Ext.define('Drpnd.view.Viewport', {
 				 title: '내정보',
 			     anchor: '100%',
 			     bodyPadding: 5,
+			     iconCls: 'icon-myinfo',
 
 			        fieldDefaults: {
 			            labelAlign: 'left',

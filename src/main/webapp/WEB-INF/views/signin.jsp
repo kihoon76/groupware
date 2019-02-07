@@ -8,6 +8,7 @@
 	<title>동림피엔디</title>
 	<link rel="icon" href="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}/resources/images/favicon.png" type="image/png" />
 	<link rel="stylesheet" href="/resources/core/ver/4.1.1-rc2/css/ext-all-gray.css"/>
+	<link rel="stylesheet" href="/resources/css/icon.css"/>
 	<style>
 	.customLoadMask {
 		filter: alpha(opacity=70);
