@@ -263,9 +263,39 @@ $(function() {
 	}
 	
 	function delEvent(rnum) {
-		var item = $(calId).fullCalendar('removeEvents', function(evt) {
+		$(calId).fullCalendar('removeEvents', function(evt) {
 			return evt.rnum == rnum;
 		});
+		
+	
+		var events = eventSources['default'].events;
+		var b = false;
+		
+		var defaultEventsLen = events.length;
+		if(defaultEventsLen) {
+			for(var i=0; i<defaultEventsLen; i++) {
+				if(events[i].rnum == rnum) {
+					events.splice(i, 1);
+					b = true;
+					break;
+				}
+			}
+		}
+		
+		if(b == true) return;
+		
+		events = eventSources['mine'].events;
+		defaultEventsLen = events.length;
+		
+		if(defaultEventsLen) {
+			for(var i=0; i<defaultEventsLen; i++) {
+				if(events[i].rnum == rnum) {
+					events.splice(i, 1);
+					break;
+				}
+			}
+		}
+	
 	}
 	
 	window.getCurrentDate = getCurrentDate;

@@ -33,6 +33,9 @@
 	};
 	var timeSettingWin = null;
 	var myToken = $('#_csrfToken').val();
+	var crCountStr = $('#crCount').val();
+	var crCount = parseInt(crCountStr, 10);
+	var today = $('body').data('date');
 	//var hasSocketConntected = false;
 	var reservationContentWin = null;
 	//var reconTotal = 10;
@@ -61,6 +64,11 @@
 			    		}, 'default');  
 			    	}
 				}
+				
+				//회의실 예약 카운트 +1
+				if(mBody.ymd == today) {
+					conferenceMap[0].ownerTxt.text('회의실(' + (++crCount) + ')');
+				}
 			}
 		},{
 			url: '/message/conference/del/reservation',
@@ -70,6 +78,11 @@
 				    if(reservationContentWin && reservationContentWin.getCurrentDate() == mBody.ymd) {
 				    	reservationContentWin.delEvent(mBody.rnum);  
 				    }
+				}
+				
+				//회의실 예약 카운트 +1
+				if(mBody.ymd == today && crCount >= 1) {
+					conferenceMap[0].ownerTxt.text('회의실(' + (--crCount) + ')');
 				}
 			}
 		},{
@@ -439,7 +452,7 @@
 			this.fill({ color : recColor, opacity: 1})
 		})
 		
-		var ownerTxt = draw.text('회의실').attr({x:50, y:50});
+		var ownerTxt = draw.text('회의실(' + crCountStr + ')').attr({x:50, y:50});
 		ownerTxt.font({anchor: 'middle', size: 25, family: 'Helvetica'});
 		ownerTxt.move(x + (recW/4), y + 10);
 		

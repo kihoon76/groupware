@@ -31,4 +31,6 @@ public interface CalendarDao {
 
 	Map<String, String> selectPlanContent(Map<String, String> param);
 
+	String selectTodayConferenceReservationCount();
+
 }

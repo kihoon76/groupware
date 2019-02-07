@@ -125,6 +125,12 @@
 		where 회의년도 = #{reserveDate}
 	</select>
 	
+	<select id="selectTodayConferenceReservationCount" resultType="string">
+		select count(예약번호)
+		  from [동림].[dbo].[회의실예약]
+		 where 회의년도 = CONVERT(CHAR(10),GETDATE(),23)
+	</select>
+	
 	<update id="updateConferenceReservation" parameterType="ConferenceReservation">
 		update [동림].[dbo].[회의실예약]
 		   set 회의제목 = #{title},

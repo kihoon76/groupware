@@ -195,4 +195,8 @@ public class CalendarService {
 		return calendarDao.selectPlanContent(param);
 	}
 
+	public String getTodayConferenceReservationCount() {
+		return calendarDao.selectTodayConferenceReservationCount();
+	}
+
 }

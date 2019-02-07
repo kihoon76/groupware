@@ -26,6 +26,7 @@ import com.google.gson.Gson;
 import kr.co.drpnd.domain.AjaxVO;
 import kr.co.drpnd.domain.Sawon;
 import kr.co.drpnd.domain.Team;
+import kr.co.drpnd.service.CalendarService;
 import kr.co.drpnd.service.GeuntaeService;
 import kr.co.drpnd.service.SawonService;
 import kr.co.drpnd.type.TokenKey;
@@ -43,6 +44,9 @@ public class DrpndController {
 	
 	@Resource(name="geuntaeService")
 	GeuntaeService geuntaeService;
+	
+	@Resource(name="calendarService")
+	CalendarService calendarService;
 	
 	@GetMapping(value={"main", "m/main"})
 	public String index(HttpServletRequest request, ModelMap m) {
@@ -120,11 +124,14 @@ public class DrpndController {
 		List<Sawon> sawonList = sawonService.getMyDepartmentAllSawon(sawon.getSawonDepartment());
 		List<Map<String, Object>> todayVacationList = sawonService.getTodayVacationAllSawon(sawon.getSawonDepartment());
 		List<Map<String, Object>> todayPlanList = sawonService.getTodayPlanAllSawon(sawon.getSawonDepartment());
+		String reservationCount = calendarService.getTodayConferenceReservationCount();
 		
 		Gson g = new Gson();
 		m.addAttribute("list", g.toJson(sawonList));
 		m.addAttribute("vacation", g.toJson(todayVacationList));
 		m.addAttribute("plan", g.toJson(todayPlanList));
+		m.addAttribute("cr_count", reservationCount);
+		m.addAttribute("currentDate", DateUtil.getCurrentDateString());
 		return "floormap";
 	}
 	

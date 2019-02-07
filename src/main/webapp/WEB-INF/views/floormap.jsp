@@ -26,4 +26,5 @@
 	<input type="hidden" value='${list}' id="list"/>
 	<input type="hidden" value='${vacation}' id="vacation"/>
 	<input type="hidden" value='${plan}' id="plan"/>
+	<input type="hidden" value="${cr_count}" id="crCount" />
 </body>
