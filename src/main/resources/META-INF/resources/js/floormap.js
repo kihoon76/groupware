@@ -481,6 +481,7 @@
 			closeAction: 'destroy',
 			modal: true,
 			draggable: false,
+			resizable: false,
 			items: [iframe],
 			dockedItems: [{
 			    xtype: 'toolbar',

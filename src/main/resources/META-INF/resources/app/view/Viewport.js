@@ -106,10 +106,12 @@ Ext.define('Drpnd.view.Viewport', {
 	    	CommonFn.checkSession(function() {
 	    		offWorkWin = Ext.create('Ext.window.Window', {
 					title: '퇴근처리',
-					height: 800,
-					width: 800,
+					height: 600,
+					width: 600,
 					layout: 'fit',
+					iconCls: 'icon-offwork',
 					closeAction: 'destroy',
+					resizable: false,
 					modal: true,
 					items: [{
 						xtype: 'form',
@@ -123,7 +125,7 @@ Ext.define('Drpnd.view.Viewport', {
 				        defaultType: 'textarea',
 				        items: [{
 				        	fieldLabel: '업무내용',
-				        	height: 350,
+				        	height: 250,
 				        	listeners: {
 				        		afterrender: function(txt) {
 				        			offworkObj.txtWorkContent = txt;
@@ -131,7 +133,7 @@ Ext.define('Drpnd.view.Viewport', {
 				        	}
 				        },{
 				        	fieldLabel: '야근내용',
-				        	height: 350,
+				        	height: 250,
 				        	listeners: {
 				        		afterrender: function(txt) {
 				        			offworkObj.txtOutworkContent = txt;
@@ -146,12 +148,12 @@ Ext.define('Drpnd.view.Viewport', {
 					    //defaults: {minWidth: minButtonWidth},
 					    items: [
 					        { xtype: 'component', flex: 1 },
-					        { xtype: 'button', text: '처리', listeners: {
+					        { xtype: 'button', text: '퇴근', iconCls: 'icon-offwork', listeners: {
 					        	click: function() {
 					        		offwork();
 					        	}
 					        } },
-					        { xtype: 'button', text: '닫기', listeners: {
+					        { xtype: 'button', text: '닫기', iconCls: 'icon-close', listeners: {
 					        	click: function(btn) {
 					        		offWorkWin.close();
 					        	}
