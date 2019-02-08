@@ -96,6 +96,13 @@ $(document).ready(function() {
 				else if(upDown == 'down') {
 					resources.splice(i+1, 0, {id: newId, title: title});
 				}
+			}, function(arr, i) {
+				if(upDown == 'up') {
+					arr.splice(i, 0, {id: newId, title: title});
+				}
+				else if(upDown == 'down') {
+					arr.splice(i+1, 0, {id: newId, title: title});
+				}
 			});
 		}
 	}
