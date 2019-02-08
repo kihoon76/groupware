@@ -3,7 +3,7 @@ $(document).ready(function() {
 	var resourceIdCnt = 1;
 	var eventIdCnt = 1;
 	var resources = [
-        { id: 'a', title: 'Auditorium A' },
+        { id: 'a', title: 'Task 1' },
         /*{ id: 'b', title: 'Auditorium B', eventColor: 'green' },
         { id: 'c', title: 'Auditorium C', eventColor: 'orange' },
         { id: 'd', title: 'Auditorium D', 
@@ -21,7 +21,7 @@ $(document).ready(function() {
 	var events = [];
 	
 	function modifyResource(id, title) {
-		var rLen = resources.length;
+		/*var rLen = resources.length;
 		var r = null;
 		var modified = false;
 		for(var i=0; i<rLen; i++) {
@@ -35,61 +35,102 @@ $(document).ready(function() {
 		
 		if(modified) {
 			$('#calendar').fullCalendar('refetchResources');
-		}
+		}*/
+		commonSearchResources(id, function(item, i) {
+			item.title = title;
+		}, function(arr, i) {
+			arr[i].title = title;
+		});
 	}
 	
-	function addResource(parentId, currentId, newId, upDown, title) {
-		if(parentId) {
-			
-		}
-		else {
-			var rLen = resources.length;
-			var r = null;
-			var modified = false;
-			for(var i=0; i<rLen; i++) {
-				r = resources[i];
-				if(r.id == currentId) {
-					if(upDown == 'up') {
-						resources.splice(i, 0, {id: newId, title: title});
-					}
-					else if(upDown == 'down') {
-						resources.splice(i+1, 0, {id: newId, title: title});
-					}
-					
-					
-					modified = true;
-					break;
-				}
-			}
-			
-			if(modified) {
-				$('#calendar').fullCalendar('refetchResources');
-			}
-		}
-	}
-	
-	function removeResource(id) {
+	function commonSearchResources(searchId, callback, recursiveCallback, finalCallback) {
 		var rLen = resources.length;
-		
-		if(rLen == 1) return;
 		var r = null;
 		var modified = false;
 		for(var i=0; i<rLen; i++) {
 			r = resources[i];
-			if(r.id == id) {
-				resources.splice(i, 1);
+			if(r.id == searchId) {
+				callback(r, i);				
+				
 				modified = true;
 				break;
+			}
+			else if(r.children && r.children.length > 0) {
+				if(recursive(searchId, r.children, recursiveCallback)) {
+					modified = true;
+					break;
+				}
 			}
 		}
 		
 		if(modified) {
+			if(finalCallback) finalCallback(r, i);
 			$('#calendar').fullCalendar('refetchResources');
 		}
 	}
 	
+	
+	function addResource(parentId, currentId, newId, upDown, title) {
+		if(parentId) {
+			commonSearchResources(parentId, function(item, i) {
+				if(resources[i].children) {
+					resources[i].children.push({id: newId, title: title});
+				}
+				else {
+					resources[i].children = [{id: newId, title: title}];
+				}
+			}, function(arr, i) {
+				if(arr[i].children) {
+					arr[i].children.push({id: newId, title: title});
+				}
+				else {
+					arr[i].children = [{id: newId, title: title}];
+				}
+			});
+		}
+		else {
+			commonSearchResources(currentId, function(item, i) {
+				if(upDown == 'up') {
+					resources.splice(i, 0, {id: newId, title: title});
+				}
+				else if(upDown == 'down') {
+					resources.splice(i+1, 0, {id: newId, title: title});
+				}
+			});
+		}
+	}
+	
+	function removeResource(id) {
+		if(resources.length == 1) return;
+		
+		commonSearchResources(id, function(item, i) {
+			resources.splice(i, 1);
+		}, function(arr, i) {
+			arr.splice(i, 1);
+		});
+	}
+	
+	function recursive(searchId, itemArr, callback) {
+		if(itemArr) {
+			var len = itemArr.length;
+			var r = null;
+			for(var i=0; i<len; i++) {
+				r = itemArr[i];
+				if(searchId == r.id) {
+					callback(itemArr, i);
+					return true;
+				}
+				else if(r.children && r.children.length > 0) {
+					if(recursive(searchId, r.children, callback)) return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
 	function moveUp(currentId) {
-		var rLen = resources.length;
+		/*var rLen = resources.length;
 		var r = null;
 		var modified = false;
 		var insertIdx = 0;
@@ -108,30 +149,33 @@ $(document).ready(function() {
 			resources.splice(insertIdx, 0, r);
 			
 			$('#calendar').fullCalendar('refetchResources');
-		}
+		}*/
+		
+		commonSearchResources(currentId, function(item, i) {
+			resources.splice(i, 1);
+		}, function(arr, i) {
+			if(i>0) {
+				var item = arr[i];
+				arr.splice(i, 1);
+				arr.splice(i-1, 0, item);
+			}
+		}, function(item, i) {
+			resources.splice(i-1, 0, item);
+		});
 	}
 	
 	function moveDown(currentId) {
-		var rLen = resources.length;
-		var r = null;
-		var modified = false;
-		var insertIdx = 0;
-		
-		for(var i=0; i<rLen; i++) {
-			r = resources[i];
-			if(r.id == currentId && i != rLen-1) {
-				resources.splice(i, 1);
-				insertIdx = i+1;
-				modified = true;
-				break;
+		commonSearchResources(currentId, function(item, i) {
+			resources.splice(i, 1);
+		}, function(arr, i) {
+			if(i<arr.length-1) {
+				var item = arr[i];
+				arr.splice(i, 1);
+				arr.splice(i+1, 0, item);
 			}
-		}
-		
-		if(modified) {
-			resources.splice(insertIdx, 0, r);
-			
-			$('#calendar').fullCalendar('refetchResources');
-		}
+		}, function(item, i) {
+			resources.splice(i+1, 0, item);
+		});
 	}
 	
 	function eventReceived(resourceId, start, end) {
@@ -148,10 +192,6 @@ $(document).ready(function() {
 	$.contextMenu({
         selector: '.fc-cell-content', 
         callback: function(key, options) {
-            var m = "clicked: " + key;
-            console.log(m); 
-            console.log(taskContextMenu.title);
-            
             switch(key) {
             case 'delete':
             	common.showExtMsg({
@@ -160,7 +200,6 @@ $(document).ready(function() {
 		   			callback: function(btn) {
 		   				if(btn == 'ok') {
 		   					removeResource(taskContextMenu.id);
-		   					//$('#calendar').fullCalendar('removeResource', taskContextMenu);  
 		   				}
 		   			}
 		   		});
@@ -168,7 +207,9 @@ $(document).ready(function() {
             case 'add_sub':
             	parent.Ext.Msg.prompt('', taskContextMenu.title + '의 하위 Task를 입력하세요', function(btn, txt) {
     				if(btn == 'ok') {
-    					$('#calendar').fullCalendar('addResource', { parentId:taskContextMenu.id, title: txt }, true /* scroll to the new resource?*/ );
+    					//$('#calendar').fullCalendar('addResource', { parentId:taskContextMenu.id, title: txt }, true /* scroll to the new resource?*/ );
+    					var newId = 'r' + (++resourceIdCnt);
+    					addResource(taskContextMenu.id, null, newId, null, txt);
     				}
     			});
             	break;

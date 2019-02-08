@@ -22,46 +22,41 @@
 	<link rel="stylesheet" href="/resources/os/fullcalendar-3.9.0/scheduler-1.9.4.min.css" />
 	<link rel="stylesheet" href="/resources/os/jQuery-Contextmenu-2.7.1/jquery.contextMenu.css" />
 	<style>
-		 body {
-    margin-top: 10px;
-    text-align: center;
-    font-size: 14px;
-    font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
-  }
+		body {
+    		margin-top: 10px;
+    		text-align: center;
+    		font-size: 14px;
+    		font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+  		}
   
-   #external-events {
-     width: 150px; 
-     padding: 0 10px; 
-     border: 1px solid #ccc; 
-     background: #eee; 
-     text-align: left; 
-     margin-bottom: 10px;
-  }
+   		#external-events {
+     		width: 150px; 
+     		padding: 0 10px; 
+     		border: 1px solid #ccc; 
+     		background: #eee; 
+     		text-align: left; 
+     		margin-bottom: 10px;
+  		}
+  		
+  		 #external-events h5 {
+    		font-size: 11px;
+    		margin-top: 0;
+     		padding-top: 3px; 
+  		}
   
-  #external-events .fc-event { 
-     margin: 10px 0; 
-     cursor: pointer; 
-   } 
-    
+  		#external-events .fc-event { 
+     		margin: 5px 0; 
+     		cursor: pointer; 
+   		} 
 	</style>
 </head>
 <body>
-	<div id='wrap'>
-
-    <div id='external-events'>
-<!--       <h4>Draggable Events</h4> -->
-      <div class='fc-event'>드래그 하세요!!</div>
-<!--       <div class='fc-event'>My Event 2</div> -->
-<!--       <div class='fc-event'>My Event 3</div> -->
-<!--       <div class='fc-event'>My Event 4</div> -->
-<!--       <div class='fc-event'>My Event 5</div> -->
-<!--       <p> -->
-<!--         <input type='checkbox' id='drop-remove' /> -->
-<!--         <label for='drop-remove'>remove after drop</label> -->
-<!--       </p> -->
+	<div id="wrap">
+    	<div id="external-events">
+    		<h5>드래그하세요</h5>
+      		<div class="fc-event">&nbsp;</div>
+    	</div>
+    	<div id="calendar"></div>
+    	<div style="clear:both;"></div>
     </div>
-
-    <div id='calendar'></div>
-
-    <div style='clear:both'></div>
 </body>
