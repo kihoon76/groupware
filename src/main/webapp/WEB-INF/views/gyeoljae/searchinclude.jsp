@@ -9,6 +9,9 @@
  		<select class="form-control" id="selSearchTxt">
  			<option value="A">모두보기</option>
 		    <option value="T">제목</option>
+		    <c:if test="${tab eq 'keepbox'}">
+		    <option value="G">작성자</option>
+		    </c:if>
 		</select>		
 	</div>
 	<div class="form-group divMR">

@@ -21,6 +21,7 @@
 	<link rel="stylesheet" href="/resources/os/fullcalendar-3.9.0/fullcalendar.min.css" />
 	<link rel="stylesheet" href="/resources/os/fullcalendar-3.9.0/scheduler-1.9.4.min.css" />
 	<link rel="stylesheet" href="/resources/os/jQuery-Contextmenu-2.7.1/jquery.contextMenu.css" />
+	<link rel="stylesheet" href="/resources/os/font-awesome/css/font-awesome.min.css" />
 	<style>
 		body {
     		margin-top: 10px;

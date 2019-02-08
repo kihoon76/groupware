@@ -225,7 +225,7 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 				xtype: 'button',
 				text: '보관함',
 				iconCls: 'icon-gyeoljae-keepbox',
-				qtip: '★ 결재완료된 내 기안 보관함<br/>★ 반려된 내 기안은 상신함이나 요약에서 확인하세요',
+				qtip: '★ 결재완료된 모든 사원의 기안 보관함',
 				listeners: {
 					click: function() {
 						keepBoxClick();

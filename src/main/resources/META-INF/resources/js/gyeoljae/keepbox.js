@@ -10,7 +10,7 @@
 	   	var myKeepBox = Gyeoljae.createTabulator({
 			id: '#myKeepBox',
 			pagination: 'remote',
-			ajaxURL: '/mycommited',
+			ajaxURL: '/allcommited',
 			ajaxParams: {
 				searchStatus: 'A',
 				searchTextType: 'A',
@@ -26,7 +26,7 @@
 			selectable:1,
 			height: '800px',
 			rowClick: function(e, row) {
-				Gyeoljae.getMyGianDetail(row.getData().sangsinNum);
+				Gyeoljae.getCommittedGianDetail(row.getData().sangsinNum);
 			},
 			toolbar: true
 		});

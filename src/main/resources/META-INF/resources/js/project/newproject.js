@@ -222,17 +222,22 @@ $(document).ready(function() {
             console.log();
         },
         items: {
-            "edit": {name: "수정", icon: "edit"},
-            "add_up": {name: "위에 추가", icon: "add"},
-            "add_down": {name: "아래에 추가", icon: "add"},
-            "add_sub": {name: "하위메뉴로 추가", icon: "add"},
-           //copy: {name: "Copy", icon: "copy"},
-            //"paste": {name: "Paste", icon: "paste"},
-            "moveup": {name: "위로 옮기기", icon: "moveup"},
-            "movedown": {name: "아래로 옮기기", icon: "movedown"},
-            "delete": {name: "삭제", icon: "delete"},
-            "sep1": "---------",
-            "quit": {name: "닫기", icon: function(){
+            'edit': {name: '수정', icon: 'edit'},
+            'add_up': {name: '위에 추가', icon: 'add'},
+            'add_down': {name: '아래에 추가', icon: 'add'},
+            'add_sub': {name: '하위메뉴로 추가', icon: 'add'},
+           //copy: {name: 'Copy', icon: 'copy'},
+            //'paste': {name: 'Paste', icon: 'paste'},
+            'moveup': {name: '위로 옮기기', icon: function(opt, $itemElement, itemKey, item) {
+            	$itemElement.html('<span><i class=\'fa fa-bars\'></i></span> ' + opt.selector);
+
+                // Add the context-menu-icon-updated class to the item
+                return 'context-menu-icon-updated';
+            }},
+            'movedown': {name: '아래로 옮기기', icon: 'movedown'},
+            'delete': {name: '삭제', icon: 'delete'},
+            'sep1': '---------',
+            'quit': {name: '닫기', icon: function(){
                 return 'context-menu-icon context-menu-icon-quit';
             }}
         }

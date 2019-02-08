@@ -124,4 +124,16 @@ public class GyeoljaeService {
 		return gyeoljaeDao.selectMyCommitedGyeoljaeTotalCount(param);
 	}
 
+	public Map<String, Object> getAllCommitedGyeoljaeTotalCount(Map<String, Object> param) {
+		return gyeoljaeDao.selectMyCommitedGyeoljaeTotalCount(param);
+	}
+
+	public List<Map<String, String>> getAllCommitedGyeoljae(Map<String, Object> param) {
+		return gyeoljaeDao.selectMyCommitedGyeoljae(param);
+	}
+
+	public Sangsin getCommittedSangsinDetail(Map<String, String> param) {
+		return gyeoljaeDao.selectMySangsinDetail(param);
+	}
+
 }

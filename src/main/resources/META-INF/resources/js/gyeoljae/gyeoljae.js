@@ -64,7 +64,7 @@ var Gyeoljae = (function() {
 		return '<div class="step ' + style + '" data-code="' + code + '"> <span>' + status + ' (' + name + ')</span> </div>';
 	}
 	
-	function openMyGianGyeoljaeWin(type, sangsin) {
+	function openMyGianGyeoljaeWin(type, sangsin, isCommitted) {
 		var fileStore = parent.Ext.create('Ext.data.JsonStore', {
 			fields: ['code', 'name', 'size', 'ext'],
 			data:sangsin.attachFiles
@@ -96,7 +96,7 @@ var Gyeoljae = (function() {
 			if(code != null && code != '-1') {
 				common.checkSession(function() {
 					common.ajaxExt({
-						url: '/gyeoljae/comment/' + code,
+						url: isCommitted ? '/gyeoljae/comment/' + code + '?committed' : '/gyeoljae/comment/' + code,
 						method: 'GET',
 						loadmask: {
 							msg: '의견을 로딩중입니다.'
@@ -509,7 +509,7 @@ var Gyeoljae = (function() {
 				if($.trim($txtSearchContent.val()) == '') {
 					common.showExtMsg({
 						type: 'alert',
-						msg: '검색할 제목을 입력하세요',
+						msg: searchTextType == 'G' ? '작성자이름을 입력하세요' : '검색할 제목을 입력하세요',
 						callback: function() {
 							$txtSearchContent.focus();
 						}
@@ -593,6 +593,20 @@ var Gyeoljae = (function() {
 					},
 					success: function(jo) {
 						openMyGianGyeoljaeWin('gian', jo.datas[0]);
+					}
+				});
+			});
+		},
+		getCommittedGianDetail: function(sangsinNum) {
+			common.checkSession(function() {
+				common.ajaxExt({
+					url: '/gyeoljae/committedsangsin/' + sangsinNum,
+					method: 'GET',
+					loadmask: {
+						msg: '상신문서를 로딩중입니다.'
+					},
+					success: function(jo) {
+						openMyGianGyeoljaeWin('gian', jo.datas[0], true);
 					}
 				});
 			});

@@ -351,6 +351,29 @@ public class GyeoljaeController {
 		return vo;
 	}
 	
+	@GetMapping("committedsangsin/{sangsinNum}")
+	@ResponseBody
+	public AjaxVO<Sangsin> getCommitedSangsinDetail(@PathVariable("sangsinNum") String sangsinNum) {
+		Map<String, String> param = new HashMap<>();
+		param.put("sangsinNum", sangsinNum);
+		
+		AjaxVO<Sangsin> vo = new AjaxVO<>();
+		
+		try {
+			Sangsin gyeoljaeDetail = gyeoljaeService.getCommittedSangsinDetail(param);
+			vo.setSuccess(true);
+			vo.addObject(gyeoljaeDetail);
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+		
+		return vo;
+	}
+	
+	
+	
 	@GetMapping("mygyeoljae")
 	@ResponseBody
 	public AjaxVO<Map<String, String>> getMyGyeoljae(
@@ -452,6 +475,62 @@ public class GyeoljaeController {
 			}
 			
 			List<Map<String, String>> list = gyeoljaeService.getMyCommitedGyeoljae(param);
+			vo.setSuccess(true);
+			vo.setDatas(list);
+			vo.setTotalPage(totalPage);
+			vo.setTotalRow(totalRow);
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+		
+		return vo;
+	}
+	
+	@GetMapping("allcommited")
+	@ResponseBody
+	public AjaxVO<Map<String, String>> getAllCommitedGyeoljae(
+			@RequestParam(name="summary", required=false) String summary,
+			@RequestParam(name="page", required=false) Integer page,
+			@RequestParam(name="size", required=false) Integer size,
+			@RequestParam(name="searchStatus", required=false) String searchStatus,
+			@RequestParam(name="searchTextType", required=false) String searchTextType,
+			@RequestParam(name="searchText", required=false) String searchText,
+			@RequestParam(name="searchStartDate", required=false) String searchStartDate,
+			@RequestParam(name="searchEndDate", required=false) String searchEndDate
+		) {
+		//Sawon myInfo = SessionUtil.getSessionSawon();
+		
+		AjaxVO<Map<String, String>> vo = new AjaxVO<>();
+		try {
+			Map<String, Object> param = new HashMap<>();
+			//param.put("sawonCode", Integer.parseInt(myInfo.getSawonCode()));
+			
+			int totalPage = 0;
+			int totalRow = 0;
+			
+			if(summary == null) {
+				int start = ((page-1)*size) + 1;
+				param.put("summary", -1);
+				param.put("start", start);
+				param.put("end", start + size);
+				param.put("size", size);
+				param.put("searchStatus", searchStatus);
+				param.put("searchTextType", searchTextType);
+				param.put("searchText", StringUtil.escapeMsSql(searchText));
+				param.put("searchStartDate", searchStartDate);
+				param.put("searchEndDate", searchEndDate + " 23:59:59");
+				
+				Map<String, Object> r = gyeoljaeService.getAllCommitedGyeoljaeTotalCount(param);
+				totalPage = Integer.parseInt(String.valueOf(r.get("page")));
+				totalRow = Integer.parseInt(String.valueOf(r.get("total")));
+			}
+			else {
+				param.put("summary", Integer.parseInt(summary));
+			}
+			
+			List<Map<String, String>> list = gyeoljaeService.getAllCommitedGyeoljae(param);
 			vo.setSuccess(true);
 			vo.setDatas(list);
 			vo.setTotalPage(totalPage);
@@ -618,12 +697,18 @@ public class GyeoljaeController {
 	
 	@GetMapping("comment/{gyeoljaeLineCode}")
 	@ResponseBody
-	public AjaxVO<String> getGyeoljaeComment(@PathVariable("gyeoljaeLineCode") String gyeoljaeLineCode) {
+	public AjaxVO<String> getGyeoljaeComment(
+			@PathVariable("gyeoljaeLineCode") String gyeoljaeLineCode,
+			@RequestParam(name="committed", required=false) String committed) {
 		Sawon myInfo = SessionUtil.getSessionSawon();
 		
 		Map<String, String> param = new HashMap<>();
 		param.put("sawonCode", myInfo.getSawonCode());
 		param.put("gyeoljaeLineCode", gyeoljaeLineCode);
+		
+		if(committed != null) {
+			param.put("committed", "Y");
+		}
 		
 		AjaxVO<String> vo = new AjaxVO<>();
 		

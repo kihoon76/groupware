@@ -27,7 +27,7 @@
 		<div class="divMT">
   			<span style="font-size:1.5em;">
   				<span class="badge badge-pill badge-info">
-  					내 결재완료된 기안 <span id="spBadge" class="badge badge-light">0</span>
+  					결재완료된 모든 사원의 기안 <span id="spBadge" class="badge badge-light">0</span>
   				</span>
   			</span>
   		</div>

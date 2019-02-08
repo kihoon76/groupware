@@ -103,12 +103,24 @@
 	
 	<select id="selectMyCommitedGyeoljaeTotalCount" parameterType="map" resultType="map">
 		select ceiling((count(상신코드) + 0.0)/(${size}+0.0)) page, count(상신코드) total
-		  from [동림].[dbo].[상신]
-		 where 기안자  = #{sawonCode}
+		  from [동림].[dbo].[상신] T1
+		 inner join [동림].[dbo].[사원] T2
+		    on T1.기안자 = T2.사원코드
+		 <choose>
+		 <when test="sawonCode != null">
+		  where 기안자  = #{sawonCode}
 		   and 처리상태 = 'C'
+		 </when>
+		 <otherwise>
+		  where 처리상태 = 'C'
+		 </otherwise>
+		 </choose>
 		 <choose>
 		 <when test='searchTextType eq "T"'>
 		   and 기안제목 like #{searchText}  {escape '`'}
+		 </when>
+		 <when test='searchTextType eq "G"'>
+		   and T2.사원명 like #{searchText}  {escape '`'}
 		 </when>
 		 </choose>
 		   and 기안작성일 >= #{searchStartDate} and 기안작성일 <![CDATA[<]]>= #{searchEndDate}
@@ -249,11 +261,21 @@
 	 			  ) T3  on T1.상신코드 = T3.상신코드
 	 			 inner join [동림].[dbo].[사원] T4
 	    			on T1.기안자 = T4.사원코드 
-	 			 where T1.기안자 = #{sawonCode}
-	   			   and T1.처리상태 = 'C'
+	    		   <choose>
+		 		   <when test="sawonCode != null">
+		  		   where T1.기안자  = #{sawonCode}
+		   		     and T1.처리상태 = 'C'
+		 		   </when>
+		 		   <otherwise>
+		  		   where T1.처리상태 = 'C'
+		 		   </otherwise>
+		 		   </choose>
 	   			   <choose>
 				   <when test='searchTextType eq "T"'>
 		   		   and 기안제목 like #{searchText}  {escape '`'}
+		 		   </when>
+		 		   <when test='searchTextType eq "G"'>
+		   		   and T4.사원명 like #{searchText}  {escape '`'}
 		 		   </when>
 		 		   </choose>
 		 		   and 기안작성일 >= #{searchStartDate} and 기안작성일 <![CDATA[<]]>= #{searchEndDate}
@@ -300,10 +322,23 @@
 	</select> 
 	
 	<select id="selectMySangsinDetail" parameterType="map" resultMap="RM_Sangsin">
-		select T1.상신코드, 기안제목, 기안내용_CODE, convert(char(16), 기안작성일, 20) 기안작성일
+		 <choose>
+		 <when test="sawonCode != null">
+		 select T1.상신코드, 기안제목, 기안내용_CODE, convert(char(16), 기안작성일, 20) 기안작성일
 		  from [동림].[dbo].[상신] T1
 		 where T1.상신코드 = #{sangsinNum}
 		   and T1.기안자 = #{sawonCode}
+		 </when>
+		 <otherwise>
+		  select T1.상신코드, 기안제목, 기안내용_CODE, convert(char(16), 기안작성일, 20) 기안작성일, 사원명 as 기안자
+		    from [동림].[dbo].[상신] T1
+		   inner join [동림].[dbo].[사원] T2
+		      on T1.기안자 = T2.사원코드
+		   where T1.상신코드 = #{sangsinNum}
+		     and T1.처리상태 = 'C'
+		 </otherwise>
+		 </choose>
+		 
 	</select>
 	
 	<select id="selectSangsinAttachFiles" parameterType="string" resultType="AttachFile">
@@ -347,6 +382,16 @@
 	</update>
 	
 	<select id="selectGyeoljaeComment" parameterType="map" resultType="string">
+		<choose>
+		<when test="committed != null">
+		select 의견
+		  from [동림].[dbo].[결재내역] T1
+		 inner join [동림].[dbo].[상신] T2
+		    on T1.상신코드 = T2.상신코드
+		 where T1.결재라인코드 = #{gyeoljaeLineCode}
+		   and T2.처리상태 = 'C'
+		</when>
+		<otherwise>
 		select distinct 의견
 		  from (
 				select T1.상신코드, T2.기안자, 의견
@@ -358,5 +403,7 @@
 		  inner join [동림].[dbo].[결재라인] T2
 		     on T1.상신코드 = T2.상신코드
 		  where 기안자 = #{sawonCode} or T2.결재처리자 = #{sawonCode}
+		</otherwise>
+		</choose>
 	</select>
 </mapper>
