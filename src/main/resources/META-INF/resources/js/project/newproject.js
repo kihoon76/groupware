@@ -21,21 +21,6 @@ $(document).ready(function() {
 	var events = [];
 	
 	function modifyResource(id, title) {
-		/*var rLen = resources.length;
-		var r = null;
-		var modified = false;
-		for(var i=0; i<rLen; i++) {
-			r = resources[i];
-			if(r.id == id) {
-				r.title = title;
-				modified = true;
-				break;
-			}
-		}
-		
-		if(modified) {
-			$('#calendar').fullCalendar('refetchResources');
-		}*/
 		commonSearchResources(id, function(item, i) {
 			item.title = title;
 		}, function(arr, i) {
@@ -137,27 +122,6 @@ $(document).ready(function() {
 	}
 	
 	function moveUp(currentId) {
-		/*var rLen = resources.length;
-		var r = null;
-		var modified = false;
-		var insertIdx = 0;
-		
-		for(var i=0; i<rLen; i++) {
-			r = resources[i];
-			if(r.id == currentId && i > 0) {
-				resources.splice(i, 1);
-				insertIdx = i-1;
-				modified = true;
-				break;
-			}
-		}
-		
-		if(modified) {
-			resources.splice(insertIdx, 0, r);
-			
-			$('#calendar').fullCalendar('refetchResources');
-		}*/
-		
 		commonSearchResources(currentId, function(item, i) {
 			resources.splice(i, 1);
 		}, function(arr, i) {
@@ -354,16 +318,14 @@ $(document).ready(function() {
 	    drop: function(date, jsEvent, ui, resourceId) {
 	    	console.log(jsEvent);
 	    	console.log('drop', date.format(), resourceId);
-	    	// is the "remove after drop" checkbox checked?
-	    	//if ($('#drop-remove').is(':checked')) {
-	    		// if so, remove the element from the "Draggable Events" list
-	    		//$(this).remove();
-	    	//}
+	    	return false
 	    },
+	    eventOverlap: false,
 	    eventReceive: function(event) { // called when a proper external event is dropped
 	    	console.log('eventReceive', event.resourceId);
 	    	console.log('eventReceive', event.start.format());
 	    	eventReceived(event.resourceId, event.start.format(), null);
+	    	
 	    },
 	    eventDrop: function(event) { // called when an event (already on the calendar) is moved
 	        console.log('eventDrop', event);
