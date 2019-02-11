@@ -614,6 +614,7 @@ $(document).ready(function() {
 	function addEvent(event) {
 		var teamId = event.cate;
 		event.backgroundColor = mineBgColor;
+		event.borderColor = mineBgColor;
 		event.textColor = mineTxtColor;
 		$('#calendar').fullCalendar('removeEventSource', eventSources[teamId]);
 		
