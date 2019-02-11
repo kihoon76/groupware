@@ -27,10 +27,16 @@ Ext.define('Drpnd.controller.MainController', {
 			if(!this.categoryPanel.isAttachedCategory(recObj.id)) {
 				switch(recObj.id) {
 				case 'system-list' :
-					this.addContentTabPanel(recObj.id, recObj.text, {
-						xtype: 'panel',
-						html: that.html.organizationchart
-					});
+//					this.addContentTabPanel(recObj.id, recObj.text, {
+//						xtype: 'panel',
+//						html: that.html.organizationchart
+//					});
+					
+					this.addContentTabPanel(
+						recObj.id, 
+						recObj.text, 
+						Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'view/orgchart' })
+					);
 					break;
 				default :
 					break;

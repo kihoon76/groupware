@@ -199,6 +199,11 @@ public class DrpndController {
 		return vo;
 	}
 	
+	@GetMapping("view/orgchart")
+	public String viewChart() {
+		return "orgchart";
+	}
+	
 	private void createToken(ModelMap m, TokenKey key) {
 		String token = SessionUtil.createToken();
 		SessionUtil.getSessionSawon().setToken(key, token);

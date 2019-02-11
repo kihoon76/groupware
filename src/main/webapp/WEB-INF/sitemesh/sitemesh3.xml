@@ -6,6 +6,7 @@
 
 	<mapping path="/gyeoljae/*" decorator="/WEB-INF/views/layout/defaultiframe.jsp" />
 	<mapping path="/calendar/view" decorator="/WEB-INF/views/layout/defaultiframe.jsp" />
+	<mapping path="/view/orgchart" decorator="/WEB-INF/views/layout/defaultiframe.jsp" />
 	<mapping path="/signatureview" decorator="/WEB-INF/views/layout/defaultiframe.jsp" />
 	<mapping path="/project/newproject" decorator="/WEB-INF/views/layout/defaultiframe.jsp" />
 	<mapping path="/floormap" decorator="/WEB-INF/views/layout/defaultiframe.jsp" />
