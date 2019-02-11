@@ -28,6 +28,7 @@ import kr.co.drpnd.domain.Sawon;
 import kr.co.drpnd.domain.Team;
 import kr.co.drpnd.service.CalendarService;
 import kr.co.drpnd.service.GeuntaeService;
+import kr.co.drpnd.service.GyeoljaeService;
 import kr.co.drpnd.service.SawonService;
 import kr.co.drpnd.type.TokenKey;
 import kr.co.drpnd.util.DateUtil;
@@ -48,6 +49,9 @@ public class DrpndController {
 	@Resource(name="calendarService")
 	CalendarService calendarService;
 	
+	@Resource(name="gyeoljaeService")
+	GyeoljaeService gyeoljaeService;
+	
 	@GetMapping(value={"main", "m/main"})
 	public String index(HttpServletRequest request, ModelMap m) {
 		Sawon myInfo = SessionUtil.getSessionSawon();
@@ -55,6 +59,7 @@ public class DrpndController {
 		boolean gotoworkChecked = false;
 		boolean offworkChecked = false;
 		String cuttentTime10 = "";
+		String mygyeoljaeCount = "0";
 		List<Team> teamList = null;
 		
 		try {
@@ -62,17 +67,30 @@ public class DrpndController {
 			gotoworkChecked = geuntaeService.checkMyTodayGotowork(myInfo.getSawonCode());
 			offworkChecked = geuntaeService.checkMyTodayOffwork(myInfo.getSawonCode());
 			
+			Map<String, Object> param = new HashMap<>();
+			param.put("searchStatus", "A");
+			param.put("searchTextType", "A");
+			param.put("limitDate", "Y");
+			param.put("sawonCode", myInfo.getSawonCode());
+			param.put("size", 1);
 			
+			Map<String, Object> r = gyeoljaeService.getMyGyeoljaeTotalCount(param);
+			mygyeoljaeCount = String.valueOf(r.get("total"));
+		
 			teamList = geuntaeService.getTeamList(myInfo.getSawonDepartment());
 		}
-		catch(Exception e) {}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
 		
+		m.put("mygyeoljaeCount", mygyeoljaeCount);
 		m.put("currentDate", DateUtil.getCurrentDateString());
 		m.put("isGotoworkChecked", gotoworkChecked);
 		m.put("isOffworkChecked", offworkChecked);
 		m.put("sawonName", myInfo.getSawonName());
 		m.put("sawonCode", myInfo.getSawonCode());
 		m.put("currentTime10", cuttentTime10);
+		
 		
 		if(RequestUtil.isMobile(request)) {
 			m.put("footbar", "home");

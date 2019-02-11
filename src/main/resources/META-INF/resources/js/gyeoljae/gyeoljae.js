@@ -1,6 +1,7 @@
 var Gyeoljae = (function() {
 	var multiWin = null;
 	var paginationSize = 10;
+	var extTreeGyeoljaeCount = $('#spTreeMyGyeoljae', window.parent.document);
 	
 	var commonColumns = [
   		{title: '첨부', field:'attCnt', width:50, headerSort:false, align:'center', formatter: function(cell) {
@@ -327,6 +328,7 @@ var Gyeoljae = (function() {
 				items: [{
 					xtype: 'textarea',
 					emptyText: '의견을 입력하세요',
+					value: '승인합니다.',
 					listeners: {
 						afterrender: function(txt) {
 							txtField = txt;
@@ -379,6 +381,7 @@ var Gyeoljae = (function() {
 				items: [{
 					xtype: 'textarea',
 					emptyText: '반려사유를 입력하세요',
+					value: '반려합니다',
 					listeners: {
 						afterrender: function(txt) {
 							txtField = txt;
@@ -429,12 +432,19 @@ var Gyeoljae = (function() {
 				console.log(jo);
 				var param = {type: 'alert'};
 				if(jo.success) {
+					
+					var curCnt = parseInt(extTreeGyeoljaeCount.text());
+					curCnt--;
+					extTreeGyeoljaeCount.text(curCnt);
+					
 					param.msg = '결재되었습니다.';
 					param.callback = function() {
 						win.close();
 						multiWin.close();
 						window.location.reload();
 					}
+					
+					
 				}
 				else {
 					param.msg = jo.errMsg;
@@ -457,6 +467,10 @@ var Gyeoljae = (function() {
 			},
 			success: function(jo) {
 				console.log(jo);
+				var curCnt = parseInt(extTreeGyeoljaeCount.text());
+				curCnt--;
+				extTreeGyeoljaeCount.text(curCnt);
+				
 				var param = {type: 'alert'};
 				if(jo.success) {
 					param.msg = '반려되었습니다.';

@@ -11,6 +11,9 @@ Ext.define('Drpnd.view.Viewport', {
 	    var isOffwork = Ext.getBody().getAttribute('data-offwork') == 'true';
 	    var sawonName = Ext.getBody().getAttribute('data-sawon-name');
 	    var sawonCode = Ext.getBody().getAttribute('data-sawon-code');
+	    var mygyeoljaeCount = parseInt(Ext.getBody().getAttribute('data-gyeoljae-count'));
+	    var treeGyeoljae = null; 
+	    
 	    var currentTime10 = Ext.get('hdnTime').getValue();
 	    var hasWorker = false;
 	    var worker = null;
@@ -54,7 +57,10 @@ Ext.define('Drpnd.view.Viewport', {
 	             	},{
 	             		url: '/message/gyeoljae/received/' + sawonCode + '/alarm',
 	             		callback: function(message, mBody) {
-	             			console.log(mBody)
+	             			console.log(mBody);
+	             			
+	             			mygyeoljaeCount++;
+	             			treeGyeoljae.innerText = mygyeoljaeCount;
 	             			if(!msgCt){
 	                            msgCt = Ext.DomHelper.insertFirst(document.body, {id:'msg-div'}, true);
 	                        }
@@ -63,6 +69,8 @@ Ext.define('Drpnd.view.Viewport', {
 	                        var m = Ext.DomHelper.overwrite(msgCt, createAlarmBox('알림', s), true);
 	                        m.hide();
 	                        m.slideIn('t').ghost('t', { delay: 5000, remove: true});
+	                        
+	                        
 	             		}
 	             	},{
 	             		url: '/message/gyeoljae/reject/' + sawonCode + '/alarm',
@@ -750,6 +758,9 @@ Ext.define('Drpnd.view.Viewport', {
             listeners: {
             	afterlayout: function() {
             		createSocket();
+                  	treeGyeoljae = Ext.query('#spTreeMyGyeoljae')[0];
+                  	console.log(treeGyeoljae);
+                     
             	}
             }
         });

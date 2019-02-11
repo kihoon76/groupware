@@ -58,7 +58,7 @@ Ext.define('Drpnd.controller.MainController', {
 		}
 		else if(recObj.leaf && recObj.cate == 'gyeoljae') {
 			if(!this.categoryPanel.isAttachedCategory(recObj.id)) {
-				this.addContentTabPanel(recObj.id, recObj.text, {
+				this.addContentTabPanel(recObj.id, recObj.tabText, {
 					xtype: 'gyeoljaepanel',
 				});
 			}

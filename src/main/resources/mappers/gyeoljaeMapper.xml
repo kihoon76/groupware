@@ -98,7 +98,9 @@
 		   and 기안제목 like #{searchText}  {escape '`'}
 		 </when>
 		 </choose>
+		 <if test="limitDate == null">
 		   and 기안작성일 >= #{searchStartDate} and 기안작성일 <![CDATA[<]]>= #{searchEndDate}
+		 </if>
 	</select>
 	
 	<select id="selectMyCommitedGyeoljaeTotalCount" parameterType="map" resultType="map">

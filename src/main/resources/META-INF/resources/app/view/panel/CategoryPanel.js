@@ -6,6 +6,7 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
     ,initComponent : function() {
     	var addedCategoryMap = {};
     	var teamList = Ext.getBody().getAttribute('data-team');
+    	var mygyeoljaeCount = Ext.getBody().getAttribute('data-gyeoljae-count');
     	var teamJson = teamList ? Ext.decode(teamList) : '';
     	var treeItems = [{
     		text: '조직도', leaf : true, cate : 'system', id: 'system-list', iconCls: 'icon-organization'
@@ -43,7 +44,7 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
     	});
     	
     	treeItems.push({
-    		 text: '결재', leaf : true, cate : 'gyeoljae', id: 'gyeoljae', iconCls: 'icon-approve'
+    		 tabText: '결재', text: '결재(<span id="spTreeMyGyeoljae" style="color:#ff0000;">' + mygyeoljaeCount + '</span>)', leaf : true, cate : 'gyeoljae', id: 'gyeoljae', iconCls: 'icon-approve'
     	});
     	
     	treeItems.push({
