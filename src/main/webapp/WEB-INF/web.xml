@@ -38,12 +38,14 @@
 	<filter>
 		<filter-name>xframe</filter-name>
 		<filter-class>kr.co.drpnd.filter.XframeFilter</filter-class>
+		<async-supported>true</async-supported>
 	</filter>
 	
 	<!-- Spring Security -->
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+		<async-supported>true</async-supported>
 	</filter>
 	
 	<!-- Sitemesh -->
@@ -53,6 +55,7 @@
 	<filter>
 		<filter-name>sitemesh</filter-name>
 		<filter-class>kr.co.drpnd.sitemesh.DrpndSiteMeshFilter</filter-class>
+		<async-supported>true</async-supported>
 		<init-param>
 			<param-name>configFile</param-name>
 			<param-value>/WEB-INF/sitemesh/sitemesh3.xml</param-value>
@@ -62,6 +65,7 @@
 	<filter>
 		<filter-name>encodingFilter</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<async-supported>true</async-supported>
 		<init-param>
 			<param-name>encoding</param-name>
 			<param-value>UTF-8</param-value>
