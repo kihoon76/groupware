@@ -28,6 +28,7 @@
 		select 팀코드, 팀명 
 		  from [동림].[dbo].[팀]
 		 where 부서코드 = #{departmentCode}
+		 order by 순서
 	</select>
 	
 	<select id="selectPosition" resultMap="RM_Position">

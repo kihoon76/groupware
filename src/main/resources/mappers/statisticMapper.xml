@@ -23,6 +23,4 @@
 		#{searchMonth, mode=IN, jdbcType=INTEGER, javaType=int}
 	)}
 	</select>
-	
-	
 </mapper>
