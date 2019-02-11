@@ -243,9 +243,17 @@
     			fill: '#003'
     		});
     		
-    		obj.rectPlan.attr({
-    			fill: '#003'
-    		});
+    		if(obj.hasPlan) {
+    			obj.rectPlan.attr({
+        			fill: planActiveColor
+        		});
+    		}
+    		else {
+    			obj.rectPlan.attr({
+        			fill: '#003'
+        		});
+    		}
+    		
     		
     		if(isOutwork == 'Y') {
     			obj.outworkTxt.attr({
