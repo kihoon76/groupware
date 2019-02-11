@@ -70,7 +70,8 @@
 		update [동림].[dbo].[캘린더]
 		   set 시작일 = #{event.start},
 		   	       종료일 = #{event.end},
-		   	       제목 = #{event.title}
+		   	       제목 = #{event.title},
+		   	       상세 = #{event.description}
 		 where 일련번호 = #{event.id}
 		</foreach>	
 	</update>
