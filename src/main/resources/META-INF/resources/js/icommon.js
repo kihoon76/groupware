@@ -367,6 +367,9 @@ var common = (function() {
 	    	case 'gif':
 	    		ext = fileFormatPath + 'gif.png" />';
 	    		break;
+	    	case 'exe':
+	    		ext = fileFormatPath + 'exe.png" />';
+	    		break;
 	    	default:
 	    		ext = fileFormatPath + 'default.png" />';
 	    		break;
