@@ -194,7 +194,6 @@
 			onCancel: function(files) {
 				var k = files[0];//.name.replace(/\./gm, '');
 				delete gyeoljaeSelectedFiles[k];
-				//gyeoljaeSelectedFiles[files[0].name] = null;
 			}
 		});
 		   

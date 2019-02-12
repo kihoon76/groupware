@@ -12,6 +12,7 @@
 <script src="/resources/os/fullcalendar-3.9.0/locale/ko.js"></script>
 <script src="/resources/os/fullcalendar-3.9.0/scheduler-1.9.4.min.js"></script>
 <script src="/resources/os/jQuery-Contextmenu-2.7.1/jquery.contextMenu.js"></script>
+<script src="/resources/os/jQuery-Contextmenu-2.7.1/jquery.ui.position.js"></script>
 <script src="/resources/js/icommon.js"></script>
 <script src="/resources/js/project/newproject.js"></script>
 </content>
@@ -25,7 +26,7 @@
 	<style>
 		body {
     		margin-top: 10px;
-    		text-align: center;
+    		/*text-align: center;*/
     		font-size: 14px;
     		font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
   		}
