@@ -34,6 +34,8 @@
 	var timeSettingWin = null;
 	var myToken = $('#_csrfToken').val();
 	var crCountStr = $('#crCount').val();
+	var mySeatNum = $('#mySeatNum').val();
+	
 	var crCount = parseInt(crCountStr, 10);
 	var today = $('body').data('date');
 	//var hasSocketConntected = false;
@@ -108,7 +110,7 @@
 			callback: function(message, mBody) {
 				if(mBody.seatNum >= 0) {
 		    		var sm = seatMap[mBody.seatNum];
-		    		gotowork(sm, mBody.isOutwork);
+		    		gotowork(sm, mBody.isOutwork, mBody.seatNum, mBody.geuntaeCode);
 		    	}
 			}
 		},{
@@ -117,6 +119,17 @@
 				if(seatNum >= 0) {
 		    		var sm = seatMap[seatNum];
 		    		offwork(sm);
+					/*sm.ownerTxt.text(sawonList[i].sawonName);
+					sm.phoneTxt.text(sawonList[i].sawonPhone + ' / ' + sawonList[i].sawonInnerPhone);*/
+		    	}
+			}
+		},{
+			url: '/message/geuntae/change/outwork',
+			callback: function(message, mBody) {
+				var seatNum = mBody.seatNum;
+				if(seatNum >= 0) {
+		    		var sm = seatMap[seatNum];
+		    		changeSeatOutToIn(sm);
 					/*sm.ownerTxt.text(sawonList[i].sawonName);
 					sm.phoneTxt.text(sawonList[i].sawonPhone + ' / ' + sawonList[i].sawonInnerPhone);*/
 		    	}
@@ -225,7 +238,64 @@
 //		    });
 //	}
 	
-	function gotowork(obj, isOutwork) {
+	function changeOutToIn(geuntaeCode, seatNum) {
+		common.showExtMsg({
+			type: 'confirm',
+			msg: '내근으로 전환하시겠습니까?',
+			callback: function(btn) {
+				if(btn == 'ok') {
+					common.ajaxExt({
+						url: '/geuntae/change/outwork/' + geuntaeCode + '?seatNum=' + seatNum,
+						method: 'GET',
+						headers: { 'Content-Type': 'application/json' }, 
+						loadmask: {
+							msg: '내근전환중 입니다.'
+						},
+						success: function(jo) {
+							if(jo.success) {
+								common.showExtMsg({
+									type: 'alert',
+									icon: parent.Ext.MessageBox.INFO,
+									msg: '내근전환 되었습니다.'
+								});
+							}
+							else {
+								common.showExtMsg({
+									type: 'alert',
+									msg: jo.errMsg
+								});
+							}
+						}
+					});
+				}
+			}
+		});
+	}
+	
+	function changeSeatOutToIn(sm) {
+		if(sm) {
+			sm.outworkTxt.attr({
+				fill: '#003'
+			});
+			
+			sm.rect
+			.off('click')
+			.off('mouseover')
+			.off('mouseout');
+    		
+    		sm.ownerTxt
+			.off('click')
+			.off('mouseover')
+			.off('mouseout');
+    		
+    		sm.outworkTxt
+			.off('click')
+			.off('mouseover')
+			.off('mouseout');
+		}
+	}
+	
+	function gotowork(obj, isOutwork, seatNum, todayGeuntaeCode) {
 		if(obj) {
 			obj.rect.attr({
     			fill: '#003'
@@ -255,10 +325,55 @@
     		}
     		
     		
-    		if(isOutwork == 'Y') {
+    		if(isOutwork == 'Y'/* && todayGeuntaeCode != 0*/) {
     			obj.outworkTxt.attr({
     				fill: '#fff'
     			});
+    			
+    			if(mySeatNum == seatNum) {
+    				obj.rect
+    				.off('click')
+    				.off('mouseover')
+    				.off('mouseout')
+    				.on('click', function() {
+    					changeOutToIn(todayGeuntaeCode, seatNum);
+    				})
+    				.on('mouseover', function() {
+    					this.fill({opacity: 0.3})
+					})
+					.on('mouseout', function() {
+						this.fill({opacity: 1})
+					});
+    				
+    				obj.ownerTxt
+    				.off('click')
+    				.off('mouseover')
+    				.off('mouseout')
+    				.on('click', function() {
+    					changeOutToIn(todayGeuntaeCode, seatNum);
+    				})
+    				.on('mouseover', function() {
+    					obj.rect.fill({opacity: 0.3})
+					})
+					.on('mouseout', function() {
+						obj.rect.fill({opacity: 1})
+					});
+    				
+    				obj.outworkTxt
+    				.off('click')
+    				.off('mouseover')
+    				.off('mouseout')
+    				.on('click', function() {
+    					changeOutToIn(todayGeuntaeCode, seatNum);
+    				})
+    				.on('mouseover', function() {
+    					obj.rect.fill({opacity: 0.3})
+					})
+					.on('mouseout', function() {
+						obj.rect.fill({opacity: 1})
+					});
+    				
+    			}
     		}
     		else {
     			obj.outworkTxt.attr({
@@ -300,6 +415,21 @@
     				fill: recColor
     			});
     		}
+    		
+    		obj.rect
+			.off('click')
+			.off('mouseover')
+			.off('mouseout');
+    		
+    		obj.ownerTxt
+			.off('click')
+			.off('mouseover')
+			.off('mouseout');
+    		
+    		obj.outworkTxt
+			.off('click')
+			.off('mouseover')
+			.off('mouseout');
 		}
 	}
 	
@@ -722,7 +852,7 @@
 			sm.phoneTxt.text(sawonList[i].sawonPhone + ' / ' + sawonList[i].sawonInnerPhone);
 			
 			if(sawonList[i].isGotowork == 'Y' && sawonList[i].isOffwork == 'N') {
-				gotowork(sm, sawonList[i].isOutwork);
+				gotowork(sm, sawonList[i].isOutwork, sawonList[i].seatNum, sawonList[i].todayGeuntaeCode);
 			}
 		}
 	}

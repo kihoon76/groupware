@@ -95,6 +95,11 @@ public class GeuntaeService {
 	public List<Team> getTeamList(String sawonDepartment) {
 		return geuntaeDao.selectTeamList(sawonDepartment);
 	}
+
+	public boolean changeOutwork(Map<String, String> param) {
+		int r = geuntaeDao.updateGeuntaeOutworkToIn(param);
+		return r == 1;
+	}
 	
 
 }

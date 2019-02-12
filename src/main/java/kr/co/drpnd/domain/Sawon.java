@@ -35,6 +35,7 @@ public class Sawon {
 	private String positionGubun;
 	private String signature;
 	private boolean isImwon;
+	private String todayGeuntaeCode;
 	
 	private Map<TokenKey, String> token = new HashMap<>();
 
@@ -255,6 +256,15 @@ public class Sawon {
 
 	public void setSignature(String signature) {
 		this.signature = signature;
+	}
+	
+
+	public String getTodayGeuntaeCode() {
+		return todayGeuntaeCode;
+	}
+
+	public void setTodayGeuntaeCode(String todayGeuntaeCode) {
+		this.todayGeuntaeCode = todayGeuntaeCode;
 	}
 
 	@Override

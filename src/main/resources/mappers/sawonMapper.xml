@@ -82,6 +82,7 @@
 			        when T2.퇴근시간 is null then 'N'
 			   else 'Y'
 			   end as isOffwork,
+			   isnull(T2.근태코드, 0) as todayGeuntaeCode,
 			   T2.외근여부 as isOutwork
 	      from [동림].[dbo].[사원] T1
 	      left outer join [동림].[dbo].[근태] T2 on T1.사원코드 = T2.사원코드

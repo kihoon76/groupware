@@ -72,6 +72,7 @@ public class GeuntaeController {
 			Map<String, Object> param = new HashMap<>();
 			param.put("seatNum", sawon.getSeatNum());
 			param.put("isOutwork", isMobile ? "Y" : "N");
+			param.put("geuntaeCode", geuntae.getGeuntaeCode());
 			this.template.convertAndSend("/message/geuntae/gotowork", param);
 		}
 		catch(InvalidGotoworkTime e) {
@@ -83,6 +84,41 @@ public class GeuntaeController {
 			vo.setSuccess(false);
 			vo.setErrCode(ExceptionCode.ALREADY_GOTOWORK.getCode());
 			vo.setErrMsg(e.getMessage());
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+		
+		return vo;
+	}
+	
+	@GetMapping("change/outwork/{geuntaeCode}")
+	@ResponseBody
+	public AjaxVO changeOutwork(
+			@PathVariable("geuntaeCode") String geuntaeCode,
+			@RequestParam("seatNum") String seatNum) {
+		AjaxVO vo = new AjaxVO();
+		Sawon sawon = SessionUtil.getSessionSawon();
+		
+		Map<String, String> param = new HashMap<>();
+		param.put("sawonCode", sawon.getSawonCode());
+		param.put("geuntaeCode", geuntaeCode);
+		
+		try {
+			boolean b = geuntaeService.changeOutwork(param);
+			
+			if(b) {
+				vo.setSuccess(true);
+				Map<String, Integer> m = new HashMap<>();
+				m.put("seatNum", Integer.parseInt(seatNum));
+				this.template.convertAndSend("/message/geuntae/change/outwork", m);
+			}
+			else {
+				vo.setSuccess(false);
+				vo.setErrMsg("내근으로 전환할수 없습니다.");
+			}
+			
 		}
 		catch(Exception e) {
 			vo.setSuccess(false);

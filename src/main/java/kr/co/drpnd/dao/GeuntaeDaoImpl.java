@@ -64,5 +64,10 @@ public class GeuntaeDaoImpl implements GeuntaeDao {
 		return msSqlSession.selectList(namespace + ".selectTeamList", sawonDepartment);
 	}
 
+	@Override
+	public int updateGeuntaeOutworkToIn(Map<String, String> param) {
+		return msSqlSession.update(namespace + ".updateGeuntaeOutworkToIn", param);
+	}
+
 
 }

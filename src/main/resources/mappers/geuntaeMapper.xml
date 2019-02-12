@@ -13,7 +13,8 @@
 			#{gotoworkMethod, mode=IN, jdbcType=CHAR, javaType=string},
 			#{lat, mode=IN, jdbcType=FLOAT, javaType=float},
 			#{lng, mode=IN, jdbcType=FLOAT, javaType=float},
-			#{gotoworkTime, mode=OUT, jdbcType=VARCHAR, javaType=string}
+			#{gotoworkTime, mode=OUT, jdbcType=VARCHAR, javaType=string},
+			#{geuntaeCode, mode=OUT, jdbcType=VARCHAR, javaType=string}
 		)}
 	</insert>
 	
@@ -88,4 +89,13 @@
 		 where 부서코드 = #{teamCode}
 		 order by 순서
 	</select>
+	
+	<update id="updateGeuntaeOutworkToIn" parameterType="map">
+		update [동림].[dbo].[근태]
+		   set 외근여부 = 'N',
+		                 근태출근처리수단 = 'P'
+		 where 근태코드 = #{geuntaeCode}
+		   and 사원코드 = #{sawonCode}
+		   and 외근여부 = 'Y'
+	</update>
 </mapper>

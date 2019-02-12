@@ -26,4 +26,6 @@ public interface GeuntaeDao {
 
 	List<Team> selectTeamList(String sawonDepartment);
 
+	int updateGeuntaeOutworkToIn(Map<String, String> param);
+
 }

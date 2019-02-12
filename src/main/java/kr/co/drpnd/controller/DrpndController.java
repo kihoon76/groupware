@@ -150,6 +150,7 @@ public class DrpndController {
 		m.addAttribute("plan", g.toJson(todayPlanList));
 		m.addAttribute("cr_count", reservationCount);
 		m.addAttribute("currentDate", DateUtil.getCurrentDateString());
+		m.addAttribute("mySeatNum", sawon.getSeatNum());
 		return "floormap";
 	}
 	
