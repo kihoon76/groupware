@@ -55,7 +55,7 @@
 <body>
 	<div id="wrap">
     	<div id="external-events">
-    		<h5>드래그하세요</h5>
+<!--     		<h5>드래그하세요</h5> -->
       		<div class="fc-event">&nbsp;</div>
     	</div>
     	<div id="calendar"></div>

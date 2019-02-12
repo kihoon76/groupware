@@ -3,7 +3,7 @@ $(document).ready(function() {
 	var resourceIdCnt = 1;
 	var eventIdCnt = 1;
 	var resources = [
-        { id: 'a', title: 'Task 1' },
+        {id: 'a', title: 'Task 1'},
         /*{ id: 'b', title: 'Auditorium B', eventColor: 'green' },
         { id: 'c', title: 'Auditorium C', eventColor: 'orange' },
         { id: 'd', title: 'Auditorium D', 
@@ -18,7 +18,22 @@ $(document).ready(function() {
         { id: 'h', title: 'Auditorium H' },*/
     ];
 	
-	var events = [];
+	var events = [ { id: '1', resourceId: 'a', start: '2018-04-07', end: '2018-04-08', title: '' },
+	   	        { id: '2', resourceId: 'a', start: '2018-04-09', end: '2018-04-10', title: '' },];
+	
+	
+	function searchEvent(searchId, callback) {
+		var len = events.length;
+		if(len > 0) {
+			for(var i=0; i<len; i++) {
+				if(events[i].id == searchId) {
+					callback(i);
+					break;
+				}
+			}
+		}
+	}
+	
 	
 	function modifyResource(id, title) {
 		commonSearchResources(id, function(item, i) {
@@ -149,15 +164,18 @@ $(document).ready(function() {
 		});
 	}
 	
-	function eventReceived(resourceId, start, end) {
+	function eventReceive(resourceId, start, end) {
+		var id = 'e' + (++eventIdCnt);
 		events.push({
-			id: 'e' + (++eventIdCnt),
+			id: id,
 			resourceId: resourceId,
 			title: ' ',
 			start: start,
 			end: end
 			
 		});
+		
+		return id;
 	}
 	
 	$.contextMenu({
@@ -253,6 +271,14 @@ $(document).ready(function() {
 	
 	$('#calendar').fullCalendar({
 		schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
+		customButtons: {
+			save: {
+				text: '저장',
+				click: function() {
+					
+				}
+			}
+		},
 		now: '2018-04-07',
 	    editable: true,
 	    droppable: true, // this allows things to be dropped onto the calendar
@@ -260,7 +286,7 @@ $(document).ready(function() {
 	    scrollTime: '00:00',
 	    header: {
 	    	//left: 'promptResource today prev,next',
-	    	left: 'today prev,next',
+	    	left: 'today prev,next save',
 	        center: 'title',
 	        //right: 'timelineDay,timelineTenDay,timelineMonth,timelineYear'
 	        right: 'timelineMonth,timelineYear'
@@ -314,16 +340,16 @@ $(document).ready(function() {
 	        { id: '5', resourceId: 'f', start: '2018-04-07T00:30:00', end: '2018-04-07T02:30:00', title: 'event 5' }
 	    ]*/,
 	    drop: function(date, jsEvent, ui, resourceId) {
-	    	console.log(jsEvent);
 	    	console.log('drop', date.format(), resourceId);
-	    	return false
+	    	console.log(this)
 	    },
 	    eventOverlap: false,
 	    eventReceive: function(event) { // called when a proper external event is dropped
 	    	console.log('eventReceive', event.resourceId);
 	    	console.log('eventReceive', event.start.format());
-	    	eventReceived(event.resourceId, event.start.format(), null);
-	    	
+	    	var id = eventReceive(event.resourceId, event.start.format(), null);
+	    	event.id = id;
+	    	$('#calendar').fullCalendar('updateEvent', event);  
 	    },
 	    eventDrop: function(event) { // called when an event (already on the calendar) is moved
 	        console.log('eventDrop', event);
@@ -332,15 +358,33 @@ $(document).ready(function() {
 	    	console.log(calEvent.id);
 	    	console.log(calEvent.resourceId);
 	    	
-//	    	common.showExtMsg({
-//	   			type: 'confirm',
-//	   			msg: '삭제하시겠습니까?',
-//	   			callback: function(btn) {
-//	   				if(btn == 'ok') {
-//	   					$('#calendar').fullCalendar('removeResource', resource);  
-//	   				}
-//	   			}
-//	   		});
+	    	commonSearchResources(calEvent.resourceId, function(item, i) {
+		    	common.showExtMsg({
+		   			type: 'confirm',
+		   			msg: '[' + item.title + ']의 일정을 삭제하시겠습니까?',
+		   			callback: function(btn) {
+		   				if(btn == 'ok') {
+		   					searchEvent(calEvent.id, function(i) {
+		   						events.splice(i, 1);
+		   						$('#calendar').fullCalendar('removeEvents', calEvent.id);
+		   					});
+		   				}
+		   			}
+		   		});
+			}, function(arr, i) {
+				common.showExtMsg({
+		   			type: 'confirm',
+		   			msg: '[' + arr[i].title + ']의 일정을 삭제하시겠습니까?',
+		   			callback: function(btn) {
+		   				if(btn == 'ok') {
+		   					searchEvent(calEvent.id, function(i) {
+		   						events.splice(i, 1);
+		   						$('#calendar').fullCalendar('removeEvents', calEvent.id);
+		   					});   
+		   				}
+		   			}
+		   		});
+			});
 	    }
 	});
 });
