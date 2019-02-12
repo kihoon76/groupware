@@ -217,8 +217,15 @@ var Gyeoljae = (function() {
 				    	if(value < 1024) {
 				    		return value + 'Byte';
 				    	}
-				    	var kb = Math.round((value/1024) * 10) / 10;
-				    	return kb + 'K';
+				    	else if(value < 1024*1024) {
+				    		var kb = Math.round((value/1024) * 10) / 10;
+					    	return kb + 'K';
+				    	}
+				    	else {
+				    		var mb = Math.round((value/(1024*1024)) * 10) / 10;
+					    	return mb + 'M';
+				    	}
+				    	
 				    }},
 				    {text: '다운로드', width: 100, dataIndex: 'ext', align: 'center', renderer: function(value) {
 				    	return common.getFileFormatIcon(value);

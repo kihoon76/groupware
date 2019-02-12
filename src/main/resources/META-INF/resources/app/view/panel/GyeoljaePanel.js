@@ -18,6 +18,7 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 		var receivedWin = null;
 		var sangsinWin = null;
 		var keepboxWin = null;
+		var newGyeoljaeWin = null;
 		
 		function activeButtonCSS(activeBtn) {
 			if(activeBtn == 'OVERVIEW') {
@@ -83,14 +84,13 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 		function newGyeoljaeClick() {
 			activeButtonCSS('NEW_GYEOLJAE');
 			CommonFn.checkSession(function() {
-				var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'gyeoljae/view/new' });
+				var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'gyeoljae/view/new', load: function(dom) {
+					newGyeoljaeWin = dom.contentWindow;
+					newGyeoljaeWin.setGyeoljaePanel(that);
+				} });
 				addItem(iframe);
 			});
 		}
-		
-		var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: '/signatureview', load: function(dom) {
-    		signatureContentWin = dom.contentWindow;;
-    	} });
 		
 		//요약
 		function overviewClick(isNotSessionCheck) {
