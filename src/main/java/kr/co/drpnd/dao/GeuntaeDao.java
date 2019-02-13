@@ -28,4 +28,6 @@ public interface GeuntaeDao {
 
 	int updateGeuntaeOutworkToIn(Map<String, String> param);
 
+	int updateGeuntaeInworkToOut(Map<String, String> param);
+
 }

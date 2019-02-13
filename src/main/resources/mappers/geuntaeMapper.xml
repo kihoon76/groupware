@@ -98,4 +98,13 @@
 		   and 사원코드 = #{sawonCode}
 		   and 외근여부 = 'Y'
 	</update>
+	
+	<update id="updateGeuntaeInworkToOut" parameterType="map">
+		update [동림].[dbo].[근태]
+		   set 외근여부 = 'Y',
+		                 근태출근처리수단 = 'P'
+		 where 근태코드 = #{geuntaeCode}
+		   and 사원코드 = #{sawonCode}
+		   and 외근여부 = 'N'
+	</update>
 </mapper>

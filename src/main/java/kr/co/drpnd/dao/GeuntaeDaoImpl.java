@@ -69,5 +69,10 @@ public class GeuntaeDaoImpl implements GeuntaeDao {
 		return msSqlSession.update(namespace + ".updateGeuntaeOutworkToIn", param);
 	}
 
+	@Override
+	public int updateGeuntaeInworkToOut(Map<String, String> param) {
+		return msSqlSession.update(namespace + ".updateGeuntaeInworkToOut", param);
+	}
+
 
 }

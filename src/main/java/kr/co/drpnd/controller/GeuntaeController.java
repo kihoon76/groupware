@@ -128,6 +128,41 @@ public class GeuntaeController {
 		return vo;
 	}
 	
+	@GetMapping("change/inwork/{geuntaeCode}")
+	@ResponseBody
+	public AjaxVO changeInwork(
+			@PathVariable("geuntaeCode") String geuntaeCode,
+			@RequestParam("seatNum") String seatNum) {
+		AjaxVO vo = new AjaxVO();
+		Sawon sawon = SessionUtil.getSessionSawon();
+		
+		Map<String, String> param = new HashMap<>();
+		param.put("sawonCode", sawon.getSawonCode());
+		param.put("geuntaeCode", geuntaeCode);
+		
+		try {
+			boolean b = geuntaeService.changeInwork(param);
+			
+			if(b) {
+				vo.setSuccess(true);
+				Map<String, Integer> m = new HashMap<>();
+				m.put("seatNum", Integer.parseInt(seatNum));
+				this.template.convertAndSend("/message/geuntae/change/inwork", m);
+			}
+			else {
+				vo.setSuccess(false);
+				vo.setErrMsg("외근으로 전환할수 없습니다.");
+			}
+			
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+		
+		return vo;
+	}
+	
 	@PostMapping(value={"offwork", "m/offwork"})
 	@ResponseBody
 	public AjaxVO<String> checkOffwork(@RequestBody Map<String, String> param) {

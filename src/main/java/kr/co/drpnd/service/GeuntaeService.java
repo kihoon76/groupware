@@ -100,6 +100,11 @@ public class GeuntaeService {
 		int r = geuntaeDao.updateGeuntaeOutworkToIn(param);
 		return r == 1;
 	}
+
+	public boolean changeInwork(Map<String, String> param) {
+		int r = geuntaeDao.updateGeuntaeInworkToOut(param);
+		return r == 1;
+	}
 	
 
 }

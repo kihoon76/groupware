@@ -45,6 +45,7 @@
 	var sawonList = null;
 	var vacationSawonList = null;
 	var sawonPlanList = null;
+	var IN_OUT_TYPE = '';
 	
 	//var socket = new SockJS('/websocket'),
 	//stompClient = Stomp.over(socket);
@@ -119,8 +120,6 @@
 				if(seatNum >= 0) {
 		    		var sm = seatMap[seatNum];
 		    		offwork(sm);
-					/*sm.ownerTxt.text(sawonList[i].sawonName);
-					sm.phoneTxt.text(sawonList[i].sawonPhone + ' / ' + sawonList[i].sawonInnerPhone);*/
 		    	}
 			}
 		},{
@@ -129,9 +128,16 @@
 				var seatNum = mBody.seatNum;
 				if(seatNum >= 0) {
 		    		var sm = seatMap[seatNum];
-		    		changeSeatOutToIn(sm);
-					/*sm.ownerTxt.text(sawonList[i].sawonName);
-					sm.phoneTxt.text(sawonList[i].sawonPhone + ' / ' + sawonList[i].sawonInnerPhone);*/
+		    		changeSeatOutToIn(sm, 'TO_OUT');
+		    	}
+			}
+		},{
+			url: '/message/geuntae/change/inwork',
+			callback: function(message, mBody) {
+				var seatNum = mBody.seatNum;
+				if(seatNum >= 0) {
+		    		var sm = seatMap[seatNum];
+		    		changeSeatOutToIn(sm, 'TO_IN');
 		    	}
 			}
 		}]
@@ -139,159 +145,96 @@
 	
 	Socket.connect();
 	
-	
-//	function successCallback() {
-//		hasSocketConntected = true;
-//		reconAttemp = 0;
-//		
-//	    stompClient.subscribe('/message/conference/reservation', function(message){
-//	       var m = $.parseJSON(message.body);
-//	       console.log(m.token+ '/' + myToken)
-//	       
-//	       if(m.token != myToken) {
-//	    	  //같은 날짜를 보고 있을경우에만 
-//	    	  if(reservationContentWin && reservationContentWin.getCurrentDate() == m.ymd) {
-//	    		  reservationContentWin.addEvent({
-//	    			  title: m.title,
-//	    			  start: m.ymd + 'T' + m.startTime,
-//	    			  end: m.ymd + 'T' + m.endTime,
-//	    			  reserver: m.reserver,
-//	    			  mine: m.mine
-//				  }, 'default');  
-//	    	  }
-//	       }
-//	    });
-//	    
-//	    stompClient.subscribe('/message/conference/del/reservation', function(message) {
-//	    	var m = $.parseJSON(message.body);
-//		    console.log(m.token+ '/' + myToken)
-//		       
-//		    if(m.token != myToken) {
-//		    	//같은 날짜를 보고 있을경우에만 
-//		    	if(reservationContentWin && reservationContentWin.getCurrentDate() == m.ymd) {
-//		    		reservationContentWin.delEvent(m.rnum);  
-//		    	  }
-//		       }
-//	    });
-//	    
-//	    stompClient.subscribe('/message/conference/mod/reservation', function(message) {
-//	    	var m = $.parseJSON(message.body);
-//		    console.log(m.token+ '/' + myToken)
-//		       
-//		    if(m.token != myToken) {
-//		    	//같은 날짜를 보고 있을경우에만 
-//		    	if(reservationContentWin && reservationContentWin.getCurrentDate() == m.ymd) {
-//		    		reservationContentWin.modEvent({
-//						title: m.title,
-//						start: m.ymd + 'T' + m.startTime,
-//						end: m.ymd + 'T' + m.endTime,
-//						reserver: m.reserver,
-//						mine: 'N',
-//						rnum: m.rnum
-//					});
-//		    	  }
-//		       }
-//	    });
-//	    
-//	    stompClient.subscribe('/message/geuntae/gotowork', function(message) {
-//	    	var seatNum = $.parseJSON(message.body);
-//		    
-//	    	if(seatNum >= 0) {
-//	    		var sm = seatMap[seatNum];
-//	    		gotowork(sm);
-//	    	}
-//		       
-//		   
-//	    });
-//	    
-//	    stompClient.subscribe('/message/geuntae/offwork', function(message) {
-//	    	var seatNum = $.parseJSON(message.body);
-//		    
-//	    	if(seatNum >= 0) {
-//	    		var sm = seatMap[seatNum];
-//	    		offwork(sm);
-//				/*sm.ownerTxt.text(sawonList[i].sawonName);
-//				sm.phoneTxt.text(sawonList[i].sawonPhone + ' / ' + sawonList[i].sawonInnerPhone);*/
-//	    	}
-//		       
-//		   
-//	    });
-//	    
-//	    stompClient.subscribe('/message/conference/mod/reservation', function(message){
-//		       var m = $.parseJSON(message.body);
-//		       console.log(m.token+ '/' + myToken)
-//		       
-//		       if(m.token != myToken) {
-//		    	  var m = $.parseJSON(message.body);
-//		    	  
-//		    	  //같은 날짜를 보고 있을경우에만 
-//		    	  if(reservationContentWin && reservationContentWin.getCurrentDate() == m.ymd) {
-//		    		  reservationContentWin.modEvent({
-//		    			  title: m.title,
-//		    			  start: m.ymd + 'T' + m.startTime,
-//		    			  end: m.ymd + 'T' + m.endTime,
-//		    			  reserver: m.reserver,
-//		    			  mine: m.mine
-//					  }, 'default');  
-//		    	  }
-//		       }
-//		    });
-//	}
-	
-	function changeOutToIn(geuntaeCode, seatNum) {
-		common.showExtMsg({
-			type: 'confirm',
-			msg: '내근으로 전환하시겠습니까?',
-			callback: function(btn) {
-				if(btn == 'ok') {
-					common.ajaxExt({
-						url: '/geuntae/change/outwork/' + geuntaeCode + '?seatNum=' + seatNum,
-						method: 'GET',
-						headers: { 'Content-Type': 'application/json' }, 
-						loadmask: {
-							msg: '내근전환중 입니다.'
-						},
-						success: function(jo) {
-							if(jo.success) {
-								common.showExtMsg({
-									type: 'alert',
-									icon: parent.Ext.MessageBox.INFO,
-									msg: '내근전환 되었습니다.'
-								});
+	function changeOutToIn(geuntaeCode, seatNum, type) {
+		if(type == 'TO_IN') {
+			common.showExtMsg({
+				type: 'confirm',
+				msg: '내근으로 전환하시겠습니까?',
+				callback: function(btn) {
+					if(btn == 'ok') {
+						common.ajaxExt({
+							url: '/geuntae/change/outwork/' + geuntaeCode + '?seatNum=' + seatNum,
+							method: 'GET',
+							headers: { 'Content-Type': 'application/json' }, 
+							loadmask: {
+								msg: '내근전환중 입니다.'
+							},
+							success: function(jo) {
+								if(jo.success) {
+									common.showExtMsg({
+										type: 'alert',
+										icon: parent.Ext.MessageBox.INFO,
+										msg: '내근전환 되었습니다.'
+									});
+								}
+								else {
+									common.showExtMsg({
+										type: 'alert',
+										msg: jo.errMsg
+									});
+								}
 							}
-							else {
-								common.showExtMsg({
-									type: 'alert',
-									msg: jo.errMsg
-								});
-							}
-						}
-					});
+						});
+					}
 				}
-			}
-		});
+			});
+		}
+		else {
+			common.showExtMsg({
+				type: 'confirm',
+				msg: '외근으로 전환하시겠습니까?',
+				callback: function(btn) {
+					if(btn == 'ok') {
+						common.ajaxExt({
+							url: '/geuntae/change/inwork/' + geuntaeCode + '?seatNum=' + seatNum,
+							method: 'GET',
+							headers: { 'Content-Type': 'application/json' }, 
+							loadmask: {
+								msg: '외근전환중 입니다.'
+							},
+							success: function(jo) {
+								if(jo.success) {
+									common.showExtMsg({
+										type: 'alert',
+										icon: parent.Ext.MessageBox.INFO,
+										msg: '외근전환 되었습니다.'
+									});
+								}
+								else {
+									common.showExtMsg({
+										type: 'alert',
+										msg: jo.errMsg
+									});
+								}
+							}
+						});
+					}
+				}
+			});
+		}
 	}
 	
-	function changeSeatOutToIn(sm) {
+	function changeSeatOutToIn(sm, type) {
 		if(sm) {
 			sm.outworkTxt.attr({
-				fill: '#003'
+				fill: type == 'TO_OUT' ? '#003' : '#fff'
 			});
 			
-			sm.rect
-			.off('click')
-			.off('mouseover')
-			.off('mouseout');
-    		
-    		sm.ownerTxt
-			.off('click')
-			.off('mouseover')
-			.off('mouseout');
-    		
-    		sm.outworkTxt
-			.off('click')
-			.off('mouseover')
-			.off('mouseout');
+			IN_OUT_TYPE = type;
+//			sm.rect
+//			.off('click')
+//			.off('mouseover')
+//			.off('mouseout');
+//    		
+//    		sm.ownerTxt
+//			.off('click')
+//			.off('mouseover')
+//			.off('mouseout');
+//    		
+//    		sm.outworkTxt
+//			.off('click')
+//			.off('mouseover')
+//			.off('mouseout');
 		}
 	}
 	
@@ -324,62 +267,82 @@
         		});
     		}
     		
-    		
     		if(isOutwork == 'Y'/* && todayGeuntaeCode != 0*/) {
+    			IN_OUT_TYPE = 'TO_IN';
+    			
     			obj.outworkTxt.attr({
     				fill: '#fff'
     			});
-    			
-    			if(mySeatNum == seatNum) {
-    				obj.rect
-    				.off('click')
-    				.off('mouseover')
-    				.off('mouseout')
-    				.on('click', function() {
-    					changeOutToIn(todayGeuntaeCode, seatNum);
-    				})
-    				.on('mouseover', function() {
-    					this.fill({opacity: 0.3})
-					})
-					.on('mouseout', function() {
-						this.fill({opacity: 1})
-					});
-    				
-    				obj.ownerTxt
-    				.off('click')
-    				.off('mouseover')
-    				.off('mouseout')
-    				.on('click', function() {
-    					changeOutToIn(todayGeuntaeCode, seatNum);
-    				})
-    				.on('mouseover', function() {
-    					obj.rect.fill({opacity: 0.3})
-					})
-					.on('mouseout', function() {
-						obj.rect.fill({opacity: 1})
-					});
-    				
-    				obj.outworkTxt
-    				.off('click')
-    				.off('mouseover')
-    				.off('mouseout')
-    				.on('click', function() {
-    					changeOutToIn(todayGeuntaeCode, seatNum);
-    				})
-    				.on('mouseover', function() {
-    					obj.rect.fill({opacity: 0.3})
-					})
-					.on('mouseout', function() {
-						obj.rect.fill({opacity: 1})
-					});
-    				
-    			}
     		}
     		else {
+    			IN_OUT_TYPE = 'TO_OUT';
     			obj.outworkTxt.attr({
     				fill: '#003'
     			});
     		}
+    		
+    		if(mySeatNum == seatNum) {
+				obj.rect
+				.off('click')
+				.off('mouseover')
+				.off('mouseout')
+				.on('click', function() {
+					changeOutToIn(todayGeuntaeCode, seatNum, IN_OUT_TYPE);
+				})
+				.on('mouseover', function() {
+					this.fill({opacity: 0.3});
+					if(IN_OUT_TYPE == 'TO_OUT') {
+						obj.outworkTxt.fill({opacity: 0});
+					}
+				})
+				.on('mouseout', function() {
+					this.fill({opacity: 1});
+					if(IN_OUT_TYPE == 'TO_OUT') {
+						obj.outworkTxt.fill({opacity: 1});
+					}
+				});
+				
+				obj.ownerTxt
+				.off('click')
+				.off('mouseover')
+				.off('mouseout')
+				.on('click', function() {
+					changeOutToIn(todayGeuntaeCode, seatNum, IN_OUT_TYPE);
+				})
+				.on('mouseover', function() {
+					obj.rect.fill({opacity: 0.3});
+					if(IN_OUT_TYPE == 'TO_OUT') {
+						obj.outworkTxt.fill({opacity: 0});
+					}
+				})
+				.on('mouseout', function() {
+					obj.rect.fill({opacity: 1});
+					if(IN_OUT_TYPE == 'TO_OUT') {
+						obj.outworkTxt.fill({opacity: 1});
+					}
+				});
+				
+				obj.outworkTxt
+				.off('click')
+				.off('mouseover')
+				.off('mouseout')
+				.on('click', function() {
+					changeOutToIn(todayGeuntaeCode, seatNum, IN_OUT_TYPE);
+				})
+				.on('mouseover', function() {
+					obj.rect.fill({opacity: 0.3});
+					if(IN_OUT_TYPE == 'TO_OUT') {
+						this.fill({opacity: 0});
+					}
+				})
+				.on('mouseout', function() {
+					obj.rect.fill({opacity: 1});
+					if(IN_OUT_TYPE == 'TO_OUT') {
+						this.fill({opacity: 1});
+					}
+				});
+				
+			}
 		}
 	}
 	

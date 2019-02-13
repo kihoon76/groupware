@@ -275,6 +275,8 @@ $(document).ready(function() {
 			save: {
 				text: '저장',
 				click: function() {
+					var events = $('#calendar').fullCalendar('getEventSources');
+					console.log(events[0].rawEventDefs);
 					
 				}
 			}
@@ -353,6 +355,7 @@ $(document).ready(function() {
 	    },
 	    eventDrop: function(event) { // called when an event (already on the calendar) is moved
 	        console.log('eventDrop', event);
+	        $('#calendar').fullCalendar('updateEvent', event);
 	    },
 	    eventClick: function(calEvent, jsEvent, view) {
 	    	console.log(calEvent.id);
@@ -385,6 +388,13 @@ $(document).ready(function() {
 		   			}
 		   		});
 			});
-	    }
+	    },
+	    eventResize: function(event, delta, revertFunc) {
+	    	console.log(event.end.format())
+	    	var end = event.end.format();
+	    	//event.end = end;
+	    	console.log(event)
+	    	 $('#calendar').fullCalendar('updateEvent', event);
+	     },
 	});
 });

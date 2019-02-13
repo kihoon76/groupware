@@ -555,12 +555,25 @@ Ext.define('Drpnd.view.Viewport', {
 				},
 				success: function(jo) {
 					if(jo.success) {
-						Ext.MessageBox.alert('알림', jo.datas[0] + ' - '+ jo.datas[1] + ' 퇴근처리 되었습니다.');
+						//Ext.MessageBox.alert('알림', jo.datas[0] + ' - '+ jo.datas[1] + ' 퇴근처리 되었습니다.');
+						Ext.Msg.show({
+							title: '',
+							msg: jo.datas[0] + ' - '+ jo.datas[1] + ' 퇴근처리 되었습니다.',
+							buttons: Ext.Msg.OK,
+							icon: Ext.MessageBox.INFO
+						});
+						
 						toolbarObj.btnOffwork.setDisabled(true);
 						offWorkWin.close();
 					}
 					else {
-						Ext.MessageBox.alert('alert', jo.errMsg);
+						Ext.Msg.show({
+							title: '',
+							msg: jo.errMsg,
+							buttons: Ext.Msg.OK,
+							icon: Ext.MessageBox.WARNING
+						});
+						//Ext.MessageBox.alert('alert', jo.errMsg);
 					}
 				},
 			}); 
@@ -651,12 +664,24 @@ Ext.define('Drpnd.view.Viewport', {
 									},
 									success: function(jo) {
 										if(jo.success) {
-											Ext.MessageBox.alert('알림', jo.datas[0] + '분에 출근처리 되었습니다.');
+											Ext.Msg.show({
+												title: '',
+												msg: jo.datas[0] + '분에 출근처리 되었습니다.',
+												buttons: Ext.Msg.OK,
+												icon: Ext.MessageBox.INFO
+											});
+											//Ext.MessageBox.alert('알림', jo.datas[0] + '분에 출근처리 되었습니다.');
 											btn.setDisabled(true);
 											toolbarObj.btnOffwork.setDisabled(false);
 										}
 										else {
 											Ext.MessageBox.alert('alert', jo.errMsg);
+											Ext.Msg.show({
+												title: '',
+												msg: jo.errMsg,
+												buttons: Ext.Msg.OK,
+												icon: Ext.MessageBox.WARNING
+											});
 										}
 									},
 							   });  
