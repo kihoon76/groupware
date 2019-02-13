@@ -353,6 +353,10 @@ $(document).ready(function() {
 	    	event.id = id;
 	    	$('#calendar').fullCalendar('updateEvent', event);  
 	    },
+	    eventDataTransform: function(eventData) {
+	    	console.log('eventDataTransform');
+	    	console.log(eventData);
+	    },
 	    eventDrop: function(event) { // called when an event (already on the calendar) is moved
 	        console.log('eventDrop', event);
 	        $('#calendar').fullCalendar('updateEvent', event);

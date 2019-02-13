@@ -67,7 +67,8 @@ $(document).ready(function() {
 		    		 children: [{position: '사원', name: '김사라', 'relationship': '100', team: 'ebiz', leader: 'N'}]  
 		    	  }]   
 		       }]	
-		    }
+		    },
+		    {position: '실장', name: '박화숙', 'relationship': '110', team: 'imwon', leader: 'N'}
 		  ],
 	};
 	
