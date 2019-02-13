@@ -268,20 +268,24 @@
     		}
     		
     		if(isOutwork == 'Y'/* && todayGeuntaeCode != 0*/) {
-    			IN_OUT_TYPE = 'TO_IN';
-    			
     			obj.outworkTxt.attr({
     				fill: '#fff'
     			});
     		}
     		else {
-    			IN_OUT_TYPE = 'TO_OUT';
     			obj.outworkTxt.attr({
     				fill: '#003'
     			});
     		}
     		
     		if(mySeatNum == seatNum) {
+    			if(isOutwork == 'Y'/* && todayGeuntaeCode != 0*/) {
+        			IN_OUT_TYPE = 'TO_IN';
+        		}
+        		else {
+        			IN_OUT_TYPE = 'TO_OUT';
+        		}
+    			
 				obj.rect
 				.off('click')
 				.off('mouseover')
