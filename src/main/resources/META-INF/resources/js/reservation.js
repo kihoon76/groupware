@@ -176,6 +176,7 @@ $(function() {
 		var rnum = event.rnum;
 		timeModifyWin = parent.Ext.create('Ext.window.Window', {
 			title: '시간설정(' + getCurrentDate() + ')',
+			iconCls: 'icon-timer',
 			height: 200,
 			width: 400,
 			layout: 'fit',
@@ -240,17 +241,17 @@ $(function() {
 			    //defaults: {minWidth: minButtonWidth},
 			    items: [
 			        { xtype: 'component', flex: 1 },
-			        { xtype: 'button', text: '수정', listeners: {
+			        { xtype: 'button', text: '수정', iconCls: 'icon-modi', listeners: {
 			        	click: function() {
 			        		modify(rnum);
 			        	}
 			        } },
-			        { xtype: 'button', text: '삭제', listeners: {
+			        { xtype: 'button', text: '삭제', iconCls: 'icon-del', listeners: {
 			        	click: function() {
 			        		deleteReservation(rnum);
 			        	}
 			        } },
-			        { xtype: 'button', text: '닫기', listeners: {
+			        { xtype: 'button', text: '닫기', iconCls: 'icon-close', listeners: {
 			        	click: function(btn) {
 			        		timeModifyWin.close();
 			        	}
