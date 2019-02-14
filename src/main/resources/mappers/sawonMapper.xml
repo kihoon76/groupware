@@ -121,7 +121,7 @@
 		   	       내선번호 = #{sawonInnerPhone},
 		   	       이메일 = #{sawonEmail},
 		   	       생년월일 = #{sawonBirthday},
-		   	       팀리더 = #{sawonTeamLeader},
+<!-- 		   	       팀리더 = #{sawonTeamLeader}, -->
 		   	       시스템등록일 = getDate()    
 		 where 사원코드 = #{sawonCode}    
 	</update>

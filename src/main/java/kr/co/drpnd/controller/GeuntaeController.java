@@ -1,7 +1,6 @@
 package kr.co.drpnd.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -9,8 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +24,6 @@ import kr.co.drpnd.domain.Sawon;
 import kr.co.drpnd.exception.AlreadyGotowork;
 import kr.co.drpnd.exception.AlreadyOffwork;
 import kr.co.drpnd.exception.InvalidGotoworkTime;
-import kr.co.drpnd.exception.InvalidReservationTime;
 import kr.co.drpnd.exception.InvalidUser;
 import kr.co.drpnd.exception.NotExistGotowork;
 import kr.co.drpnd.service.GeuntaeService;
@@ -254,7 +252,13 @@ public class GeuntaeController {
 		}
 		
 		return vo;
-		
+	}
+	
+	//퇴근처리 안했을 경우 
+	//@Scheduled(cron="* 0/1 * * * *")
+	@Scheduled(cron="0 10 8 * * *")
+	public void autoOffwork() {
+		geuntaeService.autoOffwork();
 	}
 	
 }

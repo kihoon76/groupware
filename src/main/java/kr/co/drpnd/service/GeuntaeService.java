@@ -35,10 +35,16 @@ public class GeuntaeService {
 
 	public boolean checkMyTodayGotowork(String sawonCode) {
 		Map<String, Integer> r = geuntaeDao.selectMyTodayGotowork(sawonCode);
-		int hour = r.get("hr");
+		String yesterdayOffwork = geuntaeDao.selectMyYesterdayOffwork(sawonCode);
 		
+		int hour = r.get("hr");
 		if(r.get("cnt") == 0) {
-			if(hour >= 0 && hour <=8) {
+			//당일 출퇴 처리를 다 한사람은 익일 00:00시 부터 출근 활성화
+			if("Y".equals(yesterdayOffwork)) {
+				return false;
+			}
+			
+			if(hour >= 0 && hour <=7) {
 				//throw new InvalidGotoworkTime(ExceptionCode.INVALID_GOTOWORK_TIME.getMsg());
 				return true;
 			}
@@ -104,6 +110,10 @@ public class GeuntaeService {
 	public boolean changeInwork(Map<String, String> param) {
 		int r = geuntaeDao.updateGeuntaeInworkToOut(param);
 		return r == 1;
+	}
+
+	public void autoOffwork() {
+		geuntaeDao.updateAutoOffwork();
 	}
 	
 
