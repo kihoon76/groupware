@@ -2,7 +2,7 @@ $(document).ready(function() {
 	var taskContextMenu = null;
 	var resourceIdCnt = 1;
 	var eventIdCnt = 1;
-	var resources = [{id: 'a', title: 'Task 1'}
+	var resources = [{id: 'r1', title: 'Task 1'}
         /*{ id: 'b', title: 'Auditorium B', eventColor: 'green' },
         { id: 'c', title: 'Auditorium C', eventColor: 'orange' },
         { id: 'd', title: 'Auditorium D', 
@@ -255,6 +255,82 @@ $(document).ready(function() {
         }
     });
 	
+	$.contextMenu({
+        selector: 'div.fc-content.EVENT', 
+        callback: function(key, options) {
+//            switch(key) {
+//            case 'delete':
+//            	common.showExtMsg({
+//		   			type: 'confirm',
+//		   			msg: '항목 [' + taskContextMenu.title + ']을 삭제하시겠습니까?',
+//		   			callback: function(btn) {
+//		   				if(btn == 'ok') {
+//		   					removeResource(taskContextMenu.id);
+//		   				}
+//		   			}
+//		   		});
+//            	break;
+//            case 'add_sub':
+//            	parent.Ext.Msg.prompt('', taskContextMenu.title + '의 하위 Task를 입력하세요', function(btn, txt) {
+//    				if(btn == 'ok') {
+//    					//$('#calendar').fullCalendar('addResource', { parentId:taskContextMenu.id, title: txt }, true /* scroll to the new resource?*/ );
+//    					var newId = 'r' + (++resourceIdCnt);
+//    					addResource(taskContextMenu.id, null, newId, null, txt);
+//    				}
+//    			});
+//            	break;
+//            case 'edit' :
+//            	parent.Ext.Msg.prompt('', 'Task를 입력하세요', function(btn, txt) {
+//    				if(btn == 'ok') {
+//    					//$('#calendar').fullCalendar('addResource', { parentId:taskContextMenu.id, title: txt }, true /* scroll to the new resource?*/ );
+//    					if(taskContextMenu.title != txt) {
+//    						modifyResource(taskContextMenu.id, txt);
+//    					}
+//    				}
+//    			}, null, null, taskContextMenu.title);
+//            	break;
+//            case 'add_up':
+//            	parent.Ext.Msg.prompt('', 'Task를 입력하세요', function(btn, txt) {
+//    				if(btn == 'ok') {
+//    					var newId = 'r' + (++resourceIdCnt);
+//    					addResource(null, taskContextMenu.id, newId, 'up', txt);
+//    				}
+//    			});
+//            	break;
+//            case 'add_down':
+//            	parent.Ext.Msg.prompt('', 'Task를 입력하세요', function(btn, txt) {
+//    				if(btn == 'ok') {
+//    					var newId = 'r' + (++resourceIdCnt);
+//    					addResource(null, taskContextMenu.id, newId, 'down', txt);
+//    				}
+//    			});
+//            	break;
+//            case 'moveup':
+//            	moveUp(taskContextMenu.id);
+//            	break;
+//            case 'movedown':
+//            	moveDown(taskContextMenu.id);
+//            	break;
+//            }
+           
+            
+            console.log();
+        },
+        items: {
+            'edit': {name: '수정', icon: 'fa-edit'},
+            'add_up': {name: '위에 추가', icon: 'add'},
+            'add_down': {name: '아래에 추가', icon: 'add'},
+            'add_sub': {name: '하위메뉴로 추가', icon: 'add'},
+            'moveup': {name: '위로 옮기기', icon: 'fa-arrow-circle-up'},
+            'movedown': {name: '아래로 옮기기', icon: 'fa-arrow-circle-down'},
+            'delete': {name: '삭제', icon: 'fa-trash'},
+            'sep1': '---------',
+            'quit': {name: '닫기', icon: function(){
+                return 'context-menu-icon context-menu-icon-quit';
+            }}
+        }
+    });
+	
 	$('#external-events .fc-event').each(function() {
 		// store data so the calendar knows to render an event upon drop
 	    $(this).data('event', {
@@ -270,41 +346,203 @@ $(document).ready(function() {
 	    });
 	});
 	
+	var extTxtWbsName = null;
+	var extRgp = null;
+	var extDate = null;
+	
+	function getRegForm() {
+		return parent.Ext.create('Ext.form.Panel', {
+			frame: true,
+		    anchor: '100%',
+		    bodyPadding: 5,
+	        fieldDefaults: {
+	            labelAlign: 'left',
+	            labelWidth: 90,
+	            anchor: '100%'
+	        },
+	        items: [{
+	            xtype: 'textfield',
+	            name: 'sawonName',
+	            fieldLabel: 'WBS 이름',
+	            listeners: {
+	            	afterrender: function(txt) {
+	            		extTxtWbsName = txt;
+	            	}
+	            }
+	        },{
+	            xtype: 'datefield',
+	            name: 'sawonBirthday',
+	            fieldLabel: '시작일자',
+	            format:'Y-m-d',
+	            editable: false,
+	            listeners: {
+	            	afterrender: function(date) {
+	            		extDate = date;
+	            	}
+	            }
+	        },{
+	        	xtype: 'radiogroup',
+            	fieldLabel: '공유범위',
+            	//height: 120,
+            	items: [{
+            		boxLabel: '나만보기',
+            		boxLabelAlign: 'after',
+            		name: 'sawonTeamLeader',
+            		id: 'rdoSawonTeamLeaderY',
+            		padding: '0 50 0 0',
+            		checked: true,
+            		_value: 'P'
+            		
+            	},{
+            		boxLabel: '팀공유',
+            		boxLabelAlign: 'after',
+            		name: 'sawonTeamLeader',
+            		id: 'rdoSawonTeamLeaderN',
+            		_value: 'T'
+            	},{
+            		boxLabel: '전체공유',
+            		boxLabelAlign: 'after',
+            		name: 'sawonTeamLeader',
+            		id: 'rdoSawonTeamLeaderNN',
+            		_value: 'A'
+            	}],
+            	listeners: {
+	            	afterrender: function(rdoGrp) {
+	            		extRgp = rdoGrp;
+	            	}
+	            }
+	        }]
+		});
+	}
+	
+	
+	function regWin() {
+		var wbsRegWin = parent.Ext.create('Ext.window.Window', {
+			title: 'WBS 등록',
+			iconCls: 'icon-project',
+			height: 200,
+			width: 600,
+			layout: 'fit',
+			closeAction: 'destroy',
+			modal: true,
+			resizable: false,
+			items: [getRegForm()],
+			dockedItems: [{
+			    xtype: 'toolbar',
+			    dock: 'bottom',
+			    ui: 'footer',
+			    //defaults: {minWidth: minButtonWidth},
+			    items: [
+			        { xtype: 'component', flex: 1 },
+			        { xtype: 'button', text: '등록', iconCls: 'icon-project', listeners: {
+			        	click: function() {
+			        		var wbsName = $.trim(extTxtWbsName.getValue());
+			        		var range = (extRgp.getChecked())[0]._value;
+			        		var start = extDate.getRawValue();
+			        		
+			        		if($.trim(wbsName) == '') {
+			        			extTxtWbsName.markInvalid('WBS 이름을 입력하세요');
+			        		}
+			        		else if(start == '') {
+			        			extDate.markInvalid('WBS 시작일자를 선택하세요');
+			        		}
+			        		else {
+				        		regWBS(wbsName, range, start, wbsRegWin);
+			        		}
+			        	}
+			        } },
+			        { xtype: 'button', text: '닫기', iconCls: 'icon-close', listeners: {
+			        	click: function(btn) {
+			        		wbsRegWin.close();
+			        	}
+			        } }
+			    ]
+			}],
+			listeners: {
+				close: function() {
+					
+				}
+			}
+		})
+		
+		wbsRegWin.show();
+	}
+	
+	function regWBS(wbsName, range, start, win) {
+		var events = $('#calendar').fullCalendar('clientEvents');
+		var event = null;
+		var len = events.length;
+		var eventObject = [];
+		var end = null;
+		
+		//end가 null인 경우: drop만 한 경우
+		for(var i=0; i<len; i++) {
+			event = events[i];
+			end = event.end;
+			if(end) {
+				end = event.end.format();
+			}
+			else {
+				var d = new Date(event.start.format());
+		    	d.setDate(d.getDate() + 1);
+		    	end = common.getYmd(d); 
+			}
+			eventObject.push({
+				id: event.id,
+				resourceId: event.resourceId,
+				start: event.start.format(),
+				end: end,
+				title: ''
+			});
+		}
+		
+		common.ajaxExt({
+			url: '/project/reg/wbs',
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			jsonData: {
+				resources: JSON.stringify(resources),
+				events: JSON.stringify(eventObject),
+				title: wbsName, 
+				range: range,
+				start: start
+			},
+			loadmask: {
+				msg: 'WBS 등록중입니다.'
+			},
+			success: function(jo) {
+				console.log(jo);
+				if(jo.success) {
+					common.showExtMsg({
+						type: 'alert',
+						icon: parent.Ext.MessageBox.INFO,
+						msg: 'WBS 등록되었습니다.',
+						callback: function() {
+							win.close();
+							window.location.reload();
+						}
+						
+					});
+				}
+				else {
+					common.showExtMsg({
+						type: 'alert',
+						msg: jo.errMsg
+					});
+				}
+			}
+		});
+		
+		console.log(JSON.stringify(eventObject));
+	}
+	
 	$('#calendar').fullCalendar({
 		schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
 		customButtons: {
 			save: {
 				text: '저장',
 				click: function() {
-					var events = $('#calendar').fullCalendar('clientEvents');
-					var event = null;
-					var len = events.length;
-					var eventObject = [];
-					var end = null;
-					
-					//end가 null인 경우: drop만 한 경우
-					for(var i=0; i<len; i++) {
-						event = events[i];
-						end = event.end;
-						if(end) {
-							end = event.end.format();
-						}
-						else {
-							var d = new Date(event.start.format());
-					    	d.setDate(d.getDate() + 1);
-					    	end = common.getYmd(d); 
-						}
-						eventObject.push({
-							id: event.id,
-							resourceId: event.resourceId,
-							start: event.start.format(),
-							end: end,
-							title: ''
-						});
-					}
-					
-					console.log(JSON.stringify(eventObject));
-					
+					regWin();
 				}
 			}
 		},
@@ -371,6 +609,7 @@ $(document).ready(function() {
 	    drop: function(date, jsEvent, ui, resourceId) {
 	    	console.log('drop', date.format(), resourceId);
 	    	console.log(this)
+	    	console.log(jsEvent);
 	        // assign it the date that was reported
 	      
 	    	
@@ -444,6 +683,9 @@ $(document).ready(function() {
 	    	//event.end = end;
 	    	console.log(event)
 	    	 $('#calendar').fullCalendar('updateEvent', event);
-	     },
+	    },
+	    eventAfterAllRender: function() {
+	    	$('#spLoading').text('');
+	    }
 	});
 });

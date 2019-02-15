@@ -14,7 +14,7 @@
 <script src="/resources/os/jQuery-Contextmenu-2.7.1/jquery.contextMenu.js"></script>
 <script src="/resources/os/jQuery-Contextmenu-2.7.1/jquery.ui.position.js"></script>
 <script src="/resources/js/icommon.js"></script>
-<script src="/resources/js/project/newproject.js"></script>
+<script src="/resources/js/project/listwbs.js"></script>
 </content>
 <head>
 	<link rel="stylesheet" href="/resources/css/jquery-ui.css" />
@@ -40,25 +40,22 @@
      		margin-bottom: 10px;
   		}
   		
-  		 #external-events h5 {
-    		font-size: 11px;
-    		margin-top: 0;
-     		padding-top: 3px; 
-  		}
-  
   		#external-events .fc-event { 
      		margin: 5px 0; 
+     		cursor: pointer; 
+   		} 
+   		
+   		#external-events .fc-event button{ 
      		cursor: pointer; 
    		} 
 	</style>
 </head>
 <body>
-	<div id="wrap">
+   	<div id="wrap">
     	<div id="external-events">
-<!--     		<h5>드래그하세요</h5> -->
-      		<div class="fc-event">&nbsp;</div>
+      		<div class="fc-event"><button id="btnWBSPop" style="width: 100%">WBS 리스트 검색</button></div>
     	</div>
-    	<div id="calendar"></div>
+<!--     	<div id="calendar"><span id="spLoading">폼 로딩중......</span></div> -->
     	<div style="clear:both;"></div>
     </div>
 </body>

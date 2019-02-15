@@ -8,7 +8,8 @@
 	<mapping path="/calendar/view" decorator="/WEB-INF/views/layout/defaultiframe.jsp" />
 	<mapping path="/view/orgchart" decorator="/WEB-INF/views/layout/defaultiframe.jsp" />
 	<mapping path="/signatureview" decorator="/WEB-INF/views/layout/defaultiframe.jsp" />
-	<mapping path="/project/newproject" decorator="/WEB-INF/views/layout/defaultiframe.jsp" />
+	<mapping path="/project/newwbs" decorator="/WEB-INF/views/layout/defaultiframe.jsp" />
+	<mapping path="/project/listwbs" decorator="/WEB-INF/views/layout/defaultiframe.jsp" />
 	<mapping path="/floormap" decorator="/WEB-INF/views/layout/defaultiframe.jsp" />
 	<mapping path="/reservation" decorator="/WEB-INF/views/layout/defaultiframe.jsp" />
 	<mapping path="/m/*" decorator="/WEB-INF/views/layout/defaultmobile.jsp" />

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mappers.projectMapper">
+	<insert id="insertNewWBS" parameterType="map">
+		insert into [동림].[dbo].[WBS] (이름, DEFAULT_DAY, 작성자, 공유범위, resources, [events])
+		values (#{title}, #{start}, #{writer}, #{range}, #{resources}, #{events})
+	</insert>
+</mapper>

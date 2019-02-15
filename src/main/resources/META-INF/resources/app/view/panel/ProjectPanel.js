@@ -4,11 +4,76 @@ Ext.define('Drpnd.view.panel.ProjectPanel', {
 	requires:['Drpnd.util.CommonFn'],
 	initComponent: function() {
 		var CommonFn = Drpnd.util.CommonFn;
+		var activeColor = '#ccffff';
+		var btnNewWBS = null;
+		var btnListWBS = null;
+		var newWBSWin = null;
+		var listWBSWin = null;
+		var that = this;
+		
+		function activeButtonCSS(activeBtn) {
+			if(activeBtn == 'NEW_WBS') {
+				btnNewWBS.getEl().setStyle('background-color', activeColor);
+			}
+			else {
+				btnNewWBS.getEl().setStyle('background-color', 'transparent');
+			}
+			
+			if(activeBtn == 'LIST_WBS') {
+				btnListWBS.getEl().setStyle('background-color', activeColor);
+			}
+			else {
+				btnListWBS.getEl().setStyle('background-color', 'transparent');
+			}
+			
+		}
+		
+		function clearItems() {
+			var record = that.items.items;
+			var recordLen = record.length;
+			
+			if(recordLen == 1) {
+				var r = record[0];
+				record.remove(r);
+			}
+		}
+		
+		function addItem(obj) {
+			clearItems();
+			that.add(obj);
+			rerender();
+		}
+		
+		function rerender() {
+			that.update();
+			that.doLayout();
+		}
+		
+		
+		//WBS생성
+		function newWBSClick() {
+			activeButtonCSS('NEW_WBS');
+			CommonFn.checkSession(function() {
+				var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: '/project/newwbs', load: function(dom) {
+					newWBSWin = dom.contentWindow;
+				} });
+				addItem(iframe);
+			});
+		}
+		
+		//WBS 리스트
+		function listWBSClick() {
+			activeButtonCSS('LIST_WBS');
+			CommonFn.checkSession(function() {
+				var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: '/project/listwbs', load: function(dom) {
+					listWBSWin = dom.contentWindow;
+				} });
+				addItem(iframe);
+			});
+		}
 		
 		Ext.apply(this, {
-			items: Ext.create('Drpnd.view.iframe.BaseIframe', { url: '/project/newproject', load: function(dom) {
-	    		
-	    	} }),
+			items: {},
 			layout: 'fit',
 			tbar: [/*{
 				xtype: 'button',
@@ -93,20 +158,32 @@ Ext.define('Drpnd.view.panel.ProjectPanel', {
 				}
 			}, '-', */{
 				xtype: 'button',
-				text: '프로젝트 생성',
+				text: 'WBS 생성',
 				iconCls: 'icon-gyeoljae-new',
 				listeners: {
 					click: function(btn) {
-						newGyeoljaeClick();
+						newWBSClick();
 					},
 					afterrender: function(btn) {
-						btnNewGyeoljae = btn;
+						btnNewWBS = btn;
+					}
+				}
+			}, '-', {
+				xtype: 'button',
+				text: 'WBS 리스트',
+				iconCls: 'icon-gyeoljae-new',
+				listeners: {
+					click: function(btn) {
+						listWBSClick();
+					},
+					afterrender: function(btn) {
+						btnListWBS = btn;
 					}
 				}
 			}],
 			listeners: {
 				afterrender: function() {
-					
+					newWBSClick();
 				}
 			}
 		});
