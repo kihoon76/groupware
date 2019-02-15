@@ -1,23 +1,23 @@
-Ext.define('Hotplace.view.panel.LogListGridPanel', {
+Ext.define('Drpnd.view.panel.WbsListGridPanel', {
 	extend: 'Ext.grid.Panel',
-	requires : ['Hotplace.util.Constants' ,'Hotplace.util.CommonFn'],
-	xtype: 'loggrid',
-	id: 'logListGrid',
+	requires : ['Drpnd.util.Constants' ,'Drpnd.util.CommonFn'],
+	xtype: 'wbsgrid',
+	id: 'wbsListGrid',
 	initComponent: function() {
-		var	constants = Hotplace.util.Constants,
-			commFn = Hotplace.util.CommonFn,
+		var	constants = Drpnd.util.Constants,
+			commFn = Drpnd.util.CommonFn,
 			categoryPanel = Ext.getCmp('app-category'),
 			contentPanel = Ext.getCmp('app-contents'),
 			//searchWin = null,
 			that = this;
 		
 		try {
-			var store = Ext.create('Hotplace.store.LogListStore');
+			var store = Ext.create('Drpnd.store.WbsListStore');
 		}
 		catch(e) {
 			console.log(e);
 			//세션만료 및 중복로그인시  js파일을 가져오지 못해서 오류발생함
-			commFn.loadJsError();
+			//commFn.loadJsError();
 		}
 		//store.baseParams = {ip:'', id: '', regDate: null}
 		
@@ -125,36 +125,20 @@ Ext.define('Hotplace.view.panel.LogListGridPanel', {
 		Ext.apply(this, {
 			store: store,
 			columns: [{
-				text: '아이피',
-				dataIndex: 'ip',
-				flex: 0
-			}, {
-				text: '아이디',
-				dataIndex: 'accountId',
-				flex: 0
-			}, {
-				text: '유입경로',
-				dataIndex: 'referer',
-				flex: 0
-			}, {
-				text: '요청리소스',
-				dataIndex: 'url',
-				flex: 0
-			}, {
-				text: '파라미터',
-				dataIndex: 'parameter',
+				text: 'WBS이름',
+				dataIndex: 'WbsName',
 				flex: 1
 			}, {
-				text: '접속시간',
-				dataIndex: 'accessTime',
+				text: '시작일',
+				dataIndex: 'WbsDefaultDay',
 				flex: 0
 			}, {
-				text: '브라우저정보',
-				dataIndex: 'userAgent',
+				text: '작성자',
+				dataIndex: 'WbsWriter',
 				flex: 0
 			}, {
-				text: '모바일여부',
-				dataIndex: 'isMobile',
+				text: '공개범위',
+				dataIndex: 'WbsRange',
 				flex: 0
 			}],
 			tbar: [{
@@ -197,7 +181,7 @@ Ext.define('Hotplace.view.panel.LogListGridPanel', {
 					editable: false,
 					width: 100,
 					value: constants.gridPageSize,
-					store: Ext.create('Hotplace.store.PagingSize'),
+					store: Ext.create('Drpnd.store.PagingSize'),
 					listeners: {
 						change: function(cb, nV, oV) {
 							makeParam(false, false);

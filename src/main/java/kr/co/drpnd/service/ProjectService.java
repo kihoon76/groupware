@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import kr.co.drpnd.dao.ProjectDao;
+import kr.co.drpnd.domain.ExtjsStoreVO;
 
 @Service("projectService")
 public class ProjectService {
@@ -16,6 +17,9 @@ public class ProjectService {
 
 	public void createNewWBS(Map<String, String> param) {
 		projectDao.insertNewWBS(param);
-		
+	}
+
+	public ExtjsStoreVO<Map> getListWBS(Map param) {
+		return projectDao.selectListWBS(param);
 	}
 }

@@ -1,11 +1,47 @@
 $(document).ready(function() {
 	
 	function searchWin() {
+		var wbsWin = parent.Ext.create('Ext.window.Window', {
+			title: 'WBS 리스트',
+			iconCls: 'icon-project',
+			height: 600,
+			width: 600,
+			layout: 'fit',
+			closeAction: 'destroy',
+			modal: true,
+			draggable: false,
+			resizable: false,
+			items: [parent.Ext.create('Drpnd.view.panel.WbsListGridPanel')],
+			dockedItems: [{
+			    xtype: 'toolbar',
+			    dock: 'bottom',
+			    ui: 'footer',
+			    items: [
+			        { xtype: 'component', flex: 1 },
+			        { xtype: 'button', text: '시간설정', iconCls: 'icon-timer', listeners: {
+			        	click: function() {
+			        		
+			        	}
+			        } },
+			        { xtype: 'button', text: '닫기', iconCls: 'icon-close', listeners: {
+			        	click: function(btn) {
+			        		wbsWin.close();
+			        	}
+			        } }
+			    ]
+			}],
+			listeners: {
+				close: function() {
+					
+				}
+			}
+		})
 		
+		wbsWin.show();
 	}
 	
 	$('#btnWBSPop').on('click', function() {
-		
+		searchWin();
 		
 	});
 //	$('#calendar').fullCalendar({

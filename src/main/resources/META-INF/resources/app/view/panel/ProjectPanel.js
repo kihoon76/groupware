@@ -171,7 +171,7 @@ Ext.define('Drpnd.view.panel.ProjectPanel', {
 			}, '-', {
 				xtype: 'button',
 				text: 'WBS 리스트',
-				iconCls: 'icon-gyeoljae-new',
+				iconCls: 'icon-project',
 				listeners: {
 					click: function(btn) {
 						listWBSClick();
