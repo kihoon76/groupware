@@ -2,8 +2,7 @@ $(document).ready(function() {
 	var taskContextMenu = null;
 	var resourceIdCnt = 1;
 	var eventIdCnt = 1;
-	var resources = [
-        {id: 'a', title: 'Task 1'},
+	var resources = [{id: 'a', title: 'Task 1'}
         /*{ id: 'b', title: 'Auditorium B', eventColor: 'green' },
         { id: 'c', title: 'Auditorium C', eventColor: 'orange' },
         { id: 'd', title: 'Auditorium D', 
@@ -18,8 +17,7 @@ $(document).ready(function() {
         { id: 'h', title: 'Auditorium H' },*/
     ];
 	
-	var events = [ { id: '1', resourceId: 'a', start: '2018-04-07', end: '2018-04-08', title: '' },
-	   	        { id: '2', resourceId: 'a', start: '2018-04-09', end: '2018-04-10', title: '' },];
+	var events = [];
 	
 	
 	function searchEvent(searchId, callback) {
@@ -164,6 +162,9 @@ $(document).ready(function() {
 		});
 	}
 	
+	function getNewEventId() {
+		return 'e' + (++eventIdCnt);
+	}
 	function eventReceive(resourceId, start, end) {
 		var id = 'e' + (++eventIdCnt);
 		events.push({
@@ -275,13 +276,39 @@ $(document).ready(function() {
 			save: {
 				text: '저장',
 				click: function() {
-					var events = $('#calendar').fullCalendar('getEventSources');
-					console.log(events[0].rawEventDefs);
+					var events = $('#calendar').fullCalendar('clientEvents');
+					var event = null;
+					var len = events.length;
+					var eventObject = [];
+					var end = null;
+					
+					//end가 null인 경우: drop만 한 경우
+					for(var i=0; i<len; i++) {
+						event = events[i];
+						end = event.end;
+						if(end) {
+							end = event.end.format();
+						}
+						else {
+							var d = new Date(event.start.format());
+					    	d.setDate(d.getDate() + 1);
+					    	end = common.getYmd(d); 
+						}
+						eventObject.push({
+							id: event.id,
+							resourceId: event.resourceId,
+							start: event.start.format(),
+							end: end,
+							title: ''
+						});
+					}
+					
+					console.log(JSON.stringify(eventObject));
 					
 				}
 			}
 		},
-		now: '2018-04-07',
+		now: $('body').data('date'),
 	    editable: true,
 	    droppable: true, // this allows things to be dropped onto the calendar
 	    aspectRatio: 1.8,
@@ -344,13 +371,35 @@ $(document).ready(function() {
 	    drop: function(date, jsEvent, ui, resourceId) {
 	    	console.log('drop', date.format(), resourceId);
 	    	console.log(this)
+	        // assign it the date that was reported
+	      
+	    	
+	        /*copiedEventObject.start = date;
+	        copiedEventObject.end = new Date(tempDate.setHours(tempDate.getHours()+1)); // <-- make sure we assigned a date object
+	        copiedEventObject.allDay = false;  //< -- o
+	        
+	        copiedEventObject.start = date;
+	        copiedEventObject.end = date.setDate(date.getDate()+1); // <- should be working*/
+
+	        // render the event on the calendar
+	        // the last `true` argument determines if the event "sticks"
+	        // (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
+	        //$('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
 	    },
 	    eventOverlap: false,
 	    eventReceive: function(event) { // called when a proper external event is dropped
 	    	console.log('eventReceive', event.resourceId);
 	    	console.log('eventReceive', event.start.format());
-	    	var id = eventReceive(event.resourceId, event.start.format(), null);
-	    	event.id = id;
+	    	//var id = eventReceive(event.resourceId, event.start.format(), null);
+	    	var d = new Date(event.start.format());
+	    	d.setDate(d.getDate() + 1);
+	    	
+	    	console.log(event);
+	    	
+	    	event.id = getNewEventId();
+	    	//event.end = common.getYmd(d);
+	    	//event.allDay = false;
+	    	//event.setEnd(d);
 	    	$('#calendar').fullCalendar('updateEvent', event);  
 	    },
 	    eventDrop: function(event) { // called when an event (already on the calendar) is moved

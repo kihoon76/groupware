@@ -1,5 +1,6 @@
 package kr.co.drpnd.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +32,9 @@ public class SawonDaoImpl implements SawonDao {
 
 	@Override
 	public List<Sawon> selectMyDepartmentSawonList(String sawonDepartment) {
-		return msSqlSession.selectList(namespace + ".selectMyDepartmentSawonList", sawonDepartment);
+		Map<String, Integer> m = new HashMap<>();
+		m.put("department", Integer.parseInt(sawonDepartment));
+		return msSqlSession.selectList(namespace + ".selectMyDepartmentSawonList", m);
 	}
 
 	@Override

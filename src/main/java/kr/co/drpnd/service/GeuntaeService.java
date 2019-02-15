@@ -28,7 +28,7 @@ public class GeuntaeService {
 		geuntaeDao.insertGotowork(geuntae);
 		
 		if(geuntae.getGotoworkTime().equals("0")) throw new AlreadyGotowork(ExceptionCode.ALREADY_GOTOWORK.getMsg());
-		if(geuntae.getGotoworkTime().equals("-1")) throw new InvalidGotoworkTime(ExceptionCode.INVALID_GOTOWORK_TIME.getMsg());
+		//if(geuntae.getGotoworkTime().equals("-1")) throw new InvalidGotoworkTime(ExceptionCode.INVALID_GOTOWORK_TIME.getMsg());
 		
 		return geuntae.getGotoworkTime();
 	}
