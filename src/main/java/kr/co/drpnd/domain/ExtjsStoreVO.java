@@ -10,10 +10,10 @@ public class ExtjsStoreVO<T> {
 	private int total;
 	private String searchType;
 	private String searchValue;
-	
-	private String ip;
-	private String id;
-	private String regDate;
+	private String wbsName;
+	private String writerCode;
+	private String myTeamCode;
+	private String myDepartmentCode;
 	
 	private int start;
 	private int limit;
@@ -55,22 +55,29 @@ public class ExtjsStoreVO<T> {
 	public void setLimit(int limit) {
 		this.limit = limit;
 	}
-	public String getIp() {
-		return ip;
+	public String getWbsName() {
+		return wbsName;
 	}
-	public void setIp(String ip) {
-		this.ip = ip;
+	public void setWbsName(String wbsName) {
+		this.wbsName = wbsName;
 	}
-	public String getId() {
-		return id;
+	public String getWriterCode() {
+		return writerCode;
 	}
-	public void setId(String id) {
-		this.id = id;
+	public void setWriterCode(String writerCode) {
+		this.writerCode = writerCode;
 	}
-	public String getRegDate() {
-		return regDate;
+	public String getMyTeamCode() {
+		return myTeamCode;
 	}
-	public void setRegDate(String regDate) {
-		this.regDate = regDate;
+	public void setMyTeamCode(String myTeamCode) {
+		this.myTeamCode = myTeamCode;
 	}
+	public String getMyDepartmentCode() {
+		return myDepartmentCode;
+	}
+	public void setMyDepartmentCode(String myDepartmentCode) {
+		this.myDepartmentCode = myDepartmentCode;
+	}
+	
 }

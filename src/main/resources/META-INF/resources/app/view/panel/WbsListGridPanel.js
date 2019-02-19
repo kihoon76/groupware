@@ -3,6 +3,7 @@ Ext.define('Drpnd.view.panel.WbsListGridPanel', {
 	requires : ['Drpnd.util.Constants' ,'Drpnd.util.CommonFn'],
 	xtype: 'wbsgrid',
 	id: 'wbsListGrid',
+	win: null,
 	initComponent: function() {
 		var	constants = Drpnd.util.Constants,
 			commFn = Drpnd.util.CommonFn,
@@ -126,19 +127,35 @@ Ext.define('Drpnd.view.panel.WbsListGridPanel', {
 			store: store,
 			columns: [{
 				text: 'WBS이름',
-				dataIndex: 'WbsName',
+				dataIndex: 'name',
 				flex: 1
 			}, {
 				text: '시작일',
-				dataIndex: 'WbsDefaultDay',
+				dataIndex: 'defaultDay',
 				flex: 0
 			}, {
 				text: '작성자',
-				dataIndex: 'WbsWriter',
+				dataIndex: 'writer',
 				flex: 0
 			}, {
 				text: '공개범위',
-				dataIndex: 'WbsRange',
+				dataIndex: 'range',
+				renderer: function(v) {
+					switch(v) {
+					case 'P' :
+						v = 'private';
+						break;
+					case 'T':
+						v = '팀공유';
+						break;
+					case 'A' :
+						v = '전체공유';
+						break;
+					}
+					
+					return v;
+						
+				},
 				flex: 0
 			}],
 			tbar: [{
@@ -165,7 +182,7 @@ Ext.define('Drpnd.view.panel.WbsListGridPanel', {
 				xtype: 'pagingtoolbar',
 				store: store,
 				displayInfo: true,
-				displayMsg: '로그 리스트 {0} - {1} of {2}',
+				displayMsg: 'WBS 리스트 {0} - {1} of {2}',
 				dock: 'bottom',
 				doRefresh: function() {
 					makeParam(false, false, true);
@@ -199,172 +216,12 @@ Ext.define('Drpnd.view.panel.WbsListGridPanel', {
 					
 				},
 				itemdblclick: function(grid, rec, item) {
-					showDetailWin(rec);
+					that.myExtraParams.win.makeCalendar(rec.data);
 				}
 			}
 		});
 		
-		function getBrowserKind(isMobile, ua) {
-	    	var b = {
-				msie: false,
-				msedge: false,
-				msie_ver: '',
-				chrome: false,
-				firefox: false,
-				safari: false,
-				opera: false
-	    	};
-			    	
-	    	if(!ua || isMobile == 'Y') return b;
-	    	
-	    	if(ua.search('Chrome') >= 0 && ua.search('Edge') < 0) {
-	    		b.chrome = true;
-	    	}
-	    	else if(ua.search('Firefox') >= 0) {
-	    		b.firefox = true;
-	    	}
-	    	else if(ua.search('Safari') >= 0 && ua.search('Chrome') < 0) {
-	    		b.safari = true;
-	    	}
-	    	else if(ua.search('Opera') >= 0) {
-	    		b.opera = true;
-	    	}
-	    	else if(ua.search('Trident') >=0) {
-	    		b.msie = true;
-	    		if(ua.search('Trident/7.0') >=0) {
-	    			b.msie_ver = '11';
-	    		}
-	    		else if(ua.search('Trident/6.0') >=0) {
-	    			b.msie_ver = '10';
-	    		}
-	    		else if(ua.search('Trident/5.0') >=0) {
-	    			b.msie_ver = '9';
-	    		}
-	    	}
-	    	else if(ua.search('Edge') >=0) {
-	    		b.msedge = true;
-	    	}
-			    	
-			return b;
-		}
 		
-		function showDetailWin(rec) {
-			var datas = rec.getData();
-			var b = getBrowserKind(datas.isMobile, datas.userAgent);
-			
-			var win = Ext.create('Ext.window.Window',{
-				iconCls: 'icon-window',
-				width: 800,
-				height: 800,
-				modal: true,
-				draggable: true,
-				resizable: true,
-				closeAction: 'close',
-				items: [{
-					xtype: 'form',
-					bodyPadding: 5,
-					height: 700,
-					defaults: {
-		                width: 250,
-		                height: 22,
-		                labelWidth: 80,
-		                anchor: '100%',
-		                readOnly: true
-		            },
-		            defaultType: 'textfield',
-		            items: [{
-		            	fieldLabel: '아이피',
-						value: datas.ip
-		            }, {
-		            	fieldLabel: '아이디',
-		            	value: datas.accountId,
-		            	focusOnToFront: false,
-		            	listeners: {
-		            		focus: function(text) {
-		            			console.log('focus');
-		            		}
-		            	}
-		            }, {
-		            	fieldLabel: '유입경로',
-		            	value: datas.referer
-		            }, {
-		            	fieldLabel: '요청리소스',
-		            	value: datas.url
-		            }, {
-		            	xtype: 'textareafield',
-		            	height: 300,
-		            	grow: true,
-		            	fieldLabel: '파라미터',
-		            	value: datas.parameter
-		            }, {
-		            	fieldLabel: '접속시간',
-		            	value: datas.accessTime
-		            }, {
-		            	fieldLabel: '브라우저정보',
-		            	value: datas.userAgent
-		            }, {
-		            	fieldLabel: '모바일여부',
-		            	value: datas.isMobile
-		            }, {
-		            	xtype: 'radiogroup',
-		            	fieldLabel: '브라우저종류',
-	            		items: [{
-	            			xtype: 'radio',
-	            			boxLabel: 'IE(edge)',
-	            			readOnly: true,
-	            			checked: b.msedge
-	            		}, {
-	            			xtype: 'radio',
-	            			boxLabel: 'IE(11)',
-	            			readOnly: true,
-	            			checked: b.msie && b.msie_ver == '11'
-	            		}, {
-	            			xtype: 'radio',
-	            			boxLabel: 'IE(10)',
-	            			readOnly: true,
-	            			checked: b.msie && b.msie_ver == '10'
-	            		}, {
-	            			xtype: 'radio',
-	            			boxLabel: 'IE(9)',
-	            			readOnly: true,
-	            			checked: b.msie && b.msie_ver == '10'
-	            		}, {
-	            			xtype: 'radio',
-	            			boxLabel: '크롬',
-	            			readOnly: true,
-	            			checked: b.chrome
-	            		}, {
-	            			xtype: 'radio',
-	            			boxLabel: '파이어폭스',
-	            			readOnly: true,
-	            			checked: b.firefox
-	            		}, {
-	            			xtype: 'radio',
-	            			boxLabel: '사파리',
-	            			readOnly: true,
-	            			checked: b.safari
-	            		}, {
-	            			xtype: 'radio',
-	            			boxLabel: '오페라',
-	            			readOnly: true,
-	            			checked: b.opera
-	            		}]
-		            }]
-				}],
-				buttons: [{
-					xtype: 'button',
-					text: '닫기',
-					listeners: {
-						click: function() {
-							win.close();
-						}
-					}
-				}]
-				
-			});
-			
-			win.show();
-		}
 		
 		this.callParent(arguments);
 	}

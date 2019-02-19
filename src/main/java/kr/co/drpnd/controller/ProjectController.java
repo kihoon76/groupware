@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.drpnd.domain.AjaxVO;
 import kr.co.drpnd.domain.ExtjsStoreVO;
 import kr.co.drpnd.domain.Sawon;
+import kr.co.drpnd.domain.Wbs;
 import kr.co.drpnd.service.ProjectService;
 import kr.co.drpnd.util.DateUtil;
 import kr.co.drpnd.util.SessionUtil;
@@ -67,16 +68,19 @@ public class ProjectController {
 	
 	@PostMapping("list/wbs")
 	@ResponseBody
-	public ExtjsStoreVO<Map> getListWbs(
+	public ExtjsStoreVO<Wbs> getListWbs(
 			@RequestParam("limit") int limit,
 			@RequestParam("start") int start,
-			@RequestParam(name="ip", required=false) String ip) {
+			@RequestParam(name="wbsName", required=false) String wbsName) {
 		Sawon sawon = SessionUtil.getSessionSawon();
 		
 		Map param = new HashMap();
 		param.put("start", start);
 		param.put("limit", limit);
-		param.put("writer", sawon.getSawonCode());
+		param.put("sawonCode", sawon.getSawonCode());
+		param.put("myTeam", sawon.getSawonTeam());
+		param.put("department", sawon.getSawonDepartment());
+		
 		return projectService.getListWBS(param);
 	}
 }

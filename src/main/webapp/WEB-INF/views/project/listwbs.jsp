@@ -13,6 +13,7 @@
 <script src="/resources/os/fullcalendar-3.9.0/scheduler-1.9.4.min.js"></script>
 <script src="/resources/os/jQuery-Contextmenu-2.7.1/jquery.contextMenu.js"></script>
 <script src="/resources/os/jQuery-Contextmenu-2.7.1/jquery.ui.position.js"></script>
+<script src="/resources/os/jQuery-loading-overlay/loadingoverlay.min.js"></script>
 <script src="/resources/js/icommon.js"></script>
 <script src="/resources/js/project/listwbs.js"></script>
 </content>
@@ -40,6 +41,32 @@
      		margin-bottom: 10px;
   		}
   		
+  		#wbsName {
+  			width: 600px; 
+     		padding: 0 10px; 
+     		border: 1px solid #ccc; 
+     		background: #eee; 
+     		text-align: left; 
+     		margin-bottom: 10px;
+  		}
+  		
+  		#wbsWriter {
+  			width: 100px; 
+     		padding: 0 10px; 
+     		border: 1px solid #ccc; 
+     		background: #eee; 
+     		text-align: left; 
+     		margin-bottom: 10px;
+  		}
+  		
+  		#wbsWriter .wbs_header {
+  			margin: 5px 0;
+  		}
+  		
+  		#wbsName .wbs_header {
+  			margin: 5px 0;
+  		}
+  		
   		#external-events .fc-event { 
      		margin: 5px 0; 
      		cursor: pointer; 
@@ -48,14 +75,30 @@
    		#external-events .fc-event button{ 
      		cursor: pointer; 
    		} 
+   		
+   		div .DV_FLOAT {
+   			float:left;
+   			margin-right: 10px;
+   		}
+   		
 	</style>
 </head>
 <body>
    	<div id="wrap">
-    	<div id="external-events">
+    	<div id="external-events" class=" DV_FLOAT">
       		<div class="fc-event"><button id="btnWBSPop" style="width: 100%">WBS 리스트 검색</button></div>
     	</div>
-<!--     	<div id="calendar"><span id="spLoading">폼 로딩중......</span></div> -->
-    	<div style="clear:both;"></div>
+    	<div id="wbsName" class="DV_FLOAT">
+    		<div class="wbs_header">
+    			<input type="text" id="txtWbsName" style="height:20px; width:100%;" placeholder="WBS이름" readonly>
+    		</div>
+    	</div>
+    	<div id="wbsWriter" class="DV_FLOAT">
+    		<div class="wbs_header">
+    			<input type="text" id="txtWbsWriter" style="height:20px; width:100%;" placeholder="WBS작성자" readonly>
+    		</div>
+    	</div>
+    	<div style="clear:both"></div>
+    	<div id="calendar"><span id="spLoading">폼 로딩중......</span></div>
     </div>
 </body>

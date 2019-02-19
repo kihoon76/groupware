@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import kr.co.drpnd.dao.ProjectDao;
 import kr.co.drpnd.domain.ExtjsStoreVO;
+import kr.co.drpnd.domain.Wbs;
 
 @Service("projectService")
 public class ProjectService {
@@ -19,7 +20,7 @@ public class ProjectService {
 		projectDao.insertNewWBS(param);
 	}
 
-	public ExtjsStoreVO<Map> getListWBS(Map param) {
+	public ExtjsStoreVO<Wbs> getListWBS(Map param) {
 		return projectDao.selectListWBS(param);
 	}
 }

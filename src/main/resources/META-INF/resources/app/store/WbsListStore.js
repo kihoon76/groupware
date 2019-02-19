@@ -3,7 +3,7 @@ Ext.define('Drpnd.store.WbsListStore', {
 	 requires : ['Drpnd.util.Constants', 'Drpnd.util.CommonFn'],
 	 proxy : {
 	        type : 'ajax'
-	       ,url : Drpnd.util.Constants.context + '/project/list'
+	       ,url : Drpnd.util.Constants.context + '/project/list/wbs'
 	       ,actionMethods : 'POST'
 	       ,reader : {
 	           type : 'json'
@@ -17,7 +17,7 @@ Ext.define('Drpnd.store.WbsListStore', {
 	       }
 
 	  },
-	  fields : ['WbsCode', 'WbsName', 'WbsDefaultDay', 'WbsStart', 'WbsWriter', 'WbsRange'],
+	  fields : ['code', 'name', 'defaultDay', 'writer', 'range', 'resources', 'events'],
 	  autoLoad : true,
 	  pageSize : Drpnd.util.Constants.gridPageSize
 });
