@@ -1,22 +1,17 @@
 package kr.co.drpnd.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.springframework.web.bind.annotation.PathVariable;
-
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import kr.co.drpnd.domain.Department;
 import kr.co.drpnd.domain.ExtjsStoreVO;
-import kr.co.drpnd.domain.Position;
-import kr.co.drpnd.domain.Team;
 import kr.co.drpnd.service.CodeService;
 import kr.co.drpnd.type.Code;
 
@@ -46,6 +41,10 @@ public class CodeController {
 			break;
 		case POSITION:
 			list = codeService.getPosition();
+			break;
+		case OVERWORK:
+			list = codeService.getOverwork();
+			break;
 		default :
 			break;
 		}

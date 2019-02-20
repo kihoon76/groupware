@@ -19,6 +19,11 @@
 		<result column="직급구별"		property="positionGubun"		javaType="string"/>
 	</resultMap>
 	
+	<resultMap id="RM_Overwork" type="map">
+		<result column="코드"		property="overworkCode"			javaType="string"/>
+		<result column="이름"		property="overworkName"			javaType="string"/>
+	</resultMap>
+	
 	<select id="selectDepartment" resultMap="RM_Department">
 		select 부서코드, 부서명 
 		  from [동림].[dbo].[부서]
@@ -36,5 +41,12 @@
 		  from [동림].[dbo].[직급]
 	</select>
 	
+	<select id="selectOverwork" resultMap="RM_Overwork">
+		select 0 코드, '정시퇴근' 이름
+		 union all
+		select 코드, 이름
+		  from [동림].[dbo].[야근타입]
+		 where 적용범위 = 'A'
+	</select>
 	
 </mapper>

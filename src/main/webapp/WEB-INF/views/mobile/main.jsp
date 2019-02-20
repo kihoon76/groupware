@@ -31,5 +31,6 @@
 		</c:choose>
 	</div>
 	<input id="baseUrl" type="hidden" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
+	<input id="overworkTypes" type="hidden" value="${overworkTypes}" />
 </div>
 </content>

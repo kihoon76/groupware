@@ -26,6 +26,7 @@
 			#{lng, mode=IN, jdbcType=FLOAT, javaType=float},
 			#{workContent, mode=IN, jdbcType=VARCHAR, javaType=string},
 			#{outworkContent, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{overworkType, mode=IN, jdbcType=INTEGER, javaType=int},
 			#{offworkTime, mode=OUT, jdbcType=VARCHAR, javaType=string},
 			#{gotoworkTime, mode=OUT, jdbcType=VARCHAR, javaType=string}
 		)}

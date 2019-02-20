@@ -63,6 +63,7 @@ public class GeuntaeService {
 		geuntae.setLng(0);
 		geuntae.setWorkContent(param.get("workContent"));
 		geuntae.setOutworkContent(param.get("outworkContent"));
+		geuntae.setOverworkType(Integer.parseInt(param.get("overworkType")));
 		
 		geuntaeDao.updateOffwork(geuntae);
 		

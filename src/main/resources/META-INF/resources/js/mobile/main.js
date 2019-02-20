@@ -3,7 +3,7 @@ var Common = {
 	worker: null,
 	popupClose: function() {},
 	useCacheReserPop: true,
-	offworkPopup: '<form><div><h4>업무내용: </h4><textarea style="width:100%; height:70px;" id="txtWorkContent"></textarea>	<h4>야근내용: </h4>	<textarea style="width:100%; height:70px;" id="txtOutworkContent"></textarea></div></form>',
+	offworkPopup: '',
 	getFullHeight: function() {
 		var screen = $.mobile.getScreenHeight();
     	var header = $(".ui-header").hasClass("ui-header-fixed") ? $(".ui-header").outerHeight()  - 1 : $(".ui-header").outerHeight();
@@ -150,11 +150,31 @@ else if(userAgent.match('android')) {
 	$('head').append('<link rel="shortcut icon" href="/resources/images/dongrim.png" />') 
 }
 
+
+$(document)
+.off('change', '#selOverworkType')
+.on('change', '#selOverworkType', function() {
+	var v = $(this).val();
+	var $txtOutworkContent = $('#txtOutworkContent');
+	if(v == '0') {
+		$txtOutworkContent.val('');
+		$txtOutworkContent.prop('disabled', true);
+	}
+	else {
+		$txtOutworkContent.prop('disabled', false);
+	}
+});
+
 $(document)
 .off('pageinit')
 .on('pageinit', function () {
 	$('body>[data-role="panel"]').panel();
 	
+	var overworkTypes = $('#overworkTypes').val();
+	var html = '<form><div><h4>업무내용: </h4><textarea style="width:100%; height:40px;" id="txtWorkContent"></textarea>';
+	html += '<h4>야근유형: </h4><select id="selOverworkType">' + overworkTypes + '</select>';
+	html += '<h4>야근내용: </h4><textarea style="width:100%; height:40px;" id="txtOutworkContent" disabled></textarea></div></form>';
+	Common.offworkPopup = html;
 //	var baseUrl = $('#baseUrl').val();
 //	
 //	(function callWorker() {
@@ -250,6 +270,7 @@ $(document)
 	.on('click', '#btnPopupOk', function() {
 		var $txtWorkContent = $('#txtWorkContent');
 		var $txtOutworkContent = $('#txtOutworkContent');
+		var $selOverworkType = $('#selOverworkType');
 		
 		var workContent = $.trim($txtWorkContent.val());
 		if(workContent == '') {
@@ -264,7 +285,8 @@ $(document)
 			dataType: 'json',
 			data: JSON.stringify({
 				workContent: workContent,
-				outworkContent: $.trim($txtOutworkContent.val())
+				outworkContent: $.trim($txtOutworkContent.val()),
+				overworkType: $selOverworkType.val()
 			}),
 			headers: {'CUSTOM': 'Y'},
 			contentType: 'application/json',

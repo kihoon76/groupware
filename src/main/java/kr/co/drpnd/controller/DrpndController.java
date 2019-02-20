@@ -22,6 +22,7 @@ import kr.co.drpnd.domain.AjaxVO;
 import kr.co.drpnd.domain.Sawon;
 import kr.co.drpnd.domain.Team;
 import kr.co.drpnd.service.CalendarService;
+import kr.co.drpnd.service.CodeService;
 import kr.co.drpnd.service.GeuntaeService;
 import kr.co.drpnd.service.GyeoljaeService;
 import kr.co.drpnd.service.SawonService;
@@ -47,6 +48,9 @@ public class DrpndController {
 	@Resource(name="gyeoljaeService")
 	GyeoljaeService gyeoljaeService;
 	
+	@Resource(name="codeService")
+	CodeService codeService;
+	
 	@GetMapping(value={"main", "m/main"})
 	public String index(HttpServletRequest request, ModelMap m) {
 		Sawon myInfo = SessionUtil.getSessionSawon();
@@ -56,6 +60,7 @@ public class DrpndController {
 		String cuttentTime10 = "";
 		String mygyeoljaeCount = "0";
 		List<Team> teamList = null;
+		List<Object> overworkTypes = null;
 		
 		try {
 			cuttentTime10 = geuntaeService.getCuttentTime10();
@@ -73,6 +78,7 @@ public class DrpndController {
 			mygyeoljaeCount = String.valueOf(r.get("total"));
 		
 			teamList = geuntaeService.getTeamList(myInfo.getSawonDepartment());
+			overworkTypes = codeService.getOverwork();
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -88,6 +94,17 @@ public class DrpndController {
 		
 		
 		if(RequestUtil.isMobile(request)) {
+			StringBuilder options = new StringBuilder();
+			if(overworkTypes != null) {
+				int len = overworkTypes.size();
+				for(int i=0; i<len; i++) {
+					Map o = (Map)overworkTypes.get(i);
+					options.append("<option value='" + o.get("overworkCode") + "'>" + o.get("overworkName") + "</option>");
+				}
+				
+				m.put("overworkTypes", options.toString());
+			}
+			
 			m.put("footbar", "home");
 			return "mobile/main";
 		}

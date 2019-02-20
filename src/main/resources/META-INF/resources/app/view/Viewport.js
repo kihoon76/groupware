@@ -25,7 +25,8 @@ Ext.define('Drpnd.view.Viewport', {
 	    
 	    var offworkObj = {
 	    	txtWorkContent: null,
-	    	txtOutworkContent: null	
+	    	txtOutworkContent: null,
+	    	comboOverworkType: null
 	    }
 	    
 	    var offWorkWin = null;
@@ -109,13 +110,14 @@ Ext.define('Drpnd.view.Viewport', {
 			}
 	    }
 	    
+	    
 	    function offWorkClick() {
 	    	
 	    	CommonFn.checkSession(function() {
 	    		offWorkWin = Ext.create('Ext.window.Window', {
 					title: '퇴근처리',
-					height: 600,
-					width: 600,
+					height: 400,
+					width: 400,
 					layout: 'fit',
 					iconCls: 'icon-offwork',
 					closeAction: 'destroy',
@@ -133,15 +135,39 @@ Ext.define('Drpnd.view.Viewport', {
 				        defaultType: 'textarea',
 				        items: [{
 				        	fieldLabel: '업무내용',
-				        	height: 250,
+				        	height: 130,
 				        	listeners: {
 				        		afterrender: function(txt) {
 				        			offworkObj.txtWorkContent = txt;
 				        		}
 				        	}
 				        },{
+				        	fieldLabel: '야근유형',
+				        	xtype: 'combo',
+				        	queryMode: 'remote',
+				        	displayField: 'overworkName',
+					        valueField: 'overworkCode',
+					        editable: false,
+					        store: Ext.create('Drpnd.store.OverworkListStore'),
+					        value: '0',
+				        	listeners: {
+				        		afterrender: function(combo) {
+				        			offworkObj.comboOverworkType = combo;
+				        		},
+				        		change: function(c, nV) {
+				        			if(nV == '0') {
+				        				offworkObj.txtOutworkContent.setValue('');
+				        				offworkObj.txtOutworkContent.setDisabled(true);
+				        			}
+				        			else {
+				        				offworkObj.txtOutworkContent.setDisabled(false);
+				        			}
+				        		}
+				        	}
+				        },{
 				        	fieldLabel: '야근내용',
-				        	height: 250,
+				        	height: 130,
+				        	disabled: true,
 				        	listeners: {
 				        		afterrender: function(txt) {
 				        			offworkObj.txtOutworkContent = txt;
@@ -536,6 +562,7 @@ Ext.define('Drpnd.view.Viewport', {
 	    function offwork() {
 	    	 var wcVal = Ext.String.trim(offworkObj.txtWorkContent.getValue());
 	    	 var ocVal = Ext.String.trim(offworkObj.txtOutworkContent.getValue());
+	    	 var otVal = offworkObj.comboOverworkType.getValue();
 	    	 
 	    	 if(wcVal == '') {
 	    		 offworkObj.txtWorkContent.markInvalid('업무내용을 입력하세요.');
@@ -548,7 +575,8 @@ Ext.define('Drpnd.view.Viewport', {
 				headers: { 'Content-Type': 'application/json' }, 
 				jsonData: {
 					workContent: wcVal,
-					outworkContent: ocVal
+					outworkContent: ocVal,
+					overworkType: otVal
 				},
 				loadmask: {
 					msg: '퇴근처리중 입니다.'

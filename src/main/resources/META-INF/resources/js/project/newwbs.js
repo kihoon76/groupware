@@ -599,6 +599,5 @@ $(document).ready(function() {
 	    		taskEventContextMenu = event;
 	    	})
 	    }
-	    
 	});
 });
