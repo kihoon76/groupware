@@ -655,6 +655,8 @@ Ext.define('Drpnd.view.Viewport', {
 						   btn.setDisabled(isGotowork);
 					   },
 					   click: function(btn) {
+						   btn.setDisabled(true);
+						   
 						   CommonFn.getLatLng(function(lat, lng) {
 							   CommonFn.ajax({
 									url: '/geuntae/gotowork?lat=' + lat + '&lng=' + lng,
@@ -670,12 +672,11 @@ Ext.define('Drpnd.view.Viewport', {
 												buttons: Ext.Msg.OK,
 												icon: Ext.MessageBox.INFO
 											});
-											//Ext.MessageBox.alert('알림', jo.datas[0] + '분에 출근처리 되었습니다.');
 											btn.setDisabled(true);
 											toolbarObj.btnOffwork.setDisabled(false);
 										}
 										else {
-											Ext.MessageBox.alert('alert', jo.errMsg);
+											btn.setDisabled(false);
 											Ext.Msg.show({
 												title: '',
 												msg: jo.errMsg,
@@ -684,6 +685,9 @@ Ext.define('Drpnd.view.Viewport', {
 											});
 										}
 									},
+									failure: function() {
+										btn.setDisabled(false);
+									}
 							   });  
 						   });
 					   }

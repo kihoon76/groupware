@@ -71,7 +71,9 @@ public class ProjectController {
 	public ExtjsStoreVO<Wbs> getListWbs(
 			@RequestParam("limit") int limit,
 			@RequestParam("start") int start,
-			@RequestParam(name="wbsName", required=false) String wbsName) {
+			@RequestParam(name="wbsName", required=false) String wbsName,
+			@RequestParam(name="writer", required=false) String writer,
+			@RequestParam(name="range", required=false) String range) {
 		Sawon sawon = SessionUtil.getSessionSawon();
 		
 		Map param = new HashMap();
@@ -80,6 +82,16 @@ public class ProjectController {
 		param.put("sawonCode", sawon.getSawonCode());
 		param.put("myTeam", sawon.getSawonTeam());
 		param.put("department", sawon.getSawonDepartment());
+		param.put("range", (range == null) ? "D" : range );
+		
+		
+		if(wbsName != null && !"".equals(wbsName)) {
+			param.put("wbsName", wbsName);
+		}
+		
+		if(writer != null && !"".equals(writer)) {
+			param.put("writer", writer);
+		}
 		
 		return projectService.getListWBS(param);
 	}

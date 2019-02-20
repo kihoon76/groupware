@@ -11,9 +11,11 @@ public class ExtjsStoreVO<T> {
 	private String searchType;
 	private String searchValue;
 	private String wbsName;
-	private String writerCode;
+	private String sawonCode;
 	private String myTeamCode;
 	private String myDepartmentCode;
+	private String range;
+	private String writer;
 	
 	private int start;
 	private int limit;
@@ -61,11 +63,11 @@ public class ExtjsStoreVO<T> {
 	public void setWbsName(String wbsName) {
 		this.wbsName = wbsName;
 	}
-	public String getWriterCode() {
-		return writerCode;
+	public String getSawonCode() {
+		return sawonCode;
 	}
-	public void setWriterCode(String writerCode) {
-		this.writerCode = writerCode;
+	public void setSawonCode(String sawonCode) {
+		this.sawonCode = sawonCode;
 	}
 	public String getMyTeamCode() {
 		return myTeamCode;
@@ -78,6 +80,18 @@ public class ExtjsStoreVO<T> {
 	}
 	public void setMyDepartmentCode(String myDepartmentCode) {
 		this.myDepartmentCode = myDepartmentCode;
+	}
+	public String getRange() {
+		return range;
+	}
+	public void setRange(String range) {
+		this.range = range;
+	}
+	public String getWriter() {
+		return writer;
+	}
+	public void setWriter(String writer) {
+		this.writer = writer;
 	}
 	
 }

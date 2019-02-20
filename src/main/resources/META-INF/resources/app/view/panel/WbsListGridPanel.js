@@ -7,9 +7,9 @@ Ext.define('Drpnd.view.panel.WbsListGridPanel', {
 	initComponent: function() {
 		var	constants = Drpnd.util.Constants,
 			commFn = Drpnd.util.CommonFn,
-			categoryPanel = Ext.getCmp('app-category'),
-			contentPanel = Ext.getCmp('app-contents'),
-			//searchWin = null,
+			searchWbsName = null,
+			searchWbsWriter = null,
+			searchWbsRange = null,
 			that = this;
 		
 		try {
@@ -20,10 +20,17 @@ Ext.define('Drpnd.view.panel.WbsListGridPanel', {
 			//세션만료 및 중복로그인시  js파일을 가져오지 못해서 오류발생함
 			//commFn.loadJsError();
 		}
-		//store.baseParams = {ip:'', id: '', regDate: null}
+		
+		store.baseParams = {wbsName:'', writer: '', range: 'D'}
 		
 		var searchComboStore = Ext.create('Ext.data.Store', {
-			 fields   : ['name', 'value']
+			 fields : ['name', 'value'],
+			 data : [
+			     {name: '내것+팀+전체', value: 'D'},
+			     {name: '내가작성한것 보기', value: 'P'}, 
+			     {name: '팀공유', value: 'T'}, 
+			     {name: '전체공유', value: 'A'}
+			 ]
 		});
 		
 		var searchComboArr = [], searchType = '', searchValue = '';
@@ -38,7 +45,7 @@ Ext.define('Drpnd.view.panel.WbsListGridPanel', {
 			closeAction: 'hide',
 			items: [{
 				xtype: 'form',
-				id: 'logSearchForm',
+				id: 'wbsSearchForm',
 				bodyPadding: 5,
 				height: 300,
 				defaults: {
@@ -48,21 +55,43 @@ Ext.define('Drpnd.view.panel.WbsListGridPanel', {
 	            },
 	            defaultType: 'textfield',
 	            items: [{
-	            	fieldLabel: '아이피',
-					name: 'txtLogSearchIp',
-					id: 'txtLogSearchIp'
+	            	fieldLabel: 'wbs이름',
+					listeners: {
+						afterrender: function(txt) {
+							searchWbsName = txt
+						}
+					}
 	            }, {
-	            	fieldLabel: '아이디',
-					name: 'txtLogSearchId',
-					id: 'txtLogSearchId'
+	            	fieldLabel: '작성자',
+	            	disabled: true,
+					listeners: {
+						afterrender: function(txt) {
+							searchWbsWriter = txt;
+						}
+					}
 	            }, {
-	            	xtype: 'datefield',
-	            	fieldLabel: '접속시간',
-	            	height: 22,
+	            	xtype: 'combobox',
+	            	fieldLabel: '공유범위',
 	            	editable: false,
-	            	name: 'dateLogSearch',
-					id: 'dateLogSearch',
-			    	format: 'Y-m-d',
+	            	displayField: 'name',
+	            	valueField: 'value',
+			    	queryMode: 'local',
+			    	value: 'D',
+			    	store: searchComboStore,
+			    	listeners: {
+			    		afterrender: function(combo) {
+			    			searchWbsRange = combo;
+			    		},
+			    		change: function(c, nV) {
+			    			if(nV != 'A') {
+			    				searchWbsWriter.setValue('');
+			    				searchWbsWriter.setDisabled(true);
+			    			}
+			    			else {
+			    				searchWbsWriter.setDisabled(false);
+			    			}
+			    		}
+			    	}
 	            }]
 			}],
 			buttons: [{
@@ -87,38 +116,35 @@ Ext.define('Drpnd.view.panel.WbsListGridPanel', {
 		});
 		
 		function makeParam(validate, init, isProxy) {
-			var ip = Ext.getCmp('txtLogSearchIp');
-			var id = Ext.getCmp('txtLogSearchId');
-			var date = Ext.getCmp('dateLogSearch');
 			
-			if(validate && Ext.String.trim(ip.getValue()) == '' 
-			   && Ext.String.trim(id.getValue()) == ''
-			   && date.getValue() == null) return;
+			if(validate && Ext.String.trim(searchWbsName.getValue()) == '' 
+			   && Ext.String.trim(searchWbsWriter.getValue()) == ''
+			   && searchWbsRange.getValue() == null) return;
 			
 			if(init) {
-				ip.setValue('');
-				id.setValue('');
-				date.setRawValue('');
+				searchWbsName.setValue('');
+				searchWbsWriter.setValue('');
+				searchWbsRange.setValue('D');
 			}
 			
-			var ipV = Ext.String.trim(ip.getValue());
-			var idV = Ext.String.trim(id.getValue());
-			var regDateV = (date.getRawValue()) ? date.getRawValue().substring(0,10) : null;
+			var searchWbsNameV = Ext.String.trim(searchWbsName.getValue());
+			var searchWbsWriterV = Ext.String.trim(searchWbsWriter.getValue());
+			var searchWbsRangeV = searchWbsRange.getValue();
 			
 			if(isProxy) {
-				store.getProxy().setExtraParam('ip', ipV);
-				store.getProxy().setExtraParam('id', idV);
-				store.getProxy().setExtraParam('regDate', regDateV);
-				store.getProxy().setExtraParam('limit', Ext.getCmp('log-paging-combo').getValue());
+				store.getProxy().setExtraParam('wbsName', searchWbsNameV);
+				store.getProxy().setExtraParam('writer', searchWbsWriterV);
+				store.getProxy().setExtraParam('range', searchWbsRangeV);
+				store.getProxy().setExtraParam('limit', Ext.getCmp('wbs-paging-combo').getValue());
 				return;
 			}
 			
 			store.loadPage(1, {
 				params: {
-					limit: Ext.getCmp('log-paging-combo').getValue(),
-					ip: ipV,
-					id: idV,
-					regDate: regDateV
+					limit: Ext.getCmp('wbs-paging-combo').getValue(),
+					wbsName: searchWbsNameV,
+					writer: searchWbsWriterV,
+					range: searchWbsRangeV
 				}
 			});
 		}
@@ -186,13 +212,13 @@ Ext.define('Drpnd.view.panel.WbsListGridPanel', {
 				dock: 'bottom',
 				doRefresh: function() {
 					makeParam(false, false, true);
-					Ext.getCmp('logListGrid').getStore().load();
+					store.load();
 				},
 				items: ['-', {
 					text: '목록수 : '
 				}, Ext.create('Ext.form.field.ComboBox', {
 					queryMode: 'local',
-					id: 'log-paging-combo',
+					id: 'wbs-paging-combo',
 					displayField: 'name',
 					valueField: 'value',
 					editable: false,

@@ -5,7 +5,7 @@
 .icon-user {background-image : url(../images/icon_user.gif) !important;}
 .icon-window {background-image : url(../images/new_window.gif) !important;}
 .icon-close {background-image : url(../images/close.gif) !important;}
-.icon-refresh {background-image : url(../images/refresh.png) !important;}
+.icon-refresh {background-image : url(../images/refresh.png) !important; background-size: 16px 16px;}
 .tree-expand {background-image : url(../images/tree_expand.gif) !important;}
 .tree-collapse {background-image : url(../images/tree_collapse.gif) !important;}
 .reg {background-image : url(../images/text_edit.gif) !important;}

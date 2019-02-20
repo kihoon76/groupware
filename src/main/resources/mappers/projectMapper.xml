@@ -9,12 +9,15 @@
 	<resultMap id="RM_selectListWBS" type="ExtjsStoreVO" >
 		<result column="글수" property="total" javaType="int"/>
 <!-- 		<result column="WBS이름" property="wbsName" javaType="string"/> -->
-		<result column="작성자코드" property="writerCode" javaType="string"/>
+		<result column="사원코드" property="sawonCode" javaType="string"/>
+		<result column="작성자" property="writer" javaType="string"/>
 		<result column="내팀코드" property="myTeamCode" javaType="string"/>
 		<result column="내부서코드" property="myDepartmentCode" javaType="string"/>
+		<result column="공유범위" property="range" javaType="string"/>
+		<result column="WBS이름" property="wbsName" javaType="string"/>
 		<result column="시작" property="start" javaType="int" />
 		<result column="끝" property="limit" javaType="int" />
-		<collection property="datas" column="{start=시작, limit=끝, writerCode=작성자코드, myTeamCode=내팀코드, myDepartmentCode=내부서코드}" 
+		<collection property="datas" column="{start=시작, limit=끝, sawonCode=사원코드, myTeamCode=내팀코드, myDepartmentCode=내부서코드, range=공유범위, writer=작성자, wbsName=WBS이름}" 
 					javaType="java.util.ArrayList"
 					ofType="WBS" 
 					select="selectWBS" />
@@ -37,6 +40,8 @@
 				  from [동림].[dbo].[WBS] T1
 				 inner join [동림].[dbo].[사원] T2
 				    on T1.작성자 = T2.사원코드
+				 <choose>
+				 <when test='range == "D"'>
 				 where 작성자 = #{sawonCode}
 		  	  	    or (작성자 != #{sawonCode} and 공유범위  = 'A')
 		  	  	    <choose>
@@ -59,8 +64,52 @@
 		  	  	    or (작성자 != #{sawonCode} and T2.팀코드 in (select 팀코드 from [동림].[dbo].[관리팀] where 사원코드 = #{sawonCode}) and 공유범위   = 'T')
 		  	  	    </otherwise>
 		  	  	    </choose>
-		  	  	    
-				) 글수, #{sawonCode} 작성자코드, #{myTeam} 내팀코드, #{department} 내부서코드, #{start} 시작, #{limit} 끝
+		  	  	    <if test="wbsName != null">
+		  	  	    and T1.이름 like '%' + #{wbsName} + '%'
+		  	  	    </if>
+				 </when>
+				 <when test='range == "P"'>
+				  where 작성자 = #{sawonCode}
+				 <if test="wbsName != null">
+		  	  	    and T1.이름 like '%' + #{wbsName} + '%'
+		  	  	 </if>
+				 </when>
+				 <when test='range == "T"'>
+		  	  	    <choose>
+		  	  	    <when test="myTeam != null and myTeam != ''">
+		  	  	    where (T2.팀코드 in (
+		  	  	    	select T1.팀코드 
+			  			  from [동림].[dbo].[관리팀] T1
+			 			 inner join [동림].[dbo].[관리팀] T2 
+			    			on  T1.사원코드 = T2.사원코드
+			 			 inner join [동림].[dbo].[사원] T3 
+			    			on T1.사원코드 = T3.사원코드
+			 			 inner join [동림].[dbo].[직급] T4 
+			    			on T3.직급코드 = T4.직급코드
+			 			 where T2.팀코드 = #{myTeam} 
+			   			   and T1.부서코드 = #{department}
+			   			   and T4.직급구별 = 2 
+		  	  	    ) and 공유범위   = 'T')
+		  	  	    </when>
+		  	  	    <otherwise>
+		  	  	    where T2.팀코드  in (select 팀코드 from [동림].[dbo].[관리팀] where 사원코드 = #{sawonCode}) and 공유범위   = 'T'
+		  	  	    </otherwise>
+		  	  	    </choose>
+		  	  	    <if test="wbsName != null">
+		  	  	      and T1.이름 like '%' + #{wbsName} + '%'
+		  	  	    </if> 
+				 </when>
+				 <when test='range == "A"'>
+				 	where 공유범위   = 'A'
+				 	<if test="writer != null">
+				 	  and T2.사원명 = #{writer}
+				 	</if>
+				 	<if test="wbsName != null">
+		  	  	      and T1.이름 like '%' + #{wbsName} + '%'
+		  	  	    </if>
+				 </when>
+				 </choose>
+				) 글수, #{sawonCode} 사원코드, #{myTeam} 내팀코드, #{department} 내부서코드, #{range} 공유범위, #{writer} 작성자, #{wbsName} WBS이름, #{start} 시작, #{limit} 끝
 	</select>
 	
 	<select id="selectWBS" parameterType="map" resultMap="RM_WBS">
@@ -70,31 +119,142 @@
 		  	  from [동림].[dbo].[WBS] T1
 		  	 inner join [동림].[dbo].[사원] T2
 				on T1.작성자 = T2.사원코드
-		  	  where 작성자 = #{writerCode}
-		  	  	 or (작성자 != #{writerCode} and 공유범위  = 'A')
-		  	  	 <choose>
-		  	  	    <when test="myTeamCode != null and myTeamCode != ''">
-		  	  	    or (작성자 != #{writerCode} and T2.팀코드 in (
-		  	  	    	select T1.팀코드 
-			  			  from [동림].[dbo].[관리팀] T1
-			 			 inner join [동림].[dbo].[관리팀] T2 
-			    			on  T1.사원코드 = T2.사원코드
-			 			 inner join [동림].[dbo].[사원] T3 
-			    			on T1.사원코드 = T3.사원코드
-			 			 inner join [동림].[dbo].[직급] T4 
-			    			on T3.직급코드 = T4.직급코드
-			 			 where T2.팀코드 = #{myTeamCode} 
-			   			   and T1.부서코드 = #{myDepartmentCode}
-			   			   and T4.직급구별 = 2 
+		  	 <choose>
+			 <when test='range == "D"'>
+			 where 작성자 = #{sawonCode}
+		  	    or (작성자 != #{sawonCode} and 공유범위  = 'A')
+		  	    <choose>
+		  	    <when test="myTeamCode != null and myTeamCode != ''">
+		  	  	or (작성자 != #{sawonCode} and T2.팀코드 in (
+		  	  		select T1.팀코드 
+			  		  from [동림].[dbo].[관리팀] T1
+			 		 inner join [동림].[dbo].[관리팀] T2 
+			    		on  T1.사원코드 = T2.사원코드
+			 		 inner join [동림].[dbo].[사원] T3 
+			    		on T1.사원코드 = T3.사원코드
+			 		 inner join [동림].[dbo].[직급] T4 
+			    		on T3.직급코드 = T4.직급코드
+			 		 where T2.팀코드 = #{myTeamCode} 
+			   		   and T1.부서코드 = #{myDepartmentCode}
+			   		   and T4.직급구별 = 2 
 		  	  	    ) and 공유범위   = 'T') 
-		  	  	    </when>
-		  	  	    <otherwise>
-		  	  	    or (작성자 != #{writerCode} and T2.팀코드 in (select 팀코드 from [동림].[dbo].[관리팀] where 사원코드 = #{writerCode}) and 공유범위   = 'T')
-		  	  	    </otherwise>
-		  	  	    </choose>
+				</when>
+		  	  	<otherwise>
+		  	  	or (작성자 != #{sawonCode} and T2.팀코드 in (select 팀코드 from [동림].[dbo].[관리팀] where 사원코드 = #{sawonCode}) and 공유범위   = 'T')
+		  	  	</otherwise>
+		  	  	</choose>
+		  	  	<if test="wbsName != null">
+		  	  	and T1.이름 like '%' + #{wbsName} + '%'
+		  	  	</if>
+			</when>
+			<when test='range == "P"'>
+			where 작성자 = #{sawonCode}
+			<if test="wbsName != null">
+		  	  and T1.이름 like '%' + #{wbsName} + '%'
+		  	</if>
+			</when>
+			<when test='range == "T"'>
+		  		<choose>
+		  	  	<when test="myTeamCode != null and myTeamCode != ''">
+		  	  	where (T2.팀코드 in (
+		  	  	   	select T1.팀코드 
+			  		  from [동림].[dbo].[관리팀] T1
+			 		 inner join [동림].[dbo].[관리팀] T2 
+			    		on  T1.사원코드 = T2.사원코드
+			 		 inner join [동림].[dbo].[사원] T3 
+			    		on T1.사원코드 = T3.사원코드
+			 		 inner join [동림].[dbo].[직급] T4 
+			    		on T3.직급코드 = T4.직급코드
+			 		 where T2.팀코드 = #{myTeamCode} 
+			   		   and T1.부서코드 = #{myDepartmentCode}
+			   		   and T4.직급구별 = 2 
+		  	  	    ) and 공유범위   = 'T')
+		  	  	</when>
+		  	  	<otherwise>
+		  	  	where T2.팀코드  in (select 팀코드 from [동림].[dbo].[관리팀] where 사원코드 = #{sawonCode}) and 공유범위   = 'T'
+		  	  	</otherwise>
+		  	  	</choose> 
+		  	  	<if test="wbsName != null">
+		  	  	  and T1.이름 like '%' + #{wbsName} + '%'
+		  	  	</if>
+			</when>
+			<when test='range == "A"'>
+			where 공유범위   = 'A'
+			<if test="writer != null">
+			  and T2.사원명 = #{writer}
+			</if>
+			<if test="wbsName != null">
+  	  	      and T1.이름 like '%' + #{wbsName} + '%'
+  	  	    </if>
+			</when>
+			</choose>
 		  ) tb1
 		 inner join [동림].[dbo].[사원] tb2
 		    on tb1.작성자 = tb2.사원코드
 		 where rownum between (#{start} + 1) and (#{start} + #{limit})
 	</select>
+	
+<!-- 	<select id="selectListWBS"  parameterType="map"  resultMap="RM_selectListWBS"> -->
+<!-- 		select ( -->
+<!-- 				select count(T1.코드)  -->
+<!-- 				  from [동림].[dbo].[WBS] T1 -->
+<!-- 				 inner join [동림].[dbo].[사원] T2 -->
+<!-- 				    on T1.작성자 = T2.사원코드 -->
+<!-- 		  	  	    <choose> -->
+<!-- 		  	  	    <when test="myTeam != null and myTeam != ''"> -->
+<!-- 		  	  	    or (작성자 != #{sawonCode} and T2.팀코드 in ( -->
+<!-- 		  	  	    	select T1.팀코드  -->
+<!-- 			  			  from [동림].[dbo].[관리팀] T1 -->
+<!-- 			 			 inner join [동림].[dbo].[관리팀] T2  -->
+<!-- 			    			on  T1.사원코드 = T2.사원코드 -->
+<!-- 			 			 inner join [동림].[dbo].[사원] T3  -->
+<!-- 			    			on T1.사원코드 = T3.사원코드 -->
+<!-- 			 			 inner join [동림].[dbo].[직급] T4  -->
+<!-- 			    			on T3.직급코드 = T4.직급코드 -->
+<!-- 			 			 where T2.팀코드 = #{myTeam}  -->
+<!-- 			   			   and T1.부서코드 = #{department} -->
+<!-- 			   			   and T4.직급구별 = 2  -->
+<!-- 		  	  	    ) and 공유범위   = 'T')  -->
+<!-- 		  	  	    </when> -->
+<!-- 		  	  	    <otherwise> -->
+<!-- 		  	  	    or (작성자 != #{sawonCode} and T2.팀코드 in (select 팀코드 from [동림].[dbo].[관리팀] where 사원코드 = #{sawonCode}) and 공유범위   = 'T') -->
+<!-- 		  	  	    </otherwise> -->
+<!-- 		  	  	    </choose> -->
+<!-- 				) 글수, #{sawonCode} 작성자코드, #{myTeam} 내팀코드, #{department} 내부서코드, #{start} 시작, #{limit} 끝 -->
+<!-- 	</select> -->
+	
+<!-- 	<select id="selectWBS" parameterType="map" resultMap="RM_WBS"> -->
+<!-- 		select 코드, 이름, DEFAULT_DAY, 작성일자, tb2.사원명 작성자, 공유범위, resources, events -->
+<!-- 		  from ( -->
+<!-- 		  	select row_number() over(order by 작성일자 desc) rownum, * -->
+<!-- 		  	  from [동림].[dbo].[WBS] T1 -->
+<!-- 		  	 inner join [동림].[dbo].[사원] T2 -->
+<!-- 				on T1.작성자 = T2.사원코드 -->
+<!-- 		  	  where 작성자 = #{sawonCode} -->
+<!-- 		  	  	 or (작성자 != #{sawonCode} and 공유범위  = 'A') -->
+<!-- 		  	  	 <choose> -->
+<!-- 		  	  	    <when test="myTeamCode != null and myTeamCode != ''"> -->
+<!-- 		  	  	    or (작성자 != #{sawonCode} and T2.팀코드 in ( -->
+<!-- 		  	  	    	select T1.팀코드  -->
+<!-- 			  			  from [동림].[dbo].[관리팀] T1 -->
+<!-- 			 			 inner join [동림].[dbo].[관리팀] T2  -->
+<!-- 			    			on  T1.사원코드 = T2.사원코드 -->
+<!-- 			 			 inner join [동림].[dbo].[사원] T3  -->
+<!-- 			    			on T1.사원코드 = T3.사원코드 -->
+<!-- 			 			 inner join [동림].[dbo].[직급] T4  -->
+<!-- 			    			on T3.직급코드 = T4.직급코드 -->
+<!-- 			 			 where T2.팀코드 = #{myTeamCode}  -->
+<!-- 			   			   and T1.부서코드 = #{myDepartmentCode} -->
+<!-- 			   			   and T4.직급구별 = 2  -->
+<!-- 		  	  	    ) and 공유범위   = 'T')  -->
+<!-- 		  	  	    </when> -->
+<!-- 		  	  	    <otherwise> -->
+<!-- 		  	  	    or (작성자 != #{sawonCode} and T2.팀코드 in (select 팀코드 from [동림].[dbo].[관리팀] where 사원코드 = #{sawonCode}) and 공유범위   = 'T') -->
+<!-- 		  	  	    </otherwise> -->
+<!-- 		  	  	    </choose> -->
+<!-- 		  ) tb1 -->
+<!-- 		 inner join [동림].[dbo].[사원] tb2 -->
+<!-- 		    on tb1.작성자 = tb2.사원코드 -->
+<!-- 		 where rownum between (#{start} + 1) and (#{start} + #{limit}) -->
+<!-- 	</select> -->
 </mapper>
