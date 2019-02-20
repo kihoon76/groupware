@@ -42,11 +42,69 @@
 				    on T1.작성자 = T2.사원코드
 				 <choose>
 				 <when test='range == "D"'>
-				 where 작성자 = #{sawonCode}
-		  	  	    or (작성자 != #{sawonCode} and 공유범위  = 'A')
-		  	  	    <choose>
-		  	  	    <when test="myTeam != null and myTeam != ''">
-		  	  	    or (작성자 != #{sawonCode} and T2.팀코드 in (
+				 	<choose>
+				 	<when test="wbsName != null">
+				 	where (작성자 = #{sawonCode} and T1.이름 like '%' + #{wbsName} + '%')
+		  	  	       or (작성자 != #{sawonCode} and 공유범위  = 'A' and T1.이름 like #{wbsName} {escape '`'})
+		  	  	       <choose>
+		  	  	       <when test="myTeam != null and myTeam != ''">
+		  	  	       or (작성자 != #{sawonCode} and T2.팀코드 in (
+		  	  	    	  select T1.팀코드 
+			  			  	from [동림].[dbo].[관리팀] T1
+			 			   inner join [동림].[dbo].[관리팀] T2 
+			    			  on  T1.사원코드 = T2.사원코드
+			 			   inner join [동림].[dbo].[사원] T3 
+			    			  on T1.사원코드 = T3.사원코드
+			 			   inner join [동림].[dbo].[직급] T4 
+			    			  on T3.직급코드 = T4.직급코드
+			 			   where T2.팀코드 = #{myTeam} 
+			   			     and T1.부서코드 = #{department}
+			   			     and T4.직급구별 = 2 
+		  	  	           ) and 공유범위   = 'T' and T1.이름 like #{wbsName} {escape '`'}) 
+		  	  	       </when>
+		  	  	       <otherwise>
+		  	  	       or (작성자 != #{sawonCode} and T2.팀코드 in (select 팀코드 from [동림].[dbo].[관리팀] where 사원코드 = #{sawonCode}) and 공유범위   = 'T' and T1.이름 like #{wbsName} {escape '`'})
+		  	  	       </otherwise>
+		  	  	       </choose>
+				 	</when>
+				 	<otherwise>
+				 	where 작성자 = #{sawonCode}
+		  	  	       or (작성자 != #{sawonCode} and 공유범위  = 'A')
+		  	  	       <choose>
+		  	  	       <when test="myTeam != null and myTeam != ''">
+		  	  	       or (작성자 != #{sawonCode} and T2.팀코드 in (
+		  	  	    	  select T1.팀코드 
+			  			  	from [동림].[dbo].[관리팀] T1
+			 			   inner join [동림].[dbo].[관리팀] T2 
+			    			  on  T1.사원코드 = T2.사원코드
+			 			   inner join [동림].[dbo].[사원] T3 
+			    			  on T1.사원코드 = T3.사원코드
+			 			   inner join [동림].[dbo].[직급] T4 
+			    			  on T3.직급코드 = T4.직급코드
+			 			   where T2.팀코드 = #{myTeam} 
+			   			     and T1.부서코드 = #{department}
+			   			     and T4.직급구별 = 2 
+		  	  	           ) and 공유범위   = 'T') 
+		  	  	       </when>
+		  	  	       <otherwise>
+		  	  	       or (작성자 != #{sawonCode} and T2.팀코드 in (select 팀코드 from [동림].[dbo].[관리팀] where 사원코드 = #{sawonCode}) and 공유범위   = 'T')
+		  	  	       </otherwise>
+		  	  	       </choose>
+				 	</otherwise>
+				 	</choose>
+				 </when>
+				 <when test='range == "P"'>
+				  where 작성자 = #{sawonCode}
+				 <if test="wbsName != null">
+		  	  	    and T1.이름 like #{wbsName} {escape '`'}
+		  	  	 </if>
+				 </when>
+				 <when test='range == "T"'>
+				 	<choose>
+				 	<when test="wbsName != null">
+				 		<choose>
+		  	  	    	<when test="myTeam != null and myTeam != ''">
+		  	  	    where (T2.팀코드 in (
 		  	  	    	select T1.팀코드 
 			  			  from [동림].[dbo].[관리팀] T1
 			 			 inner join [동림].[dbo].[관리팀] T2 
@@ -58,25 +116,16 @@
 			 			 where T2.팀코드 = #{myTeam} 
 			   			   and T1.부서코드 = #{department}
 			   			   and T4.직급구별 = 2 
-		  	  	    ) and 공유범위   = 'T') 
-		  	  	    </when>
-		  	  	    <otherwise>
-		  	  	    or (작성자 != #{sawonCode} and T2.팀코드 in (select 팀코드 from [동림].[dbo].[관리팀] where 사원코드 = #{sawonCode}) and 공유범위   = 'T')
-		  	  	    </otherwise>
-		  	  	    </choose>
-		  	  	    <if test="wbsName != null">
-		  	  	    and T1.이름 like '%' + #{wbsName} + '%'
-		  	  	    </if>
-				 </when>
-				 <when test='range == "P"'>
-				  where 작성자 = #{sawonCode}
-				 <if test="wbsName != null">
-		  	  	    and T1.이름 like '%' + #{wbsName} + '%'
-		  	  	 </if>
-				 </when>
-				 <when test='range == "T"'>
-		  	  	    <choose>
-		  	  	    <when test="myTeam != null and myTeam != ''">
+		  	  	    ) and 공유범위   = 'T' and T1.이름 like #{wbsName} {escape '`'})
+		  	  	    	</when>
+		  	  	    	<otherwise>
+		  	  	    where T2.팀코드  in (select 팀코드 from [동림].[dbo].[관리팀] where 사원코드 = #{sawonCode}) and 공유범위   = 'T' and T1.이름 like #{wbsName} {escape '`'}
+		  	  	    	</otherwise>
+		  	  	    	</choose>
+				 	</when>
+				 	<otherwise>
+				 		<choose>
+		  	  	    	<when test="myTeam != null and myTeam != ''">
 		  	  	    where (T2.팀코드 in (
 		  	  	    	select T1.팀코드 
 			  			  from [동림].[dbo].[관리팀] T1
@@ -90,14 +139,13 @@
 			   			   and T1.부서코드 = #{department}
 			   			   and T4.직급구별 = 2 
 		  	  	    ) and 공유범위   = 'T')
-		  	  	    </when>
-		  	  	    <otherwise>
+		  	  	    	</when>
+		  	  	    	<otherwise>
 		  	  	    where T2.팀코드  in (select 팀코드 from [동림].[dbo].[관리팀] where 사원코드 = #{sawonCode}) and 공유범위   = 'T'
-		  	  	    </otherwise>
-		  	  	    </choose>
-		  	  	    <if test="wbsName != null">
-		  	  	      and T1.이름 like '%' + #{wbsName} + '%'
-		  	  	    </if> 
+		  	  	    	</otherwise>
+		  	  	    	</choose>
+				 	</otherwise>
+				 	</choose>
 				 </when>
 				 <when test='range == "A"'>
 				 	where 공유범위   = 'A'
@@ -105,7 +153,7 @@
 				 	  and T2.사원명 = #{writer}
 				 	</if>
 				 	<if test="wbsName != null">
-		  	  	      and T1.이름 like '%' + #{wbsName} + '%'
+		  	  	      and T1.이름 like #{wbsName} {escape '`'}
 		  	  	    </if>
 				 </when>
 				 </choose>
@@ -121,12 +169,70 @@
 				on T1.작성자 = T2.사원코드
 		  	 <choose>
 			 <when test='range == "D"'>
-			 where 작성자 = #{sawonCode}
-		  	    or (작성자 != #{sawonCode} and 공유범위  = 'A')
-		  	    <choose>
-		  	    <when test="myTeamCode != null and myTeamCode != ''">
-		  	  	or (작성자 != #{sawonCode} and T2.팀코드 in (
-		  	  		select T1.팀코드 
+			 	<choose>
+			 	<when test="wbsName != null">
+			 	where (작성자 = #{sawonCode} and T1.이름 like #{wbsName} {escape '`'}) 
+		  	       or (작성자 != #{sawonCode} and 공유범위  = 'A' and T1.이름 like #{wbsName} {escape '`'})
+		  	    	<choose>
+		  	    	<when test="myTeamCode != null and myTeamCode != ''">
+		  	  	   or (작성자 != #{sawonCode} and T2.팀코드 in (
+		  	  			select T1.팀코드 
+			  		  	  from [동림].[dbo].[관리팀] T1
+			 		 	 inner join [동림].[dbo].[관리팀] T2 
+			    			on  T1.사원코드 = T2.사원코드
+			 		 	 inner join [동림].[dbo].[사원] T3 
+			    			on T1.사원코드 = T3.사원코드
+			 		 	 inner join [동림].[dbo].[직급] T4 
+			    			on T3.직급코드 = T4.직급코드
+			 		 	 where T2.팀코드 = #{myTeamCode} 
+			   		   	   and T1.부서코드 = #{myDepartmentCode}
+			   		   	   and T4.직급구별 = 2 
+		  	  	    	) and 공유범위   = 'T' and T1.이름 like #{wbsName} {escape '`'}) 
+					</when>
+		  	  		<otherwise>
+		  	  	   or (작성자 != #{sawonCode} and T2.팀코드 in (select 팀코드 from [동림].[dbo].[관리팀] where 사원코드 = #{sawonCode}) and 공유범위   = 'T' and T1.이름 like #{wbsName} {escape '`'})
+		  	  		</otherwise>
+		  	  		</choose>
+			 	</when>
+			 	<otherwise>
+			 	where 작성자 = #{sawonCode}
+		  	       or (작성자 != #{sawonCode} and 공유범위  = 'A')
+		  	    	<choose>
+		  	    	<when test="myTeamCode != null and myTeamCode != ''">
+		  	  	   or (작성자 != #{sawonCode} and T2.팀코드 in (
+		  	  			select T1.팀코드 
+			  		  	  from [동림].[dbo].[관리팀] T1
+			 		 	 inner join [동림].[dbo].[관리팀] T2 
+			    			on  T1.사원코드 = T2.사원코드
+			 		 	 inner join [동림].[dbo].[사원] T3 
+			    			on T1.사원코드 = T3.사원코드
+			 		 	 inner join [동림].[dbo].[직급] T4 
+			    			on T3.직급코드 = T4.직급코드
+			 		 	 where T2.팀코드 = #{myTeamCode} 
+			   		   	   and T1.부서코드 = #{myDepartmentCode}
+			   		   	   and T4.직급구별 = 2 
+		  	  	    	) and 공유범위   = 'T') 
+					</when>
+		  	  		<otherwise>
+		  	  	   or (작성자 != #{sawonCode} and T2.팀코드 in (select 팀코드 from [동림].[dbo].[관리팀] where 사원코드 = #{sawonCode}) and 공유범위   = 'T')
+		  	  		</otherwise>
+		  	  		</choose>
+			 	</otherwise>
+			 	</choose>
+			</when>
+			<when test='range == "P"'>
+			where 작성자 = #{sawonCode}
+			<if test="wbsName != null">
+		  	  and T1.이름 like #{wbsName} {escape '`'}
+		  	</if>
+			</when>
+			<when test='range == "T"'>
+				<choose>
+				<when test="wbsName != null">
+					<choose>
+		  	  		<when test="myTeamCode != null and myTeamCode != ''">
+		  	  	where (T2.팀코드 in (
+		  	  	   	select T1.팀코드 
 			  		  from [동림].[dbo].[관리팀] T1
 			 		 inner join [동림].[dbo].[관리팀] T2 
 			    		on  T1.사원코드 = T2.사원코드
@@ -137,25 +243,16 @@
 			 		 where T2.팀코드 = #{myTeamCode} 
 			   		   and T1.부서코드 = #{myDepartmentCode}
 			   		   and T4.직급구별 = 2 
-		  	  	    ) and 공유범위   = 'T') 
+		  	  	    ) and 공유범위   = 'T' and T1.이름 like #{wbsName} {escape '`'} )
+		  	  		</when>
+		  	  		<otherwise>
+		  	  	where T2.팀코드  in (select 팀코드 from [동림].[dbo].[관리팀] where 사원코드 = #{sawonCode}) and 공유범위   = 'T' and T1.이름 like #{wbsName} {escape '`'}
+		  	  		</otherwise>
+		  	  		</choose> 
 				</when>
-		  	  	<otherwise>
-		  	  	or (작성자 != #{sawonCode} and T2.팀코드 in (select 팀코드 from [동림].[dbo].[관리팀] where 사원코드 = #{sawonCode}) and 공유범위   = 'T')
-		  	  	</otherwise>
-		  	  	</choose>
-		  	  	<if test="wbsName != null">
-		  	  	and T1.이름 like '%' + #{wbsName} + '%'
-		  	  	</if>
-			</when>
-			<when test='range == "P"'>
-			where 작성자 = #{sawonCode}
-			<if test="wbsName != null">
-		  	  and T1.이름 like '%' + #{wbsName} + '%'
-		  	</if>
-			</when>
-			<when test='range == "T"'>
-		  		<choose>
-		  	  	<when test="myTeamCode != null and myTeamCode != ''">
+				<otherwise>
+					<choose>
+		  	  		<when test="myTeamCode != null and myTeamCode != ''">
 		  	  	where (T2.팀코드 in (
 		  	  	   	select T1.팀코드 
 			  		  from [동림].[dbo].[관리팀] T1
@@ -169,14 +266,13 @@
 			   		   and T1.부서코드 = #{myDepartmentCode}
 			   		   and T4.직급구별 = 2 
 		  	  	    ) and 공유범위   = 'T')
-		  	  	</when>
-		  	  	<otherwise>
+		  	  		</when>
+		  	  		<otherwise>
 		  	  	where T2.팀코드  in (select 팀코드 from [동림].[dbo].[관리팀] where 사원코드 = #{sawonCode}) and 공유범위   = 'T'
-		  	  	</otherwise>
-		  	  	</choose> 
-		  	  	<if test="wbsName != null">
-		  	  	  and T1.이름 like '%' + #{wbsName} + '%'
-		  	  	</if>
+		  	  		</otherwise>
+		  	  		</choose> 
+				</otherwise>
+				</choose>
 			</when>
 			<when test='range == "A"'>
 			where 공유범위   = 'A'
@@ -184,7 +280,7 @@
 			  and T2.사원명 = #{writer}
 			</if>
 			<if test="wbsName != null">
-  	  	      and T1.이름 like '%' + #{wbsName} + '%'
+  	  	      and T1.이름 like #{wbsName} {escape '`'}
   	  	    </if>
 			</when>
 			</choose>

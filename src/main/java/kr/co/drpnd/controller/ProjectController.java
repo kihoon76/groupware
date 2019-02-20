@@ -21,6 +21,7 @@ import kr.co.drpnd.domain.Wbs;
 import kr.co.drpnd.service.ProjectService;
 import kr.co.drpnd.util.DateUtil;
 import kr.co.drpnd.util.SessionUtil;
+import kr.co.drpnd.util.StringUtil;
 
 @RequestMapping("/project")
 @Controller
@@ -86,7 +87,7 @@ public class ProjectController {
 		
 		
 		if(wbsName != null && !"".equals(wbsName)) {
-			param.put("wbsName", wbsName);
+			param.put("wbsName", StringUtil.escapeMsSql(wbsName));
 		}
 		
 		if(writer != null && !"".equals(writer)) {
