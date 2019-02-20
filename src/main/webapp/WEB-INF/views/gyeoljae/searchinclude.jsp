@@ -6,7 +6,7 @@
 <c:set var="uri" value="${req.requestURI}" />
 <div class="form-inline divMT">
 	<div class="form-group divMR">
- 		<select class="form-control" id="selSearchTxt">
+ 		<select class="form-control form-control-sm" id="selSearchTxt">
  			<option value="A">모두보기</option>
 		    <option value="T">제목</option>
 		    <c:if test="${tab eq 'keepbox'}">
@@ -15,13 +15,13 @@
 		</select>		
 	</div>
 	<div class="form-group divMR">
-		<input type="text" class="form-control  input-sm" id="txtSearchContent" disabled>		
+		<input type="text" class="form-control  form-control-sm" id="txtSearchContent" disabled>		
 	</div>
 	<c:if test="${tab ne 'keepbox'}">
 	<div class="form-group divMR">
 		<c:choose>
 		<c:when test="${tab eq 'sangsinbox'}">
-		<select class="form-control" id="status">
+		<select class="form-control form-control-sm" id="status">
 			<option value="A">모두보기</option>
 		   	<option value="D">기안</option>
 		   	<option value="S">결재중</option>
@@ -30,7 +30,7 @@
 		</select>	
 		</c:when>
 		<c:when test="${tab eq 'receivedbox'}">
-		<select class="form-control" id="status">
+		<select class="form-control form-control-sm" id="status">
 			<option value="A">모두보기</option>
 		   	<option value="D">기안</option>
 		   	<option value="S">결재중</option>
@@ -40,14 +40,14 @@
 	</div>
 	</c:if>
 	<div class="input-daterange form-group divMR" id="datepicker">
-		<div class="input-group-prepend">
-	  		<input type="text" class="input-sm form-control" id="txtStartDate" autocomplete="off" readOnly value="<c:out value='${start}' />"/>
+		<div class="input-group-prepend ">
+	  		<input type="text" class="form-control form-control-sm" id="txtStartDate" autocomplete="off" readOnly value="<c:out value='${start}' />"/>
 	  		<span class="input-group-text"> ~ </span>
-	  		<input type="text" class="input-sm form-control" id="txtEndDate" autocomplete="off" readOnly value="<c:out value='${end}' />"/>
+	  		<input type="text" class="form-control form-control-sm" id="txtEndDate" autocomplete="off" readOnly value="<c:out value='${end}' />"/>
 	  	</div>
 	</div>
 	<div class="form-group divMR">
-		<button type="button" class="btn btn-secondary" id="btnSearch">
+		<button type="button" class="btn btn-secondary btn-sm" id="btnSearch">
 			<i class="fa fa-search"></i>
 		</button>
 	</div>

@@ -47,12 +47,12 @@
 <body>
 	<form>
 		<div class="form-group">
-    		<input type="text" class="form-control" id="gianTitle" placeholder="기안제목">
+    		<input type="text" class="form-control form-control-sm" id="gianTitle" placeholder="기안제목">
   		</div>
   		<div class="input-group">
-    		<input type="text" class="form-control" placeholder="이름 입력해서  결재자 검색" id="txtSearchSawon">
+    		<input type="text" class="form-control form-control-sm" placeholder="이름 입력해서  결재자 검색" id="txtSearchSawon">
     		<div class="input-group-append">
-      			<button class="btn btn-secondary" type="button" id="btnSearchSawon" disabled>
+      			<button class="btn btn-secondary btn-sm" type="button" id="btnSearchSawon" disabled>
         			<i class="fa fa-search"></i>
       			</button>
     		</div>
