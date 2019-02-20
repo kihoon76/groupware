@@ -90,12 +90,12 @@
     	</div>
     	<div id="wbsName" class="DV_FLOAT">
     		<div class="wbs_header">
-    			<input type="text" id="txtWbsName" style="height:20px; width:100%;" placeholder="WBS이름" readonly>
+    			<input type="text" id="txtWbsName" style="height:20px; width:590px; padding-left:5px;" placeholder="WBS이름" readonly>
     		</div>
     	</div>
     	<div id="wbsWriter" class="DV_FLOAT">
     		<div class="wbs_header">
-    			<input type="text" id="txtWbsWriter" style="height:20px; width:100%;" placeholder="WBS작성자" readonly>
+    			<input type="text" id="txtWbsWriter" style="height:20px; width:100%; text-align:center;" placeholder="WBS작성자" readonly>
     		</div>
     	</div>
     	<div style="clear:both"></div>

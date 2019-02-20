@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	var taskContextMenu = null;
+	var taskEventContextMenu = null;
 	var resourceIdCnt = 1;
 	var eventIdCnt = 1;
 	var resources = [{id: 'r1', title: 'Task 1'}
@@ -20,17 +21,17 @@ $(document).ready(function() {
 	var events = [];
 	
 	
-	function searchEvent(searchId, callback) {
-		var len = events.length;
-		if(len > 0) {
-			for(var i=0; i<len; i++) {
-				if(events[i].id == searchId) {
-					callback(i);
-					break;
-				}
-			}
-		}
-	}
+//	function searchEvent(searchId, callback) {
+//		var len = events.length;
+//		if(len > 0) {
+//			for(var i=0; i<len; i++) {
+//				if(events[i].id == searchId) {
+//					callback(i);
+//					break;
+//				}
+//			}
+//		}
+//	}
 	
 	
 	function modifyResource(id, title) {
@@ -180,7 +181,7 @@ $(document).ready(function() {
 	}
 	
 	$.contextMenu({
-        selector: '.fc-cell-content', 
+        selector: 'tbody.fc-body .fc-cell-content', 
         callback: function(key, options) {
             switch(key) {
             case 'delete':
@@ -255,74 +256,19 @@ $(document).ready(function() {
         }
     });
 	
+	//event 삭제
 	$.contextMenu({
-        selector: 'div.fc-content.EVENT', 
+        selector: 'a.fc-timeline-event div.fc-content', 
         callback: function(key, options) {
-//            switch(key) {
-//            case 'delete':
-//            	common.showExtMsg({
-//		   			type: 'confirm',
-//		   			msg: '항목 [' + taskContextMenu.title + ']을 삭제하시겠습니까?',
-//		   			callback: function(btn) {
-//		   				if(btn == 'ok') {
-//		   					removeResource(taskContextMenu.id);
-//		   				}
-//		   			}
-//		   		});
-//            	break;
-//            case 'add_sub':
-//            	parent.Ext.Msg.prompt('', taskContextMenu.title + '의 하위 Task를 입력하세요', function(btn, txt) {
-//    				if(btn == 'ok') {
-//    					//$('#calendar').fullCalendar('addResource', { parentId:taskContextMenu.id, title: txt }, true /* scroll to the new resource?*/ );
-//    					var newId = 'r' + (++resourceIdCnt);
-//    					addResource(taskContextMenu.id, null, newId, null, txt);
-//    				}
-//    			});
-//            	break;
-//            case 'edit' :
-//            	parent.Ext.Msg.prompt('', 'Task를 입력하세요', function(btn, txt) {
-//    				if(btn == 'ok') {
-//    					//$('#calendar').fullCalendar('addResource', { parentId:taskContextMenu.id, title: txt }, true /* scroll to the new resource?*/ );
-//    					if(taskContextMenu.title != txt) {
-//    						modifyResource(taskContextMenu.id, txt);
-//    					}
-//    				}
-//    			}, null, null, taskContextMenu.title);
-//            	break;
-//            case 'add_up':
-//            	parent.Ext.Msg.prompt('', 'Task를 입력하세요', function(btn, txt) {
-//    				if(btn == 'ok') {
-//    					var newId = 'r' + (++resourceIdCnt);
-//    					addResource(null, taskContextMenu.id, newId, 'up', txt);
-//    				}
-//    			});
-//            	break;
-//            case 'add_down':
-//            	parent.Ext.Msg.prompt('', 'Task를 입력하세요', function(btn, txt) {
-//    				if(btn == 'ok') {
-//    					var newId = 'r' + (++resourceIdCnt);
-//    					addResource(null, taskContextMenu.id, newId, 'down', txt);
-//    				}
-//    			});
-//            	break;
-//            case 'moveup':
-//            	moveUp(taskContextMenu.id);
-//            	break;
-//            case 'movedown':
-//            	moveDown(taskContextMenu.id);
-//            	break;
-//            }
-           
-            
-            console.log();
+        	console.log(taskEventContextMenu)
+            switch(key) {
+            case 'delete':
+            	$('#calendar').fullCalendar('removeEvents', taskEventContextMenu.id);
+            	taskEventContextMenu = null;
+            	break;
+            }
         },
         items: {
-            'edit': {name: '수정', icon: 'fa-edit'},
-            'add_up': {name: '위에 추가', icon: 'add'},
-            'add_down': {name: '아래에 추가', icon: 'add'},
-            'add_sub': {name: '하위메뉴로 추가', icon: 'add'},
-            'moveup': {name: '위로 옮기기', icon: 'fa-arrow-circle-up'},
-            'movedown': {name: '아래로 옮기기', icon: 'fa-arrow-circle-down'},
             'delete': {name: '삭제', icon: 'fa-trash'},
             'sep1': '---------',
             'quit': {name: '닫기', icon: function(){
@@ -606,39 +552,10 @@ $(document).ready(function() {
 	        { id: '4', resourceId: 'e', start: '2018-04-07T03:00:00', end: '2018-04-07T08:00:00', title: 'event 4' },
 	        { id: '5', resourceId: 'f', start: '2018-04-07T00:30:00', end: '2018-04-07T02:30:00', title: 'event 5' }
 	    ]*/,
-	    drop: function(date, jsEvent, ui, resourceId) {
-	    	console.log('drop', date.format(), resourceId);
-	    	console.log(this)
-	    	console.log(jsEvent);
-	        // assign it the date that was reported
-	      
-	    	
-	        /*copiedEventObject.start = date;
-	        copiedEventObject.end = new Date(tempDate.setHours(tempDate.getHours()+1)); // <-- make sure we assigned a date object
-	        copiedEventObject.allDay = false;  //< -- o
-	        
-	        copiedEventObject.start = date;
-	        copiedEventObject.end = date.setDate(date.getDate()+1); // <- should be working*/
-
-	        // render the event on the calendar
-	        // the last `true` argument determines if the event "sticks"
-	        // (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
-	        //$('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
-	    },
+	    drop: function(date, jsEvent, ui, resourceId) {},
 	    eventOverlap: false,
 	    eventReceive: function(event) { // called when a proper external event is dropped
-	    	console.log('eventReceive', event.resourceId);
-	    	console.log('eventReceive', event.start.format());
-	    	//var id = eventReceive(event.resourceId, event.start.format(), null);
-	    	var d = new Date(event.start.format());
-	    	d.setDate(d.getDate() + 1);
-	    	
-	    	console.log(event);
-	    	
 	    	event.id = getNewEventId();
-	    	//event.end = common.getYmd(d);
-	    	//event.allDay = false;
-	    	//event.setEnd(d);
 	    	$('#calendar').fullCalendar('updateEvent', event);  
 	    },
 	    eventDrop: function(event) { // called when an event (already on the calendar) is moved
@@ -646,46 +563,42 @@ $(document).ready(function() {
 	        $('#calendar').fullCalendar('updateEvent', event);
 	    },
 	    eventClick: function(calEvent, jsEvent, view) {
-	    	console.log(calEvent.id);
-	    	console.log(calEvent.resourceId);
-	    	
-	    	commonSearchResources(calEvent.resourceId, function(item, i) {
-		    	common.showExtMsg({
-		   			type: 'confirm',
-		   			msg: '[' + item.title + ']의 일정을 삭제하시겠습니까?',
-		   			callback: function(btn) {
-		   				if(btn == 'ok') {
-		   					searchEvent(calEvent.id, function(i) {
-		   						events.splice(i, 1);
-		   						$('#calendar').fullCalendar('removeEvents', calEvent.id);
-		   					});
-		   				}
-		   			}
-		   		});
-			}, function(arr, i) {
-				common.showExtMsg({
-		   			type: 'confirm',
-		   			msg: '[' + arr[i].title + ']의 일정을 삭제하시겠습니까?',
-		   			callback: function(btn) {
-		   				if(btn == 'ok') {
-		   					searchEvent(calEvent.id, function(i) {
-		   						events.splice(i, 1);
-		   						$('#calendar').fullCalendar('removeEvents', calEvent.id);
-		   					});   
-		   				}
-		   			}
-		   		});
-			});
+//	    	console.log(calEvent.id);
+//	    	console.log(calEvent.resourceId);
+//	    	
+//	    	commonSearchResources(calEvent.resourceId, function(item, i) {
+//		    	common.showExtMsg({
+//		   			type: 'confirm',
+//		   			msg: '[' + item.title + ']의 일정을 삭제하시겠습니까?',
+//		   			callback: function(btn) {
+//		   				if(btn == 'ok') {
+//		   					$('#calendar').fullCalendar('removeEvents', calEvent.id);
+//		   				}
+//		   			}
+//		   		});
+//			}, function(arr, i) {
+//				common.showExtMsg({
+//		   			type: 'confirm',
+//		   			msg: '[' + arr[i].title + ']의 일정을 삭제하시겠습니까?',
+//		   			callback: function(btn) {
+//		   				if(btn == 'ok') {
+//		   					$('#calendar').fullCalendar('removeEvents', calEvent.id);
+//		   				}
+//		   			}
+//		   		});
+//			});
 	    },
 	    eventResize: function(event, delta, revertFunc) {
-	    	console.log(event.end.format())
-	    	var end = event.end.format();
-	    	//event.end = end;
-	    	console.log(event)
-	    	 $('#calendar').fullCalendar('updateEvent', event);
+	    	$('#calendar').fullCalendar('updateEvent', event);
 	    },
 	    eventAfterAllRender: function() {
 	    	$('#spLoading').text('');
+	    },
+	    eventRender: function(event, element) {
+	    	$(element).contextmenu(function() {
+	    		taskEventContextMenu = event;
+	    	})
 	    }
+	    
 	});
 });

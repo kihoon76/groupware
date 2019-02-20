@@ -9,6 +9,7 @@
 <script src="/resources/lib/jquery-ui.min.js"></script>
 <script src="/resources/lib/moment.min.js"></script>
 <script src="/resources/os/fullcalendar-3.9.0/fullcalendar.min.js"></script>
+<!-- <script src="/resources/os/fullcalendar-3.9.0/fullcalendar-rightclick.js"></script> -->
 <script src="/resources/os/fullcalendar-3.9.0/locale/ko.js"></script>
 <script src="/resources/os/fullcalendar-3.9.0/scheduler-1.9.4.min.js"></script>
 <script src="/resources/os/jQuery-Contextmenu-2.7.1/jquery.contextMenu.js"></script>

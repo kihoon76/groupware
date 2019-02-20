@@ -1,12 +1,13 @@
 Ext.define('Drpnd.view.panel.WbsListGridPanel', {
 	extend: 'Ext.grid.Panel',
-	requires : ['Drpnd.util.Constants' ,'Drpnd.util.CommonFn'],
+	requires : ['Drpnd.util.Constants' ,'Drpnd.util.CommonFn', 'Drpnd.util.Html'],
 	xtype: 'wbsgrid',
 	id: 'wbsListGrid',
 	win: null,
 	initComponent: function() {
 		var	constants = Drpnd.util.Constants,
 			commFn = Drpnd.util.CommonFn,
+			html = Drpnd.util.Html,
 			searchWbsName = null,
 			searchWbsWriter = null,
 			searchWbsRange = null,
@@ -202,6 +203,8 @@ Ext.define('Drpnd.view.panel.WbsListGridPanel', {
 						makeParam(false, true);
 					}
 				}
+			}, {
+				html: html.wbsalarm
 			}], 
 			
 			dockedItems: [{

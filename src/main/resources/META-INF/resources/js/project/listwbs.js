@@ -4,6 +4,7 @@ $(document).ready(function() {
 	var wbsWin = null;
 	var $txtWbsName = $('#txtWbsName');
 	var $txtWbsWriter = $('#txtWbsWriter');
+	var today = $('body').data('date');
 	
 	window.makeCalendar = function(data) {
 		wbsWin.close();
@@ -19,11 +20,14 @@ $(document).ready(function() {
 		$txtWbsWriter.val(data.writer);
 		resources = $.parseJSON(data.resources);
 		events = $.parseJSON(data.events);
+		today = data.defaultDay;
 		
+		$('#calendar').fullCalendar('gotoDate', today);
 		$('#calendar').fullCalendar('removeResource', resources);
 		$('#calendar').fullCalendar('removeEvents');
 		$('#calendar').fullCalendar('refetchResources');
 		$('#calendar').fullCalendar('refetchEvents');
+		
 	}
 	
 	function searchWin() {
@@ -75,7 +79,7 @@ $(document).ready(function() {
 	
 	$('#calendar').fullCalendar({
 		schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
-		now: $('body').data('date'),
+		now: today,
 	    editable: false,
 	    droppable: false, // this allows things to be dropped onto the calendar
 	    aspectRatio: 1.8,
@@ -97,6 +101,6 @@ $(document).ready(function() {
 	    eventAfterAllRender: function() {
 	    	$('#spLoading').text('');
 	    	$('body').LoadingOverlay('hide');
-	    }
+	    },
 	});
 });
