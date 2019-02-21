@@ -37,6 +37,7 @@ import kr.co.drpnd.domain.AttachFile;
 import kr.co.drpnd.domain.Sangsin;
 import kr.co.drpnd.domain.Sawon;
 import kr.co.drpnd.exception.InvalidUser;
+import kr.co.drpnd.service.CodeService;
 import kr.co.drpnd.service.GyeoljaeService;
 import kr.co.drpnd.service.SawonService;
 import kr.co.drpnd.type.ExceptionCode;
@@ -53,16 +54,31 @@ public class GyeoljaeController {
 	@Resource(name="sawonService")
 	SawonService sawonService;
 	
+	@Resource(name="codeService")
+	CodeService codeService;
+	
 	@Autowired
 	private SimpMessagingTemplate template;
 	
+	@SuppressWarnings("unchecked")
 	@GetMapping("view/new")
 	public String viewNewGyeoljae(ModelMap m) {
 		SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");//dd/MM/yyyy
 		Date now = new Date();
 		String strDate = sdfDate.format(now);
+		List<Object> gyeoljaeType = codeService.getGyeoljae();
 		
+		if(gyeoljaeType != null) {
+			int len = gyeoljaeType.size();
+			List<Map<String, String>> listMap = new ArrayList<>();
+			for(int i=0; i<len; i++) {
+				listMap.add((Map<String, String>)gyeoljaeType.get(i));
+			}
+			
+			m.addAttribute("gyeoljaeType", listMap);
+		}
 		m.addAttribute("time", strDate);
+		
 		return "gyeoljae/newgyeoljae";
 	}
 	

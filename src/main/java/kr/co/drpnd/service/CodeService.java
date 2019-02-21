@@ -28,9 +28,9 @@ public class CodeService {
 
 	public List<Object> getOverwork() {
 		return codeDao.selectOverwork();
-		//return null;
 	}
-	
-	
 
+	public List<Object> getGyeoljae() {
+		return codeDao.selectGyeoljae();
+	}
 }

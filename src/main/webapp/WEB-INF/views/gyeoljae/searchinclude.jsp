@@ -40,10 +40,10 @@
 	</div>
 	</c:if>
 	<div class="input-daterange form-group divMR" id="datepicker">
-		<div class="input-group-prepend ">
-	  		<input type="text" class="form-control form-control-sm" id="txtStartDate" autocomplete="off" readOnly value="<c:out value='${start}' />"/>
+		<div class="input-group-prepend">
+	  		<input type="text" style="width:120px;" class="form-control" id="txtStartDate" autocomplete="off" readOnly value="<c:out value='${start}' />"/>
 	  		<span class="input-group-text"> ~ </span>
-	  		<input type="text" class="form-control form-control-sm" id="txtEndDate" autocomplete="off" readOnly value="<c:out value='${end}' />"/>
+	  		<input type="text" style="width:120px;" class="form-control" id="txtEndDate" autocomplete="off" readOnly value="<c:out value='${end}' />"/>
 	  	</div>
 	</div>
 	<div class="form-group divMR">

@@ -34,4 +34,9 @@ public class CodeDaoImpl implements CodeDao {
 	public List<Object> selectOverwork() {
 		return msSqlSession.selectList(namespace + ".selectOverwork");
 	}
+
+	@Override
+	public List<Object> selectGyeoljae() {
+		return msSqlSession.selectList(namespace + ".selectGyeoljae");
+	}
 }

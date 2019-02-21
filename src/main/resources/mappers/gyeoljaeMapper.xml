@@ -45,8 +45,16 @@
 	</select>
 	
 	<insert id="insertNewGyeoljae" parameterType="Sangsin">
-		insert into [동림].[dbo].[상신](기안제목, 기안내용_CODE, 기안내용_PLAIN, 기안자, 처리상태, 기안작성일) 
-		values (#{title}, #{content}, #{plainContent}, #{gianja}, 'D', getDate())
+		insert into [동림].[dbo].[상신](기안제목, 기안내용_CODE, 기안내용_PLAIN, 기안자, 처리상태, 기안작성일, 결재타입, 휴가시작일, 휴가종료일)
+		<choose>
+		<when test='gyeoljaeType == "2"'>
+		values (#{title}, #{content}, #{plainContent}, #{gianja}, 'D', getDate(), #{gyeoljaeType}, #{startDate}, #{endDate})
+		</when>
+		<otherwise>
+		values (#{title}, #{content}, #{plainContent}, #{gianja}, 'D', getDate(), #{gyeoljaeType}, null, null)
+		</otherwise>
+		</choose> 
+		
 		<selectKey keyProperty="sangsinNum" resultType="int" order="AFTER">
         	SELECT IDENT_CURRENT('[동림].[dbo].[상신]')
     	</selectKey>
@@ -292,6 +300,9 @@
 		<result column="기안내용_PLAIN" property="plainContent" javaType="string"/>
 		<result column="기안자" property="gianja" javaType="string"/>
 		<result column="기안작성일" property="writeDate" javaType="string"/>
+		<result column="결재타입" property="gyeoljaeType" javaType="string"/>
+		<result column="휴가시작일" property="startDate" javaType="string"/>
+		<result column="휴가종료일" property="endDate" javaType="string"/>
 		<collection property="attachFiles" column="상신코드" 
 					javaType="java.util.ArrayList"
 					ofType="AttachFile" 
@@ -313,7 +324,7 @@
 	</select>
 	
 	<select id="selectMyGyeoljaeDetail" parameterType="map" resultMap="RM_Sangsin">
-		select T1.상신코드, 기안제목, 기안내용_CODE, T3.사원명 as 기안자, convert(char(16), 기안작성일, 20) 기안작성일
+		select T1.상신코드, 기안제목, 기안내용_CODE, T3.사원명 as 기안자, convert(char(16), 기안작성일, 20) 기안작성일, 결재타입, 휴가시작일, 휴가종료일
 		  from [동림].[dbo].[상신] T1
 		 inner join [동림].[dbo].[결재라인] T2
 		    on T1.상신코드 = T2.상신코드
@@ -326,13 +337,13 @@
 	<select id="selectMySangsinDetail" parameterType="map" resultMap="RM_Sangsin">
 		 <choose>
 		 <when test="sawonCode != null">
-		 select T1.상신코드, 기안제목, 기안내용_CODE, convert(char(16), 기안작성일, 20) 기안작성일
+		 select T1.상신코드, 기안제목, 기안내용_CODE, convert(char(16), 기안작성일, 20) 기안작성일, 결재타입, 휴가시작일, 휴가종료일
 		  from [동림].[dbo].[상신] T1
 		 where T1.상신코드 = #{sangsinNum}
 		   and T1.기안자 = #{sawonCode}
 		 </when>
 		 <otherwise>
-		  select T1.상신코드, 기안제목, 기안내용_CODE, convert(char(16), 기안작성일, 20) 기안작성일, 사원명 as 기안자
+		  select T1.상신코드, 기안제목, 기안내용_CODE, convert(char(16), 기안작성일, 20) 기안작성일, 사원명 as 기안자, 결재타입, 휴가시작일, 휴가종료일
 		    from [동림].[dbo].[상신] T1
 		   inner join [동림].[dbo].[사원] T2
 		      on T1.기안자 = T2.사원코드

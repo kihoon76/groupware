@@ -159,10 +159,18 @@ var Gyeoljae = (function() {
 		        	}
 		        }
 		    },
-		   
-		    
 		});
 		
+		var gyeoljaeType = sangsin.gyeoljaeType;
+		if(gyeoljaeType == '2') {
+			gyeoljaeType = '휴가';
+			if(sangsin.startDate && sangsin.endDate) {
+				gyeoljaeType = gyeoljaeType + ' (' + sangsin.startDate + ' ~ ' + sangsin.endDate + ')';
+			}
+		}
+		else {
+			gyeoljaeType = '일반업무';
+		}
 		
 		var form = parent.Ext.widget('form', {
 			layout: {
@@ -177,6 +185,12 @@ var Gyeoljae = (function() {
 				labelStyle: 'font-weight:bold',
 			},
 			items: [{
+				xtype: 'textfield',
+				fieldLabel: '기안타입',
+				readOnly: true,
+				width: '100%',
+				value: gyeoljaeType
+			},{
 				xtype: 'textfield',
 				fieldLabel: '기안제목',
 				readOnly: true,
@@ -204,7 +218,7 @@ var Gyeoljae = (function() {
 				xtype: 'htmleditor',
 				fieldLabel: '기안내용',
 				width: '99.9%',
-				height: 400,
+				height: 300,
 				readOnly: true,
 				value: sangsin.content
 			},{

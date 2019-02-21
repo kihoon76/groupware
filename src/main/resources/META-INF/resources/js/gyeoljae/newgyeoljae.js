@@ -12,9 +12,19 @@
 		var $gianTitle = $('#gianTitle');
 		var $gyeoljaeFileUp = $('#gyeoljaeFileUp');
 		var $gyeoljaeContent = $('#gyeoljaeContent');
+		var $selGyeoljaeType = $('#selGyeoljaeType');
+		var $txtVacationStart = $('#txtVacationStart');
+		var $txtVacationEnd = $('#txtVacationEnd');
+		var $datepicker = $('#datepicker');
+		
 		var gyeoljaeAddObj = {};
 		var delImgUrl = '/resources/images/delete.png';
 		var gyeoljaeSelectedFiles = {};
+		
+		$('.input-daterange').datepicker({
+			language: 'ko',
+			autoclose: true,
+		});
 		
 		function hasFileInGyeoljae() {
 	        for(var k in gyeoljaeSelectedFiles) {
@@ -28,6 +38,7 @@
 			var gyeoljaeLineData = getGyeoljaeLineData();
 			var len = gyeoljaeLineData.length;
 			var gyeoljaeParam = [];
+			var param = null;
 			
 			for(var i=0; i<len; i++) {
 				gyeoljaeParam.push({
@@ -41,13 +52,23 @@
 			}
 			
 			var codeContent = $gyeoljaeContent.summernote('code');
+			var gyeoljaeType = $selGyeoljaeType.val();
 			
-			return {
+			param = {
 				title: $.trim($gianTitle.val()),
 				gyeoljaeLines: gyeoljaeParam,
 				content: codeContent,
-				plainContent: $(codeContent).text()
+				plainContent: $(codeContent).text(),
+				gyeoljaeType: gyeoljaeType
 			}
+			
+			//휴가
+			if(gyeoljaeType == '2') {
+				param.startDate = $.trim($txtVacationStart.val());
+				param.endDate = $.trim($txtVacationEnd.val());
+			}
+			
+			return param;
 		}
 		
 		function sangsin() {
@@ -98,10 +119,36 @@
 			return !$gyeoljaeContent.summernote('isEmpty');
 		}
 		
+		function validateGyeoljaeType() {
+			//휴가
+			if($selGyeoljaeType.val() == '2') {
+				var s = $.trim($txtVacationStart.val());
+				var e = $.trim($txtVacationEnd.val());
+				
+				return s != '' && e != '';
+			}
+			
+			return true;
+		}
+		
 		function clearGyeoljaeFile() {
 			$gyeoljaeFileUp.reset();
 			gyeoljaeSelectedFiles = {};
 		}
+		
+		$selGyeoljaeType
+		.off('change')
+		.on('change', function() {
+			var v = $(this).val();
+			//휴가
+			if(v == '2') {
+				$datepicker.show();
+			}
+			else {
+				$datepicker.hide();
+			}
+			
+		});
 		
 		$gyeoljaeFileUp.uploadFile({
 			fileName: 'file',
@@ -250,6 +297,17 @@
 					msg: '결재내용을 입력하세요',
 					callback: function() {
 						$gyeoljaeContent.summernote('focus');
+					}
+				});
+				return;
+			}
+			
+			if(!validateGyeoljaeType()) {
+				common.showExtMsg({
+					type: 'alert',
+					msg: '휴가기간을 선택하세요',
+					callback: function() {
+						$txtVacationStart.focus();
 					}
 				});
 				return;

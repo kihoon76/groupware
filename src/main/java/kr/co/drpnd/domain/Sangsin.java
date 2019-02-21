@@ -17,6 +17,9 @@ public class Sangsin {
 	private List<AttachFile> attachFiles;
 	private String status;
 	private String writeDate;
+	private String gyeoljaeType;
+	private String startDate;
+	private String endDate;
 	
 	public String getTitle() {
 		return title;
@@ -72,5 +75,22 @@ public class Sangsin {
 	public void setWriteDate(String writeDate) {
 		this.writeDate = writeDate;
 	}
-	
+	public String getGyeoljaeType() {
+		return gyeoljaeType;
+	}
+	public void setGyeoljaeType(String gyeoljaeType) {
+		this.gyeoljaeType = gyeoljaeType;
+	}
+	public String getStartDate() {
+		return startDate;
+	}
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
+	}
+	public String getEndDate() {
+		return endDate;
+	}
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
+	}
 }

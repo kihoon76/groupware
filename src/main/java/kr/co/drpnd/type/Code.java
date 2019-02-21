@@ -4,7 +4,7 @@ import java.util.EnumSet;
 
 public enum Code {
 
-	DEPARTMENT("department"), TEAM("team"), POSITION("position"), OVERWORK("overwork");
+	DEPARTMENT("department"), TEAM("team"), POSITION("position"), OVERWORK("overwork"), GYEOLJAE("gyeoljae");
 	
 	private String value;
 	

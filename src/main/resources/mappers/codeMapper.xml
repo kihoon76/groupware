@@ -49,4 +49,9 @@
 		 where 적용범위 = 'A'
 	</select>
 	
+	<select id="selectGyeoljae" resultType="map">
+		select 코드 code, 이름  name
+		  from [동림].[dbo].[결재타입]
+	</select>
+	
 </mapper>

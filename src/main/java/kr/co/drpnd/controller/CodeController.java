@@ -45,6 +45,9 @@ public class CodeController {
 		case OVERWORK:
 			list = codeService.getOverwork();
 			break;
+		case GYEOLJAE:
+			list = codeService.getGyeoljae();
+			break;
 		default :
 			break;
 		}
