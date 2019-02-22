@@ -11,4 +11,10 @@ public interface ProjectDao {
 
 	ExtjsStoreVO<Wbs> selectListWBS(Map param);
 
+	ExtjsStoreVO<Wbs> selectListMyWBS(Map param);
+
+	int updateMyWBS(Map<String, String> param);
+
+	int deleteMyWBS(Map<String, String> param);
+
 }

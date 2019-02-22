@@ -1,20 +1,19 @@
-Ext.define('Drpnd.view.panel.WbsListGridPanel', {
+Ext.define('Drpnd.view.panel.MyWbsListGridPanel', {
 	extend: 'Ext.grid.Panel',
 	requires : ['Drpnd.util.Constants' ,'Drpnd.util.CommonFn', 'Drpnd.util.Html'],
-	xtype: 'wbsgrid',
-	id: 'wbsListGrid',
+	xtype: 'mywbsgrid',
+	id: 'mywbsListGrid',
 	win: null,
 	initComponent: function() {
 		var	constants = Drpnd.util.Constants,
 			commFn = Drpnd.util.CommonFn,
 			html = Drpnd.util.Html,
 			searchWbsName = null,
-			searchWbsWriter = null,
 			searchWbsRange = null,
 			that = this;
 		
 		try {
-			var store = Ext.create('Drpnd.store.WbsListStore');
+			var store = Ext.create('Drpnd.store.MyWbsListStore');
 		}
 		catch(e) {
 			console.log(e);
@@ -22,8 +21,7 @@ Ext.define('Drpnd.view.panel.WbsListGridPanel', {
 			//commFn.loadJsError();
 		}
 		
-		store.baseParams = {wbsName:'', writer: '', range: 'D'}
-		
+		store.baseParams = {wbsName:'', range: 'P'};
 		var searchComboStore = Ext.create('Ext.data.Store', {
 			 fields : ['name', 'value'],
 			 data : [
@@ -44,7 +42,6 @@ Ext.define('Drpnd.view.panel.WbsListGridPanel', {
 			closeAction: 'hide',
 			items: [{
 				xtype: 'form',
-				id: 'wbsSearchForm',
 				bodyPadding: 5,
 				height: 300,
 				defaults: {
@@ -61,34 +58,17 @@ Ext.define('Drpnd.view.panel.WbsListGridPanel', {
 						}
 					}
 	            }, {
-	            	fieldLabel: '작성자',
-	            	disabled: true,
-					listeners: {
-						afterrender: function(txt) {
-							searchWbsWriter = txt;
-						}
-					}
-	            }, {
 	            	xtype: 'combobox',
 	            	fieldLabel: '공유범위',
 	            	editable: false,
 	            	displayField: 'name',
 	            	valueField: 'value',
 			    	queryMode: 'local',
-			    	value: 'D',
+			    	value: 'P',
 			    	store: searchComboStore,
 			    	listeners: {
 			    		afterrender: function(combo) {
 			    			searchWbsRange = combo;
-			    		},
-			    		change: function(c, nV) {
-			    			if(nV != 'A') {
-			    				searchWbsWriter.setValue('');
-			    				searchWbsWriter.setDisabled(true);
-			    			}
-			    			else {
-			    				searchWbsWriter.setDisabled(false);
-			    			}
 			    		}
 			    	}
 	            }]
@@ -116,33 +96,27 @@ Ext.define('Drpnd.view.panel.WbsListGridPanel', {
 		
 		function makeParam(validate, init, isProxy) {
 			
-			if(validate && Ext.String.trim(searchWbsName.getValue()) == '' 
-			   && Ext.String.trim(searchWbsWriter.getValue()) == ''
-			   && searchWbsRange.getValue() == null) return;
+			if(validate && Ext.String.trim(searchWbsName.getValue()) == '') return;
 			
 			if(init) {
 				searchWbsName.setValue('');
-				searchWbsWriter.setValue('');
 				searchWbsRange.setValue('D');
 			}
 			
 			var searchWbsNameV = Ext.String.trim(searchWbsName.getValue());
-			var searchWbsWriterV = Ext.String.trim(searchWbsWriter.getValue());
 			var searchWbsRangeV = searchWbsRange.getValue();
 			
 			if(isProxy) {
 				store.getProxy().setExtraParam('wbsName', searchWbsNameV);
-				store.getProxy().setExtraParam('writer', searchWbsWriterV);
 				store.getProxy().setExtraParam('range', searchWbsRangeV);
-				store.getProxy().setExtraParam('limit', Ext.getCmp('wbs-paging-combo').getValue());
+				store.getProxy().setExtraParam('limit', Ext.getCmp('mywbs-paging-combo').getValue());
 				return;
 			}
 			
 			store.loadPage(1, {
 				params: {
-					limit: Ext.getCmp('wbs-paging-combo').getValue(),
+					limit: Ext.getCmp('mywbs-paging-combo').getValue(),
 					wbsName: searchWbsNameV,
-					writer: searchWbsWriterV,
 					range: searchWbsRangeV
 				}
 			});
@@ -209,7 +183,7 @@ Ext.define('Drpnd.view.panel.WbsListGridPanel', {
 				xtype: 'pagingtoolbar',
 				store: store,
 				displayInfo: true,
-				displayMsg: 'WBS 리스트 {0} - {1} of {2}',
+				displayMsg: '내 WBS 리스트 {0} - {1} of {2}',
 				dock: 'bottom',
 				doRefresh: function() {
 					makeParam(false, false, true);
@@ -219,7 +193,7 @@ Ext.define('Drpnd.view.panel.WbsListGridPanel', {
 					text: '목록수 : '
 				}, Ext.create('Ext.form.field.ComboBox', {
 					queryMode: 'local',
-					id: 'wbs-paging-combo',
+					id: 'mywbs-paging-combo',
 					displayField: 'name',
 					valueField: 'value',
 					editable: false,

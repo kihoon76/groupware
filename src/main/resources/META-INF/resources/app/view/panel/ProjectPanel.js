@@ -6,8 +6,10 @@ Ext.define('Drpnd.view.panel.ProjectPanel', {
 		var CommonFn = Drpnd.util.CommonFn;
 		var activeColor = '#ccffff';
 		var btnNewWBS = null;
+		var btnMyWBS = null;
 		var btnListWBS = null;
 		var newWBSWin = null;
+		var myWBSWin = null;
 		var listWBSWin = null;
 		var that = this;
 		
@@ -24,6 +26,13 @@ Ext.define('Drpnd.view.panel.ProjectPanel', {
 			}
 			else {
 				btnListWBS.getEl().setStyle('background-color', 'transparent');
+			}
+			
+			if(activeBtn == 'MY_WBS') {
+				btnMyWBS.getEl().setStyle('background-color', activeColor);
+			}
+			else {
+				btnMyWBS.getEl().setStyle('background-color', 'transparent');
 			}
 			
 		}
@@ -56,6 +65,17 @@ Ext.define('Drpnd.view.panel.ProjectPanel', {
 			CommonFn.checkSession(function() {
 				var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: '/project/newwbs', load: function(dom) {
 					newWBSWin = dom.contentWindow;
+				} });
+				addItem(iframe);
+			});
+		}
+		
+		//나의 WBS
+		function myWBSClick() {
+			activeButtonCSS('MY_WBS');
+			CommonFn.checkSession(function() {
+				var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: '/project/mywbs', load: function(dom) {
+					myWBSWin = dom.contentWindow;
 				} });
 				addItem(iframe);
 			});
@@ -166,6 +186,18 @@ Ext.define('Drpnd.view.panel.ProjectPanel', {
 					},
 					afterrender: function(btn) {
 						btnNewWBS = btn;
+					}
+				}
+			}, '-', {
+				xtype: 'button',
+				text: '나의 WBS',
+				iconCls: 'icon-myproject',
+				listeners: {
+					click: function(btn) {
+						myWBSClick();
+					},
+					afterrender: function(btn) {
+						btnMyWBS = btn;
 					}
 				}
 			}, '-', {

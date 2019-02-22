@@ -1,25 +1,50 @@
 $(document).ready(function() {
 	var taskContextMenu = null;
 	var taskEventContextMenu = null;
+	var $txtWbsName = $('#txtWbsName');
+	var $txtWbsWriter = $('#txtWbsWriter');
+	var today = $('body').data('date');
+	
+	var prefix = common.s4();
 	var resourceIdCnt = 1;
 	var eventIdCnt = 1;
-	var resources = [{id: 'r1', title: 'Task 1'}
-        /*{ id: 'b', title: 'Auditorium B', eventColor: 'green' },
-        { id: 'c', title: 'Auditorium C', eventColor: 'orange' },
-        { id: 'd', title: 'Auditorium D', 
-        	children: [
-                { id: 'd1', title: 'Room D1' },
-                { id: 'd2', title: 'Room D2' }
-            ]
-        },
-        { id: 'e', title: 'Auditorium E' },
-        { id: 'f', title: 'Auditorium F', eventColor: 'red' },
-        { id: 'g', title: 'Auditorium G' },
-        { id: 'h', title: 'Auditorium H' },*/
-    ];
-	
+	var resources = [];
 	var events = [];
+	var wbsWin = null;
 	
+	var recWbsName = null;
+	var recWbsDefaultDay = null;
+	var recRange = null;
+	var recCode = null;
+	
+	window.makeCalendar = function(data) {
+		wbsWin.close();
+		
+		$.LoadingOverlay('show', {
+		    image       : '',
+		    text        : 'WBS를 로딩중입니다.'
+		});
+		
+		$('body').LoadingOverlay('show');
+		
+		$txtWbsName.val(data.name);
+		$txtWbsWriter.val(data.writer);
+		resources = $.parseJSON(data.resources);
+		events = $.parseJSON(data.events);
+		today = data.defaultDay;
+		
+		recWbsName = data.name;
+		recWbsDefaultDay = data.defaultDay;
+		recRange = data.range;
+		recCode = data.code;
+		
+		$('#calendar').fullCalendar('gotoDate', today);
+		$('#calendar').fullCalendar('removeResource', resources);
+		$('#calendar').fullCalendar('removeEvents');
+		$('#calendar').fullCalendar('refetchResources');
+		$('#calendar').fullCalendar('refetchEvents');
+		
+	}
 	
 	function modifyResource(id, title) {
 		commonSearchResources(id, function(item, i) {
@@ -151,11 +176,11 @@ $(document).ready(function() {
 	}
 	
 	function getNewEventId() {
-		return 'e' + (++eventIdCnt);
+		return 'e' + prefix + (++eventIdCnt);
 	}
 	
 	function getNewResourceId() {
-		return 'r' + (++resourceIdCnt);
+		return 'r' + prefix + (++resourceIdCnt);
 	}
 	
 	$.contextMenu({
@@ -177,7 +202,7 @@ $(document).ready(function() {
             	parent.Ext.Msg.prompt('', taskContextMenu.title + '의 하위 Task를 입력하세요', function(btn, txt) {
     				if(btn == 'ok') {
     					//$('#calendar').fullCalendar('addResource', { parentId:taskContextMenu.id, title: txt }, true /* scroll to the new resource?*/ );
-    					//var newId = 'r' + (++resourceIdCnt);
+    					//var newId = 'r' + prefix + (++resourceIdCnt);
     					addResource(taskContextMenu.id, null, getNewResourceId(), null, txt);
     				}
     			});
@@ -195,7 +220,7 @@ $(document).ready(function() {
             case 'add_up':
             	parent.Ext.Msg.prompt('', 'Task를 입력하세요', function(btn, txt) {
     				if(btn == 'ok') {
-    					//var newId = 'r' + (++resourceIdCnt);
+    					//var newId = 'r' + prefix + (++resourceIdCnt);
     					addResource(null, taskContextMenu.id, getNewResourceId(), 'up', txt);
     				}
     			});
@@ -203,7 +228,7 @@ $(document).ready(function() {
             case 'add_down':
             	parent.Ext.Msg.prompt('', 'Task를 입력하세요', function(btn, txt) {
     				if(btn == 'ok') {
-    					//var newId = 'r' + (++resourceIdCnt);
+    					//var newId = 'r' + prefix + (++resourceIdCnt);
     					addResource(null, taskContextMenu.id, getNewResourceId(), 'down', txt);
     				}
     			});
@@ -274,7 +299,7 @@ $(document).ready(function() {
 	var extRgp = null;
 	var extDate = null;
 	
-	function getRegForm() {
+	function getModForm() {
 		return parent.Ext.create('Ext.form.Panel', {
 			frame: true,
 		    anchor: '100%',
@@ -287,6 +312,7 @@ $(document).ready(function() {
 	        items: [{
 	            xtype: 'textfield',
 	            fieldLabel: 'WBS 이름',
+	            value: recWbsName,
 	            listeners: {
 	            	afterrender: function(txt) {
 	            		extTxtWbsName = txt;
@@ -297,6 +323,7 @@ $(document).ready(function() {
 	            fieldLabel: '시작일자',
 	            format:'Y-m-d',
 	            editable: false,
+	            value: recWbsDefaultDay,
 	            listeners: {
 	            	afterrender: function(date) {
 	            		extDate = date;
@@ -311,18 +338,20 @@ $(document).ready(function() {
             		boxLabelAlign: 'after',
             		name: 'range',
             		padding: '0 50 0 0',
-            		checked: true,
+            		checked: (recRange == 'P' ? true : false),
             		_value: 'P'
             		
             	},{
             		boxLabel: '팀공유',
             		boxLabelAlign: 'after',
             		name: 'range',
+            		checked: (recRange == 'T' ? true : false),
             		_value: 'T'
             	},{
             		boxLabel: '전체공유',
             		boxLabelAlign: 'after',
             		name: 'range',
+            		checked: (recRange == 'A' ? true : false),
             		_value: 'A'
             	}],
             	listeners: {
@@ -334,10 +363,53 @@ $(document).ready(function() {
 		});
 	}
 	
+	function delWin() {
+		common.showExtMsg({
+			type: 'confirm',
+			msg: 'WBS [' + recWbsName + '] 삭제하시겠습니까?' ,
+			callback: function(btn) {
+				if(btn == 'ok') {
+					common.checkSession(function() {
+						delWBS();
+					});
+				}
+			}
+		});
+	}
 	
-	function regWin() {
-		var wbsRegWin = parent.Ext.create('Ext.window.Window', {
-			title: 'WBS 등록',
+	function delWBS() {
+		common.ajaxExt({
+			url: '/project/del/wbs/' + recCode,
+			method: 'GET',
+			headers: { 'Content-Type': 'application/json' },
+			loadmask: {
+				msg: 'WBS 삭제중입니다.'
+			},
+			success: function(jo) {
+				console.log(jo);
+				if(jo.success) {
+					common.showExtMsg({
+						type: 'alert',
+						icon: parent.Ext.MessageBox.INFO,
+						msg: 'WBS 삭제되었습니다.',
+						callback: function() {
+							window.location.reload();
+						}
+					});
+				}
+				else {
+					common.showExtMsg({
+						type: 'alert',
+						msg: jo.errMsg
+					});
+				}
+			}
+		});
+	}
+	
+	function modWin() {
+		var wbsModWin = parent.Ext.create('Ext.window.Window', {
+			title: 'WBS 수정',
 			iconCls: 'icon-project',
 			height: 200,
 			width: 600,
@@ -345,7 +417,7 @@ $(document).ready(function() {
 			closeAction: 'destroy',
 			modal: true,
 			resizable: false,
-			items: [getRegForm()],
+			items: [getModForm()],
 			dockedItems: [{
 			    xtype: 'toolbar',
 			    dock: 'bottom',
@@ -353,7 +425,7 @@ $(document).ready(function() {
 			    //defaults: {minWidth: minButtonWidth},
 			    items: [
 			        { xtype: 'component', flex: 1 },
-			        { xtype: 'button', text: '등록', iconCls: 'icon-project', listeners: {
+			        { xtype: 'button', text: '수정', iconCls: 'icon-project', listeners: {
 			        	click: function() {
 			        		var wbsName = $.trim(extTxtWbsName.getValue());
 			        		var range = (extRgp.getChecked())[0]._value;
@@ -366,13 +438,13 @@ $(document).ready(function() {
 			        			extDate.markInvalid('WBS 시작일자를 선택하세요');
 			        		}
 			        		else {
-				        		regWBS(wbsName, range, start, wbsRegWin);
+				        		modWBS(wbsName, range, start, wbsModWin);
 			        		}
 			        	}
 			        } },
 			        { xtype: 'button', text: '닫기', iconCls: 'icon-close', listeners: {
 			        	click: function(btn) {
-			        		wbsRegWin.close();
+			        		wbsModWin.close();
 			        	}
 			        } }
 			    ]
@@ -384,10 +456,10 @@ $(document).ready(function() {
 			}
 		})
 		
-		wbsRegWin.show();
+		wbsModWin.show();
 	}
 	
-	function regWBS(wbsName, range, start, win) {
+	function modWBS(wbsName, range, start, win) {
 		var events = $('#calendar').fullCalendar('clientEvents');
 		var event = null;
 		var len = events.length;
@@ -416,7 +488,7 @@ $(document).ready(function() {
 		}
 		
 		common.ajaxExt({
-			url: '/project/reg/wbs',
+			url: '/project/mod/wbs',
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			jsonData: {
@@ -424,10 +496,11 @@ $(document).ready(function() {
 				events: JSON.stringify(eventObject),
 				title: wbsName, 
 				range: range,
-				start: start
+				start: start,
+				code: recCode
 			},
 			loadmask: {
-				msg: 'WBS 등록중입니다.'
+				msg: 'WBS 수정중입니다.'
 			},
 			success: function(jo) {
 				console.log(jo);
@@ -435,7 +508,7 @@ $(document).ready(function() {
 					common.showExtMsg({
 						type: 'alert',
 						icon: parent.Ext.MessageBox.INFO,
-						msg: 'WBS 등록되었습니다.',
+						msg: 'WBS 수정되었습니다.',
 						callback: function() {
 							win.close();
 							window.location.reload();
@@ -451,80 +524,97 @@ $(document).ready(function() {
 				}
 			}
 		});
-		
-		console.log(JSON.stringify(eventObject));
 	}
+	
+	function searchWin() {
+		var grid = parent.Ext.create('Drpnd.view.panel.MyWbsListGridPanel');
+		grid.myExtraParams = {win: window};
+		wbsWin = parent.Ext.create('Ext.window.Window', {
+			title: 'WBS 리스트',
+			iconCls: 'icon-project',
+			height: 500,
+			width: 800,
+			layout: 'fit',
+			closeAction: 'destroy',
+			modal: true,
+			draggable: true,
+			resizable: false,
+			items: [grid/*parent.Ext.create('Drpnd.view.panel.WbsListGridPanel')*/],
+			dockedItems: [{
+			    xtype: 'toolbar',
+			    dock: 'bottom',
+			    ui: 'footer',
+			    items: [
+			        { xtype: 'component', flex: 1 },
+//			        { xtype: 'button', text: '시간설정', iconCls: 'icon-timer', listeners: {
+//			        	click: function() {
+//			        		
+//			        	}
+//			        } },
+			        { xtype: 'button', text: '닫기', iconCls: 'icon-close', listeners: {
+			        	click: function(btn) {
+			        		wbsWin.close();
+			        	}
+			        } }
+			    ]
+			}],
+			listeners: {
+				close: function() {
+					
+				}
+			}
+		})
+		
+		wbsWin.show();
+	}
+	
+	$('#btnWBSPop').on('click', function() {
+		searchWin();
+	});
 	
 	$('#calendar').fullCalendar({
 		schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
 		customButtons: {
 			save: {
-				text: '저장',
+				text: '수정',
 				click: function() {
-					regWin();
+					if(resources.length > 0) {
+						modWin();
+					}
+				}
+			},
+			del: {
+				text: '삭제',
+				click: function() {
+					if(resources.length > 0) {
+						delWin();
+					}
 				}
 			}
 		},
-		now: $('body').data('date'),
+		now: today,
 	    editable: true,
 	    droppable: true, // this allows things to be dropped onto the calendar
 	    aspectRatio: 1.8,
 	    scrollTime: '00:00',
 	    header: {
-	    	//left: 'promptResource today prev,next',
-	    	left: 'today prev,next save',
+	    	left: 'today prev,next save del',
 	        center: 'title',
-	        //right: 'timelineDay,timelineTenDay,timelineMonth,timelineYear'
 	        right: 'timelineMonth,timelineYear'
 	    },
-	    /*customButtons: {
-	    	promptResource: {
-	    		text: '+ Task',
-	    		click: function() {
-	    			parent.Ext.Msg.prompt('', 'Task를 입력하세요', function(btn, txt) {
-	    				if(btn == 'ok') {
-	    					$('#calendar').fullCalendar('addResource', { title: txt }, true  scroll to the new resource? );
-	    				}
-	    			});
-	    		}
-	        }
-	    },*/
 	    defaultView: 'timelineYear',
-	    /*views: {
-	    	timelineDay: {
-	    		buttonText: ':30분 간격',
-	    		slotDuration: '00:30'
-	        },
-	        timelineTenDay: {
-	           	type: 'timeline',
-	           	duration: { days: 7 }
-	        }
-	    },*/
 	    resourceLabelText: 'Tasks',
 	    resourceRender: function(resource, cellEls) {
-	    	/*cellEls.on('click', function() {
-		   		common.showExtMsg({
-		   			type: 'confirm',
-		   			msg: '항목 [' + resource.title + ']을 삭제하시겠습니까?',
-		   			callback: function(btn) {
-		   				if(btn == 'ok') {
-		   					$('#calendar').fullCalendar('removeResource', resource);  
-		   				}
-		   			}
-		   		});
-	    	});*/
 	    	$(cellEls).contextmenu(function() {
 	    		taskContextMenu = resource;
 	    	})
 	    },
-	    resources: resources,
-	    events: events/*[
-	        { id: '1', resourceId: 'b', start: '2018-04-07T02:00:00', end: '2018-04-07T07:00:00', title: 'event 1' },
-	        { id: '2', resourceId: 'c', start: '2018-04-07T05:00:00', end: '2018-04-07T22:00:00', title: 'event 2' },
-	        { id: '3', resourceId: 'd', start: '2018-04-06', end: '2018-04-08', title: 'event 3' },
-	        { id: '4', resourceId: 'e', start: '2018-04-07T03:00:00', end: '2018-04-07T08:00:00', title: 'event 4' },
-	        { id: '5', resourceId: 'f', start: '2018-04-07T00:30:00', end: '2018-04-07T02:30:00', title: 'event 5' }
-	    ]*/,
+	    resources: function(callback) {
+	    	callback(resources);
+	    },
+	    events: function(s,e,t,callback) {
+	    	callback(events);
+	    },
 	    drop: function(date, jsEvent, ui, resourceId) {},
 	    eventOverlap: false,
 	    eventReceive: function(event) { // called when a proper external event is dropped
@@ -534,32 +624,6 @@ $(document).ready(function() {
 	    eventDrop: function(event) { // called when an event (already on the calendar) is moved
 	        console.log('eventDrop', event);
 	        $('#calendar').fullCalendar('updateEvent', event);
-	    },
-	    eventClick: function(calEvent, jsEvent, view) {
-//	    	console.log(calEvent.id);
-//	    	console.log(calEvent.resourceId);
-//	    	
-//	    	commonSearchResources(calEvent.resourceId, function(item, i) {
-//		    	common.showExtMsg({
-//		   			type: 'confirm',
-//		   			msg: '[' + item.title + ']의 일정을 삭제하시겠습니까?',
-//		   			callback: function(btn) {
-//		   				if(btn == 'ok') {
-//		   					$('#calendar').fullCalendar('removeEvents', calEvent.id);
-//		   				}
-//		   			}
-//		   		});
-//			}, function(arr, i) {
-//				common.showExtMsg({
-//		   			type: 'confirm',
-//		   			msg: '[' + arr[i].title + ']의 일정을 삭제하시겠습니까?',
-//		   			callback: function(btn) {
-//		   				if(btn == 'ok') {
-//		   					$('#calendar').fullCalendar('removeEvents', calEvent.id);
-//		   				}
-//		   			}
-//		   		});
-//			});
 	    },
 	    eventResize: function(event, delta, revertFunc) {
 	    	$('#calendar').fullCalendar('updateEvent', event);
@@ -571,6 +635,10 @@ $(document).ready(function() {
 	    	$(element).contextmenu(function() {
 	    		taskEventContextMenu = event;
 	    	})
-	    }
+	    },
+	    eventAfterAllRender: function() {
+	    	$('#spLoading').text('');
+	    	$('body').LoadingOverlay('hide');
+	    },
 	});
 });

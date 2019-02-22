@@ -23,4 +23,16 @@ public class ProjectService {
 	public ExtjsStoreVO<Wbs> getListWBS(Map param) {
 		return projectDao.selectListWBS(param);
 	}
+
+	public ExtjsStoreVO<Wbs> getListMyWBS(Map param) {
+		return projectDao.selectListMyWBS(param);
+	}
+
+	public boolean modifyMyWBS(Map<String, String> param) {
+		return 1 == projectDao.updateMyWBS(param);
+	}
+
+	public boolean removeMyWBS(Map<String, String> param) {
+		return 1 == projectDao.deleteMyWBS(param);
+	}
 }

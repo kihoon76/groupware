@@ -28,4 +28,19 @@ public class ProjectDaoImpl implements ProjectDao {
 	public ExtjsStoreVO<Wbs> selectListWBS(Map param) {
 		return msSqlSession.selectOne(namespace + ".selectListWBS", param);
 	}
+
+	@Override
+	public ExtjsStoreVO<Wbs> selectListMyWBS(Map param) {
+		return msSqlSession.selectOne(namespace + ".selectListMyWBS", param);
+	}
+
+	@Override
+	public int updateMyWBS(Map<String, String> param) {
+		return msSqlSession.update(namespace + ".updateMyWBS", param);
+	}
+
+	@Override
+	public int deleteMyWBS(Map<String, String> param) {
+		return msSqlSession.delete(namespace + ".deleteMyWBS", param);
+	}
 }
