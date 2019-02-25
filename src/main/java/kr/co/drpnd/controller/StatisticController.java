@@ -1,6 +1,7 @@
 package kr.co.drpnd.controller;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,6 +45,29 @@ public class StatisticController {
 		
 		
 		List<Map<String, Object>> result = statisticService.getOverwork(param);
+		
+		ExtjsStoreVO<Map<String, Object>> extjsVo = new ExtjsStoreVO<>();
+		extjsVo.setTotal(result.size());
+		extjsVo.setDatas(result);
+		
+		return extjsVo;
+	}
+	
+	@PostMapping("overwork/teammonth")
+	@ResponseBody
+	public ExtjsStoreVO<Map<String, Object>> getOverworkTeamMonth(
+			@RequestParam("searchYear") int searchYear
+			
+	) {
+		
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("searchYear", searchYear);
+		param.put("sawonCode", Integer.parseInt(myInfo.getSawonCode()));
+		
+		
+		List<Map<String, Object>> result = statisticService.getOverworkTeamMonth(param);
 		
 		ExtjsStoreVO<Map<String, Object>> extjsVo = new ExtjsStoreVO<>();
 		extjsVo.setTotal(result.size());

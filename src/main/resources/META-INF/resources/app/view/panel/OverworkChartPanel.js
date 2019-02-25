@@ -10,6 +10,25 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
 		var yearNumField = null;
 		var comboSel = null;
 		var comboMonth = null;
+		var teams = Ext.getBody().getAttribute('data-team');
+		
+		try {
+			var teams = Ext.JSON.decode(teams);
+		}
+		catch(e) {}
+		
+		function getTeamColor(teamName) {
+			if(teams) {
+				var len = teams.length;
+				for(var i=0; i<len; i++) {
+					if(teamName == teams[i].teamName) {
+						return teams[i].teamBackColor;
+					}
+				}
+			} 
+			
+			return '';
+		}
 		
 		var overworkStore = Ext.create('Drpnd.store.StatisticListStore');
 		overworkStore.load({
@@ -20,60 +39,35 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
 		});
 		
 		function search() {
+			var type = comboSel.getValue();
 			var searchYear = yearNumField.getValue();
-			var searchMonth = comboMonth.getValue();
 			
-			overworkStore.load({
-				params: {
-					searchYear: searchYear,
-					searchMonth: searchMonth
-				}
-			});
+			if(type == 'm') {
+				chart1.setVisible(true);
+				chart2.setVisible(false);
+				
+				var searchMonth = comboMonth.getValue();
+				
+				overworkStore.load({
+					params: {
+						searchYear: searchYear,
+						searchMonth: searchMonth
+					}
+				});
+			}
+			else if(type == 'tm') {
+				chart1.setVisible(false);
+				chart2.setVisible(true);
+				
+				tmOverworkStore.load({
+					params: {
+						searchYear: searchYear
+					}
+				});
+			}
 		}
 		
-		//var _store = Ext.create('Drpnd.store.StatisticListStore');
-		
-		/*function generateData(n, floor){
-	        var data = [],
-	            p = (Math.random() *  11) + 1,
-	            i;
-	            
-	        floor = (!floor && floor !== 0)? 20 : floor;
-	        
-	        for (i = 0; i < (n || 6); i++) {
-	        	if(i == 0) {
-	        		data.push({
-		                name: '계획' + (i + 1) + '팀',
-		                data1: Math.floor(Math.max((Math.random() * 100), floor)),
-		                data2: Math.floor(Math.max((Math.random() * 100), floor)),
-		                data3: Math.floor(Math.max((Math.random() * 100), floor))
-		            });
-	        	}
-	        	else {
-	        		data.push({
-		                name: '계획' + (i + 1) + '팀',
-		                data1: Math.floor(Math.max((Math.random() * 100), floor)),
-		                data2: Math.floor(Math.max((Math.random() * 100), floor)),
-		                data3: Math.floor(Math.max((Math.random() * 100), floor)),
-		                data4: Math.floor(Math.max((Math.random() * 100), floor)),
-		                data5: Math.floor(Math.max((Math.random() * 100), floor)),
-		                data6: Math.floor(Math.max((Math.random() * 100), floor)),
-		                data7: Math.floor(Math.max((Math.random() * 100), floor)),
-		                data8: Math.floor(Math.max((Math.random() * 100), floor)),
-		                data9: Math.floor(Math.max((Math.random() * 100), floor))
-		            });
-	        	}
-	            
-	        }
-	        return data;
-	    };
-	    
-		var store = Ext.create('Ext.data.JsonStore', {
-			fields: ['name', 'data1', 'data2', 'data3', 'data4', 'data5', 'data6', 'data7', 'data9', 'data9'],
-	        data: generateData()
-		});*/
-		
-		var chart = Ext.create('Ext.chart.Chart', {
+		var chart1 = Ext.create('Ext.chart.Chart', {
 			xtype: 'chart',
 			width: 1000,
 		    height: 800,
@@ -126,6 +120,96 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
 			
 		});
 		
+		var tmOverworkStore = Ext.create('Drpnd.store.TeamMonthStatisticListStore');
+		
+		/*tmOverworkStore.load({
+			params: {
+				searchYear: currentYear
+			}
+		});*/
+		
+		Ext.chart.theme.myTheme = Ext.extend(Ext.chart.theme.Base, {
+		    constructor: function(config) {
+		        Ext.chart.theme.Base.prototype.constructor.call(this, Ext.apply({      
+		            //colors: ['#000000','#006400', '#9932cc','#CD0000','#0000ff','#FFD700','#828282'],
+		            colors: [getTeamColor('계획1팀'), getTeamColor('계획2팀'), getTeamColor('계획3팀'), getTeamColor('계획4팀'), getTeamColor('계획5팀'), getTeamColor('계획6팀'), getTeamColor('e-biz팀')]
+		        }, config));
+		    }
+		});
+		
+		var chart2 = Ext.create('Ext.chart.Chart',{
+            xtype: 'chart',
+            width: 1000,
+		    height: 800,
+		    theme: 'myTheme',
+            animate: true,
+            shadow: true,
+            store: tmOverworkStore,
+            hidden: true,
+            legend: {
+                position: 'right'
+            },
+            axes: [{
+                type: 'Numeric',
+                position: 'bottom',
+                fields: [ '계획1팀', 
+            	          '계획2팀', 
+            	          '계획3팀',
+            	          '계획4팀',
+            	          '계획5팀',
+            	          '계획6팀',
+            	          'e-biz팀'],
+                title: '야근시간(분)',
+                grid: true,
+                label: {
+                    renderer: function(v) {
+                        return v;//String(v).replace(/(.)00000$/, '.$1M');
+                    }
+                }
+            }, {
+                type: 'Category',
+                position: 'left',
+                fields: ['month'],
+                title: false
+            }],
+            series: [{
+                type: 'bar',
+                axis: 'bottom',
+                gutter: 80,
+                xField: 'month',
+                yField: ['계획1팀', 
+           	          '계획2팀', 
+        	          '계획3팀',
+        	          '계획4팀',
+        	          '계획5팀',
+        	          '계획6팀',
+        	          'e-biz팀'],
+                stacked: true,
+                tips: {
+                    trackMouse: true,
+                    width: 300,
+                    height: 30,
+                    renderer: function(storeItem, item) {
+                    	console.log(storeItem);
+                    	console.log(item);
+                    	var timeMin = item.value[1];
+                    	var timeHour = '0';
+                    	
+                    	if(timeMin > 0) {
+                    		if(timeMin >= 60) {
+                    			timeHour = parseInt(timeMin/60) + '시간 ' + (timeMin%60) + '분';
+                    		}
+                    		else {
+                    			timeHour = timeMin + '분';
+                    		}
+                    	}
+                    	
+                        this.setTitle('[' + item.yField + '][' + item.value[0] + ']-' + item.value[1] + '/' + timeHour);
+                    }
+                },
+            }]
+        });
+		
 		var searchComboStore = Ext.create('Ext.data.Store', {
 			 fields: ['name', 'value']
 		});
@@ -150,12 +234,20 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
 		    	editable: false,
 		    	store: Ext.create('Ext.data.Store', {
 					fields : ['name', 'value'],
-					data: [{name:'월간통계', value: 'm'}]
+					data: [{name:'월간통계', value: 'm'}, {name:'팀별월간통계', value: 'tm'}, ]
 				}),
 				value: 'm',
 				listeners: {
 					afterrender: function(combo) {
 						comboSel = combo;
+					},
+					change: function(c, nV) {
+						if(nV == 'm') {
+							comboMonth.setVisible(true);
+						}
+						else {
+							comboMonth.setVisible(false);
+						}
 					}
 				}
 			},{
@@ -190,7 +282,7 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
 				editable: false,
 				hidden: true
 			}],
-			items:[chart]
+			items:[chart1, chart2]
 		});
 		
 		this.callParent(arguments);

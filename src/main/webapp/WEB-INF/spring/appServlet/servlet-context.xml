@@ -13,7 +13,11 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
 
-	<task:annotation-driven/>	
+<!-- 	<task:annotation-driven/>	 -->
+	
+	<!-- GCM @Async위해 추가 -->
+	<task:executor id="myexecutor" pool-size="5" />
+	<task:annotation-driven executor="myexecutor"/>
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<annotation-driven>

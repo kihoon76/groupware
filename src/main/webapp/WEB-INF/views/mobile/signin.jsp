@@ -33,7 +33,7 @@
 <!--[if gt IE 9]><!--><html lang="ko"><!--<![endif]-->
 <head>
 	<title>동림피엔디</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimun-scale=1.0, user-scalable=no" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
 	<!-- 안드로이드 홈화면추가시 상단 주소창 제거 -->
 	<meta name="mobile-web-app-capable" content="yes">
 	<!-- ios홈화면추가시 상단 주소창 제거 -->

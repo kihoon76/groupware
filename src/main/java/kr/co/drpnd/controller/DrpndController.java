@@ -126,8 +126,13 @@ public class DrpndController {
 	}
 	
 	@GetMapping("signin")
-	public String signin(HttpServletRequest request) {
+	public String signin(
+			HttpServletRequest request,
+			@RequestParam(name="deviceNum", required=false) String deviceNum,
+			ModelMap m) {
 		if(RequestUtil.isMobile(request)) {
+			System.err.println(deviceNum);
+			m.put("deviceNum", deviceNum);
 			return "mobile/signin";
 		}
 		

@@ -99,5 +99,52 @@ public class StatisticService {
 		}
 		
 		return chartData;
-	} 
+	}
+
+	public List<Map<String, Object>> getOverworkTeamMonth(Map<String, Object> param) {
+		List<Map<String, Object>> result = statisticDao.selectOverworkMonth(param);
+		
+		List<Map<String, Object>> chartData = new ArrayList<>();
+		int size = result.size();
+		int idx = 0;
+		for(int m=1; m<=12; m++) {
+			List<Map<String, Object>> monthList = null;
+			
+			for(int i=idx, start = idx; i<size; i++) {
+				Map<String, Object> teamOverwork = result.get(i);
+				
+				if(i == start) {
+					monthList = new ArrayList<Map<String, Object>>();
+				}
+				
+				if(String.valueOf(m).equals(String.valueOf(teamOverwork.get("month")))) {
+					monthList.add(teamOverwork);
+					idx++;
+				}
+				else {
+					makeMonthRow(chartData, monthList);
+					break;
+				}
+			}
+			
+			if(m == 12) {
+				makeMonthRow(chartData, monthList);
+			}
+		}
+
+		return chartData;
+	}
+	
+	private void makeMonthRow(List<Map<String, Object>> chartData, List<Map<String, Object>> teamOverworkMonth) {
+		int size = teamOverworkMonth.size();
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("month", teamOverworkMonth.get(0).get("month") + "월");
+		for(int i=0; i<size; i++) {
+			map.put(String.valueOf(teamOverworkMonth.get(i).get("teamName")), teamOverworkMonth.get(i).get("time"));
+			//map.put(String.valueOf(teamOverworkMonth.get(i).get("teamName") + "_color"), teamOverworkMonth.get(i).get("color"));
+		}
+		
+		chartData.add(map);
+	}
 }

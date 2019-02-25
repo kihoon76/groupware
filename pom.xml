@@ -35,6 +35,9 @@
 		<sitemesh-version>3.0.1</sitemesh-version>
 		<xmlbeans-version>2.6.0</xmlbeans-version>
 		<bootstrap-version>3.3.7-1</bootstrap-version>
+		
+		<!-- android GCM -->
+		<smack-version>4.0.4</smack-version>
 	</properties>
 	
 	<dependencies>
@@ -249,6 +252,18 @@
 		    <version>${commons.codec-version}</version>
 		</dependency>
         
+        <!-- GCM -->
+		<dependency>
+		    <groupId>org.igniterealtime.smack</groupId>
+		    <artifactId>smack-core</artifactId>
+		    <version>${smack-version}</version>
+		</dependency>
+        
+		<dependency>
+		    <groupId>org.igniterealtime.smack</groupId>
+		    <artifactId>smack-tcp</artifactId>
+		    <version>${smack-version}</version>
+		</dependency>
 		
 <!-- 		<dependency> -->
 <!-- 		    <groupId>org.apache.poi</groupId> -->

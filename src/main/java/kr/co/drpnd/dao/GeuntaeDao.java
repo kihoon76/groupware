@@ -31,6 +31,8 @@ public interface GeuntaeDao {
 	int updateGeuntaeInworkToOut(Map<String, String> param);
 	
 	String selectMyYesterdayOffwork(String sawonCode);
+	
+	String selectMyYesterdayGotowork(String sawonCode);
 
 	void updateAutoOffwork();
 

@@ -35,11 +35,19 @@ public class GeuntaeService {
 
 	public boolean checkMyTodayGotowork(String sawonCode) {
 		Map<String, Integer> r = geuntaeDao.selectMyTodayGotowork(sawonCode);
-		String yesterdayOffwork = geuntaeDao.selectMyYesterdayOffwork(sawonCode);
 		
 		int hour = r.get("hr");
 		if(r.get("cnt") == 0) {
-			//당일 출퇴 처리를 다 한사람은 익일 00:00시 부터 출근 활성화
+			String yesterdayGotowork = geuntaeDao.selectMyYesterdayGotowork(sawonCode);
+			
+			//어제 출근 기록이 없으면 열어준다
+			if("N".equals(yesterdayGotowork)) {
+				return false;
+			}
+			
+			String yesterdayOffwork = geuntaeDao.selectMyYesterdayOffwork(sawonCode);
+			
+			//어제 출퇴 처리를 다 한사람은 익일 00:00시 부터 출근 활성화
 			if("Y".equals(yesterdayOffwork)) {
 				return false;
 			}

@@ -20,6 +20,11 @@ public class StatisticDaoImpl implements StatisticDao {
 	public List<List<Map<String, Object>>> selectOverwork(Map<String, Object> param) {
 		return msSqlSession.selectList(namespace + ".selectOverwork", param);
 	}
+
+	@Override
+	public List<Map<String, Object>> selectOverworkMonth(Map<String, Object> param) {
+		return msSqlSession.selectList(namespace + ".selectOverworkMonth", param);
+	}
 	
 
 	

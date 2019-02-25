@@ -16,11 +16,26 @@
 		<result column="사원명" property="sawonName" />
 	</resultMap>
 	
+	<resultMap id="RM_TeamMonthOverwork" type="map">
+		<result column="팀코드" property="teamCode" />
+		<result column="팀명" property="teamName" />
+		<result column="팀야근시간" property="time" />
+		<result column="출근월" property="month" />
+		<result column="팀칼라" property="color" />
+	</resultMap>
+	
 	<select id="selectOverwork" statementType="CALLABLE" parameterType="map" resultMap="RM_TeamOverwork, RM_SawonOverwork">
 	{ call [동림].[dbo].[UP_야근통계](
 		#{sawonCode, mode=IN, jdbcType=INTEGER, javaType=int},
 		#{searchYear, mode=IN, jdbcType=INTEGER, javaType=int},
 		#{searchMonth, mode=IN, jdbcType=INTEGER, javaType=int}
+	)}
+	</select>
+	
+	<select id="selectOverworkMonth" statementType="CALLABLE" parameterType="map" resultMap="RM_TeamMonthOverwork">
+	{ call [동림].[dbo].[UP_팀별월간야근통계](
+		#{sawonCode, mode=IN, jdbcType=INTEGER, javaType=int},
+		#{searchYear, mode=IN, jdbcType=INTEGER, javaType=int}
 	)}
 	</select>
 </mapper>

@@ -84,5 +84,10 @@ public class GeuntaeDaoImpl implements GeuntaeDao {
 		msSqlSession.update(namespace + ".updateAutoOffwork");
 	}
 
+	@Override
+	public String selectMyYesterdayGotowork(String sawonCode) {
+		return msSqlSession.selectOne(namespace + ".selectMyYesterdayGotowork", sawonCode);
+	}
+
 
 }

@@ -64,6 +64,22 @@
 <!-- 		   and DATEDIFF(DD, '2019-02-15 00:00:00', 출근시간) = -1 -->
 	</select>
 	
+	<select id="selectMyYesterdayGotowork"  parameterType="string" resultType="string">
+		select case when 출근시간  is null then 'N'
+			   else 'Y'
+			   end as 출근
+		  from [동림].[dbo].[근태] 
+		 where 사원코드 = #{sawonCode} 
+		   and DATEDIFF(DD, getDate(), 출근시간) = -1
+		   
+<!-- 		   select case when 퇴근시간  is null then 'N' -->
+<!-- 			   else 'Y' -->
+<!-- 			   end as 퇴근 -->
+<!-- 		  from [동림].[dbo].[근태]  -->
+<!-- 		 where 사원코드 = #{sawonCode}  -->
+<!-- 		   and DATEDIFF(DD, '2019-02-15 00:00:00', 출근시간) = -1 -->
+	</select>
+	
 	<select id="selectTime" parameterType="map" resultType="int">
 		<choose>
 		<when test="type == 'HOUR'">
