@@ -190,8 +190,8 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
                     width: 300,
                     height: 30,
                     renderer: function(storeItem, item) {
-                    	console.log(storeItem);
-                    	console.log(item);
+//                    	console.log(storeItem);
+//                    	console.log(item);
                     	var timeMin = item.value[1];
                     	var timeHour = '0';
                     	
