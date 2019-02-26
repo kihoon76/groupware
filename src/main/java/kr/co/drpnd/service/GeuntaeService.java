@@ -38,10 +38,10 @@ public class GeuntaeService {
 		
 		int hour = r.get("hr");
 		if(r.get("cnt") == 0) {
-			String yesterdayGotowork = geuntaeDao.selectMyYesterdayGotowork(sawonCode);
+			int yesterdayGotowork = geuntaeDao.selectMyYesterdayGotowork(sawonCode);
 			
 			//어제 출근 기록이 없으면 열어준다
-			if("N".equals(yesterdayGotowork)) {
+			if(yesterdayGotowork == 0) {
 				return false;
 			}
 			

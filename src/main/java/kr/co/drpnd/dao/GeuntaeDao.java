@@ -32,7 +32,7 @@ public interface GeuntaeDao {
 	
 	String selectMyYesterdayOffwork(String sawonCode);
 	
-	String selectMyYesterdayGotowork(String sawonCode);
+	int selectMyYesterdayGotowork(String sawonCode);
 
 	void updateAutoOffwork();
 
