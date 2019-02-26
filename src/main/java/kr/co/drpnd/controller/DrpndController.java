@@ -1,11 +1,13 @@
 package kr.co.drpnd.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -21,11 +23,13 @@ import com.google.gson.Gson;
 import kr.co.drpnd.domain.AjaxVO;
 import kr.co.drpnd.domain.Sawon;
 import kr.co.drpnd.domain.Team;
+import kr.co.drpnd.exception.AppTokenError;
 import kr.co.drpnd.service.CalendarService;
 import kr.co.drpnd.service.CodeService;
 import kr.co.drpnd.service.GeuntaeService;
 import kr.co.drpnd.service.GyeoljaeService;
 import kr.co.drpnd.service.SawonService;
+import kr.co.drpnd.type.ExceptionCode;
 import kr.co.drpnd.type.TokenKey;
 import kr.co.drpnd.util.DateUtil;
 import kr.co.drpnd.util.RequestUtil;
@@ -52,9 +56,15 @@ public class DrpndController {
 	CodeService codeService;
 	
 	@GetMapping(value={"main", "m/main"})
-	public String index(HttpServletRequest request, ModelMap m) {
+	public String index(
+			HttpServletRequest request,
+			HttpServletResponse response,
+			ModelMap m,
+			@RequestParam(name="token", required=false) String token,
+			@RequestParam(name="kind", required=false) String kind) throws IOException {
 		Sawon myInfo = SessionUtil.getSessionSawon();
 		
+		System.err.println(token);
 		boolean gotoworkChecked = false;
 		boolean offworkChecked = false;
 		String cuttentTime10 = "";
@@ -105,6 +115,25 @@ public class DrpndController {
 				m.put("overworkTypes", options.toString());
 			}
 			
+			//app으로 접속했을 경우
+			if(token != null) {
+				Map<String, String> app = new HashMap<>();
+				app.put("token", token);
+				app.put("kind", kind);
+				app.put("sawonCode", myInfo.getSawonCode());
+				app.put("result", "");
+				
+				try {
+					sawonService.regDevice(app);
+				}
+				catch(AppTokenError e) {
+					response.sendRedirect("/logout");
+				}
+				catch(Exception e) {
+					response.sendRedirect("/logout");
+				}
+			}
+			
 			m.put("footbar", "home");
 			return "mobile/main";
 		}
@@ -128,11 +157,8 @@ public class DrpndController {
 	@GetMapping("signin")
 	public String signin(
 			HttpServletRequest request,
-			@RequestParam(name="deviceNum", required=false) String deviceNum,
 			ModelMap m) {
 		if(RequestUtil.isMobile(request)) {
-			System.err.println(deviceNum);
-			m.put("deviceNum", deviceNum);
 			return "mobile/signin";
 		}
 		

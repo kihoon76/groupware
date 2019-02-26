@@ -16,6 +16,8 @@ import org.springframework.util.Base64Utils;
 
 import kr.co.drpnd.dao.SawonDao;
 import kr.co.drpnd.domain.Sawon;
+import kr.co.drpnd.exception.AppTokenError;
+import kr.co.drpnd.type.ExceptionCode;
 import kr.co.drpnd.util.DataUtil;
 
 @Service("sawonService")
@@ -88,6 +90,19 @@ public class SawonService {
 		catch(Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e.getMessage());
+		}
+	}
+
+	public void regDevice(Map<String, String> app) {
+		try {
+			sawonDao.insertDevice(app);
+			if("X".equals(app.get("result"))) throw new AppTokenError(ExceptionCode.HAS_APPTOKEN.getMsg());
+		}
+		catch(AppTokenError e) {
+			throw e;
+		}
+		catch(Exception e) {
+			throw e;
 		}
 	}
 

@@ -23,4 +23,6 @@ public interface SawonDao {
 
 	void updateSawonSign(Map<String, Object> param);
 
+	void insertDevice(Map<String, String> app);
+
 }

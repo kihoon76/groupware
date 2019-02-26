@@ -10,6 +10,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import kr.co.drpnd.domain.Sawon;
+import kr.co.drpnd.exception.AppTokenError;
+import kr.co.drpnd.type.ExceptionCode;
 
 @Repository("sawonDao")
 public class SawonDaoImpl implements SawonDao {
@@ -63,6 +65,11 @@ public class SawonDaoImpl implements SawonDao {
 	public void updateSawonSign(Map<String, Object> param) {
 		msSqlSession.update(namespace + ".updateSawonSign", param);
 		
+	}
+
+	@Override
+	public void insertDevice(Map<String, String> app) {
+		msSqlSession.insert(namespace + ".insertDevice", app);
 	}
 
 }

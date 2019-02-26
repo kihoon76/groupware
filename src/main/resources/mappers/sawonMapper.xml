@@ -87,6 +87,15 @@
 		)}
 	</select>
 	
+	<insert id="insertDevice" statementType="CALLABLE" parameterType="map">
+		{call [동림].[dbo].[UP_앱등록](
+			#{token, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{sawonCode, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{kind, mode=IN, jdbcType=VARCHAR, javaType=string},
+			#{result, mode=OUT, jdbcType=VARCHAR, javaType=string}
+		)}
+	</insert>
+	
 	<update id="updateSawon" parameterType="Sawon">
 		update [동림].[dbo].[사원]
 		   set 사원아이디 = #{sawonId},

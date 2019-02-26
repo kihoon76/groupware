@@ -49,4 +49,9 @@ public class StringUtil {
 		
 		return result;
 	}
+	
+	public static boolean isNull(String s) {
+		if(s == null || "".equals(s.trim())) return false;
+		return true;
+	}
 }
