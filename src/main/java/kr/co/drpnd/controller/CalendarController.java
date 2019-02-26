@@ -152,7 +152,7 @@ public class CalendarController {
 		
 		
 		try {
-			Map<String, String> planMap = calendarService.getPlanContent(param);
+			Map<String, String> planMap = calendarService.getPlanContentInDayAll(param); //getPlanContent(param);
 			vo.setSuccess(true);
 			vo.addObject(planMap);
 		}

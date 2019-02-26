@@ -154,4 +154,18 @@
    		   where 일련번호 = #{planCode}
      		 and T2.부서코드 = #{department} 
 	</select>
+	
+	<select id="selectPlanContentInDayAll" parameterType="map" resultType="map">
+		 select 상세 detail, 사원명 sawonName, 제목 title
+    	   from [동림].[dbo].[캘린더] T1
+		  inner join (
+				 select 시작일, 사원코드
+     			   from [동림].[dbo].[캘린더]
+     		      where 일련번호 = #{planCode}
+		  ) T2
+		  on T1.사원코드 = T2.사원코드 and T1.시작일 = T2.시작일
+   		  inner join [동림].[dbo].[사원] T3 
+   		  on T1.사원코드 = T3.사원코드
+   		  where T3.부서코드 = #{department} 
+	</select>
 </mapper>

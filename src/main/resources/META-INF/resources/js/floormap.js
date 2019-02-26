@@ -886,6 +886,7 @@
 	function openPlanWin(data) {
 		var planWin = parent.Ext.create('Ext.window.Window', {
 			title: '<span style="color:#0000FF;">' + data.sawonName + '</span>님의 오늘 일정',
+			iconCls: 'icon-calendar',
 			height: 600,
 			width: 600,
 			layout: 'fit',

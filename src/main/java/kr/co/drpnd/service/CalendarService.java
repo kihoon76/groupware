@@ -194,6 +194,29 @@ public class CalendarService {
 	public Map<String, String> getPlanContent(Map<String, String> param) {
 		return calendarDao.selectPlanContent(param);
 	}
+	
+	public Map<String, String> getPlanContentInDayAll(Map<String, String> param) {
+		List<Map<String, String>> list = calendarDao.selectPlanContentInDayAll(param);
+		int size = list.size();
+		
+		Map<String, String> resultMap = new HashMap<>();
+		if(size > 0) {
+			resultMap.put("sawonName", list.get(0).get("sawonName"));
+			
+			StringBuilder sb = new StringBuilder();
+			for(int i=0; i<size; i++) {
+				sb.append("------------------------------------" + list.get(i).get("title") + "------------------------------------");
+				sb.append(System.lineSeparator());
+				sb.append(list.get(i).get("detail"));
+				sb.append(System.lineSeparator());
+				sb.append(System.lineSeparator());
+			}
+			
+			resultMap.put("detail", sb.toString());
+		}
+		
+		return resultMap;
+	}
 
 	public String getTodayConferenceReservationCount() {
 		return calendarDao.selectTodayConferenceReservationCount();

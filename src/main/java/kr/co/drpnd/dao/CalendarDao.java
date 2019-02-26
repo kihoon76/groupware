@@ -30,6 +30,8 @@ public interface CalendarDao {
 	int deleteReserveConference(ConferenceReservation cr);
 
 	Map<String, String> selectPlanContent(Map<String, String> param);
+	
+	List<Map<String, String>> selectPlanContentInDayAll(Map<String, String> param);
 
 	String selectTodayConferenceReservationCount();
 
