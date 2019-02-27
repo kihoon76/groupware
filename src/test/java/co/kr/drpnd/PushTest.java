@@ -1,6 +1,8 @@
 package co.kr.drpnd;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -38,7 +40,10 @@ public class PushTest {
 		List<String> devices = sawonService.getSawonDevices("1");
 		
 		try {
-			fcmManager.postFCM(devices, "test", "테스트", fcmLog);
+			Map<String, String> m = new HashMap<>();
+			m.put("title", "test");
+			m.put("message", "테스트222222");
+			fcmManager.postFCM(devices, "test", "테스트", m, fcmLog);
 		}
 		catch(Exception e) {
 			e.printStackTrace();

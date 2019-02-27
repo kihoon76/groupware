@@ -54,7 +54,7 @@ public class FCMManager {
 		JSONObject payloadJson = new JSONObject();
 
 		bodyJson.put("title", title);
-		bodyJson.put("text", text);
+		bodyJson.put("body", text);
 		postJson.put("notification", bodyJson);
 
 		int size = mDeviceTokenList.size();
