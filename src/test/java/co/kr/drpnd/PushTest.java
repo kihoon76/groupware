@@ -38,35 +38,6 @@ public class PushTest {
 	@Resource(name="fcmLog")
 	FCMLog fcmLog;
 	
-//	@Ignore @Test
-//	public void getToken() {
-//		
-//		List<String> devices = sawonService.getSawonDevices("1");
-//		
-//		int size = devices.size();
-//
-//		JSONObject json = new JSONObject();
-////		JSONArray rid = new JSONArray();
-////		
-////		for(String data : devices){
-////			rid.add(data);
-////		}
-////			
-////		postJson.put("registration_ids", rid);
-////		System.err.println(postJson.toJSONString());
-//		
-//		FCMManager3 manager = FCMManager3.getInstance();
-//		
-//		try {
-//			FCMVo vo = manager.postFCM(devices, "test", "test", null);
-//			Gson g = new Gson();
-//			System.err.println(g.toJson(vo));
-//		} 
-//		catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
-	
 	@Test
 	public void asyncTest() throws InterruptedException {
 		List<String> devices = sawonService.getSawonDevices("1");
