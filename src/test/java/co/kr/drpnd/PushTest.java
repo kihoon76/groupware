@@ -4,17 +4,12 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import com.google.gson.Gson;
 
 import kr.co.drpnd.push.FCMLog;
 import kr.co.drpnd.push.FCMManager;

@@ -16,8 +16,8 @@ public class FCMLog {
 	FcmDao fcmDao;
 	
 	public void writeLog(List<String> mDeviceTokenList, String title, String content, String sf, String msg) {
-		System.err.println(mDeviceTokenList.size());
-		System.err.println(msg);
+//		System.err.println(mDeviceTokenList.size());
+//		System.err.println(msg);
 		
 		FCMVo vo = new FCMVo();
 		vo.setTokens(mDeviceTokenList);
