@@ -72,4 +72,9 @@ public class SawonDaoImpl implements SawonDao {
 		msSqlSession.insert(namespace + ".insertDevice", app);
 	}
 
+	@Override
+	public List<String> selectSawonDeviceList(String sawonCode) {
+		return msSqlSession.selectList(namespace + ".selectSawonDeviceList", sawonCode);
+	}
+
 }

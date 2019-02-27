@@ -51,7 +51,7 @@ public class StringUtil {
 	}
 	
 	public static boolean isNull(String s) {
-		if(s == null || "".equals(s.trim())) return false;
-		return true;
+		if(s == null || "".equals(s.trim())) return true;
+		return false;
 	}
 }

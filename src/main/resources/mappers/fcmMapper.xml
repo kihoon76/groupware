@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mappers.fcmMapper">
+	
+	<insert id="insertFcmLog" parameterType="FCMVo">
+		insert into [동림].[dbo].[FCM로그]([로그일자], [토큰], [성공여부], [제목], [내용], [로그])
+		values 
+		<foreach collection="tokens" item="token" separator=" , ">
+		(getDate(), #{token}, #{successFail}, #{title}, #{content}, #{result})
+		</foreach>
+	</insert>
+	
+</mapper>

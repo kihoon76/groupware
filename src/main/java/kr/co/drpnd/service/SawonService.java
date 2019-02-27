@@ -106,4 +106,8 @@ public class SawonService {
 		}
 	}
 
+	public List<String> getSawonDevices(String sawonCode) {
+		return sawonDao.selectSawonDeviceList(sawonCode);
+	}
+
 }

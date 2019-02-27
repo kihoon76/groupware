@@ -25,4 +25,6 @@ public interface SawonDao {
 
 	void insertDevice(Map<String, String> app);
 
+	List<String> selectSawonDeviceList(String sawonCode);
+
 }

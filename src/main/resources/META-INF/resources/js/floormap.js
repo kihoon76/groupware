@@ -45,7 +45,8 @@
 	var sawonList = null;
 	var vacationSawonList = null;
 	var sawonPlanList = null;
-	var IN_OUT_TYPE = '';
+	//var IN_OUT_TYPE = '';
+	var inOutMap = {};
 	
 	//var socket = new SockJS('/websocket'),
 	//stompClient = Stomp.over(socket);
@@ -128,7 +129,7 @@
 				var seatNum = mBody.seatNum;
 				if(seatNum >= 0) {
 		    		var sm = seatMap[seatNum];
-		    		changeSeatOutToIn(sm, 'TO_OUT');
+		    		changeSeatOutToIn(seatNum, sm, 'TO_OUT');
 		    	}
 			}
 		},{
@@ -137,7 +138,7 @@
 				var seatNum = mBody.seatNum;
 				if(seatNum >= 0) {
 		    		var sm = seatMap[seatNum];
-		    		changeSeatOutToIn(sm, 'TO_IN');
+		    		changeSeatOutToIn(seatNum, sm, 'TO_IN');
 		    	}
 			}
 		}]
@@ -214,13 +215,16 @@
 		}
 	}
 	
-	function changeSeatOutToIn(sm, type) {
+	function changeSeatOutToIn(seatNum, sm, type) {
 		if(sm) {
 			sm.outworkTxt.attr({
 				fill: type == 'TO_OUT' ? '#003' : '#fff'
 			});
 			
-			IN_OUT_TYPE = type;
+			if(seatNum == mySeatNum) {
+				inOutMap[String(mySeatNum)] = type;
+			}
+			//IN_OUT_TYPE = type;
 //			sm.rect
 //			.off('click')
 //			.off('mouseover')
@@ -279,11 +283,14 @@
     		}
     		
     		if(mySeatNum == seatNum) {
+    			if(!inOutMap[String(mySeatNum)])
     			if(isOutwork == 'Y'/* && todayGeuntaeCode != 0*/) {
-        			IN_OUT_TYPE = 'TO_IN';
+        			//IN_OUT_TYPE = 'TO_IN';
+        			inOutMap[String(mySeatNum)] = 'TO_IN';
         		}
         		else {
-        			IN_OUT_TYPE = 'TO_OUT';
+        			//IN_OUT_TYPE = 'TO_OUT';
+        			inOutMap[String(mySeatNum)] = 'TO_OUT';
         		}
     			
 				obj.rect
@@ -291,17 +298,28 @@
 				.off('mouseover')
 				.off('mouseout')
 				.on('click', function() {
-					changeOutToIn(todayGeuntaeCode, seatNum, IN_OUT_TYPE);
+					//changeOutToIn(todayGeuntaeCode, seatNum, IN_OUT_TYPE);
+					changeOutToIn(todayGeuntaeCode, seatNum, inOutMap[String(mySeatNum)]);
 				})
 				.on('mouseover', function() {
 					this.fill({opacity: 0.3});
-					if(IN_OUT_TYPE == 'TO_OUT') {
+//					if(IN_OUT_TYPE == 'TO_OUT') {
+//						obj.outworkTxt.fill({opacity: 0});
+//					}
+					
+					if(inOutMap[String(mySeatNum)] == 'TO_OUT') {
 						obj.outworkTxt.fill({opacity: 0});
 					}
+					
+					
 				})
 				.on('mouseout', function() {
 					this.fill({opacity: 1});
-					if(IN_OUT_TYPE == 'TO_OUT') {
+//					if(IN_OUT_TYPE == 'TO_OUT') {
+//						obj.outworkTxt.fill({opacity: 1});
+//					}
+					
+					if(inOutMap[String(mySeatNum)] == 'TO_OUT') {
 						obj.outworkTxt.fill({opacity: 1});
 					}
 				});
@@ -311,17 +329,26 @@
 				.off('mouseover')
 				.off('mouseout')
 				.on('click', function() {
-					changeOutToIn(todayGeuntaeCode, seatNum, IN_OUT_TYPE);
+					//changeOutToIn(todayGeuntaeCode, seatNum, IN_OUT_TYPE);
+					changeOutToIn(todayGeuntaeCode, seatNum, inOutMap[String(mySeatNum)]);
 				})
 				.on('mouseover', function() {
 					obj.rect.fill({opacity: 0.3});
-					if(IN_OUT_TYPE == 'TO_OUT') {
+//					if(IN_OUT_TYPE == 'TO_OUT') {
+//						obj.outworkTxt.fill({opacity: 0});
+//					}
+					
+					if(inOutMap[String(mySeatNum)] == 'TO_OUT') {
 						obj.outworkTxt.fill({opacity: 0});
 					}
 				})
 				.on('mouseout', function() {
 					obj.rect.fill({opacity: 1});
-					if(IN_OUT_TYPE == 'TO_OUT') {
+//					if(IN_OUT_TYPE == 'TO_OUT') {
+//						obj.outworkTxt.fill({opacity: 1});
+//					}
+					
+					if(inOutMap[String(mySeatNum)] == 'TO_OUT') {
 						obj.outworkTxt.fill({opacity: 1});
 					}
 				});
@@ -331,17 +358,26 @@
 				.off('mouseover')
 				.off('mouseout')
 				.on('click', function() {
-					changeOutToIn(todayGeuntaeCode, seatNum, IN_OUT_TYPE);
+					//changeOutToIn(todayGeuntaeCode, seatNum, IN_OUT_TYPE);
+					changeOutToIn(todayGeuntaeCode, seatNum, inOutMap[String(mySeatNum)]);
 				})
 				.on('mouseover', function() {
 					obj.rect.fill({opacity: 0.3});
-					if(IN_OUT_TYPE == 'TO_OUT') {
+//					if(IN_OUT_TYPE == 'TO_OUT') {
+//						this.fill({opacity: 0});
+//					}
+					
+					if(inOutMap[String(mySeatNum)] == 'TO_OUT') {
 						this.fill({opacity: 0});
 					}
 				})
 				.on('mouseout', function() {
 					obj.rect.fill({opacity: 1});
-					if(IN_OUT_TYPE == 'TO_OUT') {
+//					if(IN_OUT_TYPE == 'TO_OUT') {
+//						this.fill({opacity: 1});
+//					}
+					
+					if(inOutMap[String(mySeatNum)] == 'TO_OUT') {
 						this.fill({opacity: 1});
 					}
 				});

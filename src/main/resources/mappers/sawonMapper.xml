@@ -130,4 +130,10 @@
 		   set 서명 = #{sign}
 		 where 사원코드 = #{sawonCode}
 	</update>
+	
+	<select id="selectSawonDeviceList" parameterType="string" resultType="string">
+		select [토큰]
+		  from [동림].[dbo].[앱정보]
+		 where [사원코드] = #{sawonCode}
+	</select>
 </mapper>
