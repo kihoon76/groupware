@@ -201,15 +201,19 @@ public class GyeoljaeController {
 				}
 			}
 			
+			String pushMsg = myInfo.getSawonName() + "님이 올린 결재가 도착했습니다.";
+			
 			sangsin.setGianja(myInfo.getSawonCode());
+			sangsin.setPushContent(pushMsg);
 			gyeoljaeService.regNewGyeoljae(sangsin);
+			
 			try {
 				Map<String, String> socketMap = new HashMap<>();
 				socketMap.put("msg", myInfo.getSawonName());
 				this.template.convertAndSend("/message/gyeoljae/received/" + firstGyeoljaejaCode + "/alarm", (new Gson()).toJson(socketMap));
 				
 				//push
-				sendPush(firstGyeoljaejaCode, "결재알림", myInfo.getSawonName() + "님이 올린 결재가 도착했습니다.");
+				sendPush(firstGyeoljaejaCode, "결재알림", pushMsg);
 			}
 			catch(Exception e) {
 				e.printStackTrace();
@@ -264,6 +268,7 @@ public class GyeoljaeController {
 			sangsin.setGianja(myInfo.getSawonCode());
 			
 			List<AttachFile> attachFiles = new ArrayList<>();
+			String pushMsg = myInfo.getSawonName() + "님이 올린 결재가 도착했습니다.";
 			
 			for(MultipartFile file: files) {
 				AttachFile attachFile = new AttachFile();
@@ -281,6 +286,7 @@ public class GyeoljaeController {
 			}
 			
 			sangsin.setAttachFiles(attachFiles);
+			sangsin.setPushContent(pushMsg);
 			gyeoljaeService.regNewGyeoljae(sangsin);
 			
 			try {
@@ -289,7 +295,7 @@ public class GyeoljaeController {
 				this.template.convertAndSend("/message/gyeoljae/received/" + firstGyeoljaejaCode + "/alarm", gson.toJson(socketMap));
 				
 				//push
-				sendPush(firstGyeoljaejaCode, "결재알림", myInfo.getSawonName() + "님이 올린 결재가 도착했습니다.");
+				sendPush(firstGyeoljaejaCode, "결재알림", pushMsg);
 			}
 			catch(Exception e) {
 				e.printStackTrace();
@@ -762,11 +768,17 @@ public class GyeoljaeController {
 		//push
 		List<String> devices = sawonService.getSawonDevices(sawonCode);
 		
+		//forground push
+		Map<String, String> m = new HashMap<>();
+		m.put("title", title);
+		m.put("message", msg);
+		
 		if(devices.size() > 0) {
 			fcmManager.postFCM(
 				devices, 
 				title, 
 				msg, 
+				m,
 				fcmLog
 			);
 		}

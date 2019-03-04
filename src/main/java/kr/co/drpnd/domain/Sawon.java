@@ -36,6 +36,7 @@ public class Sawon {
 	private String signature;
 	private boolean isImwon;
 	private String todayGeuntaeCode;
+	private boolean appChecked = false;
 	
 	private Map<TokenKey, String> token = new HashMap<>();
 
@@ -265,6 +266,14 @@ public class Sawon {
 
 	public void setTodayGeuntaeCode(String todayGeuntaeCode) {
 		this.todayGeuntaeCode = todayGeuntaeCode;
+	}
+	
+	public boolean isAppChecked() {
+		return appChecked;
+	}
+
+	public void setAppChecked(boolean appChecked) {
+		this.appChecked = appChecked;
 	}
 
 	@Override

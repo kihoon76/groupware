@@ -61,7 +61,7 @@ $(document).ready(function() {
 		$('head').append('<link rel="shortcut icon" href="/resources/images/dongrim.png" />') 
 	}
 	
-	if('geolocation' in navigator) {
+	/*if('geolocation' in navigator) {
 		// 지오로케이션 사용 가능 
 		navigator.geolocation.getCurrentPosition(function(position) {
 			geoAllow = true;
@@ -76,5 +76,5 @@ $(document).ready(function() {
 	else {
 		geoErrMsg = '사용하시는 브라우져가 위치기반 서비스를 제공하지 않습니다.';
 		alert(geoErrMsg);
-	}
+	}*/
 });

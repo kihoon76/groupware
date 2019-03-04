@@ -13,7 +13,7 @@
 		<sec:intercept-url pattern="/code/**" access="permitAll" />
 		<sec:intercept-url pattern="/sawon/reg" access="permitAll" />
 		<sec:intercept-url pattern="/forbidden/**" access="permitAll" />
-<!-- 		<sec:intercept-url pattern="/main" access="permitAll" /> -->
+		<sec:intercept-url pattern="/app/m/**" access="permitAll" />
 		<sec:intercept-url pattern="/signin/**" access="permitAll"/>
 		<sec:intercept-url pattern="/login" access="permitAll"/>
 		<sec:intercept-url pattern="/result/**" access="permitAll"/>

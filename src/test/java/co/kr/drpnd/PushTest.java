@@ -42,7 +42,7 @@ public class PushTest {
 		try {
 			Map<String, String> m = new HashMap<>();
 			m.put("title", "test");
-			m.put("message", "테스트222222");
+			m.put("message", "테스트222223");
 			fcmManager.postFCM(devices, "test", "테스트", m, fcmLog);
 		}
 		catch(Exception e) {

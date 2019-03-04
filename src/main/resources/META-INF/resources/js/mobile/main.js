@@ -213,34 +213,46 @@ $(document)
 	.off('click', '#btnGotowork')
 	.on('click', '#btnGotowork', function() {
 		var $this = $(this);
-		if('geolocation' in navigator) {
-			// 지오로케이션 사용 가능 
-			navigator.geolocation.getCurrentPosition(function(position) {
-				geoAllow = true;
-				var coords = position.coords;
-				
-				Common.ajax({
-					url: '/geuntae/m/gotowork?lat=' + coords.latitude + '&lng=' + coords.longitude,
-					method: 'GET',
-					dataType: 'json',
-					headers: {'CUSTOM': 'Y'},
-					success: function(data, textStatus, jqXHR) {
-						alert(data.datas[0] + '에 출근처리 되었습니다.');
-						$this.addClass('ui-disabled');
-						$('#btnOffwork').removeClass('ui-disabled');
-					},
-				});
-				
-			}, function(err) {
-				geoErrMsg = '브라우져가 위치정보를 차단하였습니다.';
-				//alert(geoErrMsg);
-				alert(err.message);
-			});
-		}
-		else {
-			geoErrMsg = '사용하시는 브라우져가 위치기반 서비스를 제공하지 않습니다.';
-			alert(geoErrMsg);
-		}
+		Common.ajax({
+			url: '/geuntae/m/gotowork?lat=0&lng=0',
+			method: 'GET',
+			dataType: 'json',
+			headers: {'CUSTOM': 'Y'},
+			success: function(data, textStatus, jqXHR) {
+				alert(data.datas[0] + '에 출근처리 되었습니다.');
+				$this.addClass('ui-disabled');
+				$('#btnOffwork').removeClass('ui-disabled');
+			},
+		});
+		
+//		if('geolocation' in navigator) {
+//			// 지오로케이션 사용 가능 
+//			navigator.geolocation.getCurrentPosition(function(position) {
+//				geoAllow = true;
+//				var coords = position.coords;
+//				
+//				Common.ajax({
+//					url: '/geuntae/m/gotowork?lat=' + coords.latitude + '&lng=' + coords.longitude,
+//					method: 'GET',
+//					dataType: 'json',
+//					headers: {'CUSTOM': 'Y'},
+//					success: function(data, textStatus, jqXHR) {
+//						alert(data.datas[0] + '에 출근처리 되었습니다.');
+//						$this.addClass('ui-disabled');
+//						$('#btnOffwork').removeClass('ui-disabled');
+//					},
+//				});
+//				
+//			}, function(err) {
+//				geoErrMsg = '브라우져가 위치정보를 차단하였습니다.';
+//				//alert(geoErrMsg);
+//				alert(err.message);
+//			});
+//		}
+//		else {
+//			geoErrMsg = '사용하시는 브라우져가 위치기반 서비스를 제공하지 않습니다.';
+//			alert(geoErrMsg);
+//		}
 		
 //		var $this = $(this);
 //		Common.ajax({

@@ -297,7 +297,7 @@ $(document).ready(function() {
 		        	fieldLabel: '외근',
 		            value: details.outwork == 'Y' ? '예' : '아니오',
 		            readOnly: true
-		        }, {
+		        }/*, {
 		        	xtype: 'button',
 		            margin: '0 0 5 90',
 		            text: '출근위치보기',
@@ -307,7 +307,7 @@ $(document).ready(function() {
 		            		viewPositionAtMap(details);
 		            	}
 		            }
-		        }, {
+		        }*/, {
 		        	fieldLabel: '근태처리수단',
 		            value: details.gotoworkMethod == 'P' ? 'PC' : '모바일',
 		            readOnly: true

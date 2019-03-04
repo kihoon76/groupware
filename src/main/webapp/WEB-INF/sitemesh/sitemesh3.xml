@@ -19,4 +19,5 @@
 	<mapping path="/forbidden" exclude="true" />
 	<mapping path="/signin" exclude="true" />
 	<mapping path="/result" exclude="true" />
+	<mapping path="/app/m/*" exclude="true" />
 </sitemesh>

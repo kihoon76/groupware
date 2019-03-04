@@ -61,10 +61,10 @@
 	</insert>
 	
 	<insert id="insertGyeoljaeLines" parameterType="Sangsin">
-		insert into [동림].[dbo].[결재라인](상신코드, 결재처리자, 결재순서, 처리상태)
+		insert into [동림].[dbo].[결재라인](상신코드, 결재처리자, 결재순서, 처리상태, PUSH내용)
 		values 
 		<foreach collection="gyeoljaeLines" item="lines" separator=" , ">
-		(#{sangsinNum}, #{lines.sawonCode}, #{lines.order}, #{lines.status})
+		(#{sangsinNum}, #{lines.sawonCode}, #{lines.order}, #{lines.status}, #{pushContent})
 		</foreach>
 	</insert>
 	

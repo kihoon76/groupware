@@ -20,6 +20,7 @@ public class Sangsin {
 	private String gyeoljaeType;
 	private String startDate;
 	private String endDate;
+	private String pushContent;
 	
 	public String getTitle() {
 		return title;
@@ -93,4 +94,11 @@ public class Sangsin {
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
+	public String getPushContent() {
+		return pushContent;
+	}
+	public void setPushContent(String pushContent) {
+		this.pushContent = pushContent;
+	}
+	
 }
