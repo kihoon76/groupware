@@ -104,5 +104,10 @@ public class GyeoljaeDaoImpl implements GyeoljaeDao {
 	@Override
 	public Map<String, Object> selectMyCommitedGyeoljaeTotalCount(Map<String, Object> param) {
 		return msSqlSession.selectOne(namespace + ".selectMyCommitedGyeoljaeTotalCount", param);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectVacationDefaultGyeoljaeLine(Map<String, String> param) {
+		return msSqlSession.selectList(namespace + ".selectVacationDefaultGyeoljaeLine", param);
 	} 
 }

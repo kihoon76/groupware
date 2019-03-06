@@ -176,6 +176,34 @@ public class GyeoljaeController {
 			vo.setErrMsg(e.getMessage());
 		}
 		
+		return vo;
+	}
+	
+	@GetMapping("vacationline")
+	@ResponseBody
+	public AjaxVO<Map<String, Object>> getVacationLine() throws InterruptedException {
+		
+		AjaxVO<Map<String, Object>> vo = new AjaxVO<>();
+		
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		
+		Map<String, String> param = new HashMap<>();
+		param.put("sawonCode", myInfo.getSawonCode());
+		param.put("department", myInfo.getSawonDepartment());
+		param.put("teamCode", myInfo.getSawonTeam());
+		param.put("position", myInfo.getSawonPosition());
+		param.put("lastSawonCode", "34");
+		
+		try{
+			List<Map<String, Object>> list = gyeoljaeService.getVacationGyeoljaeLine(param);
+			vo.setDatas(list);
+			vo.setSuccess(true);
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+		
 		//Thread.sleep(5000);
 		return vo;
 	}

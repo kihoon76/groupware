@@ -143,9 +143,11 @@
 			//휴가
 			if(v == '2') {
 				$datepicker.show();
+				getVacationGyeoljaeLines();
 			}
 			else {
 				$datepicker.hide();
+				getDefaultGyeoljaeLines();
 			}
 			
 		});
@@ -427,6 +429,14 @@
 		
 		function getGyeoljaeLineData() {
 			return gyeoljaeLine.getData();
+		}
+		
+		function getVacationGyeoljaeLines() {
+			gyeoljaeLine.setData('/gyeoljae/vacationline');
+		}
+		
+		function getDefaultGyeoljaeLines() {
+			gyeoljaeLine.setData('/gyeoljae/myline');
 		}
 		
 		var gyeoljaeLine = new Tabulator('#gyeoljaeLine', {

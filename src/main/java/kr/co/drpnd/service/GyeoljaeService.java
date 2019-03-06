@@ -136,4 +136,8 @@ public class GyeoljaeService {
 		return gyeoljaeDao.selectMySangsinDetail(param);
 	}
 
+	public List<Map<String, Object>> getVacationGyeoljaeLine(Map<String, String> param) {
+		return gyeoljaeDao.selectVacationDefaultGyeoljaeLine(param);
+	}
+
 }

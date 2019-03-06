@@ -40,4 +40,6 @@ public interface GyeoljaeDao {
 	Map<String, Object> selectMyGyeoljaeTotalCount(Map<String, Object> param);
 
 	Map<String, Object> selectMyCommitedGyeoljaeTotalCount(Map<String, Object> param);
+
+	List<Map<String, Object>> selectVacationDefaultGyeoljaeLine(Map<String, String> param);
 }
