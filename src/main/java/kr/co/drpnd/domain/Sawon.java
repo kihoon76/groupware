@@ -37,6 +37,7 @@ public class Sawon {
 	private boolean isImwon;
 	private String todayGeuntaeCode;
 	private boolean appChecked = false;
+	private String jaetaeg;
 	
 	private Map<TokenKey, String> token = new HashMap<>();
 
@@ -274,6 +275,14 @@ public class Sawon {
 
 	public void setAppChecked(boolean appChecked) {
 		this.appChecked = appChecked;
+	}
+	
+	public String getJaetaeg() {
+		return jaetaeg;
+	}
+
+	public void setJaetaeg(String jaetaeg) {
+		this.jaetaeg = jaetaeg;
 	}
 
 	@Override

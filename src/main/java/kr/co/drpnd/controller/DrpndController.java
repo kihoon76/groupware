@@ -76,8 +76,15 @@ public class DrpndController {
 		
 		try {
 			cuttentTime10 = geuntaeService.getCuttentTime10();
-			gotoworkChecked = geuntaeService.checkMyTodayGotowork(myInfo.getSawonCode());
-			offworkChecked = geuntaeService.checkMyTodayOffwork(myInfo.getSawonCode());
+			if("Y".equals(myInfo.getJaetaeg())) {
+				gotoworkChecked = true;
+				offworkChecked = true;
+			}
+			else {
+				gotoworkChecked = geuntaeService.checkMyTodayGotowork(myInfo.getSawonCode());
+				offworkChecked = geuntaeService.checkMyTodayOffwork(myInfo.getSawonCode());
+			}
+			
 			
 			Map<String, Object> param = new HashMap<>();
 			param.put("searchStatus", "A");
@@ -198,7 +205,14 @@ public class DrpndController {
 		m.addAttribute("plan", g.toJson(todayPlanList));
 		m.addAttribute("cr_count", reservationCount);
 		m.addAttribute("currentDate", DateUtil.getCurrentDateString());
-		m.addAttribute("mySeatNum", sawon.getSeatNum());
+		
+		if("Y".equals(sawon.getJaetaeg())) {
+			m.addAttribute("mySeatNum", 100000);
+		}
+		else {
+			m.addAttribute("mySeatNum", sawon.getSeatNum());
+		}
+	
 		return "floormap";
 	}
 	
