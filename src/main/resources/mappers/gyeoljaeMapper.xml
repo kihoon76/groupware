@@ -41,6 +41,7 @@
 		 <if test='teamCode == null and position == "1"'>
 		   and T2.직급코드 = 1
 		 </if>
+		   and T1.사원코드 != #{sawonCode}
 		 order by T2.직급코드 desc
 	</select>
 	
@@ -80,6 +81,9 @@
 		select ceiling((count(상신코드) + 0.0)/(${size}+0.0)) page, count(상신코드) total
 		  from [동림].[dbo].[상신]
 		 where 기안자 = #{gianja}
+		 <if test='searchGyeoljaeType neq "A"'>
+		   and 결재타입 = #{searchGyeoljaeType}
+		 </if>
 		 <if test='searchStatus neq "A"'>
 		   and 처리상태 = #{searchStatus}
 		 </if>
@@ -100,6 +104,9 @@
 		   and (T2.처리상태 = 'D' or T2.처리상태 = 'S')
 		 <if test='searchStatus neq "A"'>
 		   and T1.처리상태 = #{searchStatus}
+		 </if>
+		 <if test='searchGyeoljaeType neq "A"'>
+		   and T1.결재타입 = #{searchGyeoljaeType}
 		 </if>
 		 <choose>
 		 <when test='searchTextType eq "T"'>
@@ -133,20 +140,26 @@
 		   and T2.사원명 like #{searchText}  {escape '`'}
 		 </when>
 		 </choose>
+		 <if test='searchGyeoljaeType neq "A"'>
+		   and T1.결재타입 = #{searchGyeoljaeType}
+		 </if>
 		   and 기안작성일 >= #{searchStartDate} and 기안작성일 <![CDATA[<]]>= #{searchEndDate}
 	</select>
 	
 	<select id="selectMySangsin" parameterType="map" resultType="map">
 		<choose>
 		<when test="summary == -1">
-		select sangsinNum, title, gianja, status, attCnt, writeDate, attCnt
+		select sangsinNum, title, gianja, status, attCnt, writeDate, attCnt, type
 		  from (
 				select row_number() over(order by 기안작성일 desc) as rnum, T1.상신코드  sangsinNum, 기안제목 title, T2.사원명 gianja,
 					   case when 처리상태 = 'D' then '기안'
 					        when 처리상태 = 'S' then '결재중'
 					        when 처리상태 = 'C' then '결재완료'
 					        when 처리상태 = 'R' then '반려'
-					   end status, 
+					   end status,
+					   case when 결재타입 = 1 then '일반업무'
+					        when 결재타입 = 2 then '휴가'
+					   end type, 
 					   convert(char(16), 기안작성일, 20) writeDate, 첨부파일수 attCnt
 				  from [동림].[dbo].[상신] T1
 				 inner join [동림].[dbo].[사원] T2
@@ -158,7 +171,10 @@
 				  ) T3
 				    on T1.상신코드 = T3.상신코드
 				 where 기안자 = #{gianja}
-				 <if test='searchStatus neq "A"'>
+				<if test='searchGyeoljaeType neq "A"'>
+		   		   and 결재타입 = #{searchGyeoljaeType}
+		 		</if>
+				<if test='searchStatus neq "A"'>
 		   		   and 처리상태 = #{searchStatus}
 		 		</if>
 		 		<choose>
@@ -177,6 +193,9 @@
 			        when 처리상태 = 'C' then '결재완료'
 			        when 처리상태 = 'R' then '반려'
 			   end status, 
+			   case when 결재타입 = 1 then '일반업무'
+			        when 결재타입 = 2 then '휴가'
+			   end type,
 			   convert(char(16), 기안작성일, 20) writeDate, 첨부파일수 attCnt
 		  from [동림].[dbo].[상신] T1
 		 inner join [동림].[dbo].[사원] T2
@@ -225,6 +244,9 @@
 				   <if test='searchStatus neq "A"'>
 		   		   and T1.처리상태 = #{searchStatus}
 				   </if>
+				   <if test='searchGyeoljaeType neq "A"'>
+		   		   and 결재타입 = #{searchGyeoljaeType}
+		 		   </if>
 				   <choose>
 				   <when test='searchTextType eq "T"'>
 		   		   and 기안제목 like #{searchText}  {escape '`'}
@@ -259,9 +281,9 @@
 	</select>
 	
 	<select id="selectMyCommitedGyeoljae" parameterType="map" resultType="map">
-		select sangsinNum, title, gianja, status, attCnt, writeDate, attCnt
+		select sangsinNum, title, gianja, status, attCnt, writeDate, attCnt, case when 결재타입 = 1 then '일반업무' when 결재타입 = 2 then '휴가' end type
 		  from (
-				select row_number() over(order by 기안작성일 desc) as rnum, T1.상신코드 sangsinNum, T1.기안제목 title, T4.사원명 gianja, 
+				select row_number() over(order by 기안작성일 desc) as rnum, T1.상신코드 sangsinNum, T1.기안제목 title, T4.사원명 gianja, T1.결재타입, 
 		   	   		   '결재완료' status, convert(char(16), 기안작성일, 20) writeDate,  T3.첨부파일수 attCnt
 	  	  		  from [동림].[dbo].[상신] T1
 	  			  left outer join (
@@ -288,6 +310,9 @@
 		   		   and T4.사원명 like #{searchText}  {escape '`'}
 		 		   </when>
 		 		   </choose>
+		 		   <if test='searchGyeoljaeType neq "A"'>
+		   		   and T1.결재타입 = #{searchGyeoljaeType}
+		 		   </if>
 		 		   and 기안작성일 >= #{searchStartDate} and 기안작성일 <![CDATA[<]]>= #{searchEndDate}
 		 ) T1
 		 where rnum >= #{start} and rnum <![CDATA[<]]> #{end}

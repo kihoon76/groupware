@@ -235,6 +235,7 @@ public class GyeoljaeController {
 			@RequestParam("gyeoljaeLines") String gyeoljaeLines,
 			@RequestParam("content") String content,
 			@RequestParam("plainContent") String plainContent,
+			@RequestParam("gyeoljaeType") String gyeoljaeType,
 			@RequestParam("file") MultipartFile[] files) {
 		AjaxVO vo = new AjaxVO();
 		
@@ -267,6 +268,7 @@ public class GyeoljaeController {
 			sangsin.setPlainContent(plainContent);
 			sangsin.setGyeoljaeLines(lines);
 			sangsin.setGianja(myInfo.getSawonCode());
+			sangsin.setGyeoljaeType(gyeoljaeType);
 			
 			List<AttachFile> attachFiles = new ArrayList<>();
 			String pushMsg = myInfo.getSawonName() + "님이 올린 결재가 도착했습니다.";
@@ -318,6 +320,7 @@ public class GyeoljaeController {
 			@RequestParam(name="size", required=false) Integer size,
 			@RequestParam(name="searchStatus", required=false) String searchStatus,
 			@RequestParam(name="searchTextType", required=false) String searchTextType,
+			@RequestParam(name="searchGyeoljaeType", required=false) String searchGyeoljaeType, 
 			@RequestParam(name="searchText", required=false) String searchText,
 			@RequestParam(name="searchStartDate", required=false) String searchStartDate,
 			@RequestParam(name="searchEndDate", required=false) String searchEndDate) {
@@ -338,6 +341,7 @@ public class GyeoljaeController {
 				param.put("size", size);
 				param.put("searchStatus", searchStatus);
 				param.put("searchTextType", searchTextType);
+				param.put("searchGyeoljaeType", searchGyeoljaeType);
 				param.put("searchText", StringUtil.escapeMsSql(searchText));
 				param.put("searchStartDate", searchStartDate);
 				param.put("searchEndDate", searchEndDate + " 23:59:59");
@@ -419,6 +423,7 @@ public class GyeoljaeController {
 			@RequestParam(name="size", required=false) Integer size,
 			@RequestParam(name="searchStatus", required=false) String searchStatus,
 			@RequestParam(name="searchTextType", required=false) String searchTextType,
+			@RequestParam(name="searchGyeoljaeType", required=false) String searchGyeoljaeType,
 			@RequestParam(name="searchText", required=false) String searchText,
 			@RequestParam(name="searchStartDate", required=false) String searchStartDate,
 			@RequestParam(name="searchEndDate", required=false) String searchEndDate) {
@@ -440,6 +445,7 @@ public class GyeoljaeController {
 				param.put("size", size);
 				param.put("searchStatus", searchStatus);
 				param.put("searchTextType", searchTextType);
+				param.put("searchGyeoljaeType", searchGyeoljaeType);
 				param.put("searchText", StringUtil.escapeMsSql(searchText));
 				param.put("searchStartDate", searchStartDate);
 				param.put("searchEndDate", searchEndDate + " 23:59:59");
@@ -477,6 +483,7 @@ public class GyeoljaeController {
 			@RequestParam(name="size", required=false) Integer size,
 			@RequestParam(name="searchStatus", required=false) String searchStatus,
 			@RequestParam(name="searchTextType", required=false) String searchTextType,
+			@RequestParam(name="searchGyeoljaeType", required=false) String searchGyeoljaeType,
 			@RequestParam(name="searchText", required=false) String searchText,
 			@RequestParam(name="searchStartDate", required=false) String searchStartDate,
 			@RequestParam(name="searchEndDate", required=false) String searchEndDate
@@ -499,6 +506,7 @@ public class GyeoljaeController {
 				param.put("size", size);
 				param.put("searchStatus", searchStatus);
 				param.put("searchTextType", searchTextType);
+				param.put("searchGyeoljaeType", searchGyeoljaeType);
 				param.put("searchText", StringUtil.escapeMsSql(searchText));
 				param.put("searchStartDate", searchStartDate);
 				param.put("searchEndDate", searchEndDate + " 23:59:59");
@@ -533,6 +541,7 @@ public class GyeoljaeController {
 			@RequestParam(name="size", required=false) Integer size,
 			@RequestParam(name="searchStatus", required=false) String searchStatus,
 			@RequestParam(name="searchTextType", required=false) String searchTextType,
+			@RequestParam(name="searchGyeoljaeType", required=false) String searchGyeoljaeType,
 			@RequestParam(name="searchText", required=false) String searchText,
 			@RequestParam(name="searchStartDate", required=false) String searchStartDate,
 			@RequestParam(name="searchEndDate", required=false) String searchEndDate
@@ -555,6 +564,7 @@ public class GyeoljaeController {
 				param.put("size", size);
 				param.put("searchStatus", searchStatus);
 				param.put("searchTextType", searchTextType);
+				param.put("searchGyeoljaeType", searchGyeoljaeType);
 				param.put("searchText", StringUtil.escapeMsSql(searchText));
 				param.put("searchStartDate", searchStartDate);
 				param.put("searchEndDate", searchEndDate + " 23:59:59");

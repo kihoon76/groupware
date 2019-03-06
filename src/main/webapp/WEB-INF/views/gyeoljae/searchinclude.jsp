@@ -6,6 +6,13 @@
 <c:set var="uri" value="${req.requestURI}" />
 <div class="form-inline divMT">
 	<div class="form-group divMR">
+ 		<select class="form-control form-control-sm" id="selGyeoljaeType">
+ 			<option value="A"  selected>모두보기</option>
+		    <option value="1">일반업무</option>
+		    <option value="2">휴가</option>
+		</select>		
+	</div>
+	<div class="form-group divMR">
  		<select class="form-control form-control-sm" id="selSearchTxt">
  			<option value="A">모두보기</option>
 		    <option value="T">제목</option>

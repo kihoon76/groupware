@@ -14,6 +14,7 @@
 			ajaxParams: {
 				searchStatus: 'A',
 				searchTextType: 'A',
+				searchGyeoljaeType: 'A',
 				searchText: $.trim($('#txtSearchContent').val()),
 				searchStartDate: $.trim($('#txtStartDate').val()),
 				searchEndDate: $.trim($('#txtEndDate').val())

@@ -13,6 +13,7 @@ var Gyeoljae = (function() {
  		}},
  	    {title:'제목', field:'title', widthGrow:4, align:'center', headerSort:false},
  	    {title:'작성자', field:'gianja', width:100, align:'center', headerSort:false},
+ 	    {title:'결재타입', field:'type', width:100, align:'center', headerSort:false},
  	    {title:'상태', field:'status', width:150, align:'center', headerSort:false, formatter: function(cell) {
  	    	if(cell.getValue() == '반려') {
  	    		return '<span style="color: #ff0000;">' + cell.getValue() + '</span>';
@@ -520,6 +521,7 @@ var Gyeoljae = (function() {
 		var $txtEndDate = $('#txtEndDate');
 		var searchStatus = 'A';
 		var searchTextType = 'A';
+		var searchGyeoljaeType = 'A';
 		
 		$('.input-daterange').datepicker({
 			language: 'ko',
@@ -528,7 +530,10 @@ var Gyeoljae = (function() {
 		
 		$('#status').on('change', function() {
 			searchStatus = $(this).val();
-			console.log(searchStatus);
+		});
+		
+		$('#selGyeoljaeType').on('change', function() {
+			searchGyeoljaeType = $(this).val();
 		});
 		
 		$('#selSearchTxt').on('change', function() {
@@ -561,9 +566,11 @@ var Gyeoljae = (function() {
 			tabObj.setData('/gyeoljae' + url, {
 				searchStatus: searchStatus,
 				searchTextType: searchTextType,
+				searchGyeoljaeType: searchGyeoljaeType,
 				searchText: $.trim($txtSearchContent.val()),
 				searchStartDate: $.trim($txtStartDate.val()),
-				searchEndDate: $.trim($txtEndDate.val())
+				searchEndDate: $.trim($txtEndDate.val()),
+				
 			});
 			
 		});
