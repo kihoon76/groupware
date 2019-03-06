@@ -136,4 +136,9 @@
 		  from [동림].[dbo].[앱정보]
 		 where [사원코드] = #{sawonCode}
 	</select>
+	
+	<select id="selectSawonAllDevices" resultType="string">
+		select [토큰]
+		  from [동림].[dbo].[앱정보]
+	</select>
 </mapper>

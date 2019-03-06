@@ -231,7 +231,6 @@ public class DrpndController {
 		Sawon myInfo = SessionUtil.getSessionSawon();
 		
 		try {
-			System.err.println(sign);
 			Map<String, String> m = new HashMap<>();
 			m.put("sawonCode", myInfo.getSawonCode());
 			m.put("sign", sign);

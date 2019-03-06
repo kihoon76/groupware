@@ -1,5 +1,6 @@
 package kr.co.drpnd.controller;
 
+import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -609,17 +610,19 @@ public class GyeoljaeController {
 							   HttpServletRequest request, HttpServletResponse response) throws Exception  {
 		
 		Sawon myInfo = SessionUtil.getSessionSawon();
+		String positionGubun = myInfo.getPositionGubun();
 		
 		Map<String, String> param = new HashMap<>();
 		param.put("sawonCode", myInfo.getSawonCode());
 		param.put("attachFileCode", code);
+		param.put("positionGubun", positionGubun);
 		
 		AttachFile file = gyeoljaeService.getAttachFile(param);
-		String fileName = file.getName().substring(0, file.getName().lastIndexOf("."));
-		
 		
 		//한글파일명 라우저 별 처리
 		if(file != null) {
+			String fileName = file.getName().substring(0, file.getName().lastIndexOf("."));
+			
 			if(request.getHeader("User-Agent").contains("MSIE") || request.getHeader("User-Agent").contains("Trident")) {
 				fileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");
 			}
@@ -635,6 +638,14 @@ public class GyeoljaeController {
 			ServletOutputStream out = response.getOutputStream();
 			out.write(file.getFileByte());
 			out.flush();
+		}
+		else {
+			response.setContentType("text/html;charset=utf-8");
+			PrintWriter writer = response.getWriter();
+			writer.println("<h3>첨부파일이 삭제되었거나 파일을 볼 권한이 없습니다.</h3><hr/>");
+			writer.println("<h3>파일은 기안자나 결재라인에 있는 결재자들 또는 임원분들만 보실수 있습니다.</h3>");
+			writer.close();
+			
 		}
 	}
 	

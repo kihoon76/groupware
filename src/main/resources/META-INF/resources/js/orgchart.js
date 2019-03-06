@@ -38,10 +38,8 @@ $(document).ready(function() {
 		        children: [
 		           {position: '차장', name: '송남이', 'relationship': '101', team: 'team3', leader: 'Y',
 		        	   children: [
-		        	       {position: '대리', name: '천석범', 'relationship': '101', team: 'team3', leader: 'N',
-		        	    	   children: [{position: '대리', name: '박승석', 'relationship': '101', team: 'team3', leader: 'N',
-		        	    		   children: [{position: '사원', name: '이가영', 'relationship': '100', team: 'team3', leader: 'N'}]
-		        	    	   }]  
+		        	       {position: '대리', name: '박승석', 'relationship': '101', team: 'team3', leader: 'N',
+	        	    		   children: [{position: '사원', name: '이가영', 'relationship': '100', team: 'team3', leader: 'N'}]
 		        	       }
 		        	   ]   
 		           },
@@ -73,7 +71,6 @@ $(document).ready(function() {
 	};
 	
 	function nodeTemplate(data) {
-		console.log(data);
 		var v = '';
 		if(data.team == 'imwon') {
 			return '<div class="imwon">' + data.name + '</div>';

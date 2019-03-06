@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
@@ -35,7 +36,7 @@ public class PushTest {
 	@Resource(name="fcmLog")
 	FCMLog fcmLog;
 	
-	@Test
+	@Ignore @Test
 	public void asyncTest() throws InterruptedException {
 		List<String> devices = sawonService.getSawonDevices("1");
 		
@@ -50,5 +51,22 @@ public class PushTest {
 		}
 		
 		Thread.sleep(6000);
+	}
+	
+	@Test
+	public void broadcastTest() throws InterruptedException {
+		List<String> devices = sawonService.getSawonAllDevices();
+		
+		try {
+			Map<String, String> m = new HashMap<>();
+			m.put("title", "테스트");
+			m.put("message", "알림테스트입니다");
+			fcmManager.postFCM(devices, "테스트", "알림테스트입니다", m, fcmLog);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		Thread.sleep(8000);
 	}
 }

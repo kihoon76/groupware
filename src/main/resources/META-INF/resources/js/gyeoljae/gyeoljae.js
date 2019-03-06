@@ -218,7 +218,7 @@ var Gyeoljae = (function() {
 				xtype: 'htmleditor',
 				fieldLabel: '기안내용',
 				width: '99.9%',
-				height: 300,
+				height: 200,
 				readOnly: true,
 				value: sangsin.content
 			},{
@@ -241,40 +241,44 @@ var Gyeoljae = (function() {
 				    	}
 				    	
 				    }},
-				    {text: '다운로드', width: 100, dataIndex: 'ext', align: 'center', renderer: function(value) {
+				    {text: '다운로드', width: 100, dataIndex: 'ext', align: 'center', renderer: function(value, meta) {
+				    	meta.tdAttr = 'data-qtip="다운로드 하시려면 이미지를 클릭하세요."';
 				    	return common.getFileFormatIcon(value);
 				    }},
 				],
 				width: '100%',
-				height: 80,
+				height: 60,
+				draggable: false,
+				enableColumnHide: false,
+				enableColumnMove: false,
 				listeners: {
 					cellclick: function(grid, td, cellIndex, record) {
 						var code = record.data.code;
-						
-						common.checkSession(function() {
-							if(code) {
-								var form = document.createElement('form');
-								form.action = '/gyeoljae/file/' + code;
-								form.method = 'POST';
-								form.target = '_blank';
-								
-								var input = document.createElement('input');
-								input.type = 'hidden';
-							   
-							    form.appendChild(input);
-								form.style.display = 'none';
-								document.body.appendChild(form);
-								form.submit();
-							}
-						});
-					
+						if(cellIndex == 2) {
+							common.checkSession(function() {
+								if(code) {
+									var form = document.createElement('form');
+									form.action = '/gyeoljae/file/' + code;
+									form.method = 'POST';
+									form.target = '_blank';
+									
+									var input = document.createElement('input');
+									input.type = 'hidden';
+								   
+								    form.appendChild(input);
+									form.style.display = 'none';
+									document.body.appendChild(form);
+									form.submit();
+								}
+							});
+						}
 					}
 				}
 			}]
 		});
 		
 		var winParam = {
-			height: 800,
+			height: 600,
 			width: 800,
 			layout: 'fit',
 			closeAction: 'destroy',

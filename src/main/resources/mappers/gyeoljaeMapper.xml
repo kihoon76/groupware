@@ -368,7 +368,11 @@
 		 inner join [동림].[dbo].[결재라인] T3
 		    on T3.상신코드 = T1.상신코드
 		 where T1.파일코드 = #{attachFileCode}
+		 <choose>
+		 <when test='positionGubun.equals("3")'>
 		   and (T2.기안자 = #{sawonCode} or T3.결재처리자  = #{sawonCode})
+		 </when>
+		 </choose>
 	</select>
 	
 	<update id="updateCommitMyGyeoljae" statementType="CALLABLE" parameterType="map">

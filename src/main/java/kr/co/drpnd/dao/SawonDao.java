@@ -27,4 +27,6 @@ public interface SawonDao {
 
 	List<String> selectSawonDeviceList(String sawonCode);
 
+	List<String> selectSawonAllDevices();
+
 }
