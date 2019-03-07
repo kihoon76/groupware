@@ -38,8 +38,7 @@
 		 <otherwise>
 		 	<choose>
 		 	<when test='position != "1"'>
-		   and (T1.사원코드 = #{sawonCode}
-		    or T2.직급구별 = 1)
+		   and T1.사원코드 = (select 사원코드 from [동림].[dbo].[최종결재자] where 결재타입 = 1)
 		 	</when>
 		 	<otherwise>
 		   and T2.직급구별 = 1
@@ -59,14 +58,14 @@
 		 <choose>
 		 <when test="teamCode != null">
 		   and ((T1.팀코드 = #{teamCode} and T1.팀리더 = 'Y')
-		    or (T1.사원코드 = #{lastSawonCode}) 
+		    or (T1.사원코드 = (select 사원코드 from [동림].[dbo].[최종결재자] where 결재타입 = 2)) 
 		    or (T1.사원코드 in (select 사원코드 from [동림].[dbo].[관리팀] where 팀코드  = #{teamCode})))
 		   and T2.직급구별 != 1
 		 </when>
 		 <otherwise>
 		 	<choose>
 		 	<when test='position != "1"'>
-		    and T1.사원코드 = #{lastSawonCode}
+		    and T1.사원코드 = (select 사원코드 from [동림].[dbo].[최종결재자] where 결재타입 = 2)
 		 	</when>
 		 	<otherwise>
 		    and T2.직급구별 = 1

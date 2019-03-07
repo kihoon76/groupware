@@ -291,19 +291,33 @@ var Gyeoljae = (function() {
 		};
 		
 		if(type == 'gian') {
+			var btnItems = [{ xtype: 'component', flex: 1 }];
+			if(isCommitted) {
+				btnItems.push({ xtype: 'button', text: '닫기', iconCls: 'icon-close', listeners: {
+		        	click: function(btn) {
+		        		multiWin.close();
+		        	}
+		        } });
+			}
+			else {
+				/*btnItems.push({ xtype: 'button', text: '수정', iconCls: 'icon-modi', listeners: {
+		        	click: function(btn) {
+		        		console.log(sangsin);
+		        		modifyMySangsin(sangsin, multiWin);
+		        	}
+		        } });*/
+				btnItems.push({ xtype: 'button', text: '닫기', iconCls: 'icon-close', listeners: {
+		        	click: function(btn) {
+		        		multiWin.close();
+		        	}
+		        } });
+			}
 			winParam.dockedItems = [{
 			    xtype: 'toolbar',
 			    dock: 'bottom',
 			    ui: 'footer',
 			    //defaults: {minWidth: minButtonWidth},
-			    items: [
-			        { xtype: 'component', flex: 1 },
-			        { xtype: 'button', text: '닫기', iconCls: 'icon-close', listeners: {
-			        	click: function(btn) {
-			        		multiWin.close();
-			        	}
-			        } }
-			    ]
+			    items: btnItems
 			}];
 		}
 		else if(type == 'gyeoljae') {
@@ -335,6 +349,12 @@ var Gyeoljae = (function() {
 		
 		multiWin = parent.Ext.create('Ext.window.Window', winParam);
 		multiWin.show();
+	}
+	
+	function modifyMySangsin(sangsin, multiWin) {
+		common.checkSession(function() {
+			
+		});
 	}
 	
 	function gyeoljaeClick(sangsin) {

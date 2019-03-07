@@ -192,7 +192,7 @@ public class GyeoljaeController {
 		param.put("department", myInfo.getSawonDepartment());
 		param.put("teamCode", myInfo.getSawonTeam());
 		param.put("position", myInfo.getSawonPosition());
-		param.put("lastSawonCode", "34");
+		//param.put("lastSawonCode", "34");
 		
 		try{
 			List<Map<String, Object>> list = gyeoljaeService.getVacationGyeoljaeLine(param);

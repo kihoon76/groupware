@@ -89,13 +89,14 @@ public class DrpndController {
 			Map<String, Object> param = new HashMap<>();
 			param.put("searchStatus", "A");
 			param.put("searchTextType", "A");
+			param.put("searchGyeoljaeType", "A");
 			param.put("limitDate", "Y");
 			param.put("sawonCode", myInfo.getSawonCode());
 			param.put("size", 1);
 			
 			Map<String, Object> r = gyeoljaeService.getMyGyeoljaeTotalCount(param);
 			mygyeoljaeCount = String.valueOf(r.get("total"));
-		
+			
 			teamList = geuntaeService.getTeamList(myInfo.getSawonDepartment());
 			overworkTypes = codeService.getOverwork();
 		}
