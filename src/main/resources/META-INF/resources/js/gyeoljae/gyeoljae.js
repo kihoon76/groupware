@@ -66,7 +66,7 @@ var Gyeoljae = (function() {
 		return '<div class="step ' + style + '" data-code="' + code + '"> <span>' + status + ' (' + name + ')</span> </div>';
 	}
 	
-	function openMyGianGyeoljaeWin(type, sangsin, isCommitted) {
+	function openMyGianGyeoljaeWin(type, sangsin, isCommitted, ext) {
 		var fileStore = parent.Ext.create('Ext.data.JsonStore', {
 			fields: ['code', 'name', 'size', 'ext'],
 			data:sangsin.attachFiles
@@ -300,12 +300,20 @@ var Gyeoljae = (function() {
 		        } });
 			}
 			else {
-				/*btnItems.push({ xtype: 'button', text: '수정', iconCls: 'icon-modi', listeners: {
+				if(sangsin.modify == 'Y') {
+					btnItems.push({ xtype: 'button', text: '수정중 취소', iconCls: 'icon-modi', listeners: {
+			        	click: function(btn) {
+			        		modifyCancelMySangsin(btn, sangsin.sangsinNum);
+			        	}
+			        } });
+				}
+				
+				btnItems.push({ xtype: 'button', text: '수정', iconCls: 'icon-modi', listeners: {
 		        	click: function(btn) {
 		        		console.log(sangsin);
-		        		modifyMySangsin(sangsin, multiWin);
+		        		modifyMySangsin(sangsin, multiWin, ext);
 		        	}
-		        } });*/
+		        } });
 				btnItems.push({ xtype: 'button', text: '닫기', iconCls: 'icon-close', listeners: {
 		        	click: function(btn) {
 		        		multiWin.close();
@@ -351,9 +359,55 @@ var Gyeoljae = (function() {
 		multiWin.show();
 	}
 	
-	function modifyMySangsin(sangsin, multiWin) {
+	function modifyCancelMySangsin(btn, sangsinNum) {
 		common.checkSession(function() {
-			
+			common.ajaxExt({
+				url: 'gyeoljae/modify/cancel/alarm/' + sangsinNum,
+				method: 'GET',
+				headers: { 'Content-Type': 'application/json' },
+				loadmask: {
+					msg: '수정알림 취소중 입니다.'
+				},
+				success: function(jo) {
+					if(jo.success) {
+						btn.setVisible(false);
+						common.showExtMsg({
+							type: 'alert',
+							icon: parent.Ext.MessageBox.INFO,
+							msg: '수정취소 되었습니다.'
+						});
+					}
+				}
+			});
+		});
+	}
+	
+	function modifyMySangsin(sangsin, multiWin, ext) {
+		common.checkSession(function() {
+			common.ajaxExt({
+				url: '/gyeoljae/check/editable/' + sangsin.sangsinNum,
+				method: 'GET',
+				headers: { 'Content-Type': 'application/json' }, 
+				success: function(jo) {
+					if(jo.success) {
+						console.log(jo);
+						ext.dom.setAttribute('data-sangsin', sangsin.sangsinNum);
+						ext.dom.click();
+						multiWin.close();
+//						common.showExtMsg({
+//							type: 'alert',
+//							icon: parent.Ext.MessageBox.INFO,
+//							msg: '내근전환 되었습니다.'
+//						});
+					}
+					else {
+						common.showExtMsg({
+							type: 'alert',
+							msg: jo.errMsg
+						});
+					}
+				}
+			});
 		});
 	}
 	
@@ -649,7 +703,7 @@ var Gyeoljae = (function() {
 			
 			return tab;
 		},
-		getMyGianDetail: function(sangsinNum) {
+		getMyGianDetail: function(sangsinNum, ext) {
 			common.checkSession(function() {
 				common.ajaxExt({
 					url: '/gyeoljae/mysangsin/' + sangsinNum,
@@ -658,7 +712,7 @@ var Gyeoljae = (function() {
 						msg: '나의 상신문서를 로딩중입니다.'
 					},
 					success: function(jo) {
-						openMyGianGyeoljaeWin('gian', jo.datas[0]);
+						openMyGianGyeoljaeWin('gian', jo.datas[0], false, ext);
 					}
 				});
 			});
@@ -677,7 +731,7 @@ var Gyeoljae = (function() {
 				});
 			});
 		},
-		getMyGyeoljaeDetail: function(sangsinNum) {
+		getMyGyeoljaeDetail: function(sangsinNum, extGyeoljaeMod) {
 			common.checkSession(function() {
 				common.ajaxExt({
 					url: '/gyeoljae/mygyeoljae/' + sangsinNum,

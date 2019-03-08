@@ -109,5 +109,31 @@ public class GyeoljaeDaoImpl implements GyeoljaeDao {
 	@Override
 	public List<Map<String, Object>> selectVacationDefaultGyeoljaeLine(Map<String, String> param) {
 		return msSqlSession.selectList(namespace + ".selectVacationDefaultGyeoljaeLine", param);
-	} 
+	}
+
+	@Override
+	public int selectSangsin(Map<String, String> param) {
+		return msSqlSession.selectOne(namespace + ".selectSangsin", param);
+	}
+
+	@Override
+	public int selectEditableSangsin(Map<String, String> param) {
+		return msSqlSession.selectOne(namespace + ".selectEditableSangsin", param);
+	}
+
+	@Override
+	public Sangsin selectMyModifySangsin(Map<String, String> param) {
+		return msSqlSession.selectOne(namespace + ".selectMyModifySangsin", param);
+	}
+
+	@Override
+	public int updateModifySangsin(String sangsinNum) {
+		return msSqlSession.update(namespace + ".updateModifySangsin", sangsinNum);
+	}
+
+	@Override
+	public int updateModifyCancelSangsin(String sangsinNum) {
+		return msSqlSession.update(namespace + ".updateModifyCancelSangsin", sangsinNum);
+	}
+
 }

@@ -38,6 +38,7 @@ import kr.co.drpnd.domain.AttachFile;
 import kr.co.drpnd.domain.Sangsin;
 import kr.co.drpnd.domain.Sawon;
 import kr.co.drpnd.exception.InvalidUser;
+import kr.co.drpnd.exception.ModifySangsin;
 import kr.co.drpnd.push.FCMLog;
 import kr.co.drpnd.push.FCMManager;
 import kr.co.drpnd.service.CodeService;
@@ -121,6 +122,51 @@ public class GyeoljaeController {
 		m.addAttribute("end", map.get("end"));
 		m.addAttribute("tab", "receivedbox");
 		return "gyeoljae/receivedbox";
+	}
+	
+	@GetMapping("view/mod/mysangsin/{sangsinNum}")
+	public String viewModMySangsin(
+			@PathVariable("sangsinNum") String sangsinNum,
+			ModelMap m) {
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		Map<String, String> param = new HashMap<>();
+		param.put("sawonCode", myInfo.getSawonCode());
+		param.put("sangsinNum", sangsinNum);
+		
+		try {
+			Sangsin mySangsin = gyeoljaeService.getMyModifySangsin(param);
+			
+			if(mySangsin == null) {
+				return "forbidden";
+			}
+			
+			m.addAttribute("sangsin", mySangsin);
+			m.addAttribute("lines", new Gson().toJson(mySangsin.getGyeoljaeLines()));
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return "forbidden";
+		}
+		
+		SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");//dd/MM/yyyy
+		Date now = new Date();
+		String strDate = sdfDate.format(now);
+		List<Object> gyeoljaeType = codeService.getGyeoljae();
+		
+		if(gyeoljaeType != null) {
+			int len = gyeoljaeType.size();
+			List<Map<String, String>> listMap = new ArrayList<>();
+			for(int i=0; i<len; i++) {
+				listMap.add((Map<String, String>)gyeoljaeType.get(i));
+			}
+			
+			m.addAttribute("gyeoljaeType", listMap);
+		}
+		
+		m.addAttribute("time", strDate);
+		m.addAttribute("sangsinNum", sangsinNum);
+		
+		return "gyeoljae/modmysangsin";
 	}
 	
 	@PostMapping("search/sawon")
@@ -731,6 +777,11 @@ public class GyeoljaeController {
 			vo.setErrCode(ExceptionCode.INVALID_GYEOLJAE_USER.getCode());
 			vo.setErrMsg(e.getMessage());
 		}
+		catch(ModifySangsin e) {
+			vo.setSuccess(false);
+			vo.setErrCode(ExceptionCode.MODIFY_SANGSIN.getCode());
+			vo.setErrMsg(e.getMessage());
+		}
 		catch(RuntimeException e) {
 			vo.setSuccess(false);
 			vo.setErrMsg(e.getMessage());
@@ -774,6 +825,11 @@ public class GyeoljaeController {
 			vo.setErrCode(ExceptionCode.INVALID_GYEOLJAE_USER.getCode());
 			vo.setErrMsg(e.getMessage());
 		}
+		catch(ModifySangsin e) {
+			vo.setSuccess(false);
+			vo.setErrCode(ExceptionCode.MODIFY_SANGSIN.getCode());
+			vo.setErrMsg(e.getMessage());
+		}
 		catch(RuntimeException e) {
 			vo.setSuccess(false);
 			vo.setErrMsg(e.getMessage());
@@ -809,6 +865,110 @@ public class GyeoljaeController {
 			vo.setSuccess(false);
 			vo.setErrMsg(e.getMessage());
 		}
+		
+		return vo;
+	}
+	
+	@GetMapping("check/editable/{sangsinNum}")
+	@ResponseBody
+	public AjaxVO checkEditableSangsin(@PathVariable("sangsinNum") String sangsinNum) {
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		AjaxVO vo = new AjaxVO();
+		
+		Map<String, String> param = new HashMap<>();
+		param.put("sawonCode", myInfo.getSawonCode());
+		param.put("sangsinNum", sangsinNum);
+		
+		try {
+			boolean b = gyeoljaeService.isEditableSangsin(param);
+			if(b) {
+				vo.setSuccess(true);
+			}
+			else {
+				vo.setSuccess(false);
+				vo.setErrMsg("결재진행중입니다.");
+			}
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+	
+		return vo;
+	}
+	
+	@GetMapping("modify/alarm/{sangsinNum}")
+	@ResponseBody
+	public AjaxVO updateModifyAlarm(
+			@PathVariable("sangsinNum") String sangsinNum) {
+		
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		AjaxVO vo = new AjaxVO();
+		
+		Map<String, String> param = new HashMap<>();
+		param.put("sawonCode", myInfo.getSawonCode());
+		param.put("sangsinNum", sangsinNum);
+		
+		try {
+			boolean b = gyeoljaeService.confirmMySangsin(param);
+			if(b) {
+				boolean result = gyeoljaeService.alarmModifySangsin(sangsinNum);
+				if(result) {
+					vo.setSuccess(true);
+				}
+				else {
+					vo.setSuccess(false);
+					vo.setErrMsg("결재진행중입니다. 수정하실수 없습니다.");
+				}
+			}
+			else {
+				vo.setSuccess(false);
+				vo.setErrMsg("내 상신문서가 아닙니다.");
+			}
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+		
+		
+		return vo;
+	}
+	
+	@GetMapping("modify/cancel/alarm/{sangsinNum}")
+	@ResponseBody
+	public AjaxVO updateModifyCancelAlarm(
+			@PathVariable("sangsinNum") String sangsinNum) {
+		
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		AjaxVO vo = new AjaxVO();
+		
+		Map<String, String> param = new HashMap<>();
+		param.put("sawonCode", myInfo.getSawonCode());
+		param.put("sangsinNum", sangsinNum);
+		
+		try {
+			boolean b = gyeoljaeService.confirmMySangsin(param);
+			if(b) {
+				boolean result = gyeoljaeService.alarmModifyCancelSangsin(sangsinNum);
+				if(result) {
+					vo.setSuccess(true);
+				}
+				else {
+					vo.setSuccess(false);
+					vo.setErrMsg("수정중이 아닙니다. 취소하실수 없습니다.");
+				}
+			}
+			else {
+				vo.setSuccess(false);
+				vo.setErrMsg("내 상신문서가 아닙니다.");
+			}
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+		
 		
 		return vo;
 	}

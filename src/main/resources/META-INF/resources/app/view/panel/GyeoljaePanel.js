@@ -13,6 +13,7 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 		var btnSansinBox = null;
 		var btnKeepBox = null;
 		var btnNewGyeoljae = null;
+		var divModGyeoljae = null;
 		var activeColor = '#ccffff';
 		var overviewWin = null;
 		var receivedWin = null;
@@ -56,6 +57,12 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 				btnNewGyeoljae.getEl().setStyle('background-color', 'transparent');
 			}
 			
+			if(activeBtn == 'UPDATE_GYEOLJAE') {
+				divModGyeoljae.setStyle('background-color', activeColor);
+			}
+			else {
+				divModGyeoljae.setStyle('background-color', 'transparent');
+			}
 			
 		}
 		
@@ -100,7 +107,7 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 			if(isNotSessionCheck) {
 				var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'gyeoljae/view/overview', load: function(dom) {
 					overviewWin = dom.contentWindow; 
-					overviewWin.setGyeoljaeButton(btnReceiveBox, btnSansinBox, btnKeepBox, mask);
+					overviewWin.setGyeoljaeButton(btnReceiveBox, btnSansinBox, btnKeepBox, divModGyeoljae, mask);
 				} });
 				addItem(iframe);
 			}
@@ -108,7 +115,7 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 				CommonFn.checkSession(function() {
 					var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'gyeoljae/view/overview', load: function(dom) {
 						overviewWin = dom.contentWindow;
-						overviewWin.setGyeoljaeButton(btnReceiveBox, btnSansinBox, btnKeepBox, mask);
+						overviewWin.setGyeoljaeButton(btnReceiveBox, btnSansinBox, btnKeepBox, divModGyeoljae, mask);
 					} });
 					addItem(iframe);
 				});
@@ -137,7 +144,7 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 			CommonFn.checkSession(function() {
 				var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'gyeoljae/view/sangsinbox', load: function(dom) {
 					sangsinWin = dom.contentWindow;
-					sangsinWin.setParam(mask);
+					sangsinWin.setParam(divModGyeoljae, mask);
 				} });
 				addItem(iframe);
 			});
@@ -152,6 +159,18 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 				var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'gyeoljae/view/keepbox', load: function(dom) {
 					keepboxWin = dom.contentWindow;
 					keepboxWin.setParam(mask);
+				} });
+				addItem(iframe);
+			});
+		}
+		
+		//결재수정
+		function modGyeoljaeClick(sangsinNum) {
+			activeButtonCSS('UPDATE_GYEOLJAE');
+			CommonFn.checkSession(function() {
+				var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'gyeoljae/view/mod/mysangsin/' + sangsinNum, load: function(dom) {
+					//keepboxWin = dom.contentWindow;
+					//keepboxWin.setParam(mask);
 				} });
 				addItem(iframe);
 			});
@@ -253,6 +272,32 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 						btnNewGyeoljae = btn;
 					}
 				}
+			}, '-', {
+				xtype: 'component',
+				qtip: '★ 직접선택이 불가합니다.<br/>★ 요약 또는 상신함에서 수정버튼을 눌러주세요.',
+		        renderTpl: '<div class="icon-modi" style="height:16px;font-size:12px;padding-left:23px;font-weight: normal;color:#333 !important;">결재수정</div>',
+		        listeners: {
+		        	render: function(c) {
+		        		divModGyeoljae = c.getEl();
+		        		divModGyeoljae.on({
+		        			click: function(e,t,opt) {
+		        				var sangsinNum = t.getAttribute('data-sangsin');
+		        				
+		        				if(sangsinNum != null) {
+		        					t.removeAttribute('data-sangsin');
+		        					modGyeoljaeClick(sangsinNum);
+		        				}
+		        				
+		        			}
+		        		});
+		        		
+		        		Ext.QuickTips.register({
+		                    target: c.getEl(),
+		                    text: c.qtip,
+		                    showDelay: 1 
+		                });
+		        	},
+		        }
 			}],
 			listeners: {
 				afterrender: function() {

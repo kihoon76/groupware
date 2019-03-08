@@ -1,7 +1,9 @@
 (function() {
 	var extMask = null;
+	var extDivModGyeoljae = null;
 	
-	window.setParam = function(mask) {
+	window.setParam = function(divModGyeoljae, mask) {
+		extDivModGyeoljae = divModGyeoljae;
 		extMask = mask;
 	}
 	
@@ -27,10 +29,13 @@
 			selectable:1,
 			height: '800px',
 			rowClick: function(e, row) {
-				Gyeoljae.getMyGianDetail(row.getData().sangsinNum);
+				Gyeoljae.getMyGianDetail(row.getData().sangsinNum, extDivModGyeoljae);
 			},
 			toolbar: true
 		});
 		
+		//extDivModGyeoljae.dom.click();
 	});
+	
+	
 })();

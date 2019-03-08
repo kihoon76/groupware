@@ -1,7 +1,7 @@
 .icon-search {background-image: url(../images/search.gif) !important; }
 .icon-add {background-image : url(../images/add.png) !important;}
 .icon-del {background-image : url(../images/delete.png) !important;}
-.icon-modi {background-image : url(../images/modify.gif) !important;}
+.icon-modi {background-image : url(../images/modify.gif) !important;  background-repeat:no-repeat;}
 .icon-user {background-image : url(../images/icon_user.gif) !important;}
 .icon-window {background-image : url(../images/new_window.gif) !important;}
 .icon-close {background-image : url(../images/close.gif) !important;}

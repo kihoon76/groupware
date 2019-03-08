@@ -359,6 +359,7 @@
 		<result column="기안작성일" property="writeDate" javaType="string"/>
 		<result column="결재타입" property="gyeoljaeType" javaType="string"/>
 		<result column="휴가시작일" property="startDate" javaType="string"/>
+		<result column="수정중" property="modify" javaType="string" />
 		<result column="휴가종료일" property="endDate" javaType="string"/>
 		<collection property="attachFiles" column="상신코드" 
 					javaType="java.util.ArrayList"
@@ -370,6 +371,45 @@
 					ofType="map"
 					select="selectGyeoljaeLines" />
 	</resultMap>
+	
+	<resultMap id="RM_ModifySangsin" type="Sangsin">
+		<result column="상신코드" property="sangsinNum" javaType="int"/>
+		<result column="기안제목" property="title" javaType="string"/>
+		<result column="기안내용_CODE" property="content" javaType="string"/>
+		<result column="기안내용_PLAIN" property="plainContent" javaType="string"/>
+		<result column="기안자" property="gianja" javaType="string"/>
+		<result column="기안작성일" property="writeDate" javaType="string"/>
+		<result column="결재타입" property="gyeoljaeType" javaType="string"/>
+		<result column="휴가시작일" property="startDate" javaType="string"/>
+		<result column="휴가종료일" property="endDate" javaType="string"/>
+		<collection property="attachFiles" column="상신코드" 
+					javaType="java.util.ArrayList"
+					ofType="AttachFile" 
+					select="selectSangsinAttachFiles"
+					/>
+		<collection property="gyeoljaeLines" column="상신코드"
+					javaType="java.util.ArrayList"
+					ofType="map"
+					select="selectMyModifyGyeoljaeLines" />
+	</resultMap>
+	
+	<select id="selectMyModifySangsin" parameterType="map" resultMap="RM_ModifySangsin">
+		 select T1.상신코드, 기안제목, REPLACE(기안내용_CODE, '"', '▦') 기안내용_CODE , convert(char(16), 기안작성일, 20) 기안작성일, 결재타입, 휴가시작일, 휴가종료일
+		  from [동림].[dbo].[상신] T1
+		 where T1.상신코드 = #{sangsinNum}
+		   and T1.기안자 = #{sawonCode}
+	</select>
+	
+	<select id="selectMyModifyGyeoljaeLines" parameterType="string" resultType="map">
+		select T1.결재처리자  sawonCode, T2.사원명 sawonName, T2.사원아이디 sawonId,  T3.직급명 sawonPosition, T2.이메일 email
+		  from [동림].[dbo].[결재라인] T1
+		 inner join [동림].[dbo].[사원] T2 
+		    on T1.결재처리자 = T2.사원코드 
+		 inner join [동림].[dbo].[직급] T3
+		    on T2.직급코드 = T3.직급코드
+		 where T1.상신코드 = #{sangsinNum} 
+		 order by 결재순서 
+	</select>
 	
 	<select id="selectGyeoljaeLines" parameterType="string" resultType="map">
 		select T2.사원명 gyeoljaeja, 결재순서 gyeoljaeOrder, 처리상태 status, T1.결재라인코드 code
@@ -394,7 +434,7 @@
 	<select id="selectMySangsinDetail" parameterType="map" resultMap="RM_Sangsin">
 		 <choose>
 		 <when test="sawonCode != null">
-		 select T1.상신코드, 기안제목, 기안내용_CODE, convert(char(16), 기안작성일, 20) 기안작성일, 결재타입, 휴가시작일, 휴가종료일
+		 select T1.상신코드, 기안제목, 기안내용_CODE, convert(char(16), 기안작성일, 20) 기안작성일, 결재타입, 휴가시작일, 휴가종료일, isnull(수정중, 'N') 수정중
 		  from [동림].[dbo].[상신] T1
 		 where T1.상신코드 = #{sangsinNum}
 		   and T1.기안자 = #{sawonCode}
@@ -480,4 +520,35 @@
 		</otherwise>
 		</choose>
 	</select>
+
+	<select id="selectSangsin" parameterType="map" resultType="int">
+		select count(상신코드)
+		  from [동림].[dbo].[상신] 
+		 where 기안자 = #{sawonCode} 
+		   and 상신코드 = #{sangsinNum}
+	</select>
+	
+	<select id="selectEditableSangsin" parameterType="map" resultType="int">
+		select count(T1.상신코드)
+		  from [동림].[dbo].[상신] T1
+		 inner join [동림].[dbo].[결재라인] T2
+		    on T1.[상신코드] = T2.[상신코드]
+		 where T1.[상신코드] = #{sangsinNum}
+		   and T2.처리상태  in ('C', 'R') 
+	</select>
+	
+	<update id="updateModifySangsin" parameterType="string">
+		update [동림].[dbo].[상신]
+		   set [수정중] = 'Y'
+		 where [상신코드] = #{sangsinNum}
+		   and 처리상태 = 'D'
+		   and 0 = (select count(결재라인코드) from [동림].[dbo].[결재라인] where [상신코드] = #{sangsinNum} and 처리상태 in ('R', 'C')) 
+	</update>
+	
+	<update id="updateModifyCancelSangsin" parameterType="string">
+		update [동림].[dbo].[상신]
+		   set [수정중] = null
+		 where [상신코드] = #{sangsinNum}
+		   and [수정중] = 'Y'
+	</update>
 </mapper>

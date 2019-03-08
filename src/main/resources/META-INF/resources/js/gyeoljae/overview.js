@@ -2,12 +2,15 @@
 	var receivedExtBtn = null;
 	var sangsinExtBtn = null;
 	var keepboxExtBtn = null;
+	var modifyExtBtn = null;
 	var extMask = null;
 	
-	window.setGyeoljaeButton = function(received, sangsin, keepbox, mask) {
+	window.setGyeoljaeButton = function(received, sangsin, keepbox, modify, mask) {
 		receivedExtBtn = received;
 		sangsinExtBtn = sangsin;
 		keepboxExtBtn = keepbox;
+		modifyExtBtn = modify;
+		console.log(modifyExtBtn)
 		extMask = mask;
 	}
 
@@ -21,7 +24,7 @@
 			selectable:1,
 			height: '300px',
 			rowClick: function(e, row) {
-				Gyeoljae.getMyGianDetail(row.getData().sangsinNum);
+				Gyeoljae.getMyGianDetail(row.getData().sangsinNum, modifyExtBtn);
 			}
 		});
 		

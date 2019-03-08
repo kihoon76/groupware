@@ -42,4 +42,14 @@ public interface GyeoljaeDao {
 	Map<String, Object> selectMyCommitedGyeoljaeTotalCount(Map<String, Object> param);
 
 	List<Map<String, Object>> selectVacationDefaultGyeoljaeLine(Map<String, String> param);
+
+	int selectSangsin(Map<String, String> param);
+
+	int selectEditableSangsin(Map<String, String> param);
+
+	Sangsin selectMyModifySangsin(Map<String, String> param);
+
+	int updateModifySangsin(String sangsinNum);
+
+	int updateModifyCancelSangsin(String sangsinNum);
 }

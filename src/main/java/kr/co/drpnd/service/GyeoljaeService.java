@@ -14,6 +14,7 @@ import kr.co.drpnd.dao.GyeoljaeDao;
 import kr.co.drpnd.domain.AttachFile;
 import kr.co.drpnd.domain.Sangsin;
 import kr.co.drpnd.exception.InvalidUser;
+import kr.co.drpnd.exception.ModifySangsin;
 import kr.co.drpnd.type.ExceptionCode;
 
 @Service("gyeoljaeService")
@@ -86,6 +87,9 @@ public class GyeoljaeService {
 		else if("-1".equals(r)) {
 			throw new RuntimeException("오류가 발생했습니다.");
 		}
+		else if("-500".equals(r)) {
+			throw new ModifySangsin(ExceptionCode.MODIFY_SANGSIN.getMsg());
+		}
 	}
 
 	public List<Map<String, String>> getMyCommitedGyeoljae(Map<String, Object> param) {
@@ -101,6 +105,9 @@ public class GyeoljaeService {
 		}
 		else if("-1".equals(r)) {
 			throw new RuntimeException("오류가 발생했습니다.");
+		}
+		else if("-500".equals(r)) {
+			throw new ModifySangsin(ExceptionCode.MODIFY_SANGSIN.getMsg());
 		}
 	}
 
@@ -138,6 +145,33 @@ public class GyeoljaeService {
 
 	public List<Map<String, Object>> getVacationGyeoljaeLine(Map<String, String> param) {
 		return gyeoljaeDao.selectVacationDefaultGyeoljaeLine(param);
+	}
+
+	public boolean isEditableSangsin(Map<String, String> param) {
+		int r = gyeoljaeDao.selectSangsin(param); 
+		if(r != 1) return false;
+		
+		r = gyeoljaeDao.selectEditableSangsin(param);
+		
+		if(r > 0) return false;
+		
+		return true;
+	}
+
+	public Sangsin getMyModifySangsin(Map<String, String> param) {
+		return gyeoljaeDao.selectMyModifySangsin(param);
+	}
+
+	public boolean confirmMySangsin(Map<String, String> param) {
+		return 1 == gyeoljaeDao.selectSangsin(param);
+	}
+
+	public boolean alarmModifySangsin(String sangsinNum) {
+		return 1 == gyeoljaeDao.updateModifySangsin(sangsinNum);
+	}
+
+	public boolean alarmModifyCancelSangsin(String sangsinNum) {
+		return 1 == gyeoljaeDao.updateModifyCancelSangsin(sangsinNum);
 	}
 
 }
