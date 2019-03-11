@@ -22,6 +22,7 @@ public class Sangsin {
 	private String endDate;
 	private String pushContent;
 	private String modify;  //수정중
+	private String delAttachCode;
 	
 	public String getTitle() {
 		return title;
@@ -107,5 +108,10 @@ public class Sangsin {
 	public void setModify(String modify) {
 		this.modify = modify;
 	}
-	
+	public String getDelAttachCode() {
+		return delAttachCode;
+	}
+	public void setDelAttachCode(String delAttachCode) {
+		this.delAttachCode = delAttachCode;
+	}
 }

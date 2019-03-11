@@ -64,4 +64,6 @@ public interface GyeoljaeDao {
 	void updateSangsinModifyFlag(int sangsinNum);
 
 	void deleteMySangsin(Map<String, Integer> rltMap);
+
+	void deleteGyeoljaeAttachFileByCode(String delAttachCode);
 }

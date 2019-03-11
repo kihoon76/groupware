@@ -169,4 +169,10 @@ public class GyeoljaeDaoImpl implements GyeoljaeDao {
 		msSqlSession.delete(namespace + ".deleteMySangsin", rltMap);
 	}
 
+	@Override
+	public void deleteGyeoljaeAttachFileByCode(String delAttachCode) {
+		msSqlSession.delete(namespace + ".deleteGyeoljaeAttachFileByCode", delAttachCode);
+		
+	}
+
 }

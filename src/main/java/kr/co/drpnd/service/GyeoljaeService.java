@@ -201,6 +201,13 @@ public class GyeoljaeService {
 					throw new RuntimeException("첨부파일 입력중 오류가 발생했습니다.");
 				}
 			}
+			else {
+				//기존 첨부만 삭제할 경우
+				String delAttachCode = sangsin.getDelAttachCode();
+				if(delAttachCode != null && !"".equals(delAttachCode)) {
+					gyeoljaeDao.deleteGyeoljaeAttachFileByCode(delAttachCode);
+				}
+			}
 			
 			//상신수정중 변경
 			gyeoljaeDao.updateSangsinModifyFlag(sangsin.getSangsinNum());

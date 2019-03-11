@@ -602,4 +602,8 @@
 			#{result, mode=OUT, jdbcType=INTEGER, javaType=int}
 		)}
 	</delete> 
+	
+	<delete id="deleteGyeoljaeAttachFileByCode" parameterType="string">
+		delete from [동림].[dbo].[상신첨부파일] where 파일코드 = #{delAttachCode}
+	</delete>
 </mapper>

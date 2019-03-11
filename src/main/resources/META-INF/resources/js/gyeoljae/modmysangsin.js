@@ -29,7 +29,7 @@
 		var chkNoLogic = false;
 		var attachFileCodeInDB = null;
 		var hasAttachFileInDB = false;
-		var removeAttachFileCodeInDB = false;
+		var removeAttachFileCodeInDB = null;
 		var maxFileCount = 1
 		
 		function onKeyDown(e) {
@@ -156,6 +156,10 @@
 				plainContent: $(codeContent).text(),
 				gyeoljaeType: gyeoljaeType,
 				sangsinNum: sangsinNum
+			}
+			
+			if(removeAttachFileCodeInDB) {
+				param.delAttachCode = removeAttachFileCodeInDB;
 			}
 			
 			//휴가
@@ -610,6 +614,10 @@
 				hasAttachFileInDB = false;
 			}
 			
+			for(var i=0; i<len; i++) {
+				data[i].del = delImgUrl;
+			}
+			
 			return data;
 		}
 		
@@ -650,7 +658,14 @@
 			movableRows: false,
 			columns: [
 			    {title:'첨부파일명', field:'name', headerSort:false, widthGrow:4},
-			    {title:'파일크기', field:'size', width:150,  headerSort:false, align:'center'}
+			    {title:'파일크기', field:'size', width:150,  headerSort:false, align:'center'},
+			    {title:'삭제', field:'del', width:60,  headerSort:false, align:'center', formatter: 'image', formatterParams: {
+			    	width: '20px', height: '20px'
+			    }, cellClick:function(e, cell) {
+			    	var row = cell.getRow();
+			    	row.delete();
+			    	removeAttachFileCodeInDB = row.getData().code;
+			    }}
 			],
 			//data: tableData,
 			rowMoved:function(row) {
