@@ -174,4 +174,52 @@ public class GyeoljaeService {
 		return 1 == gyeoljaeDao.updateModifyCancelSangsin(sangsinNum);
 	}
 
+	@Transactional(
+			isolation=Isolation.DEFAULT, 
+			propagation=Propagation.REQUIRED, 
+			rollbackFor=Exception.class,
+			timeout=10)//timeout 초단위
+	public void modifyGyeoljae(Sangsin sangsin) {
+		gyeoljaeDao.updateMySangsin(sangsin);
+		
+		int lineCount = sangsin.getGyeoljaeLines().size();
+		
+		try {
+			gyeoljaeDao.deleteGyeoljaeLines(String.valueOf(sangsin.getSangsinNum()));
+			int r = gyeoljaeDao.insertGyeoljaeLines(sangsin);
+			
+			if(r != lineCount) {
+				throw new RuntimeException("결재라인입력중 오류가 발생했습니다.");
+			}
+			
+			if(sangsin.getAttachFiles() != null) {
+				gyeoljaeDao.deleteGyeoljaeAttachFiles(sangsin.getSangsinNum());
+				int fileCount = sangsin.getAttachFiles().size();
+				int rFiles = gyeoljaeDao.insertGyeoljaeAttachFiles(sangsin);
+				
+				if(rFiles != fileCount) {
+					throw new RuntimeException("첨부파일 입력중 오류가 발생했습니다.");
+				}
+			}
+			
+			//상신수정중 변경
+			gyeoljaeDao.updateSangsinModifyFlag(sangsin.getSangsinNum());
+			
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e.getMessage());
+		}
+		
+	}
+
+	public Map<String, String> getFirstGyeoljaeja(String sangsinNum) {
+		return gyeoljaeDao.selectFirstGyeoljaeja(sangsinNum);
+	}
+
+	public void deleteMySangsin(Map<String, Integer> rltMap) {
+		gyeoljaeDao.deleteMySangsin(rltMap);
+		
+	}
+
 }

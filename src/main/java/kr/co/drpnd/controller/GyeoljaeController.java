@@ -142,6 +142,7 @@ public class GyeoljaeController {
 			
 			m.addAttribute("sangsin", mySangsin);
 			m.addAttribute("lines", new Gson().toJson(mySangsin.getGyeoljaeLines()));
+			m.addAttribute("attachFile", new Gson().toJson(mySangsin.getAttachFiles()).replaceAll("'", "▦"));
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -347,20 +348,30 @@ public class GyeoljaeController {
 			List<AttachFile> attachFiles = new ArrayList<>();
 			String pushMsg = myInfo.getSawonName() + "님이 올린 결재가 도착했습니다.";
 			
-			for(MultipartFile file: files) {
-				AttachFile attachFile = new AttachFile();
-				attachFile.setName(file.getOriginalFilename());
-				attachFile.setSize(file.getSize());
-				attachFile.setExt(FilenameUtils.getExtension(file.getOriginalFilename()));
-				attachFile.setFileByte(file.getBytes());
+//			for(MultipartFile file: files) {
+//				AttachFile attachFile = new AttachFile();
+//				attachFile.setName(file.getOriginalFilename());
+//				attachFile.setSize(file.getSize());
+//				attachFile.setExt(FilenameUtils.getExtension(file.getOriginalFilename()));
+//				attachFile.setFileByte(file.getBytes());
+//				
+//				attachFiles.add(attachFile);
+//				
+////				System.err.println("fileName ==>" + file.getOriginalFilename());
+////				System.err.println("fileSize ==>" + file.getSize());
+////				System.err.println("fileExt ==>" + FilenameUtils.getExtension(file.getOriginalFilename()));
+//				//FileCopyUtils.copy(file.getBytes(), new File(UPLOAD_LOCATION + file.getOriginalFilename()));
+//			}
+			
+			//파일 하나만 허용
+			AttachFile attachFile = new AttachFile();
+			attachFile.setName(files[0].getOriginalFilename());
+			attachFile.setSize(files[0].getSize());
+			attachFile.setExt(FilenameUtils.getExtension(files[0].getOriginalFilename()));
+			attachFile.setFileByte(files[0].getBytes());
+			
+			attachFiles.add(attachFile);
 				
-				attachFiles.add(attachFile);
-				
-//				System.err.println("fileName ==>" + file.getOriginalFilename());
-//				System.err.println("fileSize ==>" + file.getSize());
-//				System.err.println("fileExt ==>" + FilenameUtils.getExtension(file.getOriginalFilename()));
-				//FileCopyUtils.copy(file.getBytes(), new File(UPLOAD_LOCATION + file.getOriginalFilename()));
-			}
 			
 			sangsin.setAttachFiles(attachFiles);
 			sangsin.setPushContent(pushMsg);
@@ -383,6 +394,268 @@ public class GyeoljaeController {
 			vo.setErrMsg(e.getMessage());
 		}
 		
+		return vo;
+	}
+	
+	@PostMapping("mod/mysangsinNoNewFile")
+	@ResponseBody
+	public AjaxVO modMysangsinNoNewFile(@RequestBody Sangsin sangsin) {
+		
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		AjaxVO vo = new AjaxVO();
+		vo.setSuccess(true);
+		
+		try {
+			String sangsinNum = String.valueOf(sangsin.getSangsinNum());
+			Map<String, String> param = new HashMap<>();
+			param.put("sawonCode", myInfo.getSawonCode());
+			param.put("sangsinNum", sangsinNum);
+			boolean b = gyeoljaeService.confirmMySangsin(param);
+			
+			if(b) {
+				//결재수정 가능한지 조사
+				boolean result = gyeoljaeService.alarmModifySangsin(sangsinNum);
+				if(result) {
+					List<Map<String, Object>> lines = sangsin.getGyeoljaeLines();
+					String firstGyeoljaejaCode = null;
+					
+					//알림이 전달된 첫번째 결재자에게  수정사실을 알린다.
+					Map<String, String> sm = gyeoljaeService.getFirstGyeoljaeja(sangsinNum);
+					
+					for(Map<String, Object> line: lines) {
+						if("1".equals(line.get("order"))) {
+							line.put("status", "D");
+							firstGyeoljaejaCode = String.valueOf(line.get("sawonCode"));
+						}
+						else {
+							line.put("status", "W");
+						}
+					}
+					
+					String pushMsg = myInfo.getSawonName() + "님이 올린 결재가 도착했습니다.";
+					
+					sangsin.setGianja(myInfo.getSawonCode());
+					sangsin.setPushContent(pushMsg);
+					gyeoljaeService.modifyGyeoljae(sangsin);
+					
+					try {
+						Map<String, String> socketMap = new HashMap<>();
+						socketMap.put("msg", myInfo.getSawonName());
+						
+						String prevSawon = String.valueOf(sm.get("sawonCode"));
+						
+						//String.valueOf(sm.get("sawonCode")) : converter안하면 오류남
+						if(firstGyeoljaejaCode.equals(prevSawon)) {
+							//결재라인 첫번째 결재자가 동일
+							this.template.convertAndSend("/message/gyeoljae/modified/" + firstGyeoljaejaCode + "/alarm", (new Gson()).toJson(socketMap));
+							//push
+							sendPush(firstGyeoljaejaCode, "결재수정알림", myInfo.getSawonName() + "님이 올린 결재내용이 수정되었습니다.");
+						}
+						else {
+							//기존 결재자
+							this.template.convertAndSend("/message/gyeoljae/delete/line/" + prevSawon + "/alarm", (new Gson()).toJson(socketMap));
+							
+							//새결재자
+							this.template.convertAndSend("/message/gyeoljae/received/" + firstGyeoljaejaCode + "/alarm", (new Gson()).toJson(socketMap));
+							
+							sendPush(prevSawon, "결재수정알림", myInfo.getSawonName() + "님이 올린 결재의 결재라인이 변경되었습니다.");
+							sendPush(firstGyeoljaejaCode, "결재알림", pushMsg);
+						}
+					}
+					catch(Exception e) {
+						e.printStackTrace();
+					}
+				}
+				else {
+					vo.setSuccess(false);
+					vo.setErrMsg("결재진행중입니다. 수정하실수 없습니다.");
+				}
+			}
+			else {
+				vo.setSuccess(false);
+				vo.setErrMsg("내 상신문서가 아닙니다.");
+			}
+		} 
+		catch (Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+		
+		return vo;
+	}
+	
+	@PostMapping("mod/mysangsinWithNewFile")
+	@ResponseBody
+	public AjaxVO modMysangsinWithNewFile(
+			@RequestParam("title") String title,
+			@RequestParam("gyeoljaeLines") String gyeoljaeLines,
+			@RequestParam("content") String content,
+			@RequestParam("plainContent") String plainContent,
+			@RequestParam("gyeoljaeType") String gyeoljaeType,
+			@RequestParam("sangsinNum") String sangsinNum,
+			@RequestParam("file") MultipartFile[] files) {
+		AjaxVO vo = new AjaxVO();
+		
+		vo.setSuccess(true);
+		
+		try {
+			Sawon myInfo = SessionUtil.getSessionSawon();
+			
+			Map<String, String> param = new HashMap<>();
+			param.put("sawonCode", myInfo.getSawonCode());
+			param.put("sangsinNum", sangsinNum);
+			boolean b = gyeoljaeService.confirmMySangsin(param);
+			
+			if(b) {
+				//결재수정 가능한지 조사
+				boolean result = gyeoljaeService.alarmModifySangsin(sangsinNum);
+				
+				if(result) {
+					String firstGyeoljaejaCode = null;
+					Gson gson = new Gson();
+					
+					//알림이 전달된 첫번째 결재자에게  수정사실을 알린다.
+					Map<String, String> sm = gyeoljaeService.getFirstGyeoljaeja(sangsinNum);
+					List<Map<String, Object>> lines = gson.fromJson(gyeoljaeLines, new TypeToken<List<Map<String, Object>>>(){}.getType());
+					
+					for(Map<String, Object> line: lines) {
+						if("1".equals(line.get("order"))) {
+							line.put("status", "D");
+							firstGyeoljaejaCode = String.valueOf(line.get("sawonCode"));
+						}
+						else {
+							line.put("status", "W");
+						}
+					}
+					
+					Sangsin sangsin = new Sangsin();
+					sangsin.setTitle(title);
+					sangsin.setContent(content);
+					sangsin.setPlainContent(plainContent);
+					sangsin.setGyeoljaeLines(lines);
+					sangsin.setGianja(myInfo.getSawonCode());
+					sangsin.setGyeoljaeType(gyeoljaeType);
+					sangsin.setSangsinNum(Integer.parseInt(sangsinNum));
+					
+					List<AttachFile> attachFiles = new ArrayList<>();
+					String pushMsg = myInfo.getSawonName() + "님이 올린 결재가 도착했습니다.";
+					
+					//파일 하나만 허용
+					AttachFile attachFile = new AttachFile();
+					attachFile.setName(files[0].getOriginalFilename());
+					attachFile.setSize(files[0].getSize());
+					attachFile.setExt(FilenameUtils.getExtension(files[0].getOriginalFilename()));
+					attachFile.setFileByte(files[0].getBytes());
+					
+					attachFiles.add(attachFile);
+						
+					
+					sangsin.setAttachFiles(attachFiles);
+					sangsin.setPushContent(pushMsg);
+					gyeoljaeService.modifyGyeoljae(sangsin);
+					
+					try {
+						Map<String, String> socketMap = new HashMap<>();
+						socketMap.put("msg", myInfo.getSawonName());
+						
+						String prevSawon = String.valueOf(sm.get("sawonCode"));
+						
+						//String.valueOf(sm.get("sawonCode")) : converter안하면 오류남
+						if(firstGyeoljaejaCode.equals(prevSawon)) {
+							//결재라인 첫번째 결재자가 동일
+							this.template.convertAndSend("/message/gyeoljae/modified/" + firstGyeoljaejaCode + "/alarm", (new Gson()).toJson(socketMap));
+							//push
+							sendPush(firstGyeoljaejaCode, "결재수정알림", myInfo.getSawonName() + "님이 올린 결재내용이 수정되었습니다.");
+						}
+						else {
+							//기존 결재자
+							this.template.convertAndSend("/message/gyeoljae/delete/line/" + prevSawon + "/alarm", (new Gson()).toJson(socketMap));
+							
+							//새결재자
+							this.template.convertAndSend("/message/gyeoljae/received/" + firstGyeoljaejaCode + "/alarm", (new Gson()).toJson(socketMap));
+							
+							sendPush(prevSawon, "결재수정알림", myInfo.getSawonName() + "님이 올린 결재의 결재라인이 변경되었습니다.");
+							sendPush(firstGyeoljaejaCode, "결재알림", pushMsg);
+						}
+					}
+					catch(Exception e) {
+						e.printStackTrace();
+					}
+				}
+				else {
+					vo.setSuccess(false);
+					vo.setErrMsg("결재진행중입니다. 수정하실수 없습니다.");
+				}
+			}
+			else {
+				vo.setSuccess(false);
+				vo.setErrMsg("내 상신문서가 아닙니다.");
+			}
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+		
+		return vo;
+	}
+	
+	@GetMapping("del/mysangsin/{sangsinNum}")
+	@ResponseBody
+	public AjaxVO deleteMySangsin(@PathVariable("sangsinNum") String sangsinNum) {
+		
+		AjaxVO vo = new AjaxVO();
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		vo.setSuccess(true);
+		try {
+			Map<String, String> param = new HashMap<>();
+			param.put("sawonCode", myInfo.getSawonCode());
+			param.put("sangsinNum", sangsinNum);
+			boolean b = gyeoljaeService.confirmMySangsin(param);
+			
+			if(b) {
+				//결재삭제 가능한지 조사
+				boolean result = gyeoljaeService.alarmModifySangsin(sangsinNum);
+				
+				if(result) {
+					Map<String, String> sm = gyeoljaeService.getFirstGyeoljaeja(sangsinNum);
+					Map<String, String> socketMap = new HashMap<>();
+					socketMap.put("msg", myInfo.getSawonName());
+					
+					String firstGyeoljaejaCode = String.valueOf(sm.get("sawonCode"));
+					
+					Map<String, Integer> rltMap = new HashMap<>();
+					rltMap.put("sangsinNum", Integer.parseInt(sangsinNum));
+					rltMap.put("result", -1);
+					gyeoljaeService.deleteMySangsin(rltMap);
+					
+					int r = rltMap.get("result");
+					if(r == -1) {
+						vo.setSuccess(false);
+						vo.setErrMsg("상신삭제중 오류가 발생했습니다.");
+					}
+					else {
+						//결재라인 첫번째 결재자가 동일
+						this.template.convertAndSend("/message/gyeoljae/delete/" + firstGyeoljaejaCode + "/alarm", (new Gson()).toJson(socketMap));
+						//push
+						sendPush(firstGyeoljaejaCode, "결재삭제알림", myInfo.getSawonName() + "님이 올린 결재를 삭제하셨습니다.");
+					}
+				}
+				else {
+					vo.setSuccess(false);
+					vo.setErrMsg("결재진행중입니다. 삭제하실수 없습니다.");
+				}
+			}
+			else {
+				vo.setSuccess(false);
+				vo.setErrMsg("내 상신문서가 아닙니다.");
+			}
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+	
 		return vo;
 	}
 	

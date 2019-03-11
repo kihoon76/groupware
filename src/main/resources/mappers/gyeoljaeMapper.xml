@@ -551,4 +551,55 @@
 		 where [상신코드] = #{sangsinNum}
 		   and [수정중] = 'Y'
 	</update>
+	
+	<update id="updateMySangsin" parameterType="Sangsin">
+		update [동림].[dbo].[상신]
+		   set 기안제목 = #{title},
+		   	       기안내용_CODE = #{content},
+		   	       기안내용_PLAIN = #{plainContent},
+		   	       기안작성일 = getDate(),
+		   	       결재타입 = #{gyeoljaeType}, 
+		  <choose>
+		  <when test='gyeoljaeType == "1"'>
+		  	       휴가시작일 = null,
+		  	       휴가종료일 = null
+		  </when>
+		  <!-- 결재타입 휴가 --> 
+		  <otherwise>
+		  	       휴가시작일 = #{startDate},
+		  	       휴가종료일 = #{endDate} 
+		  </otherwise>
+		  </choose> 
+		 where 상신코드 = #{sangsinNum}
+	</update>
+	
+	<delete id="deleteGyeoljaeLines" parameterType="string">
+		delete from [동림].[dbo].[결재라인] where [상신코드] = #{sangsinNum}
+	</delete>
+	
+	<select id="selectFirstGyeoljaeja" parameterType="string" resultType="map">
+		select 사원코드 sawonCode, 사원명 sawonName
+		  from [동림].[dbo].[결재라인] T1
+		 inner join [동림].[dbo].[사원] T2
+		    on T1.결재처리자 = T2.사원코드
+		 where T1.결재순서 = 1
+		   and T1.상신코드 = #{sangsinNum}
+	</select>
+	
+	<delete id="deleteGyeoljaeAttachFiles" parameterType="int">
+		delete from [동림].[dbo].[상신첨부파일] where 상신코드 = #{sangsinNum}
+	</delete>
+	
+	<update id="updateSangsinModifyFlag" parameterType="int">
+		update [동림].[dbo].[상신]
+		   set 수정중 = null
+		 where 상신코드 = #{sangsinNum}
+	</update>
+	
+	<delete id="deleteMySangsin" statementType="CALLABLE" parameterType="map">
+		{call [동림].[dbo].[UP_상신삭제](
+			#{sangsinNum, mode=IN, jdbcType=INTEGER, javaType=int},
+			#{result, mode=OUT, jdbcType=INTEGER, javaType=int}
+		)}
+	</delete> 
 </mapper>

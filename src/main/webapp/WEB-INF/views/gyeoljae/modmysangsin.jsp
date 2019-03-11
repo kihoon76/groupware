@@ -80,7 +80,10 @@
   			<span style="font-size:1.5em;"><span class="badge badge-pill badge-danger">내용</span></span>
   		</div>
   		<textarea id="gyeoljaeContent" name="editordata" style="display:none;"></textarea>
-		
+		<div class="divMT divMB">
+  			<span style="font-size:1.5em;"><span class="badge badge-pill badge-danger">첨부파일</span></span>
+  			<span style="font-size:1.2em;"><span class="badge badge-pill badge-info">※새로 파일을 첨부하시면 기존의 첨부파일은 삭제됩니다.</span></span>
+  		</div>
 		<div class="divMT divMB">
 			<div id="attachedFileInDB"></div>
 		</div>
@@ -90,11 +93,13 @@
 		</div>
   		<div class="divMT">
   			<button type="button" class="btn btn-primary btn-sm" id="btnModifySangsin">상신수정</button>
+  			<button type="button" class="btn btn-danger btn-sm" id="btnDeleteSangsin">상신삭제</button>
   		</div>
   		
   		<input type="hidden" id="lines" value='${lines}' />
   		<input type="hidden" id="hdnContent" value="${sangsin.content}" />
   		<input type="hidden" id="hdnSangsinNum" value="${sangsinNum}" />
+  		<input type="hidden" id="hdnAttachFile" value='${attachFile}' />
 	</form>
 	</div>
 </body>

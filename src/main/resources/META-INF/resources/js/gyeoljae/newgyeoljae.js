@@ -20,6 +20,7 @@
 		var gyeoljaeAddObj = {};
 		var delImgUrl = '/resources/images/delete.png';
 		var gyeoljaeSelectedFiles = {};
+		var maxFileCount = 1
 		
 		$('.input-daterange').datepicker({
 			language: 'ko',
@@ -136,6 +137,13 @@
 			gyeoljaeSelectedFiles = {};
 		}
 		
+		function checkMaxFileCount() {
+			var arr = Object.keys(gyeoljaeSelectedFiles);
+			if(arr.length >= maxFileCount) return false;
+			
+			return true;
+		}
+		
 		$selGyeoljaeType
 		.off('change')
 		.on('change', function() {
@@ -158,7 +166,7 @@
 			showDone: true,
 			autoSubmit: false,
 			showPreview: true,
-			maxFileCount: 1,
+			maxFileCount: maxFileCount,
 			showAbort: false,
 			returnType: 'json',
 			url: '/gyeoljae/reg/newgyeoljaeWithfile',
@@ -234,8 +242,11 @@
 		            return false;
 		        }
 				
-				if(files[0].size <= 50000000) {
-					gyeoljaeSelectedFiles[k] = files[0];
+				//최대파일갯수 체크
+				if(checkMaxFileCount()) {
+					if(files[0].size <= 50000000) {
+						gyeoljaeSelectedFiles[k] = files[0];
+					}
 				}
 				
 				return true;

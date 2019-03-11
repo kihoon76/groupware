@@ -45,7 +45,6 @@ Ext.define('Drpnd.view.Viewport', {
 	             	subscribe: [{
 	             		url: '/message/gyeoljae/keepbox/' + sawonCode + '/alarm',
 	             		callback: function(message, mBody) {
-	             			console.log(mBody)
 	             			if(!msgCt){
 	                            msgCt = Ext.DomHelper.insertFirst(document.body, {id:'msg-div'}, true);
 	                        }
@@ -58,8 +57,6 @@ Ext.define('Drpnd.view.Viewport', {
 	             	},{
 	             		url: '/message/gyeoljae/received/' + sawonCode + '/alarm',
 	             		callback: function(message, mBody) {
-	             			console.log(mBody);
-	             			
 	             			mygyeoljaeCount++;
 	             			treeGyeoljae.innerText = mygyeoljaeCount;
 	             			if(!msgCt){
@@ -72,6 +69,47 @@ Ext.define('Drpnd.view.Viewport', {
 	                        m.slideIn('t').ghost('t', { delay: 5000, remove: true});
 	                        
 	                        
+	             		}
+	             	},{
+	             		url: '/message/gyeoljae/modified/' + sawonCode + '/alarm',
+	             		callback: function(message, mBody) {
+	             			if(!msgCt){
+	                            msgCt = Ext.DomHelper.insertFirst(document.body, {id:'msg-div'}, true);
+	                        }
+	             			var s = '<span style="color:#ff0000;">' + mBody.msg + '</span>님이 올린 결재내용이 수정되었습니다.<br/>';
+	                        var m = Ext.DomHelper.overwrite(msgCt, createAlarmBox('알림', s), true);
+	                        m.hide();
+	                        m.slideIn('t').ghost('t', { delay: 5000, remove: true});
+	                        
+	                        
+	             		}
+	             	},{
+	             		url: '/message/gyeoljae/delete/line/' + sawonCode + '/alarm',
+	             		callback: function(message, mBody) {
+	             			mygyeoljaeCount--;
+	             			treeGyeoljae.innerText = mygyeoljaeCount;
+	             			if(!msgCt){
+	                            msgCt = Ext.DomHelper.insertFirst(document.body, {id:'msg-div'}, true);
+	                        }
+	             			var s = '<span style="color:#ff0000;">' + mBody.msg + '</span>님이 올린 결재의 결재라인이 변경되었습니다.<br/>';
+	                        var m = Ext.DomHelper.overwrite(msgCt, createAlarmBox('알림', s), true);
+	                        m.hide();
+	                        m.slideIn('t').ghost('t', { delay: 5000, remove: true});
+	                        
+	                        
+	             		}
+	             	},{
+	             		url: '/message/gyeoljae/delete/' + sawonCode + '/alarm',
+	             		callback: function(message, mBody) {
+	             			mygyeoljaeCount--;
+	             			treeGyeoljae.innerText = mygyeoljaeCount;
+	             			if(!msgCt){
+	                            msgCt = Ext.DomHelper.insertFirst(document.body, {id:'msg-div'}, true);
+	                        }
+	             			var s = '<span style="color:#ff0000;">' + mBody.msg + '</span>님이 올린 결재가 삭제되었습니다<br/>';
+	                        var m = Ext.DomHelper.overwrite(msgCt, createAlarmBox('알림', s), true);
+	                        m.hide();
+	                        m.slideIn('t').ghost('t', { delay: 5000, remove: true});
 	             		}
 	             	},{
 	             		url: '/message/gyeoljae/reject/' + sawonCode + '/alarm',

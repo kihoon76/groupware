@@ -136,4 +136,37 @@ public class GyeoljaeDaoImpl implements GyeoljaeDao {
 		return msSqlSession.update(namespace + ".updateModifyCancelSangsin", sangsinNum);
 	}
 
+	@Override
+	public void updateMySangsin(Sangsin sangsin) {
+		msSqlSession.update(namespace + ".updateMySangsin", sangsin);
+		
+	}
+
+	@Override
+	public void deleteGyeoljaeLines(String sangsinNum) {
+		msSqlSession.delete(namespace + ".deleteGyeoljaeLines", sangsinNum);
+		
+	}
+
+	@Override
+	public Map<String, String> selectFirstGyeoljaeja(String sangsinNum) {
+		return msSqlSession.selectOne(namespace + ".selectFirstGyeoljaeja", sangsinNum);
+	}
+
+	@Override
+	public int deleteGyeoljaeAttachFiles(int sangsinNum) {
+		return msSqlSession.delete(namespace + ".deleteGyeoljaeAttachFiles", sangsinNum);
+	}
+
+	@Override
+	public void updateSangsinModifyFlag(int sangsinNum) {
+		msSqlSession.update(namespace + ".updateSangsinModifyFlag", sangsinNum);
+		
+	}
+
+	@Override
+	public void deleteMySangsin(Map<String, Integer> rltMap) {
+		msSqlSession.delete(namespace + ".deleteMySangsin", rltMap);
+	}
+
 }

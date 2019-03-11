@@ -20,6 +20,7 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 		var sangsinWin = null;
 		var keepboxWin = null;
 		var newGyeoljaeWin = null;
+		var modGyeoljaeWin = null;
 		
 		function activeButtonCSS(activeBtn) {
 			if(activeBtn == 'OVERVIEW') {
@@ -169,8 +170,8 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 			activeButtonCSS('UPDATE_GYEOLJAE');
 			CommonFn.checkSession(function() {
 				var iframe = Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'gyeoljae/view/mod/mysangsin/' + sangsinNum, load: function(dom) {
-					//keepboxWin = dom.contentWindow;
-					//keepboxWin.setParam(mask);
+					modGyeoljaeWin = dom.contentWindow;
+					modGyeoljaeWin.setGyeoljaeButton(that, btnSansinBox);
 				} });
 				addItem(iframe);
 			});

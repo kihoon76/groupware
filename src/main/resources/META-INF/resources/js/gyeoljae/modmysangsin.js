@@ -1,7 +1,15 @@
 (function() {
+	var panel = null;
+	var btnSangsin = null;
+	window.setGyeoljaeButton = function(p, s) {
+		panel = p;
+		btnSangsin = s;
+	}
+	
 	$(document).ready(function() {
 		var $btnSearchSawon = $('#btnSearchSawon');
 		var $btnModifySangsin = $('#btnModifySangsin');
+		var $btnDeleteSangsin = $('#btnDeleteSangsin');
 		var $txtSearchSawon = $('#txtSearchSawon');
 		var $gianTitle = $('#gianTitle');
 		var $gyeoljaeFileUp = $('#gyeoljaeFileUp');
@@ -19,6 +27,10 @@
 		var delImgUrl = '/resources/images/delete.png';
 		var gyeoljaeSelectedFiles = {};
 		var chkNoLogic = false;
+		var attachFileCodeInDB = null;
+		var hasAttachFileInDB = false;
+		var removeAttachFileCodeInDB = false;
+		var maxFileCount = 1
 		
 		function onKeyDown(e) {
 			e.preventDefault();
@@ -142,7 +154,8 @@
 				gyeoljaeLines: gyeoljaeParam,
 				content: codeContent,
 				plainContent: $(codeContent).text(),
-				gyeoljaeType: gyeoljaeType
+				gyeoljaeType: gyeoljaeType,
+				sangsinNum: sangsinNum
 			}
 			
 			//휴가
@@ -163,12 +176,12 @@
 			    }
 				else {
 					common.ajaxExt({
-						url: '/gyeoljae/reg/newgyeoljae_nofile',
+						url: '/gyeoljae/mod/mysangsinNoNewFile',
 						method: 'POST',
 						headers: { 'Content-Type': 'application/json' }, 
 						jsonData: getSangsinParams(),
 						loadmask: {
-							msg: '상신중 입니다.'
+							msg: '상신수정중 입니다.'
 						},
 						success: function(jo) {
 							var param = {type: 'alert'};
@@ -177,7 +190,7 @@
 								param.callback = function() {
 									window.location.reload();
 								};
-								param.msg = '상신되었습니다.';
+								param.msg = '상신 수정되었습니다.';
 							}
 							else {
 								param.msg = jo.errMsg;
@@ -187,6 +200,34 @@
 						}
 					});
 				}
+			});
+		}
+		
+		function sangsinDel() {
+			common.checkSession(function() {
+				common.ajaxExt({
+					url: '/gyeoljae/del/mysangsin/' + sangsinNum,
+					method: 'GET',
+					headers: { 'Content-Type': 'application/json' }, 
+					loadmask: {
+						msg: '상신삭제중 입니다.'
+					},
+					success: function(jo) {
+						var param = {type: 'alert'};
+						if(jo.success) {
+							param.icon = parent.Ext.MessageBox.INFO;
+							param.callback = function() {
+								btnSangsin.fireEvent('click', btnSangsin);
+							};
+							param.msg = '상신 삭제되었습니다.';
+						}
+						else {
+							param.msg = jo.errMsg;
+						}
+						
+						common.showExtMsg(param);
+					}
+				});
 			});
 		}
 		
@@ -219,6 +260,13 @@
 			gyeoljaeSelectedFiles = {};
 		}
 		
+		function checkMaxFileCount() {
+			var arr = Object.keys(gyeoljaeSelectedFiles);
+			if(arr.length >= maxFileCount) return false;
+			
+			return true;
+		}
+		
 		$selGyeoljaeType
 		.off('change')
 		.on('change', function() {
@@ -241,10 +289,10 @@
 			showDone: true,
 			autoSubmit: false,
 			showPreview: true,
-			maxFileCount: 1,
+			maxFileCount: maxFileCount,
 			showAbort: false,
 			returnType: 'json',
-			//url: '/gyeoljae/reg/newgyeoljaeWithfile',
+			url: '/gyeoljae/mod/mysangsinWithNewFile',
 			dragdropWidth: '500px',
 			previewHeight: '100px',
 			previewWidth: '100px',
@@ -309,6 +357,7 @@
 			},
 			onSelect: function(files) {
 				var k = files[0].name;//.replace(/\./gm, '');
+				
 				if(gyeoljaeSelectedFiles[k]) {
 					common.showExtMsg({
 						type: 'alert',
@@ -317,11 +366,15 @@
 		            return false;
 		        }
 				
-				if(files[0].size <= 50000000) {
-					gyeoljaeSelectedFiles[k] = files[0];
+				//최대파일갯수 체크
+				if(checkMaxFileCount()) {
+					if(files[0].size <= 50000000) {
+						gyeoljaeSelectedFiles[k] = files[0];
+					}
 				}
 				
 				return true;
+				
 			},
 			onCancel: function(files) {
 				var k = files[0];//.name.replace(/\./gm, '');
@@ -399,6 +452,18 @@
 			}
 			
 			sangsin();
+		});
+		
+		$btnDeleteSangsin.on('click', function() {
+			common.showExtMsg({
+				type: 'confirm',
+				msg: '삭제하시겠습니까?',
+				callback: function(btn) {
+					if(btn == 'ok') {
+						sangsinDel();
+					}
+				}
+			});
 		});
 		
 		function addSawonClick(win) {
@@ -531,6 +596,23 @@
 			return data;
 		}
 		
+		function makeAttachFileData() {
+			var str = $('#hdnAttachFile').val();
+			str = str.replace(/▦/ig, "'");
+			var data = $.parseJSON(str);
+			var len = data.length;
+			
+			if(len > 0) {
+				hasAttachFileInDB = true;
+				attachFileCodeInDB = data[0].code;
+			}
+			else {
+				hasAttachFileInDB = false;
+			}
+			
+			return data;
+		}
+		
 		var gyeoljaeLine = new Tabulator('#gyeoljaeLine', {
 			data: makeData(),
 			layout:'fitColumns',
@@ -559,24 +641,16 @@
 		});
 		
 		var attachedFileInDB = new Tabulator('#attachedFileInDB', {
-			//data: makeData(),
+			data: makeAttachFileData(),
 			layout:'fitColumns',
 		    autoResize:true,
+		    placeholder: '첨부파일이 없습니다.',
 		    //selectable:1,
 			height: '100px',
 			movableRows: false,
 			columns: [
-			    {title:'사원코드', field:'sawonCode', visible: false},
-			    {title:'사원명', field:'sawonName', width:150,  headerSort:false, align:'center'},
-			    {title:'사원아이디', field:'sawonId', width:200,  headerSort:false, align:'center'},
-			    {title:'직급', field:'sawonPosition', width:100,  headerSort:false, align:'center'},
-			    {title:'이메일', field:'email', widthGrow:4,  headerSort:false, align:'center'},
-			    {title:'삭제', field:'del', width:60,  headerSort:false, align:'center', formatter: 'image', formatterParams: {
-			    	width: '20px', height: '20px'
-			    }, cellClick:function(e, cell) {
-			    	var row = cell.getRow();
-			    	row.delete();
-			    }}
+			    {title:'첨부파일명', field:'name', headerSort:false, widthGrow:4},
+			    {title:'파일크기', field:'size', width:150,  headerSort:false, align:'center'}
 			],
 			//data: tableData,
 			rowMoved:function(row) {

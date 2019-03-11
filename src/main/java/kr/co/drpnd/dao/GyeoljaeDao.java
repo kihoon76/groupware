@@ -52,4 +52,16 @@ public interface GyeoljaeDao {
 	int updateModifySangsin(String sangsinNum);
 
 	int updateModifyCancelSangsin(String sangsinNum);
+
+	void updateMySangsin(Sangsin sangsin);
+
+	void deleteGyeoljaeLines(String valueOf);
+
+	Map<String, String> selectFirstGyeoljaeja(String sangsinNum);
+
+	int deleteGyeoljaeAttachFiles(int sangsinNum);
+
+	void updateSangsinModifyFlag(int sangsinNum);
+
+	void deleteMySangsin(Map<String, Integer> rltMap);
 }
