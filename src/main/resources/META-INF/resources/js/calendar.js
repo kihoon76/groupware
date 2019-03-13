@@ -59,7 +59,6 @@ $(document).ready(function() {
 			param = eventSources[category].events;
 		}
 		
-		console.log(param)
 		return param;
 		//return eventSources.team1.events.concat(eventSources.team2.events, eventSources.team3.events);
 		
@@ -92,7 +91,7 @@ $(document).ready(function() {
 	}
 	
 	function getPlanDetail(event) {
-		console.log(event)
+		//console.log(event)
 		var nameIdx = event.title.indexOf('_');
 		var name = event.title.substring(0, nameIdx);
 		openPlanDetailWin(name, event.description);
@@ -324,7 +323,7 @@ $(document).ready(function() {
 		win.show();
 	}
 	
-	$('#calendar').fullCalendar({
+	var calendar = $('#calendar').fullCalendar({
 		 customButtons: {
 			 cPrev: {
 				 icon:'left-single-arrow',
@@ -489,7 +488,19 @@ $(document).ready(function() {
 	    	 if(category == 'C01') return;
 	    	 var sDate = start.format();
 	    	 var eDate = end.format();
-	    	 //var eDate = end.add(-1, 'days').format();
+	    	 var eDate1 = null;
+	    	 //일정관리는 하루만 선택가능
+	    	 if(category == 'C03') {
+	    		 eDate1 = end.add(-1, 'days').format();
+	    		 if(eDate1 != sDate){
+	    	          calendar.fullCalendar('unselect');
+	    	          common.showExtMsg({
+	    	        	  type: 'alert',
+	    	        	  msg: '일정은 하루단위로 추가 가능합니다.'
+	    	          });
+	    	          return;
+	    	      }
+	    	 }
 	    	 
 	    	 common.checkSession(function() {
 	    		 common.showExtWin({
