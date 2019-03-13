@@ -403,10 +403,10 @@ $(document).ready(function() {
 	     selectable: true,
 	     eventLimit: true, // allow "more" link when too many events
 	     dayClick: function(date, jsEvent, view) {
-	    	 console.log('dayClick');
+	    	 //console.log('dayClick');
 	     },
 	     eventClick: function(calEvent, jsEvent, view) {
-	    	 console.log(calEvent.end.format());
+	    	 //console.log(calEvent.end.format());
 	    	 
 	    	 common.checkSession(function() {
 	    		 if(calEvent.cate == 'C01') {
@@ -534,7 +534,7 @@ $(document).ready(function() {
 	    	 });
 	     },
 	     eventRender: function(event, element) {
-	    	 console.log(element);
+	    	 //console.log(element);
 	    	 var id = event.id;
 	    	 eventElement['k' + id] = element;
 	    	 
@@ -544,6 +544,10 @@ $(document).ready(function() {
 	    			 'ui-tooltip': 'highlight'
 	    		 }
 	    	 });
+	    	 
+	    	 if(event.confirm == 'Y') {
+	    		 element.find('div.fc-content').prepend('<img src="/resources/images/stamp.png" width="16px" height="16px">'); 
+	    	 }
 	     }
 	});
 	

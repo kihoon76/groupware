@@ -21,6 +21,7 @@ public class CalendarEvent {
 	private boolean isModify;
 	private boolean isDelete;
 	private boolean isDb;
+	private String confirm;
 	
 	public String getTitle() {
 		return title;
@@ -125,4 +126,11 @@ public class CalendarEvent {
 	public void setBigo(String bigo) {
 		this.bigo = bigo;
 	}
+	public String getConfirm() {
+		return confirm;
+	}
+	public void setConfirm(String confirm) {
+		this.confirm = confirm;
+	}
+	
 }

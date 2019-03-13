@@ -22,6 +22,7 @@
 		<result column="바탕색"		property="bgColor"	javaType="string"/>
 		<result column="테두리색"		property="borderColor"	javaType="string"/>
 		<result column="비고"			property="bigo"		javaType="string"/>
+		<result column="결재완료"		property="confirm"		javaType="string"/>
 		<result column="myevent"	property="mine"	javaType="string"/>
 	</resultMap>
 	
@@ -46,6 +47,9 @@
 			   case when T1.사원코드 = #{sawonCode} then 'Y'
 			   		else 'N'
 			   end as myevent,
+			   case when T1.결재완료 = 'Y' then 'Y'
+			        else 'N'
+			   end as 결재완료,
 			   isnull(T3.바탕색, '#996600') as 바탕색,
 			   isnull(T3.글자색, '#ffffff') as 글자색,
 			   isnull(T3.테두리색, '#996600') as 테두리색

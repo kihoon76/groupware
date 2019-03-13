@@ -131,7 +131,20 @@ public class CalendarService {
 					map.put("editable", false);
 				}
 				else {
-					map.put("editable", ("Y".equals(cal.getMine()) ? true : false));
+					//휴가일 경우 결재완료된 것은 수정불가
+					if("C02".equals(param.get("cate"))) {
+						if("Y".equals(cal.getConfirm())) {
+							map.put("editable", false);
+							map.put("confirm", "Y");
+						}
+						else {
+							map.put("editable", ("Y".equals(cal.getMine()) ? true : false));
+							map.put("confirm", "N");
+						}
+					}
+					else {
+						map.put("editable", ("Y".equals(cal.getMine()) ? true : false));
+					}
 				}
 				
 				map.put("isNew", false);
