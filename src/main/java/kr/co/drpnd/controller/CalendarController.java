@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -80,8 +79,6 @@ public class CalendarController {
 		AjaxVO vo = new AjaxVO();
 		
 		try {
-			ObjectMapper om = new ObjectMapper();
-			//System.err.println(om.writeValueAsString(list));
 			calendarService.saveCalendar(list);
 			vo.setSuccess(true);
 		}
@@ -317,6 +314,37 @@ public class CalendarController {
 			vo.setSuccess(false);
 			vo.setErrCode(ExceptionCode.INVALID_RESERVATION_USER.getCode());
 			vo.setErrMsg(e.getMessage());
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+		
+		return vo;
+	}
+	
+	@GetMapping("m/view/plan")
+	public String mViewCalendarPlan(ModelMap m) {
+		m.addAttribute("currentDate", DateUtil.getCurrentDateString());
+		m.addAttribute("sawonName", SessionUtil.getSessionSawon().getSawonName());
+		return "mobile/calendar/plan";
+	}
+	
+	@GetMapping(value={"m/getMyPlan", "m/getMyPlan/{date}"})
+	@ResponseBody
+	public AjaxVO<Map<String, String>> getMyPlanThisMonth(@PathVariable(name="date", required=false) String date) {
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		AjaxVO<Map<String, String>> vo = new AjaxVO<>();
+		vo.setSuccess(true);
+		
+		try {
+			Map<String, String> param = new HashMap<>();
+			param.put("sawonCode", myInfo.getSawonCode());
+			if(date != null) {
+				param.put("date", date);
+			}
+			List<Map<String, String>> list = calendarService.getMyPlanThisMonthMobile(param);
+			vo.setDatas(list);
 		}
 		catch(Exception e) {
 			vo.setSuccess(false);

@@ -4,6 +4,7 @@ var Common = {
 	popupClose: function() {},
 	useCacheReserPop: true,
 	offworkPopup: '',
+	myPlanPopup: '<textarea class="ta-myplan" readOnly>{0}</textarea>',
 	getFullHeight: function() {
 		var screen = $.mobile.getScreenHeight();
     	var header = $(".ui-header").hasClass("ui-header-fixed") ? $(".ui-header").outerHeight()  - 1 : $(".ui-header").outerHeight();
@@ -15,6 +16,21 @@ var Common = {
     	var content = screen - header - footer - contentCurrent;
     	
     	return content - 32 - 32 - 32;
+	},
+	getFormatDate: function(date) {
+		try {
+			var year = date.getFullYear();                                
+			var month = (1 + date.getMonth());                     
+
+			month = month >= 10 ? month : '0' + month;     
+			var day = date.getDate();                      
+			day = day >= 10 ? day : '0' + day;             
+
+			return  year + '-' + month + '-' + day;
+		}
+		catch(e) {
+			throw e;
+		}
 	},
 	ajax: function(cfg) {
 		$.ajax(cfg.url, {
@@ -150,6 +166,15 @@ else if(userAgent.match('android')) {
 	$('head').append('<link rel="shortcut icon" href="/resources/images/dongrim.png" />') 
 }
 
+String.format = function() {
+	var s = arguments[0];
+	for(var i = 0; i < arguments.length - 1; i++) {       
+		var reg = new RegExp("\\{" + i + "\\}", "gm");             
+		s = s.replace(reg, arguments[i + 1]);
+	}
+
+	return s;
+}
 
 $(document)
 .off('change', '#selOverworkType')
@@ -361,6 +386,7 @@ $(document).on('pageshow', function (event, ui) {
 	$('#popupDialog').popup({history: false});
 	var $dvUseInfo = $('#dvUseInfo');
 	var $dvGeuntae = $('#dvGeuntae');
+	var $dvCalendarPlan = $('#dvCalendarPlan');
 	
 	if($dvGeuntae.get(0)) {
 		var baseUrl = $('#baseUrl').val();
@@ -402,6 +428,10 @@ $(document).on('pageshow', function (event, ui) {
     	});
     	
 		$dvUseInfo.height(Common.getFullHeight());
+	}
+	
+	if($dvCalendarPlan.get(0)) {
+		Common.viewCalendarPlan();
 	}
 });
 

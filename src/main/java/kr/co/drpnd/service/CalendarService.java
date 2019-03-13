@@ -222,4 +222,32 @@ public class CalendarService {
 		return calendarDao.selectTodayConferenceReservationCount();
 	}
 
+	public List<Map<String, String>> getMyPlanThisMonthMobile(Map<String, String> param) {
+		List<Map<String, String>> list = calendarDao.selectMyPlanThisMonthMobile(param);
+		
+		int size = list.size();
+		if(size > 0) {
+			List<Map<String, String>> rList = new ArrayList<>();
+			String begin = "";
+			for(int i=0; i<size; i++) {
+				if(begin.equals(list.get(i).get("begin"))) {
+					//이전거 꺼내서 summary 합친다.
+					String s = rList.get(rList.size()-1).get("summary");
+					s = s  + System.lineSeparator() + "------------------------------" + System.lineSeparator();
+					s = s + list.get(i).get("summary");
+					rList.get(rList.size()-1).put("summary", s);
+				}
+				else {
+					begin = list.get(i).get("begin");
+					rList.add(list.get(i));
+				}
+				
+			}
+			
+			return rList;
+		}
+		
+		return list;
+	}
+
 }

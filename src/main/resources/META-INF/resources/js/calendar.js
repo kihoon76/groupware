@@ -393,9 +393,9 @@ $(document).ready(function() {
 			 }
 		 },
 		 header: {
-			 left: 'cPrev,cNext today',
+			 left: 'cPrev,cNext cSave today',
 		     center: 'title',
-		     right: 'cSave'//'month,basicWeek,basicDay'
+		     right: ''//'month,basicWeek,basicDay'
 		 },
 		 height: 'auto',
 		 defaultDate: $('body').data('date'),

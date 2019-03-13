@@ -168,4 +168,20 @@
    		  on T1.사원코드 = T3.사원코드
    		  where T3.부서코드 = #{department} 
 	</select>
+	
+	<select id="selectMyPlanThisMonthMobile" parameterType="map" resultType="map">
+    <![CDATA[select 시작일  [begin], 종료일 [end], concat(제목, '<br/>', 상세) summary]]>
+    	   from [동림].[dbo].[캘린더] T1
+    	  where 카테고리코드 = 'C03'
+    	    and 사원코드 = #{sawonCode}
+    	   <choose>
+    	   <when test="date == null">
+    	    and 카테고리월 = convert(char(7), getDate(), 21)
+    	   </when>
+    	   <otherwise>
+    	    and 카테고리월 = #{date}
+    	   </otherwise>
+    	   </choose>
+    	   order by 시작일
+	</select>
 </mapper>

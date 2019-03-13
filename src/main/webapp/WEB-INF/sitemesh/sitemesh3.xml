@@ -14,6 +14,7 @@
 	<mapping path="/floormap" decorator="/WEB-INF/views/layout/defaultiframe.jsp" />
 	<mapping path="/reservation" decorator="/WEB-INF/views/layout/defaultiframe.jsp" />
 	<mapping path="/m/*" decorator="/WEB-INF/views/layout/defaultmobile.jsp" />
+	<mapping path="/calendar/m/*" decorator="/WEB-INF/views/layout/defaultmobile.jsp" />
 	<mapping path="/*" decorator="/WEB-INF/views/layout/default.jsp" />
 	
 	<mapping path="/forbidden" exclude="true" />

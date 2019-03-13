@@ -35,4 +35,6 @@ public interface CalendarDao {
 
 	String selectTodayConferenceReservationCount();
 
+	List<Map<String, String>> selectMyPlanThisMonthMobile(Map<String, String> param);
+
 }

@@ -88,4 +88,9 @@ public class CalendarDaoImpl implements CalendarDao {
 		return msSqlSession.selectList(namespace + ".selectPlanContentInDayAll", param);
 	}
 
+	@Override
+	public List<Map<String, String>> selectMyPlanThisMonthMobile(Map<String, String> param) {
+		return msSqlSession.selectList(namespace + ".selectMyPlanThisMonthMobile", param);
+	}
+
 }
