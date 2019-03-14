@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import kr.co.drpnd.domain.AttachFile;
 import kr.co.drpnd.domain.Sangsin;
+import kr.co.drpnd.domain.VacationDocs;
 
 @Repository("gyeoljaeDao")
 public class GyeoljaeDaoImpl implements GyeoljaeDao {
@@ -173,6 +174,11 @@ public class GyeoljaeDaoImpl implements GyeoljaeDao {
 	public void deleteGyeoljaeAttachFileByCode(String delAttachCode) {
 		msSqlSession.delete(namespace + ".deleteGyeoljaeAttachFileByCode", delAttachCode);
 		
+	}
+
+	@Override
+	public VacationDocs selectVacationDocsInfo(Map<String, String> param) {
+		return msSqlSession.selectOne(namespace + ".selectVacationDocsInfo", param);
 	}
 
 }

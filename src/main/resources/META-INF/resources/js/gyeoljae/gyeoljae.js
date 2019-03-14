@@ -293,6 +293,15 @@ var Gyeoljae = (function() {
 		if(type == 'gian') {
 			var btnItems = [{ xtype: 'component', flex: 1 }];
 			if(isCommitted) {
+				//결재타입이 휴가면 문서
+				if(sangsin.gyeoljaeType == '2') {
+					btnItems.push({ xtype: 'button', text: '문서출력', iconCls: 'icon-print', listeners: {
+			        	click: function(btn) {
+			        		vacationDoc(sangsin.sangsinNum);
+			        	}
+			        } });
+				}
+				
 				btnItems.push({ xtype: 'button', text: '닫기', iconCls: 'icon-close', listeners: {
 		        	click: function(btn) {
 		        		multiWin.close();
@@ -308,12 +317,24 @@ var Gyeoljae = (function() {
 			        } });
 				}
 				
-				btnItems.push({ xtype: 'button', text: '수정', iconCls: 'icon-modi', listeners: {
-		        	click: function(btn) {
-		        		console.log(sangsin);
-		        		modifyMySangsin(sangsin, multiWin, ext);
-		        	}
-		        } });
+				if(sangsin.status != 'C') {
+					btnItems.push({ xtype: 'button', text: '수정', iconCls: 'icon-modi', listeners: {
+			        	click: function(btn) {
+			        		console.log(sangsin);
+			        		modifyMySangsin(sangsin, multiWin, ext);
+			        	}
+			        } });
+				}
+				else {
+					if(sangsin.gyeoljaeType == '2') {
+						btnItems.push({ xtype: 'button', text: '문서출력', iconCls: 'icon-print', listeners: {
+				        	click: function(btn) {
+				        		vacationDoc(sangsin.sangsinNum);
+				        	}
+				        } });
+					}
+				}
+				
 				btnItems.push({ xtype: 'button', text: '닫기', iconCls: 'icon-close', listeners: {
 		        	click: function(btn) {
 		        		multiWin.close();
@@ -357,6 +378,27 @@ var Gyeoljae = (function() {
 		
 		multiWin = parent.Ext.create('Ext.window.Window', winParam);
 		multiWin.show();
+	}
+	
+	function vacationDoc(sangsinNum) {
+		//multiWin.close();
+		/*common.showExtMsg({
+			type: 'alert',
+			msg: '개발중입니다.'
+		});*/
+		
+		docWin('/docs/vacation/' + sangsinNum, 'GET');
+	}
+	
+	function docWin(url, method) {
+		var form = document.createElement('form');
+		form.action = url;
+		form.method = method;
+		form.target = '_blank';
+		
+		form.style.display = 'none';
+		document.body.appendChild(form);
+		form.submit();
 	}
 	
 	function modifyCancelMySangsin(btn, sangsinNum) {

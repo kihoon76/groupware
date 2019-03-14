@@ -1,5 +1,6 @@
 package kr.co.drpnd.service;
 
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 
@@ -9,13 +10,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 
 import kr.co.drpnd.dao.GyeoljaeDao;
 import kr.co.drpnd.domain.AttachFile;
 import kr.co.drpnd.domain.Sangsin;
+import kr.co.drpnd.domain.Sawon;
+import kr.co.drpnd.domain.VacationDocs;
 import kr.co.drpnd.exception.InvalidUser;
 import kr.co.drpnd.exception.ModifySangsin;
 import kr.co.drpnd.type.ExceptionCode;
+import kr.co.drpnd.util.DataUtil;
 
 @Service("gyeoljaeService")
 public class GyeoljaeService {
@@ -227,6 +232,18 @@ public class GyeoljaeService {
 	public void deleteMySangsin(Map<String, Integer> rltMap) {
 		gyeoljaeDao.deleteMySangsin(rltMap);
 		
+	}
+
+	public VacationDocs getVacationDocsInfo(Map<String, String> param) {
+		VacationDocs docs = gyeoljaeDao.selectVacationDocsInfo(param);
+		String mySign = docs.getMySign();
+		
+		if(mySign != null) {
+			byte[] signByte = DataUtil.hexStringToByteArray(mySign); 
+			docs.setMySign(new String(signByte, Charset.forName("UTF-8")));
+		}
+		
+		return docs;
 	}
 
 }

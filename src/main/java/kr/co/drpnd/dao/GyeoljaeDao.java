@@ -5,6 +5,7 @@ import java.util.Map;
 
 import kr.co.drpnd.domain.AttachFile;
 import kr.co.drpnd.domain.Sangsin;
+import kr.co.drpnd.domain.VacationDocs;
 
 public interface GyeoljaeDao {
 	List<Map<String, String>> selectGyeoljaeSawonList(Map<String, Object> param);
@@ -66,4 +67,6 @@ public interface GyeoljaeDao {
 	void deleteMySangsin(Map<String, Integer> rltMap);
 
 	void deleteGyeoljaeAttachFileByCode(String delAttachCode);
+
+	VacationDocs selectVacationDocsInfo(Map<String, String> param);
 }

@@ -26,6 +26,7 @@ import kr.co.drpnd.domain.AjaxVO;
 import kr.co.drpnd.domain.AttachFile;
 import kr.co.drpnd.domain.Sawon;
 import kr.co.drpnd.domain.Team;
+import kr.co.drpnd.domain.VacationDocs;
 import kr.co.drpnd.exception.AppTokenError;
 import kr.co.drpnd.service.CalendarService;
 import kr.co.drpnd.service.CodeService;
@@ -224,7 +225,7 @@ public class DrpndController {
 	
 	@GetMapping("forbidden")
 	public String forbidden() {
-		return "forbidden";
+		return "err/403";
 	}
 	
 	@GetMapping("checkSession")
@@ -249,6 +250,7 @@ public class DrpndController {
 			Map<String, String> m = new HashMap<>();
 			m.put("sawonCode", myInfo.getSawonCode());
 			m.put("sign", sign);
+			System.err.println(sign);
 			sawonService.regSignature(m);
 			
 			myInfo.setSignature(sign);
@@ -267,7 +269,36 @@ public class DrpndController {
 		return "orgchart";
 	}
 	
-	
+	@GetMapping("docs/vacation/{sangsinNum}")
+	public String getDocVacation(
+			@PathVariable("sangsinNum") String sangsinNum,
+			ModelMap m) {
+		Sawon sawon = SessionUtil.getSessionSawon();
+		
+		Map<String, String> param = new HashMap<>();
+		param.put("sawonCode", sawon.getSawonCode());
+		param.put("sangsinNum", sangsinNum);
+		param.put("gyeoljaeType", "2");
+		param.put("status", "C");
+		
+		try {
+			boolean b = gyeoljaeService.confirmMySangsin(param);
+			if(b) {
+				VacationDocs result = gyeoljaeService.getVacationDocsInfo(param);
+				m.addAttribute("docs", result);
+			}
+			else {
+				m.addAttribute("msg", "내문서가 아니거나 문서타입이 휴가가 아닙니다.");
+				return "/err/404";
+			}
+		}
+		catch(Exception e) {
+			m.addAttribute("msg", e.getMessage());
+			return "/err/500";
+		}
+		
+		return "docs/vacation";
+	}
 	
 	private void createToken(ModelMap m, TokenKey key) {
 		String token = SessionUtil.createToken();

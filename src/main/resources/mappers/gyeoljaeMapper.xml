@@ -361,6 +361,7 @@
 		<result column="휴가시작일" property="startDate" javaType="string"/>
 		<result column="수정중" property="modify" javaType="string" />
 		<result column="휴가종료일" property="endDate" javaType="string"/>
+		<result column="처리상태" property="status" javaType="string"/>
 		<collection property="attachFiles" column="상신코드" 
 					javaType="java.util.ArrayList"
 					ofType="AttachFile" 
@@ -382,6 +383,7 @@
 		<result column="결재타입" property="gyeoljaeType" javaType="string"/>
 		<result column="휴가시작일" property="startDate" javaType="string"/>
 		<result column="휴가종료일" property="endDate" javaType="string"/>
+		<result column="처리상태" property="status" javaType="string"/>
 		<collection property="attachFiles" column="상신코드" 
 					javaType="java.util.ArrayList"
 					ofType="AttachFile" 
@@ -394,7 +396,7 @@
 	</resultMap>
 	
 	<select id="selectMyModifySangsin" parameterType="map" resultMap="RM_ModifySangsin">
-		 select T1.상신코드, 기안제목, REPLACE(기안내용_CODE, '"', '▦') 기안내용_CODE , convert(char(16), 기안작성일, 20) 기안작성일, 결재타입, 휴가시작일, 휴가종료일
+		 select T1.상신코드, 기안제목, REPLACE(기안내용_CODE, '"', '▦') 기안내용_CODE , convert(char(16), 기안작성일, 20) 기안작성일, 결재타입, 휴가시작일, 휴가종료일, 처리상태
 		  from [동림].[dbo].[상신] T1
 		 where T1.상신코드 = #{sangsinNum}
 		   and T1.기안자 = #{sawonCode}
@@ -421,7 +423,7 @@
 	</select>
 	
 	<select id="selectMyGyeoljaeDetail" parameterType="map" resultMap="RM_Sangsin">
-		select T1.상신코드, 기안제목, 기안내용_CODE, T3.사원명 as 기안자, convert(char(16), 기안작성일, 20) 기안작성일, 결재타입, 휴가시작일, 휴가종료일
+		select T1.상신코드, 기안제목, 기안내용_CODE, T3.사원명 as 기안자, convert(char(16), 기안작성일, 20) 기안작성일, 결재타입, 휴가시작일, 휴가종료일, T1.처리상태
 		  from [동림].[dbo].[상신] T1
 		 inner join [동림].[dbo].[결재라인] T2
 		    on T1.상신코드 = T2.상신코드
@@ -434,13 +436,13 @@
 	<select id="selectMySangsinDetail" parameterType="map" resultMap="RM_Sangsin">
 		 <choose>
 		 <when test="sawonCode != null">
-		 select T1.상신코드, 기안제목, 기안내용_CODE, convert(char(16), 기안작성일, 20) 기안작성일, 결재타입, 휴가시작일, 휴가종료일, isnull(수정중, 'N') 수정중
+		 select T1.상신코드, 기안제목, 기안내용_CODE, convert(char(16), 기안작성일, 20) 기안작성일, 결재타입, 휴가시작일, 휴가종료일, isnull(수정중, 'N') 수정중, 처리상태
 		  from [동림].[dbo].[상신] T1
 		 where T1.상신코드 = #{sangsinNum}
 		   and T1.기안자 = #{sawonCode}
 		 </when>
 		 <otherwise>
-		  select T1.상신코드, 기안제목, 기안내용_CODE, convert(char(16), 기안작성일, 20) 기안작성일, 사원명 as 기안자, 결재타입, 휴가시작일, 휴가종료일
+		  select T1.상신코드, 기안제목, 기안내용_CODE, convert(char(16), 기안작성일, 20) 기안작성일, 사원명 as 기안자, 결재타입, 휴가시작일, 휴가종료일, 처리상태
 		    from [동림].[dbo].[상신] T1
 		   inner join [동림].[dbo].[사원] T2
 		      on T1.기안자 = T2.사원코드
@@ -526,6 +528,12 @@
 		  from [동림].[dbo].[상신] 
 		 where 기안자 = #{sawonCode} 
 		   and 상신코드 = #{sangsinNum}
+		 <if test="gyeoljaeType != null">
+		   and 결재타입 = #{gyeoljaeType}
+		 </if>
+		 <if test="status != null">
+		   and 처리상태 = #{status}
+		 </if>
 	</select>
 	
 	<select id="selectEditableSangsin" parameterType="map" resultType="int">
@@ -606,4 +614,16 @@
 	<delete id="deleteGyeoljaeAttachFileByCode" parameterType="string">
 		delete from [동림].[dbo].[상신첨부파일] where 파일코드 = #{delAttachCode}
 	</delete>
+	
+	<select id="selectVacationDocsInfo" parameterType="map" resultType="VacationDocs">
+		select T2.사원명 sawonName, isnull(T3.팀명, '') teamName, T4.직급명  positionName, T2.서명 mySign
+		  from [동림].[dbo].[상신] T1
+		  inner join [동림].[dbo].[사원] T2
+		     on T1.기안자 = T2.사원코드
+		   left outer join [동림].[dbo].[팀] T3
+		     on T2.팀코드 = T3.팀코드 
+		  inner join [동림].[dbo].[직급] T4
+		     on T2.직급코드 = T4.직급코드
+		 where 상신코드 = #{sangsinNum}
+	</select>
 </mapper>
