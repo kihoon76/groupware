@@ -302,6 +302,7 @@ var Gyeoljae = (function() {
 			        } });
 				}
 				
+				
 				btnItems.push({ xtype: 'button', text: '닫기', iconCls: 'icon-close', listeners: {
 		        	click: function(btn) {
 		        		multiWin.close();
