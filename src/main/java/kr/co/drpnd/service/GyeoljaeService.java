@@ -10,15 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Base64Utils;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import kr.co.drpnd.dao.GyeoljaeDao;
 import kr.co.drpnd.domain.AttachFile;
 import kr.co.drpnd.domain.Sangsin;
-import kr.co.drpnd.domain.Sawon;
 import kr.co.drpnd.domain.VacationDocs;
 import kr.co.drpnd.exception.InvalidUser;
 import kr.co.drpnd.exception.ModifySangsin;
