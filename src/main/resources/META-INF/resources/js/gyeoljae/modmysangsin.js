@@ -7,6 +7,7 @@
 	}
 	
 	$(document).ready(function() {
+		var $btnRefresh = $('#btnRefresh');
 		var $btnSearchSawon = $('#btnSearchSawon');
 		var $btnModifySangsin = $('#btnModifySangsin');
 		var $btnDeleteSangsin = $('#btnDeleteSangsin');
@@ -22,6 +23,10 @@
 		var $dvContainer = $('#dvContainer');
 		var $chkAlarm = $('#chkAlarm');
 		var sangsinNum = $('#hdnSangsinNum').val();
+		var $selGyeoljaeSubType = $('#selGyeoljaeSubType');
+		var $dvGyeoljaeSubType = $('#dvGyeoljaeSubType');
+		var $dvVacationTerm = $('#dvVacationTerm');
+		var $numTerm = $('#numTerm');
 		
 		var gyeoljaeAddObj = {};
 		var delImgUrl = '/resources/images/delete.png';
@@ -39,6 +44,10 @@
 		$('.input-daterange').datepicker({
 			language: 'ko',
 			autoclose: true,
+		})
+		.on('changeDate', function(e) {
+			var term = common.datediff($txtVacationStart.val(), $txtVacationEnd.val());
+			$numTerm.val((term+1));
 		});
 		
 		$chkAlarm.on('click', function(e, args) {
@@ -54,6 +63,14 @@
 		});
 		
 		$body.on('keydown', onKeyDown);
+		
+		$btnRefresh.on('click', function() {
+			window.location.reload();
+		});
+		
+		function refreshDisable(disable) {
+			$btnRefresh.prop('disabled', disable);
+		}
 		
 		function alarmDisable(disable) {
 			$chkAlarm.prop('disabled', disable);
@@ -89,6 +106,7 @@
 						}
 						
 						alarmDisable(false);
+						refreshDisable(true);
 					},
 					failure: function() {
 						alarmDisable(false);
@@ -113,6 +131,7 @@
 						}
 						
 						alarmDisable(false);
+						refreshDisable(false);
 					},
 					failure: function() {
 						alarmDisable(false);
@@ -166,6 +185,8 @@
 			if(gyeoljaeType == '2') {
 				param.startDate = $.trim($txtVacationStart.val());
 				param.endDate = $.trim($txtVacationEnd.val());
+				param.gyeoljaeSubType = $selGyeoljaeSubType.val();
+				param.term = $numTerm.val();
 			}
 			
 			return param;
@@ -259,6 +280,17 @@
 			return true;
 		}
 		
+		function validateGyeoljaeSubType() {
+			//휴가
+			if($selGyeoljaeType.val() == '2') {
+				var t = $.trim($numTerm.val());
+				
+				return t != '' && t >= 1;
+			}
+			
+			return true;
+		}
+		
 		function clearGyeoljaeFile() {
 			$gyeoljaeFileUp.reset();
 			gyeoljaeSelectedFiles = {};
@@ -278,10 +310,14 @@
 			//휴가
 			if(v == '2') {
 				$datepicker.show();
+				$dvGyeoljaeSubType.show();
+				$dvVacationTerm.show();
 				//getVacationGyeoljaeLines();
 			}
 			else {
 				$datepicker.hide();
+				$dvGyeoljaeSubType.hide();
+				$dvVacationTerm.hide();
 				//getDefaultGyeoljaeLines();
 			}
 			
@@ -450,6 +486,17 @@
 					msg: '휴가기간을 선택하세요',
 					callback: function() {
 						$txtVacationStart.focus();
+					}
+				});
+				return;
+			}
+			
+			if(!validateGyeoljaeSubType()) {
+				common.showExtMsg({
+					type: 'alert',
+					msg: '휴가일수를 입력하세요',
+					callback: function() {
+						$numTerm.focus();
 					}
 				});
 				return;

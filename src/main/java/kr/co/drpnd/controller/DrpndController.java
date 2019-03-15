@@ -285,6 +285,23 @@ public class DrpndController {
 			boolean b = gyeoljaeService.confirmMySangsin(param);
 			if(b) {
 				VacationDocs result = gyeoljaeService.getVacationDocsInfo(param);
+				
+				if(result.getStartMonth().startsWith("0")) {
+					result.setStartMonth(result.getStartMonth().substring(1));
+				}
+				if(result.getStartDay().startsWith("0")) {
+					result.setStartDay(result.getStartDay().substring(1));
+				}
+				if(result.getEndMonth().startsWith("0")) {
+					result.setEndMonth(result.getEndMonth().substring(1));
+				}
+				if(result.getEndDay().startsWith("0")) {
+					result.setEndDay(result.getEndDay().substring(1));
+				}
+				
+				
+				
+				
 				m.addAttribute("docs", result);
 			}
 			else {

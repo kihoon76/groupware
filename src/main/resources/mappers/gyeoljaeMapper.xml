@@ -78,13 +78,13 @@
 	</select>
 	
 	<insert id="insertNewGyeoljae" parameterType="Sangsin">
-		insert into [동림].[dbo].[상신](기안제목, 기안내용_CODE, 기안내용_PLAIN, 기안자, 처리상태, 기안작성일, 결재타입, 휴가시작일, 휴가종료일)
+		insert into [동림].[dbo].[상신](기안제목, 기안내용_CODE, 기안내용_PLAIN, 기안자, 처리상태, 기안작성일, 결재타입, 휴가시작일, 휴가종료일, 결재서브타입, 휴가기간)
 		<choose>
 		<when test='gyeoljaeType == "2"'>
-		values (#{title}, #{content}, #{plainContent}, #{gianja}, 'D', getDate(), #{gyeoljaeType}, #{startDate}, #{endDate})
+		values (#{title}, #{content}, #{plainContent}, #{gianja}, 'D', getDate(), #{gyeoljaeType}, #{startDate}, #{endDate}, #{gyeoljaeSubType}, #{term})
 		</when>
 		<otherwise>
-		values (#{title}, #{content}, #{plainContent}, #{gianja}, 'D', getDate(), #{gyeoljaeType}, null, null)
+		values (#{title}, #{content}, #{plainContent}, #{gianja}, 'D', getDate(), #{gyeoljaeType}, null, null, null, null)
 		</otherwise>
 		</choose> 
 		
@@ -384,6 +384,8 @@
 		<result column="휴가시작일" property="startDate" javaType="string"/>
 		<result column="휴가종료일" property="endDate" javaType="string"/>
 		<result column="처리상태" property="status" javaType="string"/>
+		<result column="결재서브타입" property="gyeoljaeSubType" javaType="string"/>
+		<result column="휴가기간" property="term" javaType="string"/>
 		<collection property="attachFiles" column="상신코드" 
 					javaType="java.util.ArrayList"
 					ofType="AttachFile" 
@@ -396,7 +398,7 @@
 	</resultMap>
 	
 	<select id="selectMyModifySangsin" parameterType="map" resultMap="RM_ModifySangsin">
-		 select T1.상신코드, 기안제목, REPLACE(기안내용_CODE, '"', '▦') 기안내용_CODE , convert(char(16), 기안작성일, 20) 기안작성일, 결재타입, 휴가시작일, 휴가종료일, 처리상태
+		 select T1.상신코드, 기안제목, REPLACE(기안내용_CODE, '"', '▦') 기안내용_CODE , convert(char(16), 기안작성일, 20) 기안작성일, 결재타입, 휴가시작일, 휴가종료일, 처리상태, 결재서브타입, 휴가기간
 		  from [동림].[dbo].[상신] T1
 		 where T1.상신코드 = #{sangsinNum}
 		   and T1.기안자 = #{sawonCode}
@@ -570,12 +572,16 @@
 		  <choose>
 		  <when test='gyeoljaeType == "1"'>
 		  	       휴가시작일 = null,
-		  	       휴가종료일 = null
+		  	       휴가종료일 = null,
+		  	       결재서브타입 = null, 
+		  	       휴가기간 = null   
 		  </when>
 		  <!-- 결재타입 휴가 --> 
 		  <otherwise>
 		  	       휴가시작일 = #{startDate},
-		  	       휴가종료일 = #{endDate} 
+		  	       휴가종료일 = #{endDate},
+		  	       결재서브타입 = #{gyeoljaeSubType},
+		  	       휴가기간 = #{term}    
 		  </otherwise>
 		  </choose> 
 		 where 상신코드 = #{sangsinNum}
@@ -615,15 +621,61 @@
 		delete from [동림].[dbo].[상신첨부파일] where 파일코드 = #{delAttachCode}
 	</delete>
 	
-	<select id="selectVacationDocsInfo" parameterType="map" resultType="VacationDocs">
-		select T2.사원명 sawonName, isnull(T3.팀명, '') teamName, T4.직급명  positionName, T2.서명 mySign
+	
+	<resultMap id="RM_VacationDocs" type="VacationDocs">
+		<result column="상신코드" property="sangsinNum" javaType="string"/>
+		<result column="사원명" property="sawonName" javaType="string"/>
+		<result column="부서명" property="departmentName" javaType="string"/>
+		<result column="직급명" property="positionName" javaType="string"/>
+		<result column="서명" property="mySign" javaType="string"/>
+		<result column="결재서브타입" property="type" javaType="string"/>
+		<result column="휴가기간" property="term" javaType="string"/>
+		<result column="시작년도" property="startYear" javaType="string"/>
+		<result column="시작월" property="startMonth" javaType="string"/>
+		<result column="시작일" property="startDay" javaType="string"/>
+		<result column="종료년도" property="endYear" javaType="string"/>
+		<result column="종료월" property="endMonth" javaType="string"/>
+		<result column="종료일" property="endDay" javaType="string"/>
+		<result column="todayYear" property="todayYear" javaType="string"/>
+		<result column="todayMonth" property="todayMonth" javaType="string"/>
+		<result column="todayDay" property="todayDay" javaType="string"/>
+		<collection property="signs" column="상신코드" 
+					javaType="java.util.ArrayList"
+					ofType="map" 
+					select="selectGyeoljaejaSigns"/>
+	</resultMap>
+	<select id="selectVacationDocsInfo" parameterType="map" resultMap="RM_VacationDocs">
+		select T2.사원명,
+			   T1.상신코드, 
+			   isnull(T3.부서명, '') 부서명, 
+			   T4.직급명 , 
+			   T2.서명, 
+			   T1.결재서브타입, 
+			   T1.휴가기간,
+			   substring(T1.휴가시작일, 1, 4) 시작년도 ,
+			   substring(T1.휴가시작일, 6, 2) 시작월,
+			   substring(T1.휴가시작일, 9, 2) 시작일,
+			   substring(T1.휴가종료일, 1, 4) 종료년도,
+			   substring(T1.휴가종료일, 6, 2) 종료월,
+			   substring(T1.휴가종료일, 9, 2) 종료일,
+			   year(getDate()) todayYear,
+			   month(getDate()) todayMonth,
+			   day(getDate()) todayDay
 		  from [동림].[dbo].[상신] T1
 		  inner join [동림].[dbo].[사원] T2
 		     on T1.기안자 = T2.사원코드
-		   left outer join [동림].[dbo].[팀] T3
-		     on T2.팀코드 = T3.팀코드 
+		  inner join [동림].[dbo].[부서] T3
+		     on T2.부서코드 = T3.부서코드 
 		  inner join [동림].[dbo].[직급] T4
 		     on T2.직급코드 = T4.직급코드
 		 where 상신코드 = #{sangsinNum}
+	</select>
+	
+	<select id="selectGyeoljaejaSigns" parameterType="string" resultType="map">
+		select T1.결재순서 [order], T2.서명 sign
+		  from [동림].[dbo].[결재라인] T1
+		 inner join [동림].[dbo].[사원] T2
+		    on T1.결재처리자 = T2.사원코드
+		 where T1.상신코드 = #{상신코드}
 	</select>
 </mapper>

@@ -12,6 +12,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import kr.co.drpnd.dao.GyeoljaeDao;
 import kr.co.drpnd.domain.AttachFile;
 import kr.co.drpnd.domain.Sangsin;
@@ -237,10 +240,21 @@ public class GyeoljaeService {
 	public VacationDocs getVacationDocsInfo(Map<String, String> param) {
 		VacationDocs docs = gyeoljaeDao.selectVacationDocsInfo(param);
 		String mySign = docs.getMySign();
+		List<Map<String, Object>> signs = docs.getSigns();
 		
 		if(mySign != null) {
 			byte[] signByte = DataUtil.hexStringToByteArray(mySign); 
 			docs.setMySign(new String(signByte, Charset.forName("UTF-8")));
+		}
+		
+		if(signs != null) {
+			int len = signs.size();
+			for(int i=0; i<len; i++) {
+				byte[] b = (byte[])signs.get(i).get("sign");
+				if(b != null) {
+					signs.get(i).put("sign", new String(b, Charset.forName("UTF-8")));
+				}
+			}
 		}
 		
 		return docs;

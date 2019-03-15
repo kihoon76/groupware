@@ -13,6 +13,11 @@
 		var $gyeoljaeFileUp = $('#gyeoljaeFileUp');
 		var $gyeoljaeContent = $('#gyeoljaeContent');
 		var $selGyeoljaeType = $('#selGyeoljaeType');
+		var $selGyeoljaeSubType = $('#selGyeoljaeSubType');
+		var $dvGyeoljaeSubType = $('#dvGyeoljaeSubType');
+		var $dvVacationTerm = $('#dvVacationTerm');
+		var $numTerm = $('#numTerm');
+		
 		var $txtVacationStart = $('#txtVacationStart');
 		var $txtVacationEnd = $('#txtVacationEnd');
 		var $datepicker = $('#datepicker');
@@ -25,6 +30,10 @@
 		$('.input-daterange').datepicker({
 			language: 'ko',
 			autoclose: true,
+		})
+		.on('changeDate', function(e) {
+			var term = common.datediff($txtVacationStart.val(), $txtVacationEnd.val());
+			$numTerm.val((term+1));
 		});
 		
 		function hasFileInGyeoljae() {
@@ -67,6 +76,8 @@
 			if(gyeoljaeType == '2') {
 				param.startDate = $.trim($txtVacationStart.val());
 				param.endDate = $.trim($txtVacationEnd.val());
+				param.gyeoljaeSubType = $selGyeoljaeSubType.val();
+				param.term = $numTerm.val();
 			}
 			
 			return param;
@@ -132,6 +143,17 @@
 			return true;
 		}
 		
+		function validateGyeoljaeSubType() {
+			//휴가
+			if($selGyeoljaeType.val() == '2') {
+				var t = $.trim($numTerm.val());
+				
+				return t != '' && t >= 1;
+			}
+			
+			return true;
+		}
+		
 		function clearGyeoljaeFile() {
 			$gyeoljaeFileUp.reset();
 			gyeoljaeSelectedFiles = {};
@@ -151,10 +173,14 @@
 			//휴가
 			if(v == '2') {
 				$datepicker.show();
+				$dvGyeoljaeSubType.show();
+				$dvVacationTerm.show();
 				getVacationGyeoljaeLines();
 			}
 			else {
 				$datepicker.hide();
+				$dvGyeoljaeSubType.hide();
+				$dvVacationTerm.hide();
 				getDefaultGyeoljaeLines();
 			}
 			
@@ -321,6 +347,17 @@
 					msg: '휴가기간을 선택하세요',
 					callback: function() {
 						$txtVacationStart.focus();
+					}
+				});
+				return;
+			}
+			
+			if(!validateGyeoljaeSubType()) {
+				common.showExtMsg({
+					type: 'alert',
+					msg: '휴가일수를 입력하세요',
+					callback: function() {
+						$numTerm.focus();
 					}
 				});
 				return;

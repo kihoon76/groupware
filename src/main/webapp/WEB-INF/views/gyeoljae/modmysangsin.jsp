@@ -37,7 +37,8 @@
 </head>
 <body>
 	<button id="chkAlarm" type="button" class="btn btn-default btn-sm" style="margin-left:10px; margin-top:5px;">알림ON</button>
-	<span class="modify-alarm">★결재자에게 수정중임을 알립니다.(수정알림을 클릭하세요) - ★취소시 꼭  알림OFF 버튼을 눌러주세요 (알림OFF를 누르지 않으면 결재가 진행되지 않습니다)</span>
+	<button id="btnRefresh" type="button" class="btn btn-primary btn-sm" style="margin-left:10px; margin-top:5px;">새로고침</button>
+	<span class="modify-alarm">★결재자에게 수정/삭제중임을 알립니다.(알림ON을 클릭하세요) - ★취소시 꼭  알림OFF 버튼을 눌러주세요 (알림OFF를 누르지 않으면 결재가 진행되지 않습니다)</span>
 	<div id="dvContainer" class="modify-disabled">
 	<form>
 		<div class="form-inline divMB">
@@ -50,12 +51,45 @@
 				</select>		
 			</div>
 			
+			<c:choose>
+			<c:when test="${sangsin.gyeoljaeType eq '2'}">
+			<div class="form-group divMR" id="dvGyeoljaeSubType">
+				<select class="form-control form-control-sm" id="selGyeoljaeSubType">
+					<option value="1" <c:if test="${sangsin.gyeoljaeSubType eq '1'}">selected</c:if>>연차</option>
+					<option value="2" <c:if test="${sangsin.gyeoljaeSubType eq '2'}">selected</c:if>>보건</option>
+					<option value="3" <c:if test="${sangsin.gyeoljaeSubType eq '3'}">selected</c:if>>청원</option>
+					<option value="4" <c:if test="${sangsin.gyeoljaeSubType eq '4'}">selected</c:if>>공가</option>
+					<option value="5" <c:if test="${sangsin.gyeoljaeSubType eq '5'}">selected</c:if>>병가</option>
+					<option value="6" <c:if test="${sangsin.gyeoljaeSubType eq '6'}">selected</c:if>>직무교육</option>
+					<option value="7" <c:if test="${sangsin.gyeoljaeSubType eq '7'}">selected</c:if>>기타</option>
+				</select> 	
+			</div>
+			</c:when>
+			<c:otherwise>
+			<div class="form-group divMR" style="display:none;" id="dvGyeoljaeSubType">
+				<select class="form-control form-control-sm" id="selGyeoljaeSubType">
+					<option value="1" selected>연차</option>
+					<option value="2">보건</option>
+					<option value="3">청원</option>
+					<option value="4">공가</option>
+					<option value="5">병가</option>
+					<option value="6">직무교육</option>
+					<option value="7">기타</option>
+				</select>
+			</div>
+			</c:otherwise>
+			</c:choose>
+			
 			<div class="input-daterange form-group divMR" id="datepicker" <c:if test="${sangsin.gyeoljaeType eq '1'}"> style="display:none;"</c:if><c:if test="${sangsin.gyeoljaeType eq '2'}"> style="display:;"</c:if>>
 				<div class="input-group-prepend">
 			  		<input type="text" style="width:120px;" class="form-control" autocomplete="off" readOnly id="txtVacationStart" value="${sangsin.startDate}"/>
 			  		<span class="input-group-text"> ~ </span>
 			  		<input type="text" style="width:120px;" class="form-control" autocomplete="off" readOnly id="txtVacationEnd" value="${sangsin.endDate}"/>
 			  	</div>
+			</div>
+			
+			<div class="form-group divMR" <c:if test="${sangsin.gyeoljaeType eq '1'}">style="display:none;"</c:if> id="dvVacationTerm">
+				(<input type="number" class="form-control form-control-sm" style="width:50px;" id="numTerm" min="1" value="<c:out value='${sangsin.term}' />">)일간
 			</div>
 		</div>
 		<div class="form-group">

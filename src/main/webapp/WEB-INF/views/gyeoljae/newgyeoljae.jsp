@@ -39,7 +39,19 @@
  				<c:forEach items="${gyeoljaeType}" var="map">
  					<option value="${map.code}" <c:if test="${map.code eq '1'}"> selected</c:if>>${map.name}</option>
  				</c:forEach>
-				</select>		
+				</select>
+			</div>
+			
+			<div class="form-group divMR" style="display:none;" id="dvGyeoljaeSubType">
+				<select class="form-control form-control-sm" id="selGyeoljaeSubType">
+					<option value="1" selected>연차</option>
+					<option value="2">보건</option>
+					<option value="3">청원</option>
+					<option value="4">공가</option>
+					<option value="5">병가</option>
+					<option value="6">직무교육</option>
+					<option value="7">기타</option>
+				</select> 		
 			</div>
 			
 			<div class="input-daterange form-group divMR" id="datepicker" style="display:none;">
@@ -48,6 +60,10 @@
 			  		<span class="input-group-text"> ~ </span>
 			  		<input type="text" style="width:120px;" class="form-control" autocomplete="off" readOnly id="txtVacationEnd"/>
 			  	</div>
+			</div>
+			
+			<div class="form-group divMR" style="display:none;" id="dvVacationTerm">
+				(<input type="number" class="form-control form-control-sm" style="width:50px;" id="numTerm" min="1">)일간
 			</div>
 		</div>
 		<div class="form-group">

@@ -13,7 +13,14 @@ var common = (function() {
 		});
 	}
 	
+	function parseDate(str) {
+		return new Date(str);
+	}
+	
 	return {
+		datediff: function(first, second) {
+			return Math.round((parseDate(second)-parseDate(first))/(1000*60*60*24));
+		},
 		refreshExtTab: function(id, callback) {
 			//cate-notice-list-panel
 			//parent.Ext.getCmp('cate-notice-list-panel')

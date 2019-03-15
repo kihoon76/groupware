@@ -45,6 +45,7 @@ import kr.co.drpnd.service.CodeService;
 import kr.co.drpnd.service.GyeoljaeService;
 import kr.co.drpnd.service.SawonService;
 import kr.co.drpnd.type.ExceptionCode;
+import kr.co.drpnd.type.VacationType;
 import kr.co.drpnd.util.SessionUtil;
 import kr.co.drpnd.util.StringUtil;
 
@@ -137,7 +138,7 @@ public class GyeoljaeController {
 			Sangsin mySangsin = gyeoljaeService.getMyModifySangsin(param);
 			
 			if(mySangsin == null) {
-				return "forbidden";
+				return "err/403";
 			}
 			
 			m.addAttribute("sangsin", mySangsin);
@@ -146,7 +147,7 @@ public class GyeoljaeController {
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			return "forbidden";
+			return "err/403";
 		}
 		
 		SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");//dd/MM/yyyy
@@ -264,6 +265,15 @@ public class GyeoljaeController {
 		vo.setSuccess(true);
 		
 		try {
+			
+			//결재타입이 2일 경우 서브타입 무결성 체크
+			if("2".equals(sangsin.getGyeoljaeType())) {
+				VacationType.getType(sangsin.getGyeoljaeSubType()); 
+				
+				int term = Integer.parseInt(sangsin.getTerm());
+				if(term < 1) throw new Exception("휴가기간은 1일 이상입니다");
+			}
+			
 			List<Map<String, Object>> lines = sangsin.getGyeoljaeLines();
 			String firstGyeoljaejaCode = null;
 			
@@ -311,7 +321,11 @@ public class GyeoljaeController {
 			@RequestParam("content") String content,
 			@RequestParam("plainContent") String plainContent,
 			@RequestParam("gyeoljaeType") String gyeoljaeType,
-			@RequestParam("file") MultipartFile[] files) {
+			@RequestParam("file") MultipartFile[] files,
+			@RequestParam(name="gyeoljaeSubType", required=false) String gyeoljaeSubType,
+			@RequestParam(name="term", required=false) String term,
+			@RequestParam(name="startDate", required=false) String startDate,
+			@RequestParam(name="endDate", required=false) String endDate) {
 		AjaxVO vo = new AjaxVO();
 		
 		vo.setSuccess(true);
@@ -321,6 +335,14 @@ public class GyeoljaeController {
 //		System.err.println("content ==>" + content);
 		
 		try {
+			
+			//결재타입이 2일 경우 서브타입 무결성 체크
+			if("2".equals(gyeoljaeType)) {
+				VacationType.getType(gyeoljaeSubType); 
+				int termInt = Integer.parseInt(term);
+				if(termInt < 1) throw new Exception("휴가기간은 1일 이상입니다");
+			}
+			
 			Sawon myInfo = SessionUtil.getSessionSawon();
 			String firstGyeoljaejaCode = null;
 			
@@ -344,6 +366,10 @@ public class GyeoljaeController {
 			sangsin.setGyeoljaeLines(lines);
 			sangsin.setGianja(myInfo.getSawonCode());
 			sangsin.setGyeoljaeType(gyeoljaeType);
+			sangsin.setGyeoljaeSubType(gyeoljaeSubType);
+			sangsin.setTerm(term);
+			sangsin.setStartDate(startDate);
+			sangsin.setEndDate(endDate);
 			
 			List<AttachFile> attachFiles = new ArrayList<>();
 			String pushMsg = myInfo.getSawonName() + "님이 올린 결재가 도착했습니다.";
@@ -406,6 +432,15 @@ public class GyeoljaeController {
 		vo.setSuccess(true);
 		
 		try {
+			
+			//결재타입이 2일 경우 서브타입 무결성 체크
+			if("2".equals(sangsin.getGyeoljaeType())) {
+				VacationType.getType(sangsin.getGyeoljaeSubType()); 
+				
+				int term = Integer.parseInt(sangsin.getTerm());
+				if(term < 1) throw new Exception("휴가기간은 1일 이상입니다");
+			}
+			
 			String sangsinNum = String.valueOf(sangsin.getSangsinNum());
 			Map<String, String> param = new HashMap<>();
 			param.put("sawonCode", myInfo.getSawonCode());
@@ -493,12 +528,26 @@ public class GyeoljaeController {
 			@RequestParam("plainContent") String plainContent,
 			@RequestParam("gyeoljaeType") String gyeoljaeType,
 			@RequestParam("sangsinNum") String sangsinNum,
-			@RequestParam("file") MultipartFile[] files) {
+			@RequestParam("file") MultipartFile[] files,
+			@RequestParam(name="gyeoljaeSubType", required=false) String gyeoljaeSubType,
+			@RequestParam(name="term", required=false) String term,
+			@RequestParam(name="startDate", required=false) String startDate,
+			@RequestParam(name="endDate", required=false) String endDate
+			) {
 		AjaxVO vo = new AjaxVO();
 		
 		vo.setSuccess(true);
 		
 		try {
+			
+			//결재타입이 2일 경우 서브타입 무결성 체크
+			if("2".equals(gyeoljaeType)) {
+				VacationType.getType(gyeoljaeSubType); 
+				
+				int termInt = Integer.parseInt(term);
+				if(termInt < 1) throw new Exception("휴가기간은 1일 이상입니다");
+			}
+			
 			Sawon myInfo = SessionUtil.getSessionSawon();
 			
 			Map<String, String> param = new HashMap<>();

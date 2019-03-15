@@ -36,7 +36,7 @@ public class PushTest {
 	@Resource(name="fcmLog")
 	FCMLog fcmLog;
 	
-	@Test
+	@Ignore @Test
 	public void asyncTest() throws InterruptedException {
 		List<String> devices = sawonService.getSawonDevices("35");
 		
@@ -68,5 +68,11 @@ public class PushTest {
 		}
 		
 		Thread.sleep(8000);
+	}
+	
+	@Test
+	public void test() {
+		String s = "04".substring(1);
+		System.err.println(s);
 	}
 }

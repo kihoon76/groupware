@@ -10,9 +10,16 @@ $(document).ready(function() {
 	$('#btnClear').off('click').on('click', function() {drawed = false;});
 	
 	
-	$('#smoothed').signaturePad({drawOnly:true, drawBezierCurves:true, lineTop:200, onDrawEnd: function() {
-		drawed = true;
-	}});
+	$('#smoothed').signaturePad({
+		drawOnly:true, 
+		drawBezierCurves:true, 
+		lineTop:200, 
+		penWidth : 5,
+		bgColour : 'transparent',
+		onDrawEnd: function() {
+			drawed = true;
+		}
+	});
 	 
 //	 $('#fileuploader').uploadFile({
 //		 fileName: 'sign'

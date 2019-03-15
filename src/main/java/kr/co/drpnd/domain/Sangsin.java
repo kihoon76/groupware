@@ -23,6 +23,8 @@ public class Sangsin {
 	private String pushContent;
 	private String modify;  //수정중
 	private String delAttachCode;
+	private String gyeoljaeSubType;
+	private String term;
 	
 	public String getTitle() {
 		return title;
@@ -113,5 +115,17 @@ public class Sangsin {
 	}
 	public void setDelAttachCode(String delAttachCode) {
 		this.delAttachCode = delAttachCode;
+	}
+	public String getGyeoljaeSubType() {
+		return gyeoljaeSubType;
+	}
+	public void setGyeoljaeSubType(String gyeoljaeSubType) {
+		this.gyeoljaeSubType = gyeoljaeSubType;
+	}
+	public String getTerm() {
+		return term;
+	}
+	public void setTerm(String term) {
+		this.term = term;
 	}
 }
