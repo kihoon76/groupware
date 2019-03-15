@@ -1,13 +1,11 @@
 package kr.co.drpnd.controller;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -23,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 
 import kr.co.drpnd.domain.AjaxVO;
-import kr.co.drpnd.domain.AttachFile;
 import kr.co.drpnd.domain.Sawon;
 import kr.co.drpnd.domain.Team;
 import kr.co.drpnd.domain.VacationDocs;
@@ -33,7 +30,6 @@ import kr.co.drpnd.service.CodeService;
 import kr.co.drpnd.service.GeuntaeService;
 import kr.co.drpnd.service.GyeoljaeService;
 import kr.co.drpnd.service.SawonService;
-import kr.co.drpnd.type.ExceptionCode;
 import kr.co.drpnd.type.TokenKey;
 import kr.co.drpnd.util.DateUtil;
 import kr.co.drpnd.util.RequestUtil;
@@ -298,9 +294,6 @@ public class DrpndController {
 				if(result.getEndDay().startsWith("0")) {
 					result.setEndDay(result.getEndDay().substring(1));
 				}
-				
-				
-				
 				
 				m.addAttribute("docs", result);
 			}
