@@ -25,17 +25,39 @@
 	</resultMap>
 	
 	<select id="selectOverwork" statementType="CALLABLE" parameterType="map" resultMap="RM_TeamOverwork, RM_SawonOverwork">
+	<choose>
+	<when test="weekend == null">
 	{ call [동림].[dbo].[UP_야근통계](
 		#{sawonCode, mode=IN, jdbcType=INTEGER, javaType=int},
 		#{searchYear, mode=IN, jdbcType=INTEGER, javaType=int},
 		#{searchMonth, mode=IN, jdbcType=INTEGER, javaType=int}
 	)}
+	</when>
+	<otherwise>
+	{ call [동림].[dbo].[UP_주말야근통계](
+		#{sawonCode, mode=IN, jdbcType=INTEGER, javaType=int},
+		#{searchYear, mode=IN, jdbcType=INTEGER, javaType=int},
+		#{searchMonth, mode=IN, jdbcType=INTEGER, javaType=int}
+	)}
+	</otherwise>
+	</choose>
 	</select>
 	
 	<select id="selectOverworkMonth" statementType="CALLABLE" parameterType="map" resultMap="RM_TeamMonthOverwork">
+	<choose>
+	<when test="weekend == null">
 	{ call [동림].[dbo].[UP_팀별월간야근통계](
 		#{sawonCode, mode=IN, jdbcType=INTEGER, javaType=int},
 		#{searchYear, mode=IN, jdbcType=INTEGER, javaType=int}
 	)}
+	</when>
+	<otherwise>
+	{ call [동림].[dbo].[UP_팀별월간주말야근통계](
+		#{sawonCode, mode=IN, jdbcType=INTEGER, javaType=int},
+		#{searchYear, mode=IN, jdbcType=INTEGER, javaType=int}
+	)}
+	</otherwise>
+	</choose>
+	
 	</select>
 </mapper>

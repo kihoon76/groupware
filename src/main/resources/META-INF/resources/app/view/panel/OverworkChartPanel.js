@@ -31,6 +31,8 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
 		}
 		
 		var overworkStore = Ext.create('Drpnd.store.StatisticListStore');
+		var weekoverworkStore = Ext.create('Drpnd.store.WeekendStatisticListStore');
+		
 		overworkStore.load({
 			params: {
 				searchYear: currentYear,
@@ -45,6 +47,8 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
 			if(type == 'm') {
 				chart1.setVisible(true);
 				chart2.setVisible(false);
+				chart3.setVisible(false);
+				chart4.setVisible(false);
 				
 				var searchMonth = comboMonth.getValue();
 				
@@ -55,11 +59,40 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
 					}
 				});
 			}
+			else if(type == 'mw') {
+				chart2.setVisible(true);
+				chart1.setVisible(false);
+				chart3.setVisible(false);
+				chart4.setVisible(false);
+				
+				var searchMonth = comboMonth.getValue();
+				
+				weekoverworkStore.load({
+					params: {
+						searchYear: searchYear,
+						searchMonth: searchMonth
+					}
+				});
+			}
 			else if(type == 'tm') {
 				chart1.setVisible(false);
-				chart2.setVisible(true);
+				chart2.setVisible(false);
+				chart3.setVisible(true);
+				chart4.setVisible(false);
 				
 				tmOverworkStore.load({
+					params: {
+						searchYear: searchYear
+					}
+				});
+			}
+			else if(type == 'tmw') {
+				chart1.setVisible(false);
+				chart2.setVisible(false);
+				chart3.setVisible(false);
+				chart4.setVisible(true);
+				
+				tmWeekOverworkStore.load({
 					params: {
 						searchYear: searchYear
 					}
@@ -120,7 +153,61 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
 			
 		});
 		
+		var chart2 = Ext.create('Ext.chart.Chart', {
+			xtype: 'chart',
+			width: 1000,
+		    height: 800,
+			animate: true,
+			shadow: true,
+			store: weekoverworkStore,
+			legend: {
+				position: 'right'
+			},
+			axes: [{
+				type: 'Numeric',
+				position: 'bottom',
+				fields: ['teamTotal', 'teamLeader', 'sawon1', 'sawon2', 'sawon3', 'sawon4'],
+				minimum: 0,
+				label: {
+                    renderer: Ext.util.Format.numberRenderer('0,0')
+                },
+                grid: true,
+                title: '야근시간(분)'
+			},{
+                type: 'Category',
+                position: 'left',
+                fields: ['teamName'],
+                title: '도시계획부 팀'
+            }],
+            series: [{
+                type: 'bar',
+                axis: 'bottom',
+                xField: 'teamName',
+                tips: {
+                    trackMouse: true,
+                    width: 300,
+                    height: 50,
+                    renderer: function(storeItem, item) {
+                    	var yField = item.yField;
+                    	this.setTitle(storeItem.data[yField + '_tips']);
+                    }
+                },
+                label: {
+                	display: 'insideEnd',
+                    field: ['teamTotal', 'teamLeader', 'sawon1', 'sawon2', 'sawon3', 'sawon4'],
+                    renderer: Ext.util.Format.numberRenderer('0'),
+                    orientation: 'horizontal',
+                    color: '#333',
+                    'text-anchor': 'middle'
+                },
+                yField: ['teamTotal', 'teamLeader', 'sawon1', 'sawon2', 'sawon3', 'sawon4'],
+                title: ['팀별 총야근시간', '팀장', '팀원1', '팀원2', '팀원3', '팀원4'],
+            }]
+			
+		});
+		
 		var tmOverworkStore = Ext.create('Drpnd.store.TeamMonthStatisticListStore');
+		var tmWeekOverworkStore = Ext.create('Drpnd.store.WeekendTeamMonthStatisticListStore');
 		
 		/*tmOverworkStore.load({
 			params: {
@@ -137,7 +224,7 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
 		    }
 		});
 		
-		var chart2 = Ext.create('Ext.chart.Chart',{
+		var chart3 = Ext.create('Ext.chart.Chart',{
             xtype: 'chart',
             width: 1000,
 		    height: 800,
@@ -145,6 +232,79 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
             animate: true,
             shadow: true,
             store: tmOverworkStore,
+            hidden: true,
+            legend: {
+                position: 'right'
+            },
+            axes: [{
+                type: 'Numeric',
+                position: 'bottom',
+                fields: [ '계획1팀', 
+            	          '계획2팀', 
+            	          '계획3팀',
+            	          '계획4팀',
+            	          '계획5팀',
+            	          '계획6팀',
+            	          'e-biz팀'],
+                title: '야근시간(분)',
+                grid: true,
+                label: {
+                    renderer: function(v) {
+                        return v;//String(v).replace(/(.)00000$/, '.$1M');
+                    }
+                }
+            }, {
+                type: 'Category',
+                position: 'left',
+                fields: ['month'],
+                title: false
+            }],
+            series: [{
+                type: 'bar',
+                axis: 'bottom',
+                gutter: 80,
+                xField: 'month',
+                yField: ['계획1팀', 
+           	          '계획2팀', 
+        	          '계획3팀',
+        	          '계획4팀',
+        	          '계획5팀',
+        	          '계획6팀',
+        	          'e-biz팀'],
+                stacked: true,
+                tips: {
+                    trackMouse: true,
+                    width: 300,
+                    height: 30,
+                    renderer: function(storeItem, item) {
+//                    	console.log(storeItem);
+//                    	console.log(item);
+                    	var timeMin = item.value[1];
+                    	var timeHour = '0';
+                    	
+                    	if(timeMin > 0) {
+                    		if(timeMin >= 60) {
+                    			timeHour = parseInt(timeMin/60) + '시간 ' + (timeMin%60) + '분';
+                    		}
+                    		else {
+                    			timeHour = timeMin + '분';
+                    		}
+                    	}
+                    	
+                        this.setTitle('[' + item.yField + '][' + item.value[0] + ']-' + item.value[1] + '/' + timeHour);
+                    }
+                },
+            }]
+        });
+		
+		var chart4 = Ext.create('Ext.chart.Chart',{
+            xtype: 'chart',
+            width: 1000,
+		    height: 800,
+		    theme: 'myTheme',
+            animate: true,
+            shadow: true,
+            store: tmWeekOverworkStore,
             hidden: true,
             legend: {
                 position: 'right'
@@ -234,7 +394,12 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
 		    	editable: false,
 		    	store: Ext.create('Ext.data.Store', {
 					fields : ['name', 'value'],
-					data: [{name:'월간통계', value: 'm'}, {name:'팀별월간통계', value: 'tm'}, ]
+					data: [
+					   {name:'월간통계', value: 'm'}, 
+					   {name:'월간통계(주말)', value: 'mw'},
+					   {name:'팀별월간통계', value: 'tm'},
+					   {name:'팀별월간통계(주말)', value: 'tmw'}
+					]
 				}),
 				value: 'm',
 				listeners: {
@@ -242,7 +407,7 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
 						comboSel = combo;
 					},
 					change: function(c, nV) {
-						if(nV == 'm') {
+						if(nV == 'm' || nV == 'mw') {
 							comboMonth.setVisible(true);
 						}
 						else {
@@ -282,7 +447,7 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
 				editable: false,
 				hidden: true
 			}],
-			items:[chart1, chart2]
+			items:[chart1, chart2, chart3, chart4]
 		});
 		
 		this.callParent(arguments);

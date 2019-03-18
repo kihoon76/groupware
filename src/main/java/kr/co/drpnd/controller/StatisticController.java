@@ -53,6 +53,32 @@ public class StatisticController {
 		return extjsVo;
 	}
 	
+	@PostMapping("overwork/weekend")
+	@ResponseBody
+	public ExtjsStoreVO<Map<String, Object>> getOverworkWeekend(
+			@RequestParam("searchYear") int searchYear,
+			@RequestParam("searchMonth") int searchMonth
+			
+	) {
+		
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("searchYear", searchYear);
+		param.put("searchMonth", searchMonth);
+		param.put("sawonCode", Integer.parseInt(myInfo.getSawonCode()));
+		param.put("weekend", "Y");
+		
+		
+		List<Map<String, Object>> result = statisticService.getOverwork(param);
+		
+		ExtjsStoreVO<Map<String, Object>> extjsVo = new ExtjsStoreVO<>();
+		extjsVo.setTotal(result.size());
+		extjsVo.setDatas(result);
+		
+		return extjsVo;
+	}
+	
 	@PostMapping("overwork/teammonth")
 	@ResponseBody
 	public ExtjsStoreVO<Map<String, Object>> getOverworkTeamMonth(
@@ -66,6 +92,29 @@ public class StatisticController {
 		param.put("searchYear", searchYear);
 		param.put("sawonCode", Integer.parseInt(myInfo.getSawonCode()));
 		
+		
+		List<Map<String, Object>> result = statisticService.getOverworkTeamMonth(param);
+		
+		ExtjsStoreVO<Map<String, Object>> extjsVo = new ExtjsStoreVO<>();
+		extjsVo.setTotal(result.size());
+		extjsVo.setDatas(result);
+		
+		return extjsVo;
+	}
+	
+	@PostMapping("overwork/teammonth/weekend")
+	@ResponseBody
+	public ExtjsStoreVO<Map<String, Object>> getOverworkWeekendTeamMonth(
+			@RequestParam("searchYear") int searchYear
+			
+	) {
+		
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("searchYear", searchYear);
+		param.put("sawonCode", Integer.parseInt(myInfo.getSawonCode()));
+		param.put("weekend", "Y");
 		
 		List<Map<String, Object>> result = statisticService.getOverworkTeamMonth(param);
 		
