@@ -246,7 +246,6 @@ public class DrpndController {
 			Map<String, String> m = new HashMap<>();
 			m.put("sawonCode", myInfo.getSawonCode());
 			m.put("sign", sign);
-			System.err.println(sign);
 			sawonService.regSignature(m);
 			
 			myInfo.setSignature(sign);
