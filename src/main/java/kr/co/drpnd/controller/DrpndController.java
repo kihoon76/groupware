@@ -277,10 +277,8 @@ public class DrpndController {
 		param.put("gyeoljaeType", "2");
 		param.put("status", "C");
 		
-		System.err.println("=========================================1");
 		try {
 			boolean b = gyeoljaeService.confirmMySangsin(param);
-			System.err.println("=========================================2");
 			if(b) {
 				VacationDocs result = gyeoljaeService.getVacationDocsInfo(param);
 				
@@ -301,17 +299,14 @@ public class DrpndController {
 			}
 			else {
 				m.addAttribute("msg", "내문서가 아니거나 문서타입이 휴가가 아닙니다.");
-				System.err.println("=========================================3");
 				return "err/404";
 			}
 		}
 		catch(Exception e) {
 			m.addAttribute("msg", e.getMessage());
-			System.err.println("=========================================4");
 			return "err/500";
 		}
 		
-		System.err.println("=========================================5");
 		return "docs/vacation";
 	}
 	

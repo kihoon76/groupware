@@ -680,7 +680,7 @@ Ext.define('Drpnd.view.Viewport', {
                ,region : 'north'
 			   ,height : 50
 			   ,items: [{
-				   html: Html.logo
+				   html: Html.logo + Html.appTitle
 			   }, 
 			   '->',{
 				   xtype: 'textfield',

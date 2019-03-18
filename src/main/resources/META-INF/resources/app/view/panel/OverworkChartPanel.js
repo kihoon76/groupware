@@ -157,6 +157,7 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
 			xtype: 'chart',
 			width: 1000,
 		    height: 800,
+		    hidden: true,
 			animate: true,
 			shadow: true,
 			store: weekoverworkStore,
