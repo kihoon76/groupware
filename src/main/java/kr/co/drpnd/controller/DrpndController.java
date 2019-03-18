@@ -300,12 +300,12 @@ public class DrpndController {
 			}
 			else {
 				m.addAttribute("msg", "내문서가 아니거나 문서타입이 휴가가 아닙니다.");
-				return "/err/404";
+				return "err/404";
 			}
 		}
 		catch(Exception e) {
 			m.addAttribute("msg", e.getMessage());
-			return "/err/500";
+			return "err/500";
 		}
 		
 		return "docs/vacation";

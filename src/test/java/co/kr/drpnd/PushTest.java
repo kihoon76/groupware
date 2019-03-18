@@ -36,9 +36,9 @@ public class PushTest {
 	@Resource(name="fcmLog")
 	FCMLog fcmLog;
 	
-	@Ignore @Test
+	@Test
 	public void asyncTest() throws InterruptedException {
-		List<String> devices = sawonService.getSawonDevices("35");
+		List<String> devices = sawonService.getSawonDevices("1");
 		
 		try {
 			Map<String, String> m = new HashMap<>();
