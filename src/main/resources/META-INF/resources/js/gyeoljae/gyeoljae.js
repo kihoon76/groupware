@@ -388,7 +388,7 @@ var Gyeoljae = (function() {
 			msg: '개발중입니다.'
 		});*/
 		
-		docWin('/docs/vacation/' + sangsinNum, 'GET');
+		docWin('/doc/vacation/' + sangsinNum, 'GET');
 	}
 	
 	function docWin(url, method) {

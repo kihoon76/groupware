@@ -264,7 +264,7 @@ public class DrpndController {
 		return "orgchart";
 	}
 	
-	@GetMapping("docs/vacation/{sangsinNum}")
+	@GetMapping("doc/vacation/{sangsinNum}")
 	public String getDocVacation(
 			@PathVariable("sangsinNum") String sangsinNum,
 			ModelMap m) {
