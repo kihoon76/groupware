@@ -24,7 +24,7 @@
 	</ul>
 	<div class="sig sigWrapper" style="height:auto;">
 	<div class="typed"></div>
-	<canvas id="canvasSign" class="pad" width="400" height="200"></canvas>
+	<canvas id="canvasSign" class="pad" width="400" height="190"></canvas>
 	<input type="hidden" id="hdnSign" class="output">
 	</div>
 </body>
