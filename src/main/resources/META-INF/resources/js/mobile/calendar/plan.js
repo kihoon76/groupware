@@ -1,5 +1,81 @@
 (function(c) {
 	var dEvents = [];
+	var selPlanData = {cate: 'C03'};
+	
+	function addPlan() {
+		c.closePopup();
+		var h = '<span style="padding-left:15px;">' + selPlanData.begin + ' 일정</span>';
+		c.makePopup(h, Common.myPlanRegPopup);
+		c.makePopupOkHandler(regPlan);
+		c.openPopup('reg_plan');
+	}
+	
+	function addDelPlan() {
+		c.closePopup();
+		var h = '<span style="padding-left:15px;">' + selPlanData.begin + ' 일정</span>';
+		c.makePopup(h, '삭제하시겠습니까?');
+		c.makePopupOkHandler(delPlan);
+		c.openPopup('del_plan');
+	}
+	
+	function delPlan() {
+		if(selPlanData.num) {
+			c.ajax({
+    			url: '/calendar/m/removeMyPlan/' + selPlanData.num,
+    	    	method: 'GET',
+    			dataType: 'json',
+    			headers: {'CUSTOM': 'Y'},
+    			success: function(data, textStatus, jqXHR) {
+    				if(data.success) {
+    					window.location.reload();
+    				}
+    			},
+    		});
+		}
+		else {
+			c.closePopup();
+		}
+	}
+	
+	function regPlan() {
+		var $planTitle = $('#planTitle');
+		var $planDetail = $('#planDetail');
+		var param = {
+			title: $.trim($planTitle.val()),
+			detail: $.trim($planDetail.val())
+		};
+		
+		if(param.title == '') {
+			$planTitle.focus();
+			return;
+		}
+		
+		if(param.detail == '') {
+			$planDetail.focus();
+			return;
+		}
+		
+		
+		param.cate = selPlanData.cate;
+		param.cateMonth = selPlanData.cateMonth;
+		param.begin = selPlanData.begin;
+		param.end = selPlanData.end;
+		
+		c.ajax({	
+			url: '/calendar/m/regMyPlan',
+	    	method: 'POST',
+			dataType: 'json',
+			headers: {'CUSTOM': 'Y'},
+			contentType: 'application/json',
+			data: JSON.stringify(param),
+			success: function(data, textStatus, jqXHR) {
+				if(data.success) {
+					window.location.reload();					
+				}
+			}
+		});
+	}
+	
 	c.viewCalendarPlan = function() {
 	    var $calendarPlan = $('#calendarPlan');
 	    var currentYM = $calendarPlan.data('current').substring(0, 7);
@@ -43,7 +119,9 @@
 	    							dEvents.push({
 	    								summary: datas[i].summary,
 	    								begin: new Date(datas[i].begin),
-	    								end: end
+	    								end: end,
+	    								num: datas[i].num,
+	    								union: datas[i].union
 	    							});
 	    						}
 	    					}
@@ -69,13 +147,18 @@
 		    	var s = '';
 		    	var h = '<span style="padding-left:15px;">' + c.getFormatDate(date) + ' 일정</span>';
 		    	var len = events.length;
+		    	var union = null;
+		    	var num = null;
+		    	
 		    	for(var i=0; i<len; i++) {
 		    		if(events[i].begin.getFullYear() == date.getFullYear() && // same year?
 		    	       events[i].begin.getMonth() == date.getMonth() &&        // same month?
 		    	       events[i].begin.getDate() == date.getDate() ) {        // same date?
 		    	          
 		    		   s = events[i].summary.replace(/<br\/>/gmi, '\n');
+		    		   union = events[i].union;
 		    		   hasData = true;
+		    		   num = events[i].num;
 		    		   break;
 		    	    }
 		    	}
@@ -83,11 +166,34 @@
 		    	//$('#calendarPlan ul').html('<li class='ui-li-static ui-body-inherit ui-first-child ui-last-child'>test<br/>trtrt<br/>trtrt<br/>trtrt<br/>trtrt<br/>trtrt<br/>trtrt<br/>trtrt<br/>trtrt<br/>trtrt<br/>trtrt<br/>trtrt<br/>trtrt<br/>trtrt<br/>trtrt<br/>trtrt<br/>trtrt<br/>trtrt<br/>trtrt<br/>trtrt<br/>trtrt<br/>trtrt<br/>trtrt</li>')
 		    	$('#calendarPlan ul').html('');
 		    	
-		    	console.log(event);
-		    	
 		    	if(hasData) {
+		    		selPlanData.cateMonth = selectdDateYM;
+		    		selPlanData.begin = c.getFormatDate(date);
+		    		selPlanData.end = c.dateAdd(date, 1);
+		    		
 		    	 	c.makePopup(h, String.format(Common.myPlanPopup, s));
-					c.openPopup('alert');
+		    	 	c.makePopupOkHandler(addPlan);
+		    	 	
+		    	 	if(union == 'Y') {
+						c.openPopup('mod_add_plan');
+						selPlanData.num = null;
+		    	 	}
+		    	 	else {
+		    	 		selPlanData.num = num;
+		    	 		c.makePopupEtcHandler(addDelPlan);
+						c.openPopup('mod_add_del_plan');
+		    	 	}
+		    	 	
+		    	}
+		    	else {
+		    		selPlanData.cateMonth = selectdDateYM;
+		    		selPlanData.begin = c.getFormatDate(date);
+		    		selPlanData.end = c.dateAdd(date, 1);
+		    		selPlanData.num = null;
+		    		
+		    		c.makePopup(h, Common.myPlanRegPopup);
+		    		c.makePopupOkHandler(regPlan);
+					c.openPopup('reg_plan');
 		    	}
 		   
 	    	}
@@ -99,7 +205,6 @@
 			dataType: 'json',
 			headers: {'CUSTOM': 'Y'},
 			success: function(data, textStatus, jqXHR) {
-				console.log(data)
 				if(data.success) {
 					var datas = data.datas;
 					var len = datas.length;
@@ -111,16 +216,15 @@
 							dEvents.push({
 								summary: datas[i].summary,
 								begin: new Date(datas[i].begin),
-								end: end
+								end: end,
+								num: datas[i].num,
+								union: datas[i].union
 							});
 						}
 					}
 					
 					$calendarPlan.trigger('refresh');
 					
-				}
-				else {
-					alert('일정을 로드하지 못했습니다.')
 				}
 			},
 	    });

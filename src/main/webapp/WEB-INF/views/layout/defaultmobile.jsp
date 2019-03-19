@@ -38,7 +38,9 @@
 	<div role="main" class="ui-content">
 		<div id="dvPopupContent"></div>
 		<a href="#" data-role="button" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" id="btnPopupOk" rel="external">퇴근처리</a>
+		<a href="#" data-role="button" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" id="btnPopupEtc" style="display:none;"></a>
 		<a href="#" data-rel="button" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" id="btnPopupCancel">닫기</a>
+		
 	</div>
 </div>
 

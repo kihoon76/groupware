@@ -174,7 +174,7 @@
 	</select>
 	
 	<select id="selectMyPlanThisMonthMobile" parameterType="map" resultType="map">
-    <![CDATA[select 시작일  [begin], 종료일 [end], concat(제목, '<br/>', 상세) summary]]>
+    <![CDATA[select 시작일  [begin], 종료일 [end], concat(제목, '<br/>', 상세) summary, 일련번호 num]]>
     	   from [동림].[dbo].[캘린더] T1
     	  where 카테고리코드 = 'C03'
     	    and 사원코드 = #{sawonCode}
@@ -188,4 +188,17 @@
     	   </choose>
     	   order by 시작일
 	</select>
+	
+	<insert id="insertMyPlanByMobile" parameterType="map">
+		insert into [동림].[dbo].[캘린더] (제목, 시작일, 사원코드, 카테고리월, 카테고리코드, 종료일, 상세)
+		values (#{title}, #{begin}, #{sawonCode}, #{cateMonth}, #{cate}, #{end}, #{detail})
+	</insert>
+	
+	<delete id="deleteMyPlanByMobile" parameterType="map">
+		delete 
+		  from [동림].[dbo].[캘린더]
+		 where 카테고리코드 = 'C03'
+		   and 사원코드 = #{sawonCode}
+		   and 일련번호 = #{num}
+	</delete>
 </mapper>

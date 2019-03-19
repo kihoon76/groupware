@@ -11,7 +11,9 @@ public enum ExceptionCode {
 	INVALID_MODIFY_USER("1006", "수정권한이 없습니다."),
 	INVALID_GYEOLJAE_USER("1007", "결재권한이 없습니다"),
 	HAS_APPTOKEN("1008", "다른사용자에게 등록된 토큰입니다."),
-	MODIFY_SANGSIN("1009", "기안자가 수정중입니다.");
+	MODIFY_SANGSIN("1009", "기안자가 수정중입니다."),
+	REG_PLAN_MOBILE("1010", "일정등록중 오류가 발생했습니다."),
+	DEL_PLAN_MOBILE("1011", "일정삭제중 오류가 발생했습니다.");
 	
 	private String code;
 	private String msg;

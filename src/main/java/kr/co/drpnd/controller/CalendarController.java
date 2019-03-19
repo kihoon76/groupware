@@ -34,6 +34,7 @@ import kr.co.drpnd.type.ExceptionCode;
 import kr.co.drpnd.type.TokenKey;
 import kr.co.drpnd.util.DateUtil;
 import kr.co.drpnd.util.SessionUtil;
+import okhttp3.internal.http2.ErrorCode;
 
 @RequestMapping("/calendar")
 @Controller
@@ -350,6 +351,57 @@ public class CalendarController {
 			vo.setSuccess(false);
 			vo.setErrMsg(e.getMessage());
 		}
+		
+		return vo;
+	}
+	
+	@PostMapping("m/regMyPlan")
+	@ResponseBody
+	public AjaxVO regMyPlanByMobile(@RequestBody Map<String, String> param) {
+		
+		AjaxVO vo = new AjaxVO<>();
+		vo.setSuccess(true);
+		try {
+			Sawon myInfo = SessionUtil.getSessionSawon();
+			param.put("sawonCode", myInfo.getSawonCode());
+			calendarService.regMyPlanByMobile(param);
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrCode(ExceptionCode.REG_PLAN_MOBILE.getCode());
+			vo.setErrMsg("일정등록 실패했습니다.");
+		}
+		
+		return vo;
+	}
+	
+	@GetMapping("m/removeMyPlan/{num}")
+	@ResponseBody
+	public AjaxVO removeMyPlan(@PathVariable("num") String num) {
+		AjaxVO vo = new AjaxVO<>();
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		Map<String, String> param = new HashMap<>();
+		param.put("sawonCode", myInfo.getSawonCode());
+		param.put("num", num);
+		
+		try {
+			boolean b = calendarService.removeMyPlanByMobile(param);
+			
+			if(b) {
+				vo.setSuccess(true);
+			}
+			else {
+				vo.setSuccess(false);
+				vo.setErrCode(ExceptionCode.DEL_PLAN_MOBILE.getCode());
+				vo.setErrMsg(ExceptionCode.DEL_PLAN_MOBILE.getMsg());
+			}
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrCode(ExceptionCode.DEL_PLAN_MOBILE.getCode());
+			vo.setErrMsg(ExceptionCode.DEL_PLAN_MOBILE.getMsg());
+		}
+	
 		
 		return vo;
 	}

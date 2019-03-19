@@ -4,7 +4,8 @@ var Common = {
 	popupClose: function() {},
 	useCacheReserPop: true,
 	offworkPopup: '',
-	myPlanPopup: '<textarea class="ta-myplan" readOnly>{0}</textarea>',
+	myPlanPopup: '<input type="text" placeholder="제목" style="width:100%;visibility:hidden;"><textarea class="ta-myplan" style="width:99%;margin-top:5px;" readOnly>{0}</textarea>',
+	myPlanRegPopup: '<input type="text" placeholder="제목" style="width:100%;" id="planTitle"><textarea class="ta-myplan" style="width:99%;margin-top:5px;" id="planDetail"></textarea>',
 	getFullHeight: function() {
 		var screen = $.mobile.getScreenHeight();
     	var header = $(".ui-header").hasClass("ui-header-fixed") ? $(".ui-header").outerHeight()  - 1 : $(".ui-header").outerHeight();
@@ -68,6 +69,8 @@ var Common = {
 						break;
 					case '1002': 
 					case '1004':
+					case '1010':
+					case '1011':
 						msg = jqXHR.errMsg;
 						break;
 					default: 
@@ -138,11 +141,39 @@ var Common = {
 	openPopup: function(type, afterFn) {
 		if(type == 'alert') {
 			$('#btnPopupOk').hide();
+			$('#btnPopupEtc').hide();
 			$('#btnPopupCancel').text('확인');
 		}
 		else if(type == 'offwork') {
+			$('#btnPopupOk').text('퇴근처리');
 			$('#btnPopupOk').show();
+			$('#btnPopupEtc').hide();
 			$('#btnPopupCancel').text('닫기');
+		}
+		else if(type == 'reg_plan') {
+			$('#btnPopupOk').text('일정등록');
+			$('#btnPopupOk').show();
+			$('#btnPopupEtc').hide();
+			$('#btnPopupCancel').text('닫기');
+		}
+		else if(type == 'mod_add_plan') {
+			$('#btnPopupOk').text('추가등록');
+			$('#btnPopupOk').show();
+			$('#btnPopupEtc').hide();
+			$('#btnPopupCancel').text('닫기');
+		}
+		else if(type == 'mod_add_del_plan') {
+			$('#btnPopupOk').text('추가등록');
+			$('#btnPopupOk').show();
+			$('#btnPopupEtc').show();
+			$('#btnPopupEtc').text('삭제');
+			$('#btnPopupCancel').text('닫기');
+		}
+		else if(type == 'del_plan') {
+			$('#btnPopupOk').text('삭제');
+			$('#btnPopupOk').show();
+			$('#btnPopupEtc').hide();
+			$('#btnPopupCancel').text('취소');
 		}
 		
 		Common.popupClose = afterFn;
@@ -154,6 +185,21 @@ var Common = {
 	makeErrMsg: function(errMsg, fn) {
 		Common.makePopup('', errMsg);
 		Common.openPopup('alert', fn);
+	},
+	makePopupOkHandler: function(fn) {
+		$('#btnPopupOk')
+		.off('click')
+		.on('click', fn);
+	},
+	makePopupEtcHandler: function(fn) {
+		$('#btnPopupEtc')
+		.off('click')
+		.on('click', fn);
+	},
+	dateAdd: function(date, add) {
+		var copiedDate = new Date(date.getTime());
+		copiedDate.setDate(copiedDate.getDate() + add);
+		return Common.getFormatDate(copiedDate);
 	}
 };
 
@@ -196,7 +242,7 @@ $(document)
 	$('body>[data-role="panel"]').panel();
 	
 	var overworkTypes = $('#overworkTypes').val();
-	var html = '<form><div><h4>업무내용: </h4><textarea style="width:100%; height:40px;" id="txtWorkContent"></textarea>';
+	var html = '<form><div style="width:256px;"><h4>업무내용: </h4><textarea style="width:100%; height:40px;" id="txtWorkContent"></textarea>';
 	html += '<h4>야근유형: </h4><select id="selOverworkType">' + overworkTypes + '</select>';
 	html += '<h4>야근내용: </h4><textarea style="width:100%; height:40px;" id="txtOutworkContent" disabled></textarea></div></form>';
 	Common.offworkPopup = html;
@@ -233,6 +279,37 @@ $(document)
 //		}
 //		
 //	})();
+	
+	function offworkHandler() {
+		var $txtWorkContent = $('#txtWorkContent');
+		var $txtOutworkContent = $('#txtOutworkContent');
+		var $selOverworkType = $('#selOverworkType');
+		
+		var workContent = $.trim($txtWorkContent.val());
+		if(workContent == '') {
+			$txtWorkContent.focus(); 
+			
+			return;
+		}
+	
+		Common.ajax({
+			url: '/geuntae/m/offwork',
+			method: 'POST',
+			dataType: 'json',
+			data: JSON.stringify({
+				workContent: workContent,
+				outworkContent: $.trim($txtOutworkContent.val()),
+				overworkType: $selOverworkType.val()
+			}),
+			headers: {'CUSTOM': 'Y'},
+			contentType: 'application/json',
+			success: function(data, textStatus, jqXHR) {
+				alert(data.datas[0] + ' - '+ data.datas[1] + '에 퇴근처리 되었습니다.');
+				$('#btnOffwork').addClass('ui-disabled');
+			},
+		});
+		
+	}
 	
 	$(document)
 	.off('click', '#btnGotowork')
@@ -297,44 +374,45 @@ $(document)
 	.off('click', '#btnOffwork')
 	.on('click', '#btnOffwork', function() {
 		Common.checkSession(function() {
+			Common.makePopupOkHandler(offworkHandler);
 			Common.makePopup('', Common.offworkPopup);
 			Common.openPopup('offwork');
 		});
 	});
 	
-	$(document)
-	.off('click', '#btnPopupOk')
-	.on('click', '#btnPopupOk', function() {
-		var $txtWorkContent = $('#txtWorkContent');
-		var $txtOutworkContent = $('#txtOutworkContent');
-		var $selOverworkType = $('#selOverworkType');
-		
-		var workContent = $.trim($txtWorkContent.val());
-		if(workContent == '') {
-			$txtWorkContent.focus(); 
-			
-			return;
-		}
-	
-		Common.ajax({
-			url: '/geuntae/m/offwork',
-			method: 'POST',
-			dataType: 'json',
-			data: JSON.stringify({
-				workContent: workContent,
-				outworkContent: $.trim($txtOutworkContent.val()),
-				overworkType: $selOverworkType.val()
-			}),
-			headers: {'CUSTOM': 'Y'},
-			contentType: 'application/json',
-			success: function(data, textStatus, jqXHR) {
-				alert(data.datas[0] + ' - '+ data.datas[1] + '에 퇴근처리 되었습니다.');
-				$('#btnOffwork').addClass('ui-disabled');
-			},
-		});
-		
-		
-	});
+//	$(document)
+//	.off('click', '#btnPopupOk')
+//	.on('click', '#btnPopupOk', Common.popupOkHandler/*function() {
+//		var $txtWorkContent = $('#txtWorkContent');
+//		var $txtOutworkContent = $('#txtOutworkContent');
+//		var $selOverworkType = $('#selOverworkType');
+//		
+//		var workContent = $.trim($txtWorkContent.val());
+//		if(workContent == '') {
+//			$txtWorkContent.focus(); 
+//			
+//			return;
+//		}
+//	
+//		Common.ajax({
+//			url: '/geuntae/m/offwork',
+//			method: 'POST',
+//			dataType: 'json',
+//			data: JSON.stringify({
+//				workContent: workContent,
+//				outworkContent: $.trim($txtOutworkContent.val()),
+//				overworkType: $selOverworkType.val()
+//			}),
+//			headers: {'CUSTOM': 'Y'},
+//			contentType: 'application/json',
+//			success: function(data, textStatus, jqXHR) {
+//				alert(data.datas[0] + ' - '+ data.datas[1] + '에 퇴근처리 되었습니다.');
+//				$('#btnOffwork').addClass('ui-disabled');
+//			},
+//		});
+//		
+//		
+//	}*/);
 	
 	$(document)
 	.off('click', '#btnPopupCancel')

@@ -410,7 +410,6 @@ $(document).ready(function() {
 	    	 
 	    	 common.checkSession(function() {
 	    		 if(calEvent.cate == 'C01') {
-		    		 console.log(calEvent.id);
 		    		 getGeuntaeDetail(calEvent);
 		    	 }
 		    	 else if(calEvent.cate == 'C02' || calEvent.cate == 'C03'){

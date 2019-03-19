@@ -249,6 +249,7 @@ public class CalendarService {
 					s = s  + System.lineSeparator() + "------------------------------" + System.lineSeparator();
 					s = s + list.get(i).get("summary");
 					rList.get(rList.size()-1).put("summary", s);
+					rList.get(rList.size()-1).put("union", "Y");
 				}
 				else {
 					begin = list.get(i).get("begin");
@@ -261,6 +262,18 @@ public class CalendarService {
 		}
 		
 		return list;
+	}
+
+	public void regMyPlanByMobile(Map<String, String> param) {
+		calendarDao.insertMyPlanByMobile(param);
+	}
+
+	@Transactional(isolation=Isolation.DEFAULT, 
+			   propagation=Propagation.REQUIRED, 
+			   rollbackFor=Exception.class,
+			   timeout=10)//timeout 초단위
+	public boolean removeMyPlanByMobile(Map<String, String> param) {
+		return 1 == calendarDao.deleteMyPlanByMobile(param);
 	}
 
 }

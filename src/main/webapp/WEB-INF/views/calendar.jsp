@@ -25,7 +25,7 @@
 			<c:forEach var="cate" items="${category}">
 			<option value="${cate.code}" <c:if test="${cate.code eq dftCate}">selected</c:if>>${cate.name}</option>
 			</c:forEach>
-		</select> 
+		</select> <b>(★ 반드시 저장을 하셔야 등록됩니다 - 단, 근태현황 제외임)</b>
 	</div>
 	<div id="calendar"></div>
 	<input type="hidden" id="mineBgColor" value="<c:out value='${mineBgColor}'/>" />

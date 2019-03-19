@@ -12,5 +12,8 @@
 		 <span id="spTime" style="color:#0000ff;">${currentTime10}</span>
 	</div>
 	<div id="calendarPlan" data-current="${currentDate}"></div>
+	<div style="margin:10px;font-size:12px;">
+	★ 하루에 일정이 복수개로 등록될 경우 모바일에서는 <br/>삭제/수정 불가합니다(추가 가능)
+	</div>
 </div>
 </content>

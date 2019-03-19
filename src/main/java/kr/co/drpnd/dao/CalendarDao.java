@@ -37,4 +37,8 @@ public interface CalendarDao {
 
 	List<Map<String, String>> selectMyPlanThisMonthMobile(Map<String, String> param);
 
+	void insertMyPlanByMobile(Map<String, String> param);
+
+	int deleteMyPlanByMobile(Map<String, String> param);
+
 }
