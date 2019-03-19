@@ -28,7 +28,8 @@
 	  data-sawon-name="<c:out value='${sawonName}' />"
 	  data-sawon-code="<c:out value='${sawonCode}' />"
 	  data-gyeoljae-count="<c:out value='${mygyeoljaeCount}' />"
-	  data-team="<c:out value='${team}' />">
+	  data-team="<c:out value='${team}' />"
+	  data-offwork-notauto="<c:out value='${yesterdayOffworkNotAuto}' />">
 	<sitemesh:write property="body" /> 
 	<script src="/resources/core/ver/4.1.1-rc2/js/ext-all.js"></script>
 	

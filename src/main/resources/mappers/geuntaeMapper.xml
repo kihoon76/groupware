@@ -64,6 +64,14 @@
 <!-- 		   and DATEDIFF(DD, '2019-02-15 00:00:00', 출근시간) = -1 -->
 	</select>
 	
+	<select id="selectMyYesterdayOffworkNotAuto" parameterType="string" resultType="int">
+		select count(근태코드)
+		  from [동림].[dbo].[근태]
+		 where 사원코드 = #{sawonCode}
+		   and DATEDIFF(DD, getDate(), 출근시간) = -1
+		   and 자동퇴근처리여부  is null
+	</select>
+	
 	<select id="selectMyYesterdayGotowork"  parameterType="string" resultType="int">
 		select count(출근시간)
 		  from [동림].[dbo].[근태] 

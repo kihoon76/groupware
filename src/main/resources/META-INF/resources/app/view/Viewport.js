@@ -12,6 +12,8 @@ Ext.define('Drpnd.view.Viewport', {
 	    var sawonName = Ext.getBody().getAttribute('data-sawon-name');
 	    var sawonCode = Ext.getBody().getAttribute('data-sawon-code');
 	    var mygyeoljaeCount = parseInt(Ext.getBody().getAttribute('data-gyeoljae-count'));
+	    var offworkNotAuto = Ext.getBody().getAttribute('data-offwork-notauto') == 'true';
+	    
 	    var treeGyeoljae = null; 
 	    
 	    var currentTime10 = Ext.get('hdnTime').getValue();
@@ -661,6 +663,19 @@ Ext.define('Drpnd.view.Viewport', {
 			worker.postMessage('SESSION');
 		}
 	    
+	    var alarmButton = '';
+	    if(!offworkNotAuto) {
+	    	alarmButton = {
+	    		xtype: 'button',
+				iconCls: 'icon-lamp',
+				text: '퇴근처리안됨',
+				listeners: {
+				   click: function() {
+					  Ext.Msg.alert('', '어제 퇴근처리가 되지 않았습니다.<br/>퇴근시간/업무내용을 카톡으로 보내주세요<br/><b>e-biz팀 남기훈(차장)</b>'); 
+				   }
+				}
+	    	}
+	    }
 	    
         Ext.apply(this, {
             id     : 'app-viewport'
@@ -682,7 +697,7 @@ Ext.define('Drpnd.view.Viewport', {
 			   ,items: [{
 				   html: Html.logo + Html.appTitle
 			   }, 
-			   '->',{
+			   '->',alarmButton,{
 				   xtype: 'textfield',
 				   id: 'timer',
 				   readOnly: true,

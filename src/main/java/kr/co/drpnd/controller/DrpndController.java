@@ -66,6 +66,8 @@ public class DrpndController {
 		
 		boolean gotoworkChecked = false;
 		boolean offworkChecked = false;
+		boolean yesterdayOffworkNotAuto = true;
+		
 		String cuttentTime10 = "";
 		String mygyeoljaeCount = "0";
 		List<Team> teamList = null;
@@ -81,6 +83,8 @@ public class DrpndController {
 				gotoworkChecked = geuntaeService.checkMyTodayGotowork(myInfo.getSawonCode());
 				offworkChecked = geuntaeService.checkMyTodayOffwork(myInfo.getSawonCode());
 			}
+			
+			yesterdayOffworkNotAuto = geuntaeService.checkYesterdayOffworkNotAuto(myInfo.getSawonCode());
 			
 			
 			Map<String, Object> param = new HashMap<>();
@@ -108,7 +112,7 @@ public class DrpndController {
 		m.put("sawonName", myInfo.getSawonName());
 		m.put("sawonCode", myInfo.getSawonCode());
 		m.put("currentTime10", cuttentTime10);
-		
+		m.put("yesterdayOffworkNotAuto", yesterdayOffworkNotAuto);
 		
 		if(RequestUtil.isMobile(request)) {
 			StringBuilder options = new StringBuilder();

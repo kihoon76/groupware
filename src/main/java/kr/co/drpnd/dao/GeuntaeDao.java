@@ -36,4 +36,6 @@ public interface GeuntaeDao {
 
 	void updateAutoOffwork();
 
+	int selectMyYesterdayOffworkNotAuto(String sawonCode);
+
 }

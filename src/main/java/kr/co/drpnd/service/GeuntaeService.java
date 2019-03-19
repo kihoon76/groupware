@@ -32,6 +32,16 @@ public class GeuntaeService {
 		
 		return geuntae.getGotoworkTime();
 	}
+	
+	public boolean checkYesterdayOffworkNotAuto(String sawonCode) {
+		int yesterdayGotowork = geuntaeDao.selectMyYesterdayGotowork(sawonCode);
+		
+		if(yesterdayGotowork == 0) {
+			return true;
+		}
+		
+		return 1 == geuntaeDao.selectMyYesterdayOffworkNotAuto(sawonCode);
+	}
 
 	public boolean checkMyTodayGotowork(String sawonCode) {
 		Map<String, Integer> r = geuntaeDao.selectMyTodayGotowork(sawonCode);
