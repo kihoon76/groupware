@@ -34,9 +34,11 @@ var Common = {
 		}
 	},
 	ajax: function(cfg) {
+		var dataType = cfg.dataType || 'json';
+		
 		$.ajax(cfg.url, {
 			method: cfg.method || 'POST',
-			dataType: cfg.dataType || 'json',
+			dataType: dataType,
 			data: cfg.data || {},
 			contentType: cfg.contentType || 'application/x-www-form-urlencoded; charset=UTF-8',
 			headers: cfg.headers || {},
@@ -99,15 +101,23 @@ var Common = {
 				
 			},
 			success: function(data, textStatus, jqXHR) {
-				var json = $.parseJSON(jqXHR.responseText);
-				if(json.success) {
-					cfg.success(json, textStatus, jqXHR); 
+				if(dataType == 'json') {
+					var json = $.parseJSON(jqXHR.responseText);
+					if(json.success) {
+						cfg.success(json, textStatus, jqXHR); 
+					}
+					else {
+						jqXHR.errCode = json.errCode;
+						jqXHR.errMsg = json.errMsg;
+						jqXHR.data = json.datas;
+					}
 				}
-				else {
-					jqXHR.errCode = json.errCode;
-					jqXHR.errMsg = json.errMsg;
-					jqXHR.data = json.datas;
+				else if(dataType == 'html') {
+					if(textStatus == 'success') {
+						cfg.success(data, textStatus, jqXHR); 
+					}
 				}
+			
 			},
 			error: function(jqXHR, textStatus, err) {
 				console.log(jqXHR)
@@ -511,7 +521,10 @@ $(document).on('pageshow', function (event, ui) {
 	$('#popupDialog').popup({history: false});
 	var $dvUseInfo = $('#dvUseInfo');
 	var $dvGeuntae = $('#dvGeuntae');
-	var $dvCalendarPlan = $('#dvCalendarPlan');
+	var $dvCalendarPlan = $('#dvCalendarPlan'); //일정관리
+	var $dvGyeoljaeReceivedBox = $('#dvGyeoljaeReceivedBox'); //결재
+	var $mygyeoljaeCount = $('#mygyeoljaeCount');
+	var $spMyGyeoljaeCount = $('#spMyGyeoljaeCount');
 	
 	if($dvGeuntae.get(0)) {
 		var baseUrl = $('#baseUrl').val();
@@ -543,6 +556,8 @@ $(document).on('pageshow', function (event, ui) {
 			
 			Common.worker.postMessage(timeObj);
 		}
+		
+		//$spMyGyeoljaeCount.text($('#mygyeoljaeCount').val());
 	}
 	
 	if($dvUseInfo.get(0)) {
@@ -557,6 +572,10 @@ $(document).on('pageshow', function (event, ui) {
 	
 	if($dvCalendarPlan.get(0)) {
 		Common.viewCalendarPlan();
+	}
+	
+	if($dvGyeoljaeReceivedBox.get(0)) {
+		Common.viewMyGyeoljaeList();
 	}
 });
 

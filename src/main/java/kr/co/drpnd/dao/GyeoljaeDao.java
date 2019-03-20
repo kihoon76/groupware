@@ -69,4 +69,5 @@ public interface GyeoljaeDao {
 	void deleteGyeoljaeAttachFileByCode(String delAttachCode);
 
 	VacationDocs selectVacationDocsInfo(Map<String, String> param);
+
 }

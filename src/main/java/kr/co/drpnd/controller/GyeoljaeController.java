@@ -125,6 +125,35 @@ public class GyeoljaeController {
 		return "gyeoljae/receivedbox";
 	}
 	
+	@GetMapping("m/view/receivedbox")
+	public String viewReceivedBoxMobile(ModelMap m) {
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		
+		try {
+			Map<String, Object> param = new HashMap<>();
+			param.put("sawonCode", Integer.parseInt(myInfo.getSawonCode()));
+			param.put("summary", 10000);
+			
+			List<Map<String, String>> list = gyeoljaeService.getMyGyeoljae(param);
+			if(list.size() > 0) {
+				m.put("list", list);
+			}
+		}
+		catch(Exception e) {
+			m.put("err", e.getMessage());
+		}
+	
+		m.put("sawonName", myInfo.getSawonName());
+		return "mobile/gyeoljae/receivedbox";
+	}
+	
+	@GetMapping("m/content/{sangsinNum}")
+	public String getGyeoljaeContentByMobile() {
+		
+		return "mobile/gyeoljae/content";
+	}
+	
+	
 	@GetMapping("view/mod/mysangsin/{sangsinNum}")
 	public String viewModMySangsin(
 			@PathVariable("sangsinNum") String sangsinNum,
@@ -809,8 +838,6 @@ public class GyeoljaeController {
 		return vo;
 	}
 	
-	
-	
 	@GetMapping("mygyeoljae")
 	@ResponseBody
 	public AjaxVO<Map<String, String>> getMyGyeoljae(
@@ -869,7 +896,6 @@ public class GyeoljaeController {
 		return vo;
 		
 	}
-	
 	
 	@GetMapping("mycommited")
 	@ResponseBody

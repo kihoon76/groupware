@@ -5,7 +5,7 @@
 	function addPlan() {
 		c.closePopup();
 		var h = '<span style="padding-left:15px;">' + selPlanData.begin + ' 일정</span>';
-		c.makePopup(h, Common.myPlanRegPopup);
+		c.makePopup(h, c.myPlanRegPopup);
 		c.makePopupOkHandler(regPlan);
 		c.openPopup('reg_plan');
 	}
@@ -31,6 +31,7 @@
     				}
     			},
     		});
+			
 		}
 		else {
 			c.closePopup();
@@ -74,6 +75,7 @@
 				}
 			}
 		});
+
 	}
 	
 	c.viewCalendarPlan = function() {

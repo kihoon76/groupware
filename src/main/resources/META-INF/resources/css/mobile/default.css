@@ -102,4 +102,5 @@
 .ui-icon-offwork:after {background-image: url('../../images/offwork.png') !important; background-size: 16px 16px;}
 .ui-icon-inwork:after {background-image: url(../../images/inwork.png) !important; background-size: 16px 16px;}
 .ui-icon-outwork:after {background-image: url(../../images/outwork.png) !important; background-size: 16px 16px;}
+.ui-icon-new:after {background-image: url(../../images/new.png) !important; background-size: 32px 32px;}
 .ta-myplan {width:250px; height:200px;}
