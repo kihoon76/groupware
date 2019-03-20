@@ -114,4 +114,8 @@ public class SawonService {
 		return sawonDao.selectSawonAllDevices();
 	}
 
+	public Sawon getTodayMyGeuntaeByMobile(Map<String, Integer> me) {
+		return sawonDao.selectTodayMyGeuntaeByMobile(me);
+	}
+
 }

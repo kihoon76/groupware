@@ -38,7 +38,7 @@ public class PushTest {
 	
 	@Test
 	public void asyncTest() throws InterruptedException {
-		List<String> devices = sawonService.getSawonDevices("1");
+		List<String> devices = sawonService.getSawonDevices("24");
 		
 		try {
 			Map<String, String> m = new HashMap<>();
@@ -70,7 +70,7 @@ public class PushTest {
 		Thread.sleep(8000);
 	}
 	
-	@Test
+	@Ignore @Test
 	public void test() {
 		String s = "04".substring(1);
 		System.err.println(s);

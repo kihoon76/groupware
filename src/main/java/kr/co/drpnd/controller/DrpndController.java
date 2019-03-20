@@ -115,6 +115,22 @@ public class DrpndController {
 		m.put("yesterdayOffworkNotAuto", yesterdayOffworkNotAuto);
 		
 		if(RequestUtil.isMobile(request)) {
+			
+			/**
+			 * 모바일에서 외근/내근 전환 
+			 */
+			try {
+				Map<String, Integer> meMap = new HashMap<>();
+				meMap.put("sawonCode", Integer.parseInt(myInfo.getSawonCode()));
+				meMap.put("department", Integer.parseInt(myInfo.getSawonDepartment()));
+				Sawon me = sawonService.getTodayMyGeuntaeByMobile(meMap);
+				m.put("me", me);
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+			}
+			
+			
 			StringBuilder options = new StringBuilder();
 			if(overworkTypes != null) {
 				int len = overworkTypes.size();

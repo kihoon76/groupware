@@ -76,6 +76,13 @@
 		)}
 	</select>
 	
+	<select id="selectTodayMyGeuntaeByMobile" statementType="CALLABLE" parameterType="map" resultType="Sawon">
+		{call [동림].[dbo].[UP_부서FLOORMAP_MOBILE](
+			#{department, mode=IN, jdbcType=INTEGER, javaType=int},
+			#{sawonCode, mode=IN, jdbcType=INTEGER, javaType=int}
+		)}
+	</select>
+	
 	<select id="selectTodayVacationAllSawon" statementType="CALLABLE" parameterType="map" resultType="map">
 		{call [동림].[dbo].[UP_휴가사원](
 			#{department, mode=IN, jdbcType=INTEGER, javaType=int}

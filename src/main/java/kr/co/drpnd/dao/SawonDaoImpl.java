@@ -82,4 +82,9 @@ public class SawonDaoImpl implements SawonDao {
 		return msSqlSession.selectList(namespace + ".selectSawonAllDevices");
 	}
 
+	@Override
+	public Sawon selectTodayMyGeuntaeByMobile(Map<String, Integer> me) {
+		return msSqlSession.selectOne(namespace + ".selectTodayMyGeuntaeByMobile", me);
+	}
+
 }

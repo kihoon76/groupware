@@ -29,6 +29,18 @@
 		<a href="#" class="ui-btn ui-icon-offwork ui-btn-icon-bottom" id="btnOffwork">퇴근처리</a>
 		</c:otherwise>
 		</c:choose>
+		
+		<c:if test="${me.isGotowork eq 'Y' and me.isOffwork eq 'N'}">
+			<c:choose>
+			<c:when test="${me.isOutwork eq 'Y'}">
+				<a href="#" class="ui-btn ui-icon-inwork ui-btn-icon-bottom" id="btnChangeInOut" data-out="Y" data-geuntae="${me.todayGeuntaeCode}" data-seat-num="${me.seatNum }">내근전환</a>
+			</c:when>
+			<c:otherwise>
+				<a href="#" class="ui-btn ui-icon-outwork ui-btn-icon-bottom" id="btnChangeInOut" data-out="N" data-geuntae="${me.todayGeuntaeCode}" data-seat-num="${me.seatNum }">외근전환</a>
+			</c:otherwise>
+			</c:choose>
+		</c:if>
+
 	</div>
 	<input id="baseUrl" type="hidden" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}" />
 	<input id="overworkTypes" type="hidden" value="${overworkTypes}" />

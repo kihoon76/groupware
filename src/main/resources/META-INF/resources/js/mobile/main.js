@@ -305,7 +305,8 @@ $(document)
 			contentType: 'application/json',
 			success: function(data, textStatus, jqXHR) {
 				alert(data.datas[0] + ' - '+ data.datas[1] + '에 퇴근처리 되었습니다.');
-				$('#btnOffwork').addClass('ui-disabled');
+				//$('#btnOffwork').addClass('ui-disabled');
+				window.location.reload();
 			},
 		});
 		
@@ -323,7 +324,8 @@ $(document)
 			success: function(data, textStatus, jqXHR) {
 				alert(data.datas[0] + '에 출근처리 되었습니다.');
 				$this.addClass('ui-disabled');
-				$('#btnOffwork').removeClass('ui-disabled');
+				//$('#btnOffwork').removeClass('ui-disabled');
+				window.location.reload();
 			},
 		});
 		
@@ -379,6 +381,52 @@ $(document)
 			Common.openPopup('offwork');
 		});
 	});
+	
+	$(document)
+	.off('click')
+	.on('click', '#btnChangeInOut', function() {
+		console.log($(this).data('seatNum'))
+		var $this = $(this);
+		var inout = $this.data('out');
+		var geuntaeCode = $this.data('geuntae');
+		var seatNum = $this.data('seatNum');
+		
+		//외근전환
+		if(inout == 'N') {
+			Common.checkSession(function() {
+				Common.ajax({
+					url: '/geuntae/m/change/inwork/' + geuntaeCode + '?seatNum=' + seatNum,
+	    	    	method: 'GET',
+	    			dataType: 'json',
+	    			headers: {'CUSTOM': 'Y'},
+	    			success: function(data, textStatus, jqXHR) {
+	    				if(data.success) {
+	    					alert('외근전환 되었습니다.')
+	    					window.location.reload();
+	    				}
+	    			},
+	    		});
+			});
+		}
+		else if(inout == 'Y') {
+			Common.checkSession(function() {
+				Common.ajax({
+					url: '/geuntae/m/change/outwork/' + geuntaeCode + '?seatNum=' + seatNum,
+	    	    	method: 'GET',
+	    			dataType: 'json',
+	    			headers: {'CUSTOM': 'Y'},
+	    			success: function(data, textStatus, jqXHR) {
+	    				if(data.success) {
+	    					alert('내근전환 되었습니다.')
+	    					window.location.reload();
+	    				}
+	    			},
+	    		});
+			});
+		}
+	});
+	
+	
 	
 //	$(document)
 //	.off('click', '#btnPopupOk')

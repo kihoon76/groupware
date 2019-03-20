@@ -29,4 +29,6 @@ public interface SawonDao {
 
 	List<String> selectSawonAllDevices();
 
+	Sawon selectTodayMyGeuntaeByMobile(Map<String, Integer> me);
+
 }

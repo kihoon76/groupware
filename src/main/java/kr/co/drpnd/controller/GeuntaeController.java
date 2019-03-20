@@ -91,7 +91,7 @@ public class GeuntaeController {
 		return vo;
 	}
 	
-	@GetMapping("change/outwork/{geuntaeCode}")
+	@GetMapping(value={"change/outwork/{geuntaeCode}", "m/change/outwork/{geuntaeCode}"})
 	@ResponseBody
 	public AjaxVO changeOutwork(
 			@PathVariable("geuntaeCode") String geuntaeCode,
@@ -126,7 +126,7 @@ public class GeuntaeController {
 		return vo;
 	}
 	
-	@GetMapping("change/inwork/{geuntaeCode}")
+	@GetMapping(value={"change/inwork/{geuntaeCode}", "m/change/inwork/{geuntaeCode}"})
 	@ResponseBody
 	public AjaxVO changeInwork(
 			@PathVariable("geuntaeCode") String geuntaeCode,
