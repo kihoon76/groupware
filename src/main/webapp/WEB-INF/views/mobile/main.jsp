@@ -14,16 +14,16 @@
 	<div>
 		<c:choose>
 		<c:when test="${isGotoworkChecked == true}">
-		<a href="#" class="ui-btn ui-icon-gotowork ui-btn-icon-bottom ui-disabled" id="btnGotowork">출근처리</a>
+		<a href="#" class="ui-btn ui-icon-gotowork ui-btn-icon-bottom ui-disabled" id="btnGotowork" data-ajax="false">출근처리</a>
 		</c:when>
 		<c:otherwise>
-		<a href="#" class="ui-btn ui-icon-gotowork ui-btn-icon-bottom" id="btnGotowork">출근처리</a>
+		<a href="#" class="ui-btn ui-icon-gotowork ui-btn-icon-bottom" id="btnGotowork" data-ajax="false">출근처리</a>
 		</c:otherwise>
 		</c:choose>
 		
 		<c:choose>
 		<c:when test="${isOffworkChecked == true}">
-		<a href="#" class="ui-btn ui-icon-offwork ui-btn-icon-bottom ui-disabled" id="btnOffwork">퇴근처리</a>
+		<a href="#" class="ui-btn ui-icon-offwork ui-btn-icon-bottom ui-disabled" id="btnOffwork" >퇴근처리</a>
 		</c:when>
 		<c:otherwise>
 		<a href="#" class="ui-btn ui-icon-offwork ui-btn-icon-bottom" id="btnOffwork">퇴근처리</a>

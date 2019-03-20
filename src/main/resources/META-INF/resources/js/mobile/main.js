@@ -383,9 +383,8 @@ $(document)
 	});
 	
 	$(document)
-	.off('click')
+	.off('click', '#btnChangeInOut')
 	.on('click', '#btnChangeInOut', function() {
-		console.log($(this).data('seatNum'))
 		var $this = $(this);
 		var inout = $this.data('out');
 		var geuntaeCode = $this.data('geuntae');
