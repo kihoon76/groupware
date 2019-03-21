@@ -39,7 +39,19 @@
   	</tr>
   	<tr>
     	<td>첨부<br/>파일</td>
-    	<td>Stella</td>
+    	<c:choose>
+    	<c:when test="${fn:length(sangsin.attachFiles) == 0}">
+    	<td>-</td>
+    	</c:when>
+    	<c:otherwise>
+    	<td>
+    	<c:forEach var="files" items="${sangsin.attachFiles}" varStatus="status">
+            <a href="#" data-code="${files.code}" class="FILES">${files.name}</a> 
+        </c:forEach>
+    	</td>
+    	</c:otherwise>
+    	</c:choose>
+    	
   	</tr>
 </table>
 </c:otherwise>

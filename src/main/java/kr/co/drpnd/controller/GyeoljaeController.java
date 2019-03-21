@@ -1056,7 +1056,7 @@ public class GyeoljaeController {
 		return vo;
 	}
 	
-	@PostMapping("/file/{code}")
+	@PostMapping(value={"/file/{code}", "/m/file/{code}"})
 	public void downloadReport(@PathVariable("code") String code, 
 							   HttpServletRequest request, HttpServletResponse response) throws Exception  {
 		

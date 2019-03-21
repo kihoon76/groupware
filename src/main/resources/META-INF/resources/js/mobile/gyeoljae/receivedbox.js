@@ -78,6 +78,21 @@
 		}
 	}
 	
+	function downloadHandler(code) {
+		var form = document.createElement('form');
+		form.action = '/gyeoljae/m/file/' + code;
+		form.method = 'POST';
+		form.target = '_blank';
+		
+		var input = document.createElement('input');
+		input.type = 'hidden';
+	   
+	    form.appendChild(input);
+		form.style.display = 'none';
+		document.body.appendChild(form);
+		form.submit();
+	}
+	
 	function getContent($link, sangsinNum) {
 		c.ajax({
 			url: '/gyeoljae/m/content/' + sangsinNum,
@@ -92,13 +107,18 @@
 				catch(e) {
 					if($selLink != null) {
 						$selLink.next().html('');
-						var btns = $selLink.next().find('button');
-						btns.off('click');
+						$selLink.next().find('button').off('click');
+						$selLink.next().find('.FILES').off('click');
 					}
 					
 					$selLink = $link;
 					$link.next().html(data);
 					$link.next().find('button').on('click', btnHandler);
+					$link.next().find('.FILES').on('click', function() {
+						var code = $(this).data('code');
+						downloadHandler(code);
+					});
+					
 				}
 			},
 			
