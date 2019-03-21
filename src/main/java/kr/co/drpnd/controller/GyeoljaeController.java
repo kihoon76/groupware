@@ -354,7 +354,8 @@ public class GyeoljaeController {
 			@RequestParam(name="gyeoljaeSubType", required=false) String gyeoljaeSubType,
 			@RequestParam(name="term", required=false) String term,
 			@RequestParam(name="startDate", required=false) String startDate,
-			@RequestParam(name="endDate", required=false) String endDate) {
+			@RequestParam(name="endDate", required=false) String endDate,
+			@RequestParam(name="docNum", required=false) String docNum) {
 		AjaxVO vo = new AjaxVO();
 		
 		vo.setSuccess(true);
@@ -399,6 +400,8 @@ public class GyeoljaeController {
 			sangsin.setTerm(term);
 			sangsin.setStartDate(startDate);
 			sangsin.setEndDate(endDate);
+			sangsin.setDocNum(docNum);
+			
 			
 			List<AttachFile> attachFiles = new ArrayList<>();
 			String pushMsg = myInfo.getSawonName() + "님이 올린 결재가 도착했습니다.";
@@ -561,7 +564,8 @@ public class GyeoljaeController {
 			@RequestParam(name="gyeoljaeSubType", required=false) String gyeoljaeSubType,
 			@RequestParam(name="term", required=false) String term,
 			@RequestParam(name="startDate", required=false) String startDate,
-			@RequestParam(name="endDate", required=false) String endDate
+			@RequestParam(name="endDate", required=false) String endDate,
+			@RequestParam(name="docNum", required=false) String docNum
 			) {
 		AjaxVO vo = new AjaxVO();
 		
@@ -614,6 +618,7 @@ public class GyeoljaeController {
 					sangsin.setGianja(myInfo.getSawonCode());
 					sangsin.setGyeoljaeType(gyeoljaeType);
 					sangsin.setSangsinNum(Integer.parseInt(sangsinNum));
+					sangsin.setDocNum(docNum);
 					
 					List<AttachFile> attachFiles = new ArrayList<>();
 					String pushMsg = myInfo.getSawonName() + "님이 올린 결재가 도착했습니다.";

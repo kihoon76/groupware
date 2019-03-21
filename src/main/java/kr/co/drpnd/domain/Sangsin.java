@@ -25,6 +25,7 @@ public class Sangsin {
 	private String delAttachCode;
 	private String gyeoljaeSubType;
 	private String term;
+	private String docNum;
 	
 	public String getTitle() {
 		return title;
@@ -128,4 +129,11 @@ public class Sangsin {
 	public void setTerm(String term) {
 		this.term = term;
 	}
+	public String getDocNum() {
+		return docNum;
+	}
+	public void setDocNum(String docNum) {
+		this.docNum = docNum;
+	}
+	
 }

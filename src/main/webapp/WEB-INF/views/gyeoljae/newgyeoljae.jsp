@@ -66,6 +66,9 @@
 				(<input type="number" class="form-control form-control-sm" style="width:50px;" id="numTerm" min="1">)일간
 			</div>
 		</div>
+		<div class="form-group" id="dvDocNum">
+    		<input type="text" class="form-control form-control-sm" id="docNum" placeholder="문서번호 (예 19-2)" style="width:150px;">
+  		</div>
 		<div class="form-group">
     		<input type="text" class="form-control form-control-sm" id="gianTitle" placeholder="기안제목">
   		</div>

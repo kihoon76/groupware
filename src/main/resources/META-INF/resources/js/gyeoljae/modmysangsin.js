@@ -26,6 +26,8 @@
 		var $selGyeoljaeSubType = $('#selGyeoljaeSubType');
 		var $dvGyeoljaeSubType = $('#dvGyeoljaeSubType');
 		var $dvVacationTerm = $('#dvVacationTerm');
+		var $dvDocNum = $('#dvDocNum');
+		var $docNum = $('#docNum');
 		var $numTerm = $('#numTerm');
 		
 		var gyeoljaeAddObj = {};
@@ -188,6 +190,9 @@
 				param.gyeoljaeSubType = $selGyeoljaeSubType.val();
 				param.term = $numTerm.val();
 			}
+			else {
+				param.docNum = $.trim($docNum.val());
+			}
 			
 			return param;
 		}
@@ -286,6 +291,16 @@
 				var t = $.trim($numTerm.val());
 				
 				return t != '' && t >= 1;
+			}
+			
+			return true;
+		}
+		
+		function validateGyeoljaeDocNum() {
+			if($selGyeoljaeType.val() == '1') {
+				var d = $.trim($docNum.val());
+				
+				return /^\d+-\d+$/.test(d);
 			}
 			
 			return true;
@@ -499,6 +514,18 @@
 						$numTerm.focus();
 					}
 				});
+				return;
+			}
+			
+			if(!validateGyeoljaeDocNum()) {
+				common.showExtMsg({
+					type: 'alert',
+					msg: '문서번호 형식이 맞지 않습니다.',
+					callback: function() {
+						$docNum.focus();
+					}
+				});
+				
 				return;
 			}
 			

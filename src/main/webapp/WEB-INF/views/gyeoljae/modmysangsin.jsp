@@ -92,6 +92,9 @@
 				(<input type="number" class="form-control form-control-sm" style="width:50px;" id="numTerm" min="1" value="<c:out value='${sangsin.term}' />">)일간
 			</div>
 		</div>
+		<div class="form-group" id="dvDocNum" <c:if test="${sangsin.gyeoljaeType eq '2'}">style="display:none;"</c:if>>
+    		<input type="text" class="form-control form-control-sm" id="docNum" placeholder="문서번호 (예 19-2)" style="width:150px;" value="<c:out value='${sangsin.docNum}' />">
+  		</div>
 		<div class="form-group">
     		<input type="text" class="form-control form-control-sm" id="gianTitle" placeholder="기안제목" value="${sangsin.title}">
   		</div>
