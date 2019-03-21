@@ -36,6 +36,16 @@
 		</c:choose>
 		
 	</div>
+<!-- 	<div> -->
+<!-- 		<ul id="myGyeoljaeList" data-role="listview"> -->
+<%-- 		<c:forEach begin="1" end="30" step="1"> --%>
+<!-- 			<li> -->
+<!-- 				<a href="#" class="GYEOLJAE" data-sangsin-num="83">test</a> -->
+<!-- 				<div></div> -->
+<!-- 			</li> -->
+<%-- 		</c:forEach>  --%>
+<!-- 		</ul> -->
+<!-- 	</div> -->
 	
 </div>
 </content>

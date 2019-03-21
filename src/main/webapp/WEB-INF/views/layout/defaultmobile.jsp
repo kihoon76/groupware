@@ -30,6 +30,8 @@
 	<script type="text/javascript" src="/resources/os/swiper-4.4.1/js/swiper.min.js"></script>
 	<script type="text/javascript" src="/resources/os/jqm-calendar/jw-jqm-cal.js"></script>
 	<script type="text/javascript" src="/resources/lib/jqmobile/fastclick.js"></script>
+	<script type="text/javascript" src="/resources/lib/jqmobile/jquery.scrollLock.js"></script>
+	
 	<script type="text/javascript" src="/resources/js/mobile/main.js"></script>
 	<script type="text/javascript" src="/resources/js/mobile/calendar/plan.js"></script>
 	<script type="text/javascript" src="/resources/js/mobile/gyeoljae/receivedbox.js"></script>
@@ -73,14 +75,7 @@
         	<li data-icon="delete"><a href="#" data-rel="close">&nbsp;</a></li>
         	<li data-role="list-divider">Menu</li>
         	<li>
-        		<c:choose>
-        		<c:when test="${not empty mygyeoljaeCount and mygyeoljaeCount ne '0'}">
-        			<a href="/gyeoljae/m/view/receivedbox" class="ui-icon-new">결재</a>
-        		</c:when>
-        		<c:otherwise>
-        			<a href="/gyeoljae/m/view/receivedbox">결재 </a>
-        		</c:otherwise>
-        		</c:choose>
+        		<a href="/gyeoljae/m/view/receivedbox">결재(<span style="color:#f00;"><c:out value="${mygyeoljaeCount}" /></span>) </a>
         	</li>
 <!--         	<li><a href="/book/statistics/read">메뉴2</a></li> -->
 <!--         	<li><a href="/book/rental_manage">메뉴3</a></li> -->

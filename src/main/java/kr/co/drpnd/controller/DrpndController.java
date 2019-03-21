@@ -31,6 +31,7 @@ import kr.co.drpnd.service.GeuntaeService;
 import kr.co.drpnd.service.GyeoljaeService;
 import kr.co.drpnd.service.SawonService;
 import kr.co.drpnd.type.TokenKey;
+import kr.co.drpnd.util.CommonUtil;
 import kr.co.drpnd.util.DateUtil;
 import kr.co.drpnd.util.RequestUtil;
 import kr.co.drpnd.util.SessionUtil;
@@ -55,6 +56,9 @@ public class DrpndController {
 	@Resource(name="codeService")
 	CodeService codeService;
 	
+	@Resource(name="commonUtil")
+	CommonUtil commonUtil;
+	
 	@GetMapping(value={"main", "m/main"})
 	public String index(
 			HttpServletRequest request,
@@ -69,7 +73,7 @@ public class DrpndController {
 		boolean yesterdayOffworkNotAuto = true;
 		
 		String cuttentTime10 = "";
-		String mygyeoljaeCount = "0";
+		//String mygyeoljaeCount = "0";
 		List<Team> teamList = null;
 		List<Object> overworkTypes = null;
 		
@@ -87,7 +91,7 @@ public class DrpndController {
 			yesterdayOffworkNotAuto = geuntaeService.checkYesterdayOffworkNotAuto(myInfo.getSawonCode());
 			
 			
-			Map<String, Object> param = new HashMap<>();
+			/*Map<String, Object> param = new HashMap<>();
 			param.put("searchStatus", "A");
 			param.put("searchTextType", "A");
 			param.put("searchGyeoljaeType", "A");
@@ -96,7 +100,7 @@ public class DrpndController {
 			param.put("size", 1);
 			
 			Map<String, Object> r = gyeoljaeService.getMyGyeoljaeTotalCount(param);
-			mygyeoljaeCount = String.valueOf(r.get("total"));
+			mygyeoljaeCount = String.valueOf(r.get("total"));*/
 			
 			teamList = geuntaeService.getTeamList(myInfo.getSawonDepartment());
 			overworkTypes = codeService.getOverwork();
@@ -105,7 +109,8 @@ public class DrpndController {
 			e.printStackTrace();
 		}
 		
-		m.put("mygyeoljaeCount", mygyeoljaeCount);
+		//m.put("mygyeoljaeCount", commonUtil.getMyGyeoljaeTotalCount(myInfo.getSawonCode()));
+		commonUtil.getMyGyeoljaeTotalCount(m, myInfo.getSawonCode());
 		m.put("currentDate", DateUtil.getCurrentDateString());
 		m.put("isGotoworkChecked", gotoworkChecked);
 		m.put("isOffworkChecked", offworkChecked);
@@ -179,8 +184,8 @@ public class DrpndController {
 	
 	@GetMapping("m/info")
 	public String useInfo(ModelMap m) {
+		commonUtil.getMyGyeoljaeTotalCount(m, SessionUtil.getSessionSawon().getSawonCode());
 		m.put("footbar", "info");
-		
 		return "mobile/useInfo";
 	}
 	

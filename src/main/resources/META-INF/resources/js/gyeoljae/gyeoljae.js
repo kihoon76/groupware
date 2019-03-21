@@ -318,7 +318,7 @@ var Gyeoljae = (function() {
 			        } });
 				}
 				
-				if(sangsin.status != 'C') {
+				if(sangsin.status != 'C' && sangsin.status != 'R') {
 					btnItems.push({ xtype: 'button', text: '수정', iconCls: 'icon-modi', listeners: {
 			        	click: function(btn) {
 			        		console.log(sangsin);

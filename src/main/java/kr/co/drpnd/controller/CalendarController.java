@@ -32,6 +32,7 @@ import kr.co.drpnd.exception.InvalidUser;
 import kr.co.drpnd.service.CalendarService;
 import kr.co.drpnd.type.ExceptionCode;
 import kr.co.drpnd.type.TokenKey;
+import kr.co.drpnd.util.CommonUtil;
 import kr.co.drpnd.util.DateUtil;
 import kr.co.drpnd.util.SessionUtil;
 import okhttp3.internal.http2.ErrorCode;
@@ -51,6 +52,9 @@ public class CalendarController {
 	
 	@Autowired
 	private SimpMessagingTemplate template;
+	
+	@Resource(name="commonUtil")
+	CommonUtil commonUtil;
 	
 	@GetMapping("/view")
 	public String viewCalendar(
@@ -326,14 +330,18 @@ public class CalendarController {
 	
 	@GetMapping("m/view/plan")
 	public String mViewCalendarPlan(ModelMap m) {
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		commonUtil.getMyGyeoljaeTotalCount(m, myInfo.getSawonCode());
 		m.addAttribute("currentDate", DateUtil.getCurrentDateString());
-		m.addAttribute("sawonName", SessionUtil.getSessionSawon().getSawonName());
+		m.addAttribute("sawonName", myInfo.getSawonName());
 		return "mobile/calendar/plan";
 	}
 	
 	@GetMapping(value={"m/getMyPlan", "m/getMyPlan/{date}"})
 	@ResponseBody
-	public AjaxVO<Map<String, String>> getMyPlanThisMonth(@PathVariable(name="date", required=false) String date) {
+	public AjaxVO<Map<String, String>> getMyPlanThisMonth(
+			@PathVariable(name="date", required=false) String date,
+			ModelMap m) {
 		Sawon myInfo = SessionUtil.getSessionSawon();
 		AjaxVO<Map<String, String>> vo = new AjaxVO<>();
 		vo.setSuccess(true);
@@ -351,6 +359,8 @@ public class CalendarController {
 			vo.setSuccess(false);
 			vo.setErrMsg(e.getMessage());
 		}
+		
+		commonUtil.getMyGyeoljaeTotalCount(m, myInfo.getSawonCode());
 		
 		return vo;
 	}

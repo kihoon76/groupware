@@ -5,6 +5,7 @@ var Common = {
 	useCacheReserPop: true,
 	offworkPopup: '',
 	myPlanPopup: '<input type="text" placeholder="제목" style="width:100%;visibility:hidden;"><textarea class="ta-myplan" style="width:99%;margin-top:5px;" readOnly>{0}</textarea>',
+	myGyeoljaePopup: '<input type="text" style="width:100%;visibility:hidden;"><textarea class="ta-myplan" style="width:99%;margin-top:5px;" id="txtGyeoljaeOpinion">{0}</textarea>',
 	myPlanRegPopup: '<input type="text" placeholder="제목" style="width:100%;" id="planTitle"><textarea class="ta-myplan" style="width:99%;margin-top:5px;" id="planDetail"></textarea>',
 	getFullHeight: function() {
 		var screen = $.mobile.getScreenHeight();
@@ -120,7 +121,11 @@ var Common = {
 			
 			},
 			error: function(jqXHR, textStatus, err) {
-				console.log(jqXHR)
+				setTimeout(function() {
+					Common.makeErrMsg('오류가 발생했습니다.(' + jqXHR.status + ')');
+				}, 1);
+				
+			
 			}
 		});
 	},
@@ -185,15 +190,32 @@ var Common = {
 			$('#btnPopupEtc').hide();
 			$('#btnPopupCancel').text('취소');
 		}
+		else if(type == 'commit_gyeoljae') {
+			$('#btnPopupOk').text('결재');
+			$('#btnPopupOk').show();
+			$('#btnPopupEtc').hide();
+			$('#btnPopupCancel').text('닫기');
+		}
+		else if(type == 'reject_gyeoljae') {
+			$('#btnPopupOk').text('반려');
+			$('#btnPopupOk').show();
+			$('#btnPopupEtc').hide();
+			$('#btnPopupCancel').text('닫기');
+		}
 		
 		Common.popupClose = afterFn;
 		$('#popupDialog').popup('open');
+		$.scrollLock(true);
 	},
 	closePopup: function() {
 		$('#popupDialog').popup('close');
 	},
 	makeErrMsg: function(errMsg, fn) {
 		Common.makePopup('', errMsg);
+		Common.openPopup('alert', fn);
+	},
+	makeResultMsg: function(msg, fn) {
+		Common.makePopup('', msg);
 		Common.openPopup('alert', fn);
 	},
 	makePopupOkHandler: function(fn) {
@@ -591,8 +613,8 @@ $(document).on('popupafterclose', "[data-role=popup]", function (e) {
 		}
 	}
 		
-	//$.scrollLock(false);
+	$.scrollLock(false);
 	
 	
-    console.log(e.target.id + " -> " + e.type);
+    //console.log(e.target.id + " -> " + e.type);
 });

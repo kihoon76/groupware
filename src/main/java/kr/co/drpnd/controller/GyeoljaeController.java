@@ -46,6 +46,7 @@ import kr.co.drpnd.service.GyeoljaeService;
 import kr.co.drpnd.service.SawonService;
 import kr.co.drpnd.type.ExceptionCode;
 import kr.co.drpnd.type.VacationType;
+import kr.co.drpnd.util.CommonUtil;
 import kr.co.drpnd.util.SessionUtil;
 import kr.co.drpnd.util.StringUtil;
 
@@ -61,6 +62,9 @@ public class GyeoljaeController {
 	
 	@Resource(name="codeService")
 	CodeService codeService;
+	
+	@Resource(name="commonUtil")
+	CommonUtil commonUtil;
 	
 	@Resource(name="fcmLog")
 	FCMLog fcmLog;
@@ -143,13 +147,23 @@ public class GyeoljaeController {
 			m.put("err", e.getMessage());
 		}
 	
+		commonUtil.getMyGyeoljaeTotalCount(m, myInfo.getSawonCode());
 		m.put("sawonName", myInfo.getSawonName());
 		return "mobile/gyeoljae/receivedbox";
 	}
 	
 	@GetMapping("m/content/{sangsinNum}")
-	public String getGyeoljaeContentByMobile() {
+	public String getGyeoljaeContentByMobile(
+			@PathVariable("sangsinNum") String sangsinNum,
+			ModelMap m) {
+		Sawon myInfo = SessionUtil.getSessionSawon();
 		
+		Map<String, String> param = new HashMap<>();
+		param.put("sawonCode", myInfo.getSawonCode());
+		param.put("sangsinNum", sangsinNum);
+		
+		Sangsin sangsin = gyeoljaeService.getMyGyeoljaeDetail(param);
+		m.addAttribute("sangsin", sangsin);
 		return "mobile/gyeoljae/content";
 	}
 	
@@ -1086,7 +1100,7 @@ public class GyeoljaeController {
 		}
 	}
 	
-	@PostMapping("commit")
+	@PostMapping(value={"commit", "m/commit"})
 	@ResponseBody
 	public AjaxVO commit(@RequestBody Map<String, String> map) {
 		AjaxVO vo = new AjaxVO<>();
@@ -1144,7 +1158,7 @@ public class GyeoljaeController {
 		
 	}
 	
-	@PostMapping("reject")
+	@PostMapping(value={"reject","m/reject"})
 	@ResponseBody
 	public AjaxVO reject(@RequestBody Map<String, String> map) {
 		AjaxVO vo = new AjaxVO<>();

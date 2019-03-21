@@ -71,7 +71,11 @@
 			data: JSON.stringify(param),
 			success: function(data, textStatus, jqXHR) {
 				if(data.success) {
-					window.location.reload();					
+					setTimeout(function() {
+						c.makeResultMsg('일정이 등록되었습니다.', function() {
+							window.location.reload();	
+						});
+					}, 1);
 				}
 			}
 		});
@@ -138,7 +142,9 @@
 	    					
 	    				}
 	    				else {
-	    					alert('일정을 로드하지 못했습니다.')
+	    					setTimeout(function() {
+	    						Common.makeErrMsg('일정을 로드하지 못했습니다.');
+	    					}, 1);
 	    				}
 	    				
 	    			},
@@ -173,7 +179,7 @@
 		    		selPlanData.begin = c.getFormatDate(date);
 		    		selPlanData.end = c.dateAdd(date, 1);
 		    		
-		    	 	c.makePopup(h, String.format(Common.myPlanPopup, s));
+		    	 	c.makePopup(h, String.format(c.myPlanPopup, s));
 		    	 	c.makePopupOkHandler(addPlan);
 		    	 	
 		    	 	if(union == 'Y') {
