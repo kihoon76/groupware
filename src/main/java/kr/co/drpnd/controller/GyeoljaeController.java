@@ -1056,10 +1056,7 @@ public class GyeoljaeController {
 		return vo;
 	}
 	
-	@PostMapping(value={"/file/{code}", "/m/file/{code}"})
-	public void downloadReport(@PathVariable("code") String code, 
-							   HttpServletRequest request, HttpServletResponse response) throws Exception  {
-		
+	private void download(String code,  HttpServletRequest request, HttpServletResponse response) throws Exception {
 		Sawon myInfo = SessionUtil.getSessionSawon();
 		String positionGubun = myInfo.getPositionGubun();
 		
@@ -1083,12 +1080,14 @@ public class GyeoljaeController {
 			
 			response.setHeader("Content-Transper-Encoding", "binary");
 			response.setHeader("Content-Disposition", "inline; filename=" + fileName + "." + file.getExt());
+			//response.setHeader("Content-Length", file.getFileByte().length + "");
 			response.setContentType("application/octet-stream");
 			
 			
 			ServletOutputStream out = response.getOutputStream();
 			out.write(file.getFileByte());
 			out.flush();
+			//System.err.println("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
 		}
 		else {
 			response.setContentType("text/html;charset=utf-8");
@@ -1097,7 +1096,20 @@ public class GyeoljaeController {
 			writer.println("<h3>파일은 기안자나 결재라인에 있는 결재자들 또는 임원분들만 보실수 있습니다.</h3>");
 			writer.close();
 			
+			
 		}
+	}
+	
+	@PostMapping(value={"/file/{code}"})
+	public void downloadReport(@PathVariable("code") String code, 
+							   HttpServletRequest request, HttpServletResponse response) throws Exception  {
+		download(code, request, response);
+	}
+	
+	@GetMapping(value={"/m/file/{code}"})
+	public void downloadMobile(@PathVariable("code") String code, 
+							   HttpServletRequest request, HttpServletResponse response) throws Exception  {
+		download(code, request, response);
 	}
 	
 	@PostMapping(value={"commit", "m/commit"})

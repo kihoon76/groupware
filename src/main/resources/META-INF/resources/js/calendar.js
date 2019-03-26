@@ -401,7 +401,7 @@ $(document).ready(function() {
 		 navLinks: true, // can click day/week names to navigate views
 	     editable: false,
 	     selectable: true,
-	     eventLimit: true, // allow "more" link when too many events
+	     eventLimit: false,//true, // allow "more" link when too many events
 	     dayClick: function(date, jsEvent, view) {
 	    	 //console.log('dayClick');
 	     },

@@ -29,6 +29,8 @@
 	<script type="text/javascript" src="/resources/lib/jqmobile/jquery.mobile-1.4.5.min.js"></script>
 	<script type="text/javascript" src="/resources/os/swiper-4.4.1/js/swiper.min.js"></script>
 	<script type="text/javascript" src="/resources/os/jqm-calendar/jw-jqm-cal.js"></script>
+	<script type="text/javascript" src="/resources/os/jQuery-Download-File/jquery.fileDownload.js"></script>
+	
 	<script type="text/javascript" src="/resources/lib/jqmobile/fastclick.js"></script>
 	<script type="text/javascript" src="/resources/lib/jqmobile/jquery.scrollLock.js"></script>
 	

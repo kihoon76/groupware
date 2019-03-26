@@ -78,19 +78,36 @@
 		}
 	}
 	
-	function downloadHandler(code) {
+	function downloadHandler(code, name) {
 		var form = document.createElement('form');
 		form.action = '/gyeoljae/m/file/' + code;
-		form.method = 'POST';
-		form.target = '_blank';
+		form.method = 'GET';
+		form.target = '_self';
 		
-		var input = document.createElement('input');
-		input.type = 'hidden';
+		//var input = document.createElement('input');
+		//input.type = 'hidden';
 	   
-	    form.appendChild(input);
+	    //form.appendChild(input);
 		form.style.display = 'none';
 		document.body.appendChild(form);
 		form.submit();
+
+		//window.location.href = ':download'
+		
+//		$.fileDownload('/gyeoljae/m/file/' + code)
+//		.done(function() {alert('download success')})
+//		.fail(function() {alert('download fail')});
+		/*$.fileDownload('/gyeoljae/m/file/' + code ,{
+			httpMethod: 'GET',
+			successCallback: function() {
+				alert('hh')
+			},
+			failCallback: function(responseHtml, url, error) {
+				alert(error)
+			}
+		});
+		
+		return false;*/
 	}
 	
 	function getContent($link, sangsinNum) {
@@ -116,7 +133,9 @@
 					$link.next().find('button').on('click', btnHandler);
 					$link.next().find('.FILES').on('click', function() {
 						var code = $(this).data('code');
-						downloadHandler(code);
+						var name = $(this).html();
+						console.log(name)
+						downloadHandler(code, name);
 					});
 					
 				}

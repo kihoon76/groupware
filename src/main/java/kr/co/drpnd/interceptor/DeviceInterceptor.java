@@ -58,6 +58,8 @@ public class DeviceInterceptor extends HandlerInterceptorAdapter {
 //		}
 		
 		boolean isMobile = isMobile(userAgent);
+		
+		
 		if(isMobile) {
 			request.setAttribute("isMobile", "Y");
 			if(!accept(request, mobileAcceptUrl, baseUrl)) {
