@@ -1087,7 +1087,7 @@ public class GyeoljaeController {
 			ServletOutputStream out = response.getOutputStream();
 			out.write(file.getFileByte());
 			out.flush();
-			System.err.println("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+			//System.err.println("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
 		}
 		else {
 			response.setContentType("text/html;charset=utf-8");
