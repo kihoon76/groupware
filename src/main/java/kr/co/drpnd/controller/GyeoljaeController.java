@@ -1080,14 +1080,14 @@ public class GyeoljaeController {
 			
 			response.setHeader("Content-Transper-Encoding", "binary");
 			response.setHeader("Content-Disposition", "inline; filename=" + fileName + "." + file.getExt());
-			//response.setHeader("Content-Length", file.getFileByte().length + "");
+			response.setHeader("Content-Length", file.getFileByte().length + "");
 			response.setContentType("application/octet-stream");
 			
 			
 			ServletOutputStream out = response.getOutputStream();
 			out.write(file.getFileByte());
 			out.flush();
-			//System.err.println("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+			System.err.println("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
 		}
 		else {
 			response.setContentType("text/html;charset=utf-8");
