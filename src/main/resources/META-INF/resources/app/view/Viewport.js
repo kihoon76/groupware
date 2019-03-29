@@ -619,8 +619,8 @@ Ext.define('Drpnd.view.Viewport', {
 	    	 var otVal = offworkObj.comboOverworkType.getValue();
 	    	 var ocsVal = offworkObj.chkOverworkSix.getValue() ? 'Y' : 'N';
 	    	 
-	    	 console.log(ocsVal);
-	    	 return;
+	    	 //console.log(ocsVal);
+	    	 //return;
 	    	 if(wcVal == '') {
 	    		 offworkObj.txtWorkContent.markInvalid('업무내용을 입력하세요.');
 	    		 return;
