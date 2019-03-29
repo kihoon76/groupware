@@ -158,24 +158,28 @@ var Common = {
 			$('#btnPopupOk').hide();
 			$('#btnPopupEtc').hide();
 			$('#btnPopupCancel').text('확인');
+			$('#btnPopupCancel').show();
 		}
 		else if(type == 'offwork') {
 			$('#btnPopupOk').text('퇴근처리');
 			$('#btnPopupOk').show();
 			$('#btnPopupEtc').hide();
 			$('#btnPopupCancel').text('닫기');
+			$('#btnPopupCancel').show();
 		}
 		else if(type == 'reg_plan') {
 			$('#btnPopupOk').text('일정등록');
 			$('#btnPopupOk').show();
 			$('#btnPopupEtc').hide();
 			$('#btnPopupCancel').text('닫기');
+			$('#btnPopupCancel').show();
 		}
 		else if(type == 'mod_add_plan') {
 			$('#btnPopupOk').text('추가등록');
 			$('#btnPopupOk').show();
 			$('#btnPopupEtc').hide();
 			$('#btnPopupCancel').text('닫기');
+			$('#btnPopupCancel').show();
 		}
 		else if(type == 'mod_add_del_plan') {
 			$('#btnPopupOk').text('추가등록');
@@ -183,25 +187,34 @@ var Common = {
 			$('#btnPopupEtc').show();
 			$('#btnPopupEtc').text('삭제');
 			$('#btnPopupCancel').text('닫기');
+			$('#btnPopupCancel').show();
 		}
 		else if(type == 'del_plan') {
 			$('#btnPopupOk').text('삭제');
 			$('#btnPopupOk').show();
 			$('#btnPopupEtc').hide();
 			$('#btnPopupCancel').text('취소');
+			$('#btnPopupCancel').show();
 		}
 		else if(type == 'commit_gyeoljae') {
 			$('#btnPopupOk').text('결재');
 			$('#btnPopupOk').show();
 			$('#btnPopupEtc').hide();
 			$('#btnPopupCancel').text('닫기');
+			$('#btnPopupCancel').show();
 		}
 		else if(type == 'reject_gyeoljae') {
 			$('#btnPopupOk').text('반려');
 			$('#btnPopupOk').show();
 			$('#btnPopupEtc').hide();
 			$('#btnPopupCancel').text('닫기');
+			$('#btnPopupCancel').show();
 		}
+		/*else if(type == 'app') {
+			$('#btnPopupOk').hide();
+			$('#btnPopupEtc').hide();
+			$('#btnPopupCancel').hide();
+		}*/
 		
 		Common.popupClose = afterFn;
 		$('#popupDialog').popup('open');

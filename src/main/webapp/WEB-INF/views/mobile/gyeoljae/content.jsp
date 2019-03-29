@@ -46,7 +46,7 @@
     	<c:otherwise>
     	<td>
     	<c:forEach var="files" items="${sangsin.attachFiles}" varStatus="status">
-            <a href="#" data-code="${files.code}" class="FILES">${files.name}</a> 
+            <a href="#" data-code="${files.code}" class="FILES" style="text-decoration:none; font-size:1.3em;">${files.name}</a>
         </c:forEach>
     	</td>
     	</c:otherwise>

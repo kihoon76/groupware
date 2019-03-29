@@ -1109,6 +1109,7 @@ public class GyeoljaeController {
 	@GetMapping(value={"/m/file/{code}"})
 	public void downloadMobile(@PathVariable("code") String code, 
 							   HttpServletRequest request, HttpServletResponse response) throws Exception  {
+		//Thread.sleep(10000);
 		download(code, request, response);
 	}
 	

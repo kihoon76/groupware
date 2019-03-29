@@ -1,6 +1,8 @@
 (function(c) {
 
 	var $selLink = null;
+	var $progressBar = null;
+	var downCurrentSize = 0;
 	
 	function commit() {
 		var $txtGyeoljaeOpinion = $('#txtGyeoljaeOpinion');
@@ -83,31 +85,10 @@
 		form.action = '/gyeoljae/m/file/' + code;
 		form.method = 'GET';
 		form.target = '_self';
-		
-		//var input = document.createElement('input');
-		//input.type = 'hidden';
-	   
-	    //form.appendChild(input);
 		form.style.display = 'none';
 		document.body.appendChild(form);
 		form.submit();
-
-		//window.location.href = ':download'
 		
-//		$.fileDownload('/gyeoljae/m/file/' + code)
-//		.done(function() {alert('download success')})
-//		.fail(function() {alert('download fail')});
-		/*$.fileDownload('/gyeoljae/m/file/' + code ,{
-			httpMethod: 'GET',
-			successCallback: function() {
-				alert('hh')
-			},
-			failCallback: function(responseHtml, url, error) {
-				alert(error)
-			}
-		});
-		
-		return false;*/
 	}
 	
 	function getContent($link, sangsinNum) {
@@ -153,9 +134,44 @@
 			var $this = $(this);
 			getContent($this, $this.data('sangsinNum'));
 		});
-		
-		
 	}
+	
+	/*c.fileDownReady = function() {
+		c.closePopup();
+		c.makePopup('다운로드', '<div id="progressbar"></div>');
+		c.makePopupOkHandler(function() {});
+		
+		
+		$progressBar = jQMProgressBar('progressbar')
+	    .setOuterTheme('b')
+	    .setInnerTheme('e')
+	    .isMini(true)
+	    .setMax(100)
+	    .setStartFrom(0)
+	    .setInterval(1000000000)
+	    .showCounter(true)
+	    .build();
+		
+		downTotalSize = 0;
+		
+		c.openPopup('app');
+	}*/
+	
+	
+	//안드로이드 앱에서 호출
+	/*c.fileDownStart = function(total, current) {
+		downCurrentSize += current;
+		
+		$progressBar
+		.setValue(Math.floor((downCurrentSize/total)*100))
+		.run();
+
+		$progressBar.stop();
+	}
+	
+	c.fileDownEnd = function() {
+		c.closePopup();
+	}*/
 	
 }(Common));
 

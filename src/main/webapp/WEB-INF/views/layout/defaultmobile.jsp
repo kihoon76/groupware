@@ -21,15 +21,17 @@
 	<link rel="stylesheet" href="/resources/lib/jqmobile/jquery.mobile-1.4.5.min.css" />
 	<link rel="stylesheet" href="/resources/os/swiper-4.4.1/css/swiper.min.css" />
 	<link rel="stylesheet" href="/resources/os/jqm-calendar/jw-jqm-cal.css" />
+<!-- 	<link rel="stylesheet" href="/resources/os/jqm-progress-bar/jQMProgressBar.css" /> -->
+		
 	<link rel="stylesheet" href="/resources/css/mobile/default.css" />
 	<link rel="stylesheet" href="/resources/css/mobile/gyeoljae.css" />
-	
 	
 	<script type="text/javascript" src="/resources/lib/jqmobile/jquery-1.11.1.min.js"></script>
 	<script type="text/javascript" src="/resources/lib/jqmobile/jquery.mobile-1.4.5.min.js"></script>
 	<script type="text/javascript" src="/resources/os/swiper-4.4.1/js/swiper.min.js"></script>
 	<script type="text/javascript" src="/resources/os/jqm-calendar/jw-jqm-cal.js"></script>
-	<script type="text/javascript" src="/resources/os/jQuery-Download-File/jquery.fileDownload.js"></script>
+<!-- 	<script type="text/javascript" src="/resources/os/jQuery-Download-File/jquery.fileDownload.js"></script> -->
+<!-- 	<script type="text/javascript" src="/resources/os/jqm-progress-bar/jQMProgressBar.js"></script> -->
 	
 	<script type="text/javascript" src="/resources/lib/jqmobile/fastclick.js"></script>
 	<script type="text/javascript" src="/resources/lib/jqmobile/jquery.scrollLock.js"></script>
@@ -90,11 +92,9 @@
         	</ul>
      	</div><!-- /collapsible -->
 	</div><!-- /leftpanel3 -->
-	
-	 
-	
 </div>
 <!-- </span> end fastclick -->
+
 <!-- $(":mobile-pagecontainer").pagecontainer("change", "#page", { options }); -->
 </body>
 </html>
