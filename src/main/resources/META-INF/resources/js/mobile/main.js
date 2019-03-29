@@ -272,12 +272,17 @@ $(document)
 .on('change', '#selOverworkType', function() {
 	var v = $(this).val();
 	var $txtOutworkContent = $('#txtOutworkContent');
+	var $chkStartSix = $('#chkStartFrom6');
+	
 	if(v == '0') {
 		$txtOutworkContent.val('');
 		$txtOutworkContent.prop('disabled', true);
+		$chkStartSix.prop('disabled', true);
+		$chkStartSix.prop('checked', false);
 	}
 	else {
 		$txtOutworkContent.prop('disabled', false);
+		$chkStartSix.prop('disabled', false);
 	}
 });
 
@@ -288,7 +293,8 @@ $(document)
 	
 	var overworkTypes = $('#overworkTypes').val();
 	var html = '<form><div style="width:256px;"><h4>업무내용: </h4><textarea style="width:100%; height:40px;" id="txtWorkContent"></textarea>';
-	html += '<h4>야근유형: </h4><select id="selOverworkType">' + overworkTypes + '</select>';
+	//html += '<h4>야근유형: </h4><select id="selOverworkType">' + overworkTypes + '</select>';
+	html += '<select id="selOverworkType">' + overworkTypes + '</select> <input type="checkbox" id="chkStartFrom6" disabled>6시부터';
 	html += '<h4>야근내용: </h4><textarea style="width:100%; height:40px;" id="txtOutworkContent" disabled></textarea></div></form>';
 	Common.offworkPopup = html;
 //	var baseUrl = $('#baseUrl').val();
@@ -329,6 +335,7 @@ $(document)
 		var $txtWorkContent = $('#txtWorkContent');
 		var $txtOutworkContent = $('#txtOutworkContent');
 		var $selOverworkType = $('#selOverworkType');
+		var $chkStartFrom6 = $('#chkStartFrom6');
 		
 		var workContent = $.trim($txtWorkContent.val());
 		if(workContent == '') {
@@ -344,7 +351,8 @@ $(document)
 			data: JSON.stringify({
 				workContent: workContent,
 				outworkContent: $.trim($txtOutworkContent.val()),
-				overworkType: $selOverworkType.val()
+				overworkType: $selOverworkType.val(),
+				startFrom6: $chkStartFrom6.prop('checked') ? 'Y' : 'N'
 			}),
 			headers: {'CUSTOM': 'Y'},
 			contentType: 'application/json',
