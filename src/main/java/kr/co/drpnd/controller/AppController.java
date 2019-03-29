@@ -43,7 +43,7 @@ public class AppController {
 		
 		/** 파일 다운로드 */
 
-		File fp = ResourceUtils.getFile("classpath:apps/groupware.apk");
+		File fp = ResourceUtils.getFile("classpath:apps/" + fileName + ".apk");
 		
 		//File fp = new File
 		int read = 0;
