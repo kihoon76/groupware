@@ -28,7 +28,8 @@ Ext.define('Drpnd.view.Viewport', {
 	    var offworkObj = {
 	    	txtWorkContent: null,
 	    	txtOutworkContent: null,
-	    	comboOverworkType: null
+	    	comboOverworkType: null,
+	    	chkOverworkSix: null,
 	    }
 	    
 	    var offWorkWin = null;
@@ -197,11 +198,24 @@ Ext.define('Drpnd.view.Viewport', {
 				        		change: function(c, nV) {
 				        			if(nV == '0') {
 				        				offworkObj.txtOutworkContent.setValue('');
+				        				offworkObj.chkOverworkSix.setDisabled(true);
+				        				offworkObj.chkOverworkSix.setValue(false);
 				        				offworkObj.txtOutworkContent.setDisabled(true);
 				        			}
 				        			else {
+				        				offworkObj.chkOverworkSix.setDisabled(false);
 				        				offworkObj.txtOutworkContent.setDisabled(false);
 				        			}
+				        		}
+				        	}
+				        },{
+				        	fieldLabel: '야근시작시간',
+				        	xtype: 'checkbox',
+				        	boxLabel: '6시부터(선택안하면 7시부터 적용)',
+				        	disabled: true,
+				        	listeners: {
+				        		afterrender: function(chk) {
+				        			offworkObj.chkOverworkSix = chk;
 				        		}
 				        	}
 				        },{
@@ -603,7 +617,10 @@ Ext.define('Drpnd.view.Viewport', {
 	    	 var wcVal = Ext.String.trim(offworkObj.txtWorkContent.getValue());
 	    	 var ocVal = Ext.String.trim(offworkObj.txtOutworkContent.getValue());
 	    	 var otVal = offworkObj.comboOverworkType.getValue();
+	    	 var ocsVal = offworkObj.chkOverworkSix.getValue() ? 'Y' : 'N';
 	    	 
+	    	 console.log(ocsVal);
+	    	 return;
 	    	 if(wcVal == '') {
 	    		 offworkObj.txtWorkContent.markInvalid('업무내용을 입력하세요.');
 	    		 return;
@@ -616,7 +633,8 @@ Ext.define('Drpnd.view.Viewport', {
 				jsonData: {
 					workContent: wcVal,
 					outworkContent: ocVal,
-					overworkType: otVal
+					overworkType: otVal,
+					startFrom6: ocsVal
 				},
 				loadmask: {
 					msg: '퇴근처리중 입니다.'

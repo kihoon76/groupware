@@ -27,6 +27,7 @@
 			#{workContent, mode=IN, jdbcType=VARCHAR, javaType=string},
 			#{outworkContent, mode=IN, jdbcType=VARCHAR, javaType=string},
 			#{overworkType, mode=IN, jdbcType=INTEGER, javaType=int},
+			#{startFrom6, mode=IN, jdbcType=CHAR, javaType=string},
 			#{offworkTime, mode=OUT, jdbcType=VARCHAR, javaType=string},
 			#{gotoworkTime, mode=OUT, jdbcType=VARCHAR, javaType=string}
 		)}

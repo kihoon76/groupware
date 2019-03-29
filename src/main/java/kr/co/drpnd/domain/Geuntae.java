@@ -27,6 +27,7 @@ public class Geuntae {
 	private String gotoworkMethod;		//P (PC) M(Mobile)
 	private String offworkMethod;
 	private int overworkType;
+	private String startFrom6;
 	
 	public String getGeuntaeCode() {
 		return geuntaeCode;
@@ -159,6 +160,12 @@ public class Geuntae {
 	}
 	public void setOverworkType(int overworkType) {
 		this.overworkType = overworkType;
+	}
+	public String getStartFrom6() {
+		return startFrom6;
+	}
+	public void setStartFrom6(String startFrom6) {
+		this.startFrom6 = startFrom6;
 	}
 	
 }
