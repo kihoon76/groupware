@@ -100,6 +100,7 @@ $(document).ready(function() {
 	function updateGeuntae(geuntaeCode, modifyObj, details, win) {
 		var vContent = '';
 		var vOverworkContent = '';
+		var vStartFrom6 = modifyObj.chkOverworkSix.getValue() ? 'Y' : 'N';
 		
 		if(modifyObj.oContent) {
 			vContent = $.trim(modifyObj.oContent.getValue());
@@ -124,7 +125,8 @@ $(document).ready(function() {
 				geuntaeCode: geuntaeCode,
 				content: vContent,
 				overworkContent: vOverworkContent,
-				startDate: details.gotowork.substring(0, 10)
+				startDate: details.gotowork.substring(0, 10),
+				startFrom6: vStartFrom6
 			},
 			success: function(jo) {
 				console.log(jo);
@@ -214,7 +216,7 @@ $(document).ready(function() {
 	
 	function openGeuntaeWin(event, details) {
 		var buttons = [];
-		var modifyObj = {oContent: null, oOverworkContent: null};
+		var modifyObj = {oContent: null, oOverworkContent: null, chkOverworkSix: null};
 		
 		if(event.mine == 'Y') {
 			buttons.push({
@@ -281,6 +283,16 @@ $(document).ready(function() {
 		            		modifyObj.oContent = txtArea;
 		            	}
 		            }
+		        }, {
+		        	fieldLabel: '야근시작시간',
+		        	xtype: 'checkbox',
+		        	boxLabel: '6시부터(선택안하면 7시부터 적용)',
+		        	checked: details.startFrom6 == 'Y' ? true : false,
+		        	listeners: {
+		        		afterrender: function(chk) {
+		        			modifyObj.chkOverworkSix = chk;
+		        		}
+		        	}
 		        }, {
 		        	fieldLabel: '야근내용',
 		        	xtype: 'textarea',

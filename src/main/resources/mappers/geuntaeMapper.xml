@@ -121,6 +121,7 @@
 		<result column="업무내용" property="content" javaType="string"/>
 		<result column="야근내용" property="overworkContent" javaType="string"/>
 		<result column="사원명" property="sawonName" javaType="string"/>
+		<result column="야근6시부터" property="startFrom6" javaType="string"/>
 		<result column="위도" property="lat" javaType="float"/>
 		<result column="경도" property="lng" javaType="float"/>
 	</resultMap>
@@ -128,7 +129,8 @@
 	<update id="updateGeuntae" parameterType="map">
 		update [동림].[dbo].[근태]
 		   set 업무내용 = #{content},
-		                 야근내용 = #{overworkContent}
+		                 야근내용 = #{overworkContent},
+		                 야근6시부터 = #{startFrom6}
 		 where 근태코드 = #{geuntaeCode}
 		   and 사원코드 = #{sawonCode}
 	</update>
