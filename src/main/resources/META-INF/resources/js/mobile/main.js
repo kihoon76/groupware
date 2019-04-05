@@ -288,7 +288,7 @@ $(document)
 
 $(document)
 .off('pageinit')
-.on('pageinit', function () {
+.on('pageinit', function (event) {
 	$('body>[data-role="panel"]').panel();
 	
 	var overworkTypes = $('#overworkTypes').val();
@@ -624,6 +624,15 @@ $(document).on('pageshow', function (event, ui) {
 
 $(document).on('pageremove', function (event, ui) {
 	console.log('pageremove')
+});
+
+$(document).on('pagebeforeshow', function() {
+    
+	//메뉴에서 중복로그인 발생시
+	if(!$.mobile.activePage.attr('id')) {
+    	alert('세션만료나 중복로그인 되었습니다.');
+    	window.location.href = '/m/main';
+    }
 });
 
 $(document).on('popupafterclose', "[data-role=popup]", function (e) {

@@ -1,7 +1,7 @@
 $(document).ready(function() {
 	var geoAllow = true;//false;
 	var geoErrMsg = '';
-	
+
 	$('#pw').on('keyup', function(e) {
 		if(e.keyCode == 13) {
 			$('#btnLogin').trigger('click');

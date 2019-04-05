@@ -6,7 +6,7 @@
 		select convert(char(19), dateadd(minute, -10, getDate()), 20) 
 	</select>
 	
-	<insert id="insertGotowork" statementType="CALLABLE" parameterType="Geuntae"  >
+	<insert id="insertGotowork" statementType="CALLABLE" parameterType="Geuntae">
 		{call [동림].[dbo].[UP_출근처리](
 			#{sawonCode, mode=IN, jdbcType=VARCHAR, javaType=string},
 			#{outworkYN, mode=IN, jdbcType=CHAR, javaType=string},

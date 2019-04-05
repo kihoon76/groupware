@@ -1110,6 +1110,7 @@ public class GyeoljaeController {
 	public void downloadMobile(@PathVariable("code") String code, 
 							   HttpServletRequest request, HttpServletResponse response) throws Exception  {
 		//Thread.sleep(10000);
+		System.err.println("---------------------------------");
 		download(code, request, response);
 	}
 	
