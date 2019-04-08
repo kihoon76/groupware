@@ -41,4 +41,6 @@ public interface CalendarDao {
 
 	int deleteMyPlanByMobile(Map<String, String> param);
 
+	List<Map<String, Object>> selectCompanyEventsList();
+
 }

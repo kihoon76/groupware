@@ -103,4 +103,9 @@ public class CalendarDaoImpl implements CalendarDao {
 		return msSqlSession.delete(namespace + ".deleteMyPlanByMobile", param);
 	}
 
+	@Override
+	public List<Map<String, Object>> selectCompanyEventsList() {
+		return msSqlSession.selectList(namespace + ".selectCompanyEventsList");
+	}
+
 }

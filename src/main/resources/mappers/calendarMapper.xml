@@ -33,6 +33,9 @@
 		<result column="글자색"		property="textColor"	javaType="string"/>
 	</resultMap>
 	
+	<select id="selectCompanyEventsList" statementType="CALLABLE" resultType="map">
+		{call [동림].[dbo].[UP_회사일정목록]}
+	</select>
 	<select id="selectCalendarDataList" parameterType="map" resultMap="RM_CalendarData">
 		<choose>
 		<when test="cate == 'C01'">

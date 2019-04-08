@@ -276,4 +276,8 @@ public class CalendarService {
 		return 1 == calendarDao.deleteMyPlanByMobile(param);
 	}
 
+	public List<Map<String, Object>> getCompanyEventsList() {
+		return calendarDao.selectCompanyEventsList();
+	}
+
 }

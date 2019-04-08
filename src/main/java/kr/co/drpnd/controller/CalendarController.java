@@ -77,6 +77,58 @@ public class CalendarController {
 		return "calendar";
 	}
 	
+	@GetMapping("/view/companyevent")
+	public String viewCalendarForCompanyEvent(ModelMap m) {
+		m.put("currentDate", DateUtil.getCurrentDateString());
+		return "companyevent";
+	}
+	
+	@PostMapping("/view/companyevent/list")
+	@ResponseBody
+	public AjaxVO<Map<String, Object>> getCompanyEventList(ModelMap m) {
+		AjaxVO<Map<String, Object>> vo = new AjaxVO<>();
+		try {
+			List<Map<String, Object>> list = calendarService.getCompanyEventsList();
+			
+			if(list != null && list.size() > 0) {
+				for(Map<String, Object> item : list) {
+					item.put("expanded", true);
+					item.put("id", String.valueOf(item.get("id")));
+					item.put("leaf", true);
+				}
+			}
+			
+			vo.setSuccess(true);
+			vo.setDatas(list);
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+		}
+		
+		
+		return vo;
+	}
+	
+	@GetMapping("/view/companyevent/{eventId}")
+	@ResponseBody
+	public AjaxVO getCompanyEventCalendar() {
+		AjaxVO<Map<String, List<Map<String, Object>>>> vo = new AjaxVO<Map<String, List<Map<String, Object>>>>();
+		try {
+			Map param = new HashMap();
+			param.put("cate", "C04");
+			Map<String, List<Map<String, Object>>> m = calendarService.getCalendarData(param);
+			
+			vo.addObject(m);
+			vo.setSuccess(true);
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+		}
+		
+		
+		return vo;
+	}
+	
 	@PostMapping("/save")
 	@ResponseBody
 	public AjaxVO saveCalendar(@RequestBody List<CalendarEvent> list) {

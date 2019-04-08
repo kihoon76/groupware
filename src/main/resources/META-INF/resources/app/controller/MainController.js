@@ -1,7 +1,7 @@
 Ext.define('Drpnd.controller.MainController', {
 	extend: 'Drpnd.controller.BaseController',
 	requires: ['Drpnd.util.ErrorCode', 'Drpnd.custom.Socket', 'Drpnd.util.Html'],
-	views: ['panel.CategoryPanel', 'panel.OverworkChartPanel', 'panel.GyeoljaePanel', 'panel.ProjectPanel'],
+	views: ['panel.CategoryPanel', 'panel.OverworkChartPanel', 'panel.GyeoljaePanel', 'panel.ProjectPanel', 'panel.InnerViewportPanel'],
 	onLaunch : function() {
 		this.addContentTabPanel(
 				'cate-main',
@@ -76,6 +76,16 @@ Ext.define('Drpnd.controller.MainController', {
 			if(!this.categoryPanel.isAttachedCategory(recObj.id)) {
 				this.addContentTabPanel(recObj.id, recObj.text, {
 					xtype: 'projectpanel',
+				});
+			}
+			else {
+				this.contentPanel.setActiveTab(recObj.id + '-panel');
+			}
+		}
+		else if(recObj.leaf && recObj.cate == 'company') {
+			if(!this.categoryPanel.isAttachedCategory(recObj.id)) {
+				this.addContentTabPanel(recObj.id, recObj.text, {
+					xtype: 'innerviewport',
 				});
 			}
 			else {

@@ -10,6 +10,8 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
     	var teamJson = teamList ? Ext.decode(teamList) : '';
     	var treeItems = [{
     		text: '조직도', leaf : true, cate : 'system', id: 'system-list', iconCls: 'icon-organization'
+    	}, {
+    		text: '회사행사', leaf : true, cate : 'company', id: 'company-event', iconCls: 'icon-company-calendar'
     	}];
     	
     	if(teamJson) {
