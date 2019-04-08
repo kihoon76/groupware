@@ -45,6 +45,9 @@
 			#{endDate, mode=IN, jdbcType=CHAR, javaType=string}
 		)}
 		</when>
+		<when test="cate == 'C04'">
+
+		</when>
 		<otherwise>
 		select concat(T2.사원명, '(', T2.사원아이디, ')_', 제목) 제목, 시작일, 종료일, 카테고리월, 카테고리코드, 일련번호, 상세,
 			   case when T1.사원코드 = #{sawonCode} then 'Y'
