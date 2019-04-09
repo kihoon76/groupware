@@ -40,7 +40,7 @@
 	<script src="/resources/js/stomp.min.js"></script>
 	
 	<!-- naver map -->
-	<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=SgnlyXnzstmDsYDhele7&submodules=panorama,geocoder"></script>
+<!-- 	<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=SgnlyXnzstmDsYDhele7&submodules=panorama,geocoder"></script> -->
 	<script>
 		Ext.onReady(function() {
 			Ext.getDoc().on('keydown', function(e, t) {

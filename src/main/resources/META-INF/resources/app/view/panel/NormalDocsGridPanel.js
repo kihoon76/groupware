@@ -41,7 +41,10 @@ Ext.define('Drpnd.view.panel.NormalDocsGridPanel', {
 			}, {
 				text: '파일이름',
 				dataIndex: 'fileName',
-				flex: 0
+				flex: 0,
+				renderer: function(v, t, r) {
+					return v + '.' + r.raw.ext;
+				}
 			}, {
 				text: '다운로드',
 				dataIndex: 'ext',
@@ -57,7 +60,7 @@ Ext.define('Drpnd.view.panel.NormalDocsGridPanel', {
 					console.log(record);
 					Ext.Msg.show({
 						title: '',
-						msg: '다운로드 하시겠습니까?',
+						msg: '[' + record.raw.fileName + ']문서를 다운로드 하시겠습니까?',
 						buttons: Ext.Msg.OKCANCEL,
 						icon: Ext.MessageBox.QUESTION,
 						fn: function(btn) {
