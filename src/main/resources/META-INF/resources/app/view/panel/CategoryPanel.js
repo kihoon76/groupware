@@ -12,6 +12,11 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
     		text: '조직도', leaf : true, cate : 'system', id: 'system-list', iconCls: 'icon-organization'
     	}, {
     		text: '회사행사', leaf : true, cate : 'company', id: 'company-event', iconCls: 'icon-company-calendar'
+    	}, {
+    		text: '문서보관', expand: true, iconCls : 'tree-expand',
+    		children: [{
+    			text: '일반문서', leaf : true, cate : 'docs', id : 'docs-normal', iconCls: 'icon-docs'
+    		}]
     	}];
     	
     	if(teamJson) {

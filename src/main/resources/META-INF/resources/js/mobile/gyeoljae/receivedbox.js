@@ -81,12 +81,20 @@
 	}
 	
 	function downloadHandler(code, name) {
-		var form = document.createElement('form');
+		var form = document.getElementById('gyeoljaeDownForm');
+		var isNew = false;
+		
+		if(!form) {
+			form = document.createElement('form');
+			form.setAttribute('id', 'gyeoljaeDownForm');
+			isNew = true;
+		}
+		
 		form.action = '/gyeoljae/m/file/' + code;
 		form.method = 'GET';
 		form.target = '_self';
 		form.style.display = 'none';
-		document.body.appendChild(form);
+		if(isNew) document.body.appendChild(form);
 		form.submit();
 		
 	}

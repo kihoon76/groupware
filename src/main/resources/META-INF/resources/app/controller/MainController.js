@@ -1,7 +1,14 @@
 Ext.define('Drpnd.controller.MainController', {
 	extend: 'Drpnd.controller.BaseController',
 	requires: ['Drpnd.util.ErrorCode', 'Drpnd.custom.Socket', 'Drpnd.util.Html'],
-	views: ['panel.CategoryPanel', 'panel.OverworkChartPanel', 'panel.GyeoljaePanel', 'panel.ProjectPanel', 'panel.InnerViewportPanel'],
+	views: [
+	     'panel.CategoryPanel', 
+	     'panel.OverworkChartPanel', 
+	     'panel.GyeoljaePanel', 
+	     'panel.ProjectPanel', 
+	     'panel.InnerViewportPanel',
+	     'panel.NormalDocsGridPanel'
+	],
 	onLaunch : function() {
 		this.addContentTabPanel(
 				'cate-main',
@@ -90,6 +97,20 @@ Ext.define('Drpnd.controller.MainController', {
 			}
 			else {
 				this.contentPanel.setActiveTab(recObj.id + '-panel');
+			}
+		}
+		else if(recObj.leaf && recObj.cate == 'docs') {
+			switch(recObj.id) {
+			case 'docs-normal':
+				if(!this.categoryPanel.isAttachedCategory(recObj.id)) {
+					this.addContentTabPanel(recObj.id, recObj.text, {
+						xtype: 'normaldocsgrid',
+					});
+				}
+				else {
+					this.contentPanel.setActiveTab(recObj.id + '-panel');
+				}
+				break;
 			}
 		}
 	}

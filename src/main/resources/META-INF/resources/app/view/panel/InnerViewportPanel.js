@@ -28,7 +28,6 @@ Ext.define('Drpnd.view.panel.InnerViewportPanel', {
 			}),
     	    listeners: {
     	    	itemclick: function(tree, record) {
-    	    		console.log(record.raw.cateMonth);
     	    		calendarWin.getCompanyEvents(record.internalId, record.raw.startDate, record.raw.endDate);
     	    	}
     	    }
