@@ -95,6 +95,13 @@ public class CalendarController {
 					item.put("expanded", true);
 					item.put("id", String.valueOf(item.get("id")));
 					item.put("leaf", true);
+					if("Y".equals(String.valueOf(item.get("passed")))) {
+						item.put("cls", "tree-text-passed");
+					}
+					else {
+						item.put("cls", "tree-text-nopassed");
+					}
+					
 				}
 			}
 			
@@ -109,16 +116,23 @@ public class CalendarController {
 		return vo;
 	}
 	
-	@GetMapping("/view/companyevent/{eventId}")
+	@GetMapping("/view/companyevent/month")
 	@ResponseBody
-	public AjaxVO getCompanyEventCalendar() {
+	public AjaxVO getCompanyEventCalendar(
+			@RequestParam("startDate") String startDate,
+			@RequestParam("endDate") String endDate) {
+		
 		AjaxVO<Map<String, List<Map<String, Object>>>> vo = new AjaxVO<Map<String, List<Map<String, Object>>>>();
 		try {
 			Map param = new HashMap();
 			param.put("cate", "C04");
+			param.put("startDate", startDate);
+			param.put("endDate", endDate);
 			Map<String, List<Map<String, Object>>> m = calendarService.getCalendarData(param);
+			if(m != null) {
+				vo.addObject(m);
+			}
 			
-			vo.addObject(m);
 			vo.setSuccess(true);
 		}
 		catch(Exception e) {

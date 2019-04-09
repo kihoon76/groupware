@@ -46,7 +46,13 @@
 		)}
 		</when>
 		<when test="cate == 'C04'">
-
+		select 제목, 시작일, 종료일, 카테고리월, 카테고리코드, 일련번호, 상세, 'N' myevent,
+			   '#996600' 바탕색,
+			   '#ffffff' 글자색,
+			   '#996600' 테두리색
+		  from [동림].[dbo].[캘린더] T1
+		 where 시작일 >= #{startDate} and 시작일 <![CDATA[<]]> #{endDate}
+		   and 카테고리코드 = 'C04'
 		</when>
 		<otherwise>
 		select concat(T2.사원명, '(', T2.사원아이디, ')_', 제목) 제목, 시작일, 종료일, 카테고리월, 카테고리코드, 일련번호, 상세,

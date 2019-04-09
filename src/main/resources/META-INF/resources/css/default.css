@@ -27,3 +27,5 @@
 /* .x-border-box .x-form-text { */
 /* 	height: 30px; */
 /* } */
+.tree-text-passed {font-weight:bold;opacity:0.3;}
+.tree-text-nopassed {font-weight:bold;opacity:1;}

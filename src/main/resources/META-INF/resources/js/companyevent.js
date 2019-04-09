@@ -1,64 +1,79 @@
 (function() {
-	var mask;
+	var mask, calMStart, calMEnd, categoryMonth;
+	var eventSources = {};
 	
-	window.getCompanyEvents = function(eventId, startDate) {
-		//console.log('listId==>' + listId);
-		//mask.show();
-		/*common.ajaxExt({
-    		url: '/calendar/view/companyevent/' + eventId,
-    		method: 'GET',
-    		loadmask: {
-    			msg: '정보로딩중...'
-    		},
-			success: function(jo) {
-				//console.log(jo);
-				if(jo.success) {
-					
-				}
-			}
-    	});*/
+	window.getCompanyEvents = function(eventId, startDate, endDate) {
 		$('#ceCalendar').fullCalendar('gotoDate', startDate);
-		$('#ceCalendar').fullCalendar('select', startDate);
+		$('#ceCalendar').fullCalendar('select', startDate, endDate);
 	}
 	
 	window.setObject = function(_mask) {
 		mask = _mask;
 	}
 	
+	function initEventSources() {
+		eventSources = {};
+		$('#ceCalendar').fullCalendar('removeEventSources');
+		
+		eventSources['C04'] = {
+			events: [],
+			color: '',
+			textColor: ''
+		} 
+	}
+	
+	function getData(eventId) {
+		common.ajaxExt({
+    		url: '/calendar/view/companyevent/month?startDate=' + calMStart + '&endDate=' + calMEnd,
+    		method: 'GET',
+    		loadmask: {
+    			msg: '정보로딩중...'
+    		},
+			success: function(jo) {
+				if(jo.success) {
+					if(jo.datas.length > 0) {
+						var events = jo.datas[0];
+						
+						for(var k in events) {
+							eventSources[k].events = events[k];
+							$('#ceCalendar').fullCalendar('removeEventSource', eventSources[k]);
+							$('#ceCalendar').fullCalendar('addEventSource', eventSources[k]);
+						}
+					}
+				}
+			}
+    	});
+	}
+	
 	$(document).ready(function() {
 		var currentDate = $('#hdnCurrentDate').val();
 		calendar = $('#ceCalendar').fullCalendar({
-			 			
-//			 header: {
-//				 left: 'today',
-//			     center: 'title',
-//			     right: ''//'month,basicWeek,basicDay'
-//			 },
 			 height: 'auto',
 			 defaultDate: currentDate,//$('body').data('date'),
 			 navLinks: true, // can click day/week names to navigate views
 		     editable: false,
 		     selectable: true,
 		     eventLimit: false,//true, // allow "more" link when too many events
-		     dayClick: function(date, jsEvent, view) {
-		    	 //console.log('dayClick');
-		     },
 		     eventClick: function(calEvent, jsEvent, view) {
 		    	 //console.log(calEvent.end.format());
 		    	 
 		    	
 		     },
-		     eventDrop: function(event, delta, revertFunc) {
-		    	 $('#ceCalendar').fullCalendar('updateEvent', event);
-		     },
-		     eventResize: function(event, delta, revertFunc) {
-		    	 $('#ceCalendar').fullCalendar('updateEvent', event);
-		     },
 		     navLinkDayClick: function(date, jsEvent) {
 		    	 console.log('yyyyy')
 		     },
 		     viewRender: function(view) {
-		    	 mask.hide(); 
+		    	 console.log('viewRender')
+		    	  mask.hide(); 
+		    	 calMStart = view.start.format();
+		    	 calMEnd = view.end.format();
+		    	 var changedCategoryMonth = $('#ceCalendar').fullCalendar('getDate').format().substring(0, 7);
+		    	 
+		    	 if(categoryMonth != changedCategoryMonth) {
+		    		 categoryMonth = changedCategoryMonth;
+		    		 initEventSources();
+		    		 getData();
+		    	 }
 		     },
 		     select: function(start, end, jsEvent) {
 		    	 console.log('pp')

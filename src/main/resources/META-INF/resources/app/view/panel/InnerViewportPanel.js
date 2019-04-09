@@ -4,7 +4,7 @@ Ext.define('Drpnd.view.panel.InnerViewportPanel', {
 	initComponent: function() {
 		var that = this;
 		var calendarWin = null;
-		var currentYear = '2019';
+		var currentYear = Ext.getBody().getAttribute('data-date').substring(0, 4);
 		var mask = null;
 		
 		var listTree = Ext.create('Ext.tree.Panel', {
@@ -29,7 +29,7 @@ Ext.define('Drpnd.view.panel.InnerViewportPanel', {
     	    listeners: {
     	    	itemclick: function(tree, record) {
     	    		console.log(record.raw.cateMonth);
-    	    		calendarWin.getCompanyEvents(record.internalId, record.raw.startDate);
+    	    		calendarWin.getCompanyEvents(record.internalId, record.raw.startDate, record.raw.endDate);
     	    	}
     	    }
 		});

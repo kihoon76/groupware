@@ -126,8 +126,8 @@ public class CalendarService {
 				map.put("cate", cal.getCate());
 				map.put("cateMonth", param.get("cateMonth"));
 				map.put("mine", cal.getMine());
-				//근태는 editable false
-				if("C01".equals(param.get("cate"))) {
+				//근태/회사일정은  editable false
+				if("C01".equals(param.get("cate")) || "C04".equals(param.get("cate"))) {
 					map.put("editable", false);
 				}
 				else {
