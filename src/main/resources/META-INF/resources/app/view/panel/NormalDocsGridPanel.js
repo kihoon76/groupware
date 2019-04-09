@@ -1,12 +1,9 @@
 Ext.define('Drpnd.view.panel.NormalDocsGridPanel', {
 	extend: 'Ext.grid.Panel',
-	requires : ['Drpnd.util.Constants' ,'Drpnd.util.CommonFn', 'Drpnd.util.Downloader'],
+	requires : ['Drpnd.util.Constants' ,'Drpnd.util.CommonFn'],
 	xtype: 'normaldocsgrid',
 	initComponent: function() {
 		var CommonFn = Drpnd.util.CommonFn;
-		var Downloader = Drpnd.util.Downloader;
-		
-		//var dwnFrame = Ext.getDom('extFrameDownload');
 		try {
 			var store = Ext.create('Drpnd.store.NormalDocsListStore');
 		}
