@@ -11,66 +11,48 @@
 <head>
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="/resources/os/lightslider/css/lightslider.css" />
+	<style>
+    	ul{
+			list-style: none outside none;
+		    padding-left: 0;
+            margin: 0;
+		}
+        .demo .item{
+            margin-bottom: 60px;
+        }
+		.content-slider li{
+		    background-color: #000000;
+		    text-align: center;
+		    color: #FFF;
+		}
+		.content-slider h3 {
+		    margin: 0;
+		    padding: 70px 0;
+		}
+		.demo{
+			width: 1000px;
+		}
+    </style>
 	<sitemesh:write property="head" />
 </head>
 <body>
-	<sitemesh:write property="body" /> 
+	<div class="demo">
+		<div class="item">
+            <ul id="content-slider" class="content-slider">
+            <sitemesh:write property="body" /> 
+            </ul>
+        </div>
+	</div>
 	<script src="/resources/lib/jquery.min.js"></script>
 	<script type="text/javascript" src="/resources/os/lightslider/js/lightslider.js"></script>
 	<script type="text/javascript">
-	$(document).ready(function() {
-	    $('#lightSlider').lightSlider(/*{
-	        item: 3,
-	        autoWidth: false,
-	        slideMove: 1, // slidemove will be 1 if loop is true
-	        slideMargin: 10,
-	 
-	        addClass: '',
-	        mode: "slide",
-	        useCSS: true,
-	        cssEasing: 'ease', //'cubic-bezier(0.25, 0, 0.25, 1)',//
-	        easing: 'linear', //'for jquery animation',////
-	 
-	        speed: 400, //ms'
-	        auto: false,
-	        loop: false,
-	        slideEndAnimation: true,
-	        pause: 2000,
-	 
-	        keyPress: false,
-	        controls: true,
-	        prevHtml: '',
-	        nextHtml: '',
-	 
-	        rtl:false,
-	        adaptiveHeight:false,
-	 
-	        vertical:false,
-	        verticalHeight:500,
-	        vThumbWidth:100,
-	 
-	        thumbItem:10,
-	        pager: true,
-	        gallery: false,
-	        galleryMargin: 5,
-	        thumbMargin: 5,
-	        currentPagerPosition: 'middle',
-	 
-	        enableTouch:true,
-	        enableDrag:true,
-	        freeMove:true,
-	        swipeThreshold: 40,
-	 
-	        responsive : [],
-	 
-	        onBeforeStart: function (el) {},
-	        onSliderLoad: function (el) {},
-	        onBeforeSlide: function (el) {},
-	        onAfterSlide: function (el) {},
-	        onBeforeNextSlide: function (el) {},
-	        onBeforePrevSlide: function (el) {}
-	    }*/);
-	});
+		$(document).ready(function() {
+			$("#content-slider").lightSlider({
+	             loop:true,
+	             keyPress:true,
+	             item:1,
+	         });
+		});
 	</script>
 </body>
 </html>

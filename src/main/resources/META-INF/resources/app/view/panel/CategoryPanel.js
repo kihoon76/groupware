@@ -63,7 +63,7 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
     		children: [{
     			text: '결재', expand: true, iconCls : 'tree-expand',
     			children: [{
-    				 text: '결재삭제', leaf : true, cate : 'help', id: 'help-gyeoljae-delete', iconCls: 'icon-approve', url: '/help/gyeoljae/delete'
+    				 text: '결재수정/삭제', leaf : true, cate : 'help', id: 'help-gyeoljae-delete', iconCls: 'icon-approve', url: '/help/gyeoljae/delete'
     			}]
     		}]
     	});
