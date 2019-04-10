@@ -118,4 +118,8 @@ public class SawonService {
 		return sawonDao.selectTodayMyGeuntaeByMobile(me);
 	}
 
+	public List<Map<String, String>> getSawonInfoForVacation(Map<String, String> param) {
+		return sawonDao.selectSawonInfoForVacation(param);
+	}
+
 }

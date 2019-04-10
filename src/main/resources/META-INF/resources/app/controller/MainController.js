@@ -7,7 +7,8 @@ Ext.define('Drpnd.controller.MainController', {
 	     'panel.GyeoljaePanel', 
 	     'panel.ProjectPanel', 
 	     'panel.InnerViewportPanel',
-	     'panel.NormalDocsGridPanel'
+	     'panel.NormalDocsGridPanel',
+	     'panel.VacationHistoryPanel'
 	],
 	onLaunch : function() {
 		this.addContentTabPanel(
@@ -34,11 +35,6 @@ Ext.define('Drpnd.controller.MainController', {
 			if(!this.categoryPanel.isAttachedCategory(recObj.id)) {
 				switch(recObj.id) {
 				case 'system-list' :
-//					this.addContentTabPanel(recObj.id, recObj.text, {
-//						xtype: 'panel',
-//						html: that.html.organizationchart
-//					});
-					
 					this.addContentTabPanel(
 						recObj.id, 
 						recObj.text, 
@@ -116,6 +112,16 @@ Ext.define('Drpnd.controller.MainController', {
 		else if(recObj.leaf && recObj.cate == 'help') {
 			if(!this.categoryPanel.isAttachedCategory(recObj.id)) {
 				this.addContentTabPanel(recObj.id, '이용안내(' + recObj.text + ')', Ext.create('Drpnd.view.iframe.BaseIframe', { url: recObj.url}));
+			}
+			else {
+				this.contentPanel.setActiveTab(recObj.id + '-panel');
+			}
+		}
+		else if(recObj.leaf && recObj.cate == 'vacation') {
+			if(!this.categoryPanel.isAttachedCategory(recObj.id)) {
+				this.addContentTabPanel(recObj.id, recObj.text, {
+					xtype: 'vacationhistory',
+				});
 			}
 			else {
 				this.contentPanel.setActiveTab(recObj.id + '-panel');

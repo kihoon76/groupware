@@ -1,14 +1,11 @@
 package kr.co.drpnd.controller;
 
-import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -89,11 +86,40 @@ public class SawonController {
 			vo.setSuccess(true);
 		}
 		catch(Exception e) {
-			System.err.println(e.getMessage());
 			vo.setSuccess(false);
 			Map<String, Object> result = MsSqlException.getErrorCode(e);
 			vo.setErrCode(result.get("code").toString());
 		}
+		
+		return vo;
+	}
+	
+	@PostMapping("/list/vacation")
+	@ResponseBody
+	public AjaxVO<Map<String, String>> getSawonListForVacation() {
+		AjaxVO<Map<String, String>> vo = new AjaxVO<>();
+		
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		String gubun = myInfo.getPositionGubun();
+		
+		Map<String, String> param = new HashMap<>();
+		if("1".equals(gubun) || "2".equals(gubun)) {
+			param.put("imwon", "Y");
+		}
+		
+		param.put("sawonCode", myInfo.getSawonCode());
+		param.put("department", myInfo.getSawonDepartment());
+		
+		try {
+			List<Map<String, String>> list = sawonService.getSawonInfoForVacation(param);
+			vo.setSuccess(true);
+			vo.setDatas(list);
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+		
 		
 		return vo;
 	}

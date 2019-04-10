@@ -10,13 +10,6 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
     	var teamJson = teamList ? Ext.decode(teamList) : '';
     	var treeItems = [{
     		text: '조직도', leaf : true, cate : 'system', id: 'system-list', iconCls: 'icon-organization'
-    	}, {
-    		text: '회사행사', leaf : true, cate : 'company', id: 'company-event', iconCls: 'icon-company-calendar'
-    	}, {
-    		text: '문서보관', expand: true, iconCls : 'tree-expand',
-    		children: [{
-    			text: '일반문서', leaf : true, cate : 'docs', id : 'docs-normal', iconCls: 'icon-docs'
-    		}]
     	}];
     	
     	if(teamJson) {
@@ -57,6 +50,21 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
     	treeItems.push({
 	   		 text: '프로젝트', leaf : true, cate : 'project', id: 'project', iconCls: 'icon-project'
 	   	});
+    	
+    	treeItems.push({
+    		text: '회사행사', leaf : true, cate : 'company', id: 'company-event', iconCls: 'icon-company-calendar'
+    	});
+    	
+    	treeItems.push({
+    		text: '휴가사용내역', leaf : true, cate : 'vacation', id: 'vacation-history', iconCls: 'icon-vacation'
+    	});
+    	
+    	treeItems.push({
+    		text: '문서보관', expand: true, iconCls : 'tree-expand',
+    		children: [{
+    			text: '일반문서', leaf : true, cate : 'docs', id : 'docs-normal', iconCls: 'icon-docs'
+    		}]
+    	});
     	
     	treeItems.push({
     		text: '이용안내', expand: true, iconCls : 'tree-expand',

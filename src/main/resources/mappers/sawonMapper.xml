@@ -34,6 +34,21 @@
 		 where 사원아이디 = #{sawonId}
 	</select>
 	
+	<select id="selectSawonInfoForVacation" parameterType="map" resultType="map">
+		select 사원코드 sawonCode, 사원아이디 sawonId, 사원명 sawonName, t2.직급명 sawonPosition
+		  from [동림].[dbo].[사원] t1
+		  left outer join [동림].[dbo].[직급] t2
+		    on t1.직급코드 = t2.직급코드
+		 <choose>
+		 <when test="imwon != null">
+		 where 부서코드 = #{department}
+		 </when>
+		 <otherwise>
+		 where 사원코드 = #{sawonCode}
+		 </otherwise>
+		 </choose>
+	</select>
+	
 	<select id="selectAuthorities" parameterType="string" resultType="Authority">
 		select b.[권한이름] as authName 
 		  from [동림].[dbo].[사원권한] a

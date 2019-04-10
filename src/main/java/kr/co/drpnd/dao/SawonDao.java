@@ -31,4 +31,6 @@ public interface SawonDao {
 
 	Sawon selectTodayMyGeuntaeByMobile(Map<String, Integer> me);
 
+	List<Map<String, String>> selectSawonInfoForVacation(Map<String, String> param);
+
 }
