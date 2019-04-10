@@ -63,7 +63,22 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
     		children: [{
     			text: '결재', expand: true, iconCls : 'tree-expand',
     			children: [{
-    				 text: '결재수정/삭제', leaf : true, cate : 'help', id: 'help-gyeoljae-delete', iconCls: 'icon-approve', url: '/help/gyeoljae/delete'
+    				 text: '결재수정/삭제', leaf : true, cate : 'help', id: 'help-gyeoljae-delete', iconCls: 'icon-help', url: '/help/gyeoljae/delete'
+    			}]
+    		},{
+    			text: '야근통계', leaf : true, cate : 'help', id: 'help-statistics', iconCls: 'icon-help', url: '/help/statistics'
+    		},{
+    			text: '회사행사', leaf : true, cate : 'help', id: 'help-company', iconCls: 'icon-help', url: '/help/company/event'
+    		},{
+    			text: '일반문서', leaf : true, cate : 'help', id: 'help-doc-normal', iconCls: 'icon-help', url: '/help/doc/normal'
+    		},{
+    			text: '프로젝트', expand: true, iconCls : 'tree-expand',
+    			children: [{
+    				text: 'WBS생성', leaf : true, cate : 'help', id: 'help-project-wbsnew', iconCls: 'icon-help', url: '/help/project/wbsnew'
+    			}, {
+    				text: '나의WBS', leaf : true, cate : 'help', id: 'help-project-mywbs', iconCls: 'icon-help', url: '/help/project/mywbs'
+    			}, {
+    				text: 'WBS리스트', leaf : true, cate : 'help', id: 'help-project-wbslist', iconCls: 'icon-help', url: '/help/project/wbslist'
     			}]
     		}]
     	});

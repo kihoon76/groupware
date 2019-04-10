@@ -30,8 +30,9 @@
 		    padding: 70px 0;
 		}
 		.demo{
-			width: 1000px;
+			width: 1500px;
 		}
+		.demo img {width:1269px; height:874px;}
     </style>
 	<sitemesh:write property="head" />
 </head>

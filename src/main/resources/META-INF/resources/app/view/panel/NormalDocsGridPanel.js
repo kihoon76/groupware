@@ -33,7 +33,7 @@ Ext.define('Drpnd.view.panel.NormalDocsGridPanel', {
 		
 		Ext.apply(this, {
 			store: store,
-			title: '<span style="color:#ff0000;">★ 다운로드를 하시려면 이미지를 더블클릭하세요.</span>',
+			title: '<span style="color:#ff0000;">★ 다운로드를 하시려면 다운로드 셀영역을 더블클릭하세요.</span>',
 			columns: [{
 				text: '문서명',
 				dataIndex: 'docName',

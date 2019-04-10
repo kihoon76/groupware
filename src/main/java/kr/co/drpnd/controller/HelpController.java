@@ -13,4 +13,24 @@ public class HelpController {
 	public String viewGyeoljae(@PathVariable("cate") String cate) {
 		return "help/gyeoljae/" + cate;
 	}
+	
+	@GetMapping("statistics")
+	public String viewStatistics() {
+		return "help/statistics/statistics";
+	}
+	
+	@GetMapping("company/event")
+	public String viewCompany() {
+		return "help/company/event";
+	}
+	
+	@GetMapping("doc/{cate}")
+	public String viewDocs(@PathVariable("cate") String cate) {
+		return "help/doc/" + cate;
+	}
+	
+	@GetMapping("project/{cate}")
+	public String viewProject(@PathVariable("cate") String cate) {
+		return "help/project/" + cate;
+	}
 }
