@@ -17,6 +17,7 @@
 	<mapping path="/m/*" decorator="/WEB-INF/views/layout/defaultmobile.jsp" />
 	<mapping path="/calendar/m/*" decorator="/WEB-INF/views/layout/defaultmobile.jsp" />
 	<mapping path="/gyeoljae/m/*" decorator="/WEB-INF/views/layout/defaultmobile.jsp" />
+	<mapping path="/help/*" decorator="/WEB-INF/views/layout/defaulthelp.jsp" />
 	<mapping path="/*" decorator="/WEB-INF/views/layout/default.jsp" />
 	
 	<mapping path="/forbidden" exclude="true" />

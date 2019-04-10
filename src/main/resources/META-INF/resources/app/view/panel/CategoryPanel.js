@@ -58,6 +58,16 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
 	   		 text: '프로젝트', leaf : true, cate : 'project', id: 'project', iconCls: 'icon-project'
 	   	});
     	
+    	treeItems.push({
+    		text: '이용안내', expand: true, iconCls : 'tree-expand',
+    		children: [{
+    			text: '결재', expand: true, iconCls : 'tree-expand',
+    			children: [{
+    				 text: '결재삭제', leaf : true, cate : 'help', id: 'help-gyeoljae-delete', iconCls: 'icon-approve', url: '/help/gyeoljae/delete'
+    			}]
+    		}]
+    	});
+    	
     	Ext.apply(this, {
     		 store : Ext.create('Ext.data.TreeStore', {
     	    	 root : {

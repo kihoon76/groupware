@@ -1,0 +1,76 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
+<%@ taglib prefix="c"	uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn"  uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
+<c:set var="req" value="${pageContext.request}" />
+<c:set var="url">${req.requestURL}</c:set>
+<c:set var="uri" value="${req.requestURI}" />
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="/resources/os/lightslider/css/lightslider.css" />
+	<sitemesh:write property="head" />
+</head>
+<body>
+	<sitemesh:write property="body" /> 
+	<script src="/resources/lib/jquery.min.js"></script>
+	<script type="text/javascript" src="/resources/os/lightslider/js/lightslider.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function() {
+	    $('#lightSlider').lightSlider(/*{
+	        item: 3,
+	        autoWidth: false,
+	        slideMove: 1, // slidemove will be 1 if loop is true
+	        slideMargin: 10,
+	 
+	        addClass: '',
+	        mode: "slide",
+	        useCSS: true,
+	        cssEasing: 'ease', //'cubic-bezier(0.25, 0, 0.25, 1)',//
+	        easing: 'linear', //'for jquery animation',////
+	 
+	        speed: 400, //ms'
+	        auto: false,
+	        loop: false,
+	        slideEndAnimation: true,
+	        pause: 2000,
+	 
+	        keyPress: false,
+	        controls: true,
+	        prevHtml: '',
+	        nextHtml: '',
+	 
+	        rtl:false,
+	        adaptiveHeight:false,
+	 
+	        vertical:false,
+	        verticalHeight:500,
+	        vThumbWidth:100,
+	 
+	        thumbItem:10,
+	        pager: true,
+	        gallery: false,
+	        galleryMargin: 5,
+	        thumbMargin: 5,
+	        currentPagerPosition: 'middle',
+	 
+	        enableTouch:true,
+	        enableDrag:true,
+	        freeMove:true,
+	        swipeThreshold: 40,
+	 
+	        responsive : [],
+	 
+	        onBeforeStart: function (el) {},
+	        onSliderLoad: function (el) {},
+	        onBeforeSlide: function (el) {},
+	        onAfterSlide: function (el) {},
+	        onBeforeNextSlide: function (el) {},
+	        onBeforePrevSlide: function (el) {}
+	    }*/);
+	});
+	</script>
+</body>
+</html>

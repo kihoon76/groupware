@@ -28,9 +28,38 @@ Ext.define('Drpnd.view.panel.InnerViewportPanel', {
 			}),
     	    listeners: {
     	    	itemclick: function(tree, record) {
+    	    		southStore.loadData([{detail:record.raw.detail, title:record.raw.text}]);
     	    		calendarWin.getCompanyEvents(record.internalId, record.raw.startDate, record.raw.endDate);
     	    	}
     	    }
+		});
+		
+		Ext.define('Detail', {
+			extend: 'Ext.data.Model',
+			fields: [
+			    {name: 'detail', type: 'string'},
+			    {name: 'title', type: 'string'}
+			]
+		});
+		
+		var southTpl = Ext.create('Ext.XTemplate',
+				'<tpl for=".">',
+				'<div class="company-detail">',
+					'<h3>{title}</h3>',
+					'<p>{detail}</p>',
+				'</div>',
+				'</tpl>'
+		);
+		
+		var southStore = Ext.create('Ext.data.Store', {
+			model: 'Detail',
+			autoLoad: true,
+			proxy: {
+				type: 'memory',
+				reader: {
+					type: 'json'
+				}
+			}
 		});
 		
 		Ext.apply(this, {
@@ -44,7 +73,16 @@ Ext.define('Drpnd.view.panel.InnerViewportPanel', {
 	            xtype: 'panel',
 	            height: 300,
 	            split: true,         // enable resizing
-	            margins: '0 5 5 5'
+	            margins: '0 5 5 5',
+	            items: {
+	            	overflowY: 'auto',
+	            	xtype: 'dataview',
+	            	itemSelector: 'div.company-detail',
+	            	tpl: southTpl,
+	            	store: southStore,
+	            	emptyText: '<div class="x-grid-empty">일정상세가 없습니다.</div>'
+	            }
+	            
 	        },{
 	            // xtype: 'panel' implied by default
 	            title: '일정목록(' + currentYear + '년도)',

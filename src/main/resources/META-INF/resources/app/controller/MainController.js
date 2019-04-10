@@ -113,5 +113,13 @@ Ext.define('Drpnd.controller.MainController', {
 				break;
 			}
 		}
+		else if(recObj.leaf && recObj.cate == 'help') {
+			if(!this.categoryPanel.isAttachedCategory(recObj.id)) {
+				this.addContentTabPanel(recObj.id, '이용안내(' + recObj.text + ')', Ext.create('Drpnd.view.iframe.BaseIframe', { url: recObj.url}));
+			}
+			else {
+				this.contentPanel.setActiveTab(recObj.id + '-panel');
+			}
+		}
 	}
 });
