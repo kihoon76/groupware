@@ -62,17 +62,17 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
     	});
     	
     	treeItems.push({
-    		text: '문서보관', expand: true, iconCls : 'tree-expand',
+    		text: '문서보관', expand: false, iconCls : 'tree-collapse',
     		children: [{
     			text: '일반문서', leaf : true, cate : 'docs', id : 'docs-normal', iconCls: 'icon-docs'
     		}]
     	});
     	
     	treeItems.push({
-    		text: '이용안내', expand: true, iconCls : 'tree-expand',
+    		text: '이용안내', expand: false, iconCls : 'tree-collapse',
     		id: 'path-help',
     		children: [{
-    			text: '결재', expand: true, iconCls : 'tree-expand',
+    			text: '결재', expand: true, iconCls : 'tree-collapse',
     			children: [{
     				 text: '결재수정/삭제', leaf : true, cate : 'help', id: 'help-gyeoljae-delete', iconCls: 'icon-help', url: '/help/gyeoljae/delete'
     			}]
@@ -83,7 +83,7 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
     		},{
     			text: '일반문서', leaf : true, cate : 'help', id: 'help-doc-normal', iconCls: 'icon-help', url: '/help/doc/normal'
     		},{
-    			text: '프로젝트', expand: true, iconCls : 'tree-expand',
+    			text: '프로젝트', expand: true, iconCls : 'tree-collapse',
     			children: [{
     				text: 'WBS생성', leaf : true, cate : 'help', id: 'help-project-wbsnew', iconCls: 'icon-help', url: '/help/project/wbsnew'
     			}, {
