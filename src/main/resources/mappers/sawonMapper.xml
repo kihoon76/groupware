@@ -198,6 +198,7 @@
 		 where T1.결재타입 = 2
 		   and T1.처리상태 = 'C'
 		   and T1.기안자 = #{sawonCode}
+		   and T1.휴가시작년도  = year(getDate())
 		 <choose>
 		 <when test="imwon != null">
 		   and T2.부서코드 = #{department}

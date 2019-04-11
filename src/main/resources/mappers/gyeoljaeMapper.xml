@@ -78,13 +78,13 @@
 	</select>
 	
 	<insert id="insertNewGyeoljae" parameterType="Sangsin">
-		insert into [동림].[dbo].[상신](기안제목, 기안내용_CODE, 기안내용_PLAIN, 기안자, 처리상태, 기안작성일, 결재타입, 휴가시작일, 휴가종료일, 결재서브타입, 휴가기간, 문서번호)
+		insert into [동림].[dbo].[상신](기안제목, 기안내용_CODE, 기안내용_PLAIN, 기안자, 처리상태, 기안작성일, 결재타입, 휴가시작일, 휴가종료일, 결재서브타입, 휴가기간, 문서번호, 휴가시작년도)
 		<choose>
 		<when test='gyeoljaeType == "2"'>
-		values (#{title}, #{content}, #{plainContent}, #{gianja}, 'D', getDate(), #{gyeoljaeType}, #{startDate}, #{endDate}, #{gyeoljaeSubType}, #{term}, null)
+		values (#{title}, #{content}, #{plainContent}, #{gianja}, 'D', getDate(), #{gyeoljaeType}, #{startDate}, #{endDate}, #{gyeoljaeSubType}, #{term}, null, left(#{startDate}, 4))
 		</when>
 		<otherwise>
-		values (#{title}, #{content}, #{plainContent}, #{gianja}, 'D', getDate(), #{gyeoljaeType}, null, null, null, null, #{docNum})
+		values (#{title}, #{content}, #{plainContent}, #{gianja}, 'D', getDate(), #{gyeoljaeType}, null, null, null, null, #{docNum}, null)
 		</otherwise>
 		</choose> 
 		
@@ -588,7 +588,8 @@
 		  	       휴가종료일 = #{endDate},
 		  	       결재서브타입 = #{gyeoljaeSubType},
 		  	       휴가기간 = #{term},
-		  	       문서번호 = null    
+		  	       문서번호 = null,
+		  	       휴가시작년도 = left(#{startDate}, 4)    
 		  </otherwise>
 		  </choose> 
 		 where 상신코드 = #{sangsinNum}

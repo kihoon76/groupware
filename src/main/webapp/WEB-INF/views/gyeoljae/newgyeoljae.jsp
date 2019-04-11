@@ -65,7 +65,7 @@
 			</div>
 			
 			<div class="form-group divMR" style="display:none;" id="dvVacationTerm">
-				(<input type="number" class="form-control form-control-sm" style="width:50px;" id="numTerm" min="1">)일간
+				(<input type="number" class="form-control form-control-sm" style="width:50px;" id="numTerm" min="1">)일간-(★ 반차는 1로 표시됩니다)
 			</div>
 		</div>
 		<div class="form-group" id="dvDocNum">

@@ -19,7 +19,7 @@ Ext.define('Drpnd.view.panel.VacationHistoryPanel', {
 	        height: 400,
 	        layout: 'border',
 	        items: [{
-	            title: '사원정보',
+	            title: '사원정보<span style="color:#0000ff;">(사원을 클릭하세요)</span>',
 	            region:'west',
 	            xtype: 'panel',
 	            items: [{
