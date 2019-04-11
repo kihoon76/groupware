@@ -4,7 +4,7 @@ import java.util.EnumSet;
 
 public enum VacationType {
 
-	YEONCHA("1"), BOGEON("2"), CHEONGWON("3"), GONGA("4"), BYEONGA("5"), EDUCATION("6"), ETC("7");
+	YEONCHA("1"), BOGEON("2"), CHEONGWON("3"), GONGA("4"), BYEONGA("5"), EDUCATION("6"), ETC("7"), BANCHA("8"), DAECHE("9");
 	
 	private String value;
 	

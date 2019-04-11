@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.co.drpnd.domain.AjaxVO;
@@ -106,6 +107,10 @@ public class SawonController {
 		if("1".equals(gubun) || "2".equals(gubun)) {
 			param.put("imwon", "Y");
 		}
+		else if("Y".equals(myInfo.getSawonTeamLeader())) {
+			param.put("leader", "Y");
+			param.put("teamCode", myInfo.getSawonTeam());
+		}
 		
 		param.put("sawonCode", myInfo.getSawonCode());
 		param.put("department", myInfo.getSawonDepartment());
@@ -114,6 +119,50 @@ public class SawonController {
 			List<Map<String, String>> list = sawonService.getSawonInfoForVacation(param);
 			vo.setSuccess(true);
 			vo.setDatas(list);
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+		
+		
+		return vo;
+	}
+	
+	@PostMapping("vacation/history")
+	@ResponseBody 
+	public AjaxVO<Map<String, String>> getSawonVacationHistory(@RequestParam("sawonCode") String sawonCode) {
+		
+		System.err.println("======>" + sawonCode);
+		AjaxVO<Map<String, String>> vo = new AjaxVO<>();
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		
+		try {
+			Map<String, String> m = new HashMap<>();
+			String gubun = myInfo.getPositionGubun();
+			
+			if("1".equals(gubun) || "2".equals(gubun)) {
+				m.put("sawonCode", sawonCode);
+				m.put("imwon", "Y");
+				m.put("department", myInfo.getSawonDepartment());
+			}
+			else if("Y".equals(myInfo.getSawonTeamLeader())) {
+				m.put("sawonCode", sawonCode);
+				m.put("leader", "Y");
+				m.put("teamCode", myInfo.getSawonTeam());
+				m.put("department", myInfo.getSawonDepartment());
+			}
+			else if(myInfo.getSawonCode().equals(sawonCode)) {
+				m.put("sawonCode", myInfo.getSawonCode());
+			}
+			else {
+				throw new Exception("조회할수 없습니다.");
+			}
+			
+			List<Map<String, String>> history = sawonService.getSawonVacationHistory(m);
+			vo.setSuccess(true);
+			if(history != null)
+				vo.setDatas(history);
 		}
 		catch(Exception e) {
 			vo.setSuccess(false);

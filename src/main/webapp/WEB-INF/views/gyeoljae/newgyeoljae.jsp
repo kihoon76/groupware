@@ -51,6 +51,8 @@
 					<option value="5">병가</option>
 					<option value="6">직무교육</option>
 					<option value="7">기타</option>
+					<option value="8">반차</option>
+					<option value="9">대체휴가</option>
 				</select> 		
 			</div>
 			

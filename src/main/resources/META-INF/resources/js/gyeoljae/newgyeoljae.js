@@ -35,7 +35,16 @@
 		})
 		.on('changeDate', function(e) {
 			var term = common.datediff($txtVacationStart.val(), $txtVacationEnd.val());
-			$numTerm.val((term+1));
+			
+			//반차 1로 표시되나 서버에서 -1로 치환
+			if($selGyeoljaeSubType.val() == '8') {
+				$txtVacationEnd.val($txtVacationStart.val());
+				$numTerm.val(1);
+			}
+			else {
+				$numTerm.val((term+1));
+			}
+			
 		});
 		
 		function hasFileInGyeoljae() {
@@ -199,6 +208,29 @@
 				$dvVacationTerm.hide();
 				$dvDocNum.show();
 				getDefaultGyeoljaeLines();
+			}
+			
+		});
+		
+		$selGyeoljaeSubType
+		.off('change')
+		.on('change', function() {
+			var v = $(this).val();
+
+			//반차
+			if(v == '8') {
+				//날짜가 입력되어 있으면
+				if($txtVacationStart.val() != '') {
+					$txtVacationEnd.val($txtVacationStart.val());
+					$numTerm.val(1);
+				}
+			}
+			else {
+				//날짜가 입력되어 있으면
+				if($txtVacationStart.val() != '') {
+					var term = common.datediff($txtVacationStart.val(), $txtVacationEnd.val());
+					$numTerm.val((term+1));
+				}
 			}
 			
 		});

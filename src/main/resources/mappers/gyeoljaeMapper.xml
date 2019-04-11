@@ -400,7 +400,10 @@
 	</resultMap>
 	
 	<select id="selectMyModifySangsin" parameterType="map" resultMap="RM_ModifySangsin">
-		 select T1.상신코드, 기안제목, REPLACE(기안내용_CODE, '"', '▦') 기안내용_CODE , convert(char(16), 기안작성일, 20) 기안작성일, 결재타입, 휴가시작일, 휴가종료일, 처리상태, 결재서브타입, 휴가기간, 문서번호
+		 select T1.상신코드, 기안제목, REPLACE(기안내용_CODE, '"', '▦') 기안내용_CODE , convert(char(16), 기안작성일, 20) 기안작성일, 결재타입, 휴가시작일, 휴가종료일, 처리상태, 결재서브타입, 
+		 		case when 휴가기간 = -1 then 1
+		 		     else 휴가기간
+		 		end 휴가기간, 문서번호
 		  from [동림].[dbo].[상신] T1
 		 where T1.상신코드 = #{sangsinNum}
 		   and T1.기안자 = #{sawonCode}

@@ -43,6 +43,21 @@
 		 <when test="imwon != null">
 		 where 부서코드 = #{department}
 		 </when>
+		 <when test="leader != null">
+		 where T1.팀코드 in (
+		 	select T1.팀코드 
+			  from [동림].[dbo].[관리팀] T1
+			 inner join [동림].[dbo].[관리팀] T2 
+			    on  T1.사원코드 = T2.사원코드
+			 inner join [동림].[dbo].[사원] T3 
+			    on T1.사원코드 = T3.사원코드
+			 inner join [동림].[dbo].[직급] T4 
+			    on T3.직급코드 = T4.직급코드
+			 where T2.팀코드 = #{teamCode} 
+			   and T1.부서코드 = #{department}
+			   and T4.직급구별 = 2 
+		 )
+		 </when>
 		 <otherwise>
 		 where 사원코드 = #{sawonCode}
 		 </otherwise>
@@ -163,5 +178,46 @@
 	<select id="selectSawonAllDevices" resultType="string">
 		select [토큰]
 		  from [동림].[dbo].[앱정보]
+	</select>
+	
+	<select id="selectSawonVacationHistory" parameterType="map" resultType="map">
+		select case when 결재서브타입 = 1 then '연차'
+					when 결재서브타입 = 2 then '보건'
+					when 결재서브타입 = 3 then '청원'
+					when 결재서브타입 = 4 then '공가'
+					when 결재서브타입 = 5 then '병가'
+					when 결재서브타입 = 6 then '교육'
+					when 결재서브타입 = 7 then '기타'
+					when 결재서브타입 = 8 then '반차'
+					when 결재서브타입 = 9 then '대체휴가'
+					else '기타'
+			   end vType, 휴가시작일 vStartDate, 휴가종료일 vEndDate, 휴가기간  vTerm, 기안내용_PLAIN vContent
+		  from [동림].[dbo].[상신] T1
+		 inner join [동림].[dbo].[사원] T2
+		    on T1.기안자 = T2.사원코드
+		 where T1.결재타입 = 2
+		   and T1.처리상태 = 'C'
+		   and T1.기안자 = #{sawonCode}
+		 <choose>
+		 <when test="imwon != null">
+		   and T2.부서코드 = #{department}
+		 </when>
+		 <when test="leader != null">
+		   and T2.팀코드 in (
+		   	   select T1.팀코드 
+			  	 from [동림].[dbo].[관리팀] T1
+			 	inner join [동림].[dbo].[관리팀] T2 
+			       on  T1.사원코드 = T2.사원코드
+			    inner join [동림].[dbo].[사원] T3 
+			       on T1.사원코드 = T3.사원코드
+			 	inner join [동림].[dbo].[직급] T4 
+			       on T3.직급코드 = T4.직급코드
+			 	where T2.팀코드 = #{teamCode} 
+			   	  and T1.부서코드 = #{department}
+			      and T4.직급구별 = 2 
+		   )
+		 </when>
+		 </choose>
+		 order by 휴가시작일 asc
 	</select>
 </mapper>

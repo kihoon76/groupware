@@ -122,4 +122,8 @@ public class SawonService {
 		return sawonDao.selectSawonInfoForVacation(param);
 	}
 
+	public List<Map<String, String>> getSawonVacationHistory(Map<String, String> m) {
+		return sawonDao.selectSawonVacationHistory(m);
+	}
+
 }

@@ -62,6 +62,8 @@
 					<option value="5" <c:if test="${sangsin.gyeoljaeSubType eq '5'}">selected</c:if>>병가</option>
 					<option value="6" <c:if test="${sangsin.gyeoljaeSubType eq '6'}">selected</c:if>>직무교육</option>
 					<option value="7" <c:if test="${sangsin.gyeoljaeSubType eq '7'}">selected</c:if>>기타</option>
+					<option value="8" <c:if test="${sangsin.gyeoljaeSubType eq '8'}">selected</c:if>>반차</option>
+					<option value="9" <c:if test="${sangsin.gyeoljaeSubType eq '9'}">selected</c:if>>대체휴가</option>
 				</select> 	
 			</div>
 			</c:when>

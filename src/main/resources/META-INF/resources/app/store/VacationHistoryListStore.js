@@ -1,9 +1,12 @@
 Ext.define('Drpnd.store.VacationHistoryListStore', {
 	 extend : 'Ext.data.Store',
 	 requires : ['Drpnd.util.Constants', 'Drpnd.util.CommonFn'],
+	 baseParams: {
+		 sawonCode:''
+	 },
 	 proxy : {
 	        type : 'ajax'
-	       ,url : Drpnd.util.Constants.context + '/sawon/list/vacation'
+	       ,url : Drpnd.util.Constants.context + '/sawon/vacation/history'
 	       ,actionMethods : 'POST'
 	       ,reader : {
 	           type : 'json'

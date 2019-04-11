@@ -10,8 +10,6 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import kr.co.drpnd.domain.Sawon;
-import kr.co.drpnd.exception.AppTokenError;
-import kr.co.drpnd.type.ExceptionCode;
 
 @Repository("sawonDao")
 public class SawonDaoImpl implements SawonDao {
@@ -90,6 +88,11 @@ public class SawonDaoImpl implements SawonDao {
 	@Override
 	public List<Map<String, String>> selectSawonInfoForVacation(Map<String, String> param) {
 		return msSqlSession.selectList(namespace + ".selectSawonInfoForVacation", param);
+	}
+
+	@Override
+	public List<Map<String, String>> selectSawonVacationHistory(Map<String, String> m) {
+		return msSqlSession.selectList(namespace + ".selectSawonVacationHistory", m);
 	}
 
 }

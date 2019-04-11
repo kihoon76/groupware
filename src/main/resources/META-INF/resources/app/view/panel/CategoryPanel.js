@@ -4,6 +4,7 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
     //,uses        : ['Hotplace.util.Constants']
     ,title       : '카테고리'
     ,initComponent : function() {
+    	var that = this;
     	var addedCategoryMap = {};
     	var teamList = Ext.getBody().getAttribute('data-team');
     	var mygyeoljaeCount = Ext.getBody().getAttribute('data-gyeoljae-count');
@@ -20,6 +21,7 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
     				text: '팀목록',
     				expand: true,
     				iconCls : 'tree-expand',
+    				id: 'path-team',
     				children: []
     			}
     			
@@ -37,7 +39,7 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
     	}
     	
     	treeItems.push({
-			 text: '통계', expand: true, iconCls : 'tree-expand'
+			 text: '통계', expand: true, iconCls : 'tree-expand', id: 'path-statistics'
 			,children : [{
 				text: '야근', leaf : true, cate : 'statistics', id : 'statistics-overwork', iconCls: 'icon-bars-chart'
 			}]
@@ -68,6 +70,7 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
     	
     	treeItems.push({
     		text: '이용안내', expand: true, iconCls : 'tree-expand',
+    		id: 'path-help',
     		children: [{
     			text: '결재', expand: true, iconCls : 'tree-expand',
     			children: [{
@@ -121,7 +124,13 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
     	    	   n.set('iconCls', 'tree-collapse');
     	       },
     	       afterrender: function(tree) {
-    	    	   tree.expandAll();
+    	    	   tree.expandPath('/root/path-team');
+    	    	   tree.expandPath('/root/path-statistics');
+    	    	   
+    	    	   /*tree.expandPath('/root/path-help', null, null, function(success, node) {
+    	    		   node.expandChildren(true);
+    	    	   });*/
+    	    	   
     	       }
     	    }
     	});

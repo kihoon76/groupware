@@ -33,4 +33,6 @@ public interface SawonDao {
 
 	List<Map<String, String>> selectSawonInfoForVacation(Map<String, String> param);
 
+	List<Map<String, String>> selectSawonVacationHistory(Map<String, String> m);
+
 }

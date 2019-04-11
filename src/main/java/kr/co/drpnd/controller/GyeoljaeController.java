@@ -315,6 +315,11 @@ public class GyeoljaeController {
 				
 				int term = Integer.parseInt(sangsin.getTerm());
 				if(term < 1) throw new Exception("휴가기간은 1일 이상입니다");
+				
+				//반차일 경우 -1로 처리
+				if(VacationType.BANCHA == VacationType.getType(sangsin.getGyeoljaeSubType())) {
+					sangsin.setTerm("-1");
+				}
 			}
 			
 			List<Map<String, Object>> lines = sangsin.getGyeoljaeLines();
@@ -385,6 +390,10 @@ public class GyeoljaeController {
 				VacationType.getType(gyeoljaeSubType); 
 				int termInt = Integer.parseInt(term);
 				if(termInt < 1) throw new Exception("휴가기간은 1일 이상입니다");
+				
+				if(VacationType.BANCHA == VacationType.getType(gyeoljaeSubType)) {
+					term = "-1";
+				}
 			}
 			
 			Sawon myInfo = SessionUtil.getSessionSawon();
@@ -485,6 +494,11 @@ public class GyeoljaeController {
 				
 				int term = Integer.parseInt(sangsin.getTerm());
 				if(term < 1) throw new Exception("휴가기간은 1일 이상입니다");
+				
+				//반차일 경우 -1로 처리
+				if(VacationType.BANCHA == VacationType.getType(sangsin.getGyeoljaeSubType())) {
+					sangsin.setTerm("-1");
+				}
 			}
 			
 			String sangsinNum = String.valueOf(sangsin.getSangsinNum());
@@ -593,6 +607,11 @@ public class GyeoljaeController {
 				
 				int termInt = Integer.parseInt(term);
 				if(termInt < 1) throw new Exception("휴가기간은 1일 이상입니다");
+				
+				//반차일 경우 -1로 처리
+				if(VacationType.BANCHA == VacationType.getType(gyeoljaeSubType)) {
+					term = "-1";
+				}
 			}
 			
 			Sawon myInfo = SessionUtil.getSessionSawon();
@@ -633,6 +652,7 @@ public class GyeoljaeController {
 					sangsin.setGyeoljaeType(gyeoljaeType);
 					sangsin.setSangsinNum(Integer.parseInt(sangsinNum));
 					sangsin.setDocNum(docNum);
+					sangsin.setTerm(term);
 					
 					List<AttachFile> attachFiles = new ArrayList<>();
 					String pushMsg = myInfo.getSawonName() + "님이 올린 결재가 도착했습니다.";
