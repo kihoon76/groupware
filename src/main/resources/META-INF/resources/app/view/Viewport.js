@@ -808,6 +808,16 @@ Ext.define('Drpnd.view.Viewport', {
 				   
 			   },{
 				   xtype: 'button',
+				   text: '회사메일',
+				   iconCls: 'icon-email',
+				   listeners: {
+					   click: function() {
+						   window.open('https://auth.worksmobile.com/login/login?accessUrl=https%3A%2F%2Fcommon.worksmobile.com%2Fproxy%2Fmy', '_blank');
+					   }
+				   }
+				   
+			   },{
+				   xtype: 'button',
 				   text: '<span style="font-weight:bold; color:#0000ff;">'  + sawonName + '</span>님 정보',
 				   iconCls: 'icon-myinfo',
 				   listeners: {
