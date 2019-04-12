@@ -810,7 +810,7 @@ Ext.define('Drpnd.view.Viewport', {
 				   xtype: 'button',
 				   text: '회사메일',
 				   iconCls: 'icon-email',
-				   qtip: '★ 회사메일 등록 및 관리는 <br/>[김성재대리]에게 문의해 주세요',
+				   qtip: '★ 회사메일 등록 및 관리는 <br/><span style="color:#0000ff;font-weight:bold;">[김성재대리]</span>에게 문의해 주세요',
 				   listeners: {
 					   click: function() {
 						   window.open('https://auth.worksmobile.com/login/login?accessUrl=https%3A%2F%2Fcommon.worksmobile.com%2Fproxy%2Fmy', '_blank');
