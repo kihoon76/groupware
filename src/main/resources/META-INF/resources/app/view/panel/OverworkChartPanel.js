@@ -132,12 +132,13 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
                 xField: 'teamName',
                 tips: {
                     trackMouse: true,
-                    width: 300,
+                    width: 600,
                     height: 50,
                     renderer: function(storeItem, item) {
                     	var yField = item.yField;
-                    	this.setTitle(storeItem.data[yField + '_tips']);
-                    }
+                    	this.setTitle('<p class="chart-tips">' + storeItem.data[yField + '_tips'] + '</p>');
+                    },
+                    cls: 'qBodyStyle'
                 },
                 label: {
                 	display: 'insideEnd',
@@ -186,12 +187,13 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
                 xField: 'teamName',
                 tips: {
                     trackMouse: true,
-                    width: 300,
+                    width: 600,
                     height: 50,
                     renderer: function(storeItem, item) {
                     	var yField = item.yField;
-                    	this.setTitle(storeItem.data[yField + '_tips']);
-                    }
+                    	this.setTitle('<p class="chart-tips">' + storeItem.data[yField + '_tips'] + '</p>');
+                    },
+                    cls: 'qBodyStyle'
                 },
                 label: {
                 	display: 'insideEnd',
@@ -275,7 +277,7 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
                 stacked: true,
                 tips: {
                     trackMouse: true,
-                    width: 300,
+                    width: 600,
                     height: 30,
                     renderer: function(storeItem, item) {
 //                    	console.log(storeItem);
@@ -285,15 +287,17 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
                     	
                     	if(timeMin > 0) {
                     		if(timeMin >= 60) {
-                    			timeHour = parseInt(timeMin/60) + '시간 ' + (timeMin%60) + '분';
+                    			timeHour = '<span class="chart-tips-strong">' + parseInt(timeMin/60) + '</span>시간 ' + (timeMin%60) + '분';
                     		}
                     		else {
                     			timeHour = timeMin + '분';
                     		}
                     	}
                     	
-                        this.setTitle('[' + item.yField + '][' + item.value[0] + ']-' + item.value[1] + '/' + timeHour);
-                    }
+                        this.setTitle('<p class="chart-tips">[' + item.yField + '][' + item.value[0] + ']-' + item.value[1] + '/' + timeHour + '</p>');
+                         
+                    },
+                    cls: 'qBodyStyle'
                 },
             }]
         });
@@ -348,7 +352,7 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
                 stacked: true,
                 tips: {
                     trackMouse: true,
-                    width: 300,
+                    width: 600,
                     height: 30,
                     renderer: function(storeItem, item) {
 //                    	console.log(storeItem);
@@ -358,16 +362,18 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
                     	
                     	if(timeMin > 0) {
                     		if(timeMin >= 60) {
-                    			timeHour = parseInt(timeMin/60) + '시간 ' + (timeMin%60) + '분';
+                    			timeHour = '<span class="chart-tips-strong">' + parseInt(timeMin/60) + '</span>시간 ' + (timeMin%60) + '분';
                     		}
                     		else {
                     			timeHour = timeMin + '분';
                     		}
                     	}
                     	
-                        this.setTitle('[' + item.yField + '][' + item.value[0] + ']-' + item.value[1] + '/' + timeHour);
-                    }
+                        this.setTitle('<p class="chart-tips">[' + item.yField + '][' + item.value[0] + ']-' + item.value[1] + '/' + timeHour + '</p>');
+                    },
+                    cls: 'qBodyStyle'
                 },
+               
             }]
         });
 		

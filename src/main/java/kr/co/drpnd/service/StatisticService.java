@@ -35,7 +35,7 @@ public class StatisticService {
 		if(timeInt >= 60) {
 			timeH = timeInt/60;
 			timeM = timeInt%60;
-			timeStr = String.valueOf(time) + "분/" + timeH + "시간" + timeM + "분";
+			timeStr = String.valueOf(time) + "분/<span class=\"chart-tips-strong\">" + timeH + "</span>시간" + timeM + "분";
 		}
 		else {
 			timeStr = timeStr + "분";

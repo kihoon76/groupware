@@ -32,3 +32,7 @@
 
 .company-detail {padding: 10px 10px 10px 10px;}
 .empty-grid-headline {font-size:14px;}
+
+.qBodyStyle {background-color:#fff;}
+.chart-tips {color:#0000ff; font-size:12px;}
+.chart-tips-strong {color:#ff0000; font-size:13px;}
