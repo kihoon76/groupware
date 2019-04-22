@@ -1076,7 +1076,7 @@ public class GyeoljaeController {
 		return vo;
 	}
 	
-	private void download(String code,  HttpServletRequest request, HttpServletResponse response) throws Exception {
+	private void download(String code,  HttpServletRequest request, HttpServletResponse response, String ios) throws Exception {
 		Sawon myInfo = SessionUtil.getSessionSawon();
 		String positionGubun = myInfo.getPositionGubun();
 		
@@ -1091,7 +1091,9 @@ public class GyeoljaeController {
 		if(file != null) {
 			String fileName = file.getName().substring(0, file.getName().lastIndexOf("."));
 			
-			if(request.getHeader("User-Agent").contains("MSIE") || request.getHeader("User-Agent").contains("Trident")) {
+			if(request.getHeader("User-Agent").contains("MSIE") || 
+			   request.getHeader("User-Agent").contains("Trident") ||
+			   "Y".equals(ios)) {
 				fileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");
 			}
 			else {
@@ -1121,17 +1123,19 @@ public class GyeoljaeController {
 	}
 	
 	@PostMapping(value={"/file/{code}"})
-	public void downloadReport(@PathVariable("code") String code, 
+	public void downloadReport(@PathVariable("code") String code,
+							   @RequestParam(name="ios", required=false) String ios,
 							   HttpServletRequest request, HttpServletResponse response) throws Exception  {
-		download(code, request, response);
+		download(code, request, response, ios);
 	}
 	
 	@GetMapping(value={"/m/file/{code}"})
 	public void downloadMobile(@PathVariable("code") String code, 
+							   @RequestParam(name="ios", required=false) String ios,
 							   HttpServletRequest request, HttpServletResponse response) throws Exception  {
 		//Thread.sleep(10000);
 		System.err.println("---------------------------------");
-		download(code, request, response);
+		download(code, request, response, ios);
 	}
 	
 	@PostMapping(value={"commit", "m/commit"})

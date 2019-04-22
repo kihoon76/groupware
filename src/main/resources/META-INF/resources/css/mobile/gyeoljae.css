@@ -10,12 +10,15 @@ If you like this solution, you might also want to check out the 1.0 version:
 .responstable {
   margin: 1em 0;
   width: 100%;
+/*   max-width:200px; */
+/*   display:block; */
   overflow: hidden;
   background: #FFF;
   color: #024457;
   border-radius: 10px;
   border: 1px solid #167F92;
   font-size: 13px;
+/*   table-layout: fixed; */
 }
 .responstable tr {
   border: 1px solid #D9E4E6;
@@ -54,7 +57,7 @@ If you like this solution, you might also want to check out the 1.0 version:
 .responstable td {
   display: block;
   word-wrap: break-word;
-  /*max-width: 7em;*/
+  max-width: 15em;
 }
 .responstable td:first-child {
   display: table-cell;
