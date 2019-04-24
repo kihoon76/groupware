@@ -99,6 +99,12 @@ public class CalendarService {
 	}
 
 	public Map<String, List<Map<String, Object>>> getCalendarData(Map param) {
+		
+		if("C02".equals(String.valueOf(param.get("cate")))) {
+			String sDate = String.valueOf(param.get("startDate"));
+			sDate = sDate.substring(0, 8) + "01";
+			param.put("startDate", sDate);
+		}
 		List<CalendarEvent> list = calendarDao.selectCalendarDataList(param);
 		
 		Map<String, List<Map<String, Object>>> m = null;
