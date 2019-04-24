@@ -404,7 +404,7 @@ $(document).ready(function() {
 			 }
 		 },
 		 header: {
-			 left: 'cPrev,cNext cSave today',
+			 left: 'cPrevYear,cPrev,cNext cSave today',
 		     center: 'title',
 		     right: ''//'month,basicWeek,basicDay'
 		 },

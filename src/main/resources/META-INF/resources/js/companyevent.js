@@ -48,6 +48,15 @@
 	$(document).ready(function() {
 		var currentDate = $('#hdnCurrentDate').val();
 		calendar = $('#ceCalendar').fullCalendar({
+			 header: {
+				 left: 'title',
+				 center: '',
+				 right: 'today prevYear,prev,next,nextYear'
+			 },
+			 buttonText: {
+				 prevYear: new moment().year()-1,
+				 nextYear: new moment().year()+1
+			 },
 			 height: 'auto',
 			 defaultDate: currentDate,//$('body').data('date'),
 			 navLinks: true, // can click day/week names to navigate views
@@ -63,8 +72,7 @@
 		    	 console.log('yyyyy')
 		     },
 		     viewRender: function(view) {
-		    	 console.log('viewRender')
-		    	  mask.hide(); 
+		    	 mask.hide(); 
 		    	 calMStart = view.start.format();
 		    	 calMEnd = view.end.format();
 		    	 var changedCategoryMonth = $('#ceCalendar').fullCalendar('getDate').format().substring(0, 7);
@@ -74,6 +82,10 @@
 		    		 initEventSources();
 		    		 getData();
 		    	 }
+		    	 
+		    	 var y = moment($('#ceCalendar').fullCalendar('getDate')).year();
+		    	 $('.fc-prevYear-button').text(y-1);
+		    	 $('.fc-nextYear-button').text(y+1);
 		     },
 		     select: function(start, end, jsEvent) {
 		    	 console.log('pp')
