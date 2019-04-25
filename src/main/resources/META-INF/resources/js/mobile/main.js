@@ -331,6 +331,22 @@ $(document)
 //		
 //	})();
 	
+	function movePageAfterSessionCheck(param) {
+		if(param) {
+			if(typeof param === 'function') {
+				Common.checkSession(param);
+			}
+			else if(typeof param === 'string') {
+				Common.checkSession(function() {
+					$.mobile.loading('show', {
+					    theme: 'a'
+					});
+					window.location.href = param;
+				});
+			}
+		}
+	}
+	
 	function offworkHandler() {
 		var $txtWorkContent = $('#txtWorkContent');
 		var $txtOutworkContent = $('#txtOutworkContent');
@@ -445,7 +461,7 @@ $(document)
 		
 		//외근전환
 		if(inout == 'N') {
-			Common.checkSession(function() {
+			movePageAfterSessionCheck(function() {
 				Common.ajax({
 					url: '/geuntae/m/change/inwork/' + geuntaeCode + '?seatNum=' + seatNum,
 	    	    	method: 'GET',
@@ -459,9 +475,23 @@ $(document)
 	    			},
 	    		});
 			});
+			/*Common.checkSession(function() {
+				Common.ajax({
+					url: '/geuntae/m/change/inwork/' + geuntaeCode + '?seatNum=' + seatNum,
+	    	    	method: 'GET',
+	    			dataType: 'json',
+	    			headers: {'CUSTOM': 'Y'},
+	    			success: function(data, textStatus, jqXHR) {
+	    				if(data.success) {
+	    					alert('외근전환 되었습니다.')
+	    					window.location.reload();
+	    				}
+	    			},
+	    		});
+			});*/
 		}
 		else if(inout == 'Y') {
-			Common.checkSession(function() {
+			movePageAfterSessionCheck(function() {
 				Common.ajax({
 					url: '/geuntae/m/change/outwork/' + geuntaeCode + '?seatNum=' + seatNum,
 	    	    	method: 'GET',
@@ -475,6 +505,21 @@ $(document)
 	    			},
 	    		});
 			});
+			
+			/*Common.checkSession(function() {
+				Common.ajax({
+					url: '/geuntae/m/change/outwork/' + geuntaeCode + '?seatNum=' + seatNum,
+	    	    	method: 'GET',
+	    			dataType: 'json',
+	    			headers: {'CUSTOM': 'Y'},
+	    			success: function(data, textStatus, jqXHR) {
+	    				if(data.success) {
+	    					alert('내근전환 되었습니다.')
+	    					window.location.reload();
+	    				}
+	    			},
+	    		});
+			});*/
 		}
 	});
 	
@@ -527,7 +572,6 @@ $(document)
 	.off('click')
 	.on('click', function () {
 		var $this = $(this);
-		console.log($this)
 		
 		if($this.attr('href') != '#') {
 			$('#leftpanel1').panel('close');
@@ -553,11 +597,31 @@ $(document)
 	$(document)
 	.off('click', '#footerHome')
 	.on('click', '#footerHome', function(e) {
-		$.mobile.loading('show', {
-		    theme: 'a'
-		});
-		window.location.href = '/m/main';
+		movePageAfterSessionCheck('/m/main');
 	});
+	
+	$(document)
+	.off('click', '#footerInfo')
+	.on('click', '#footerInfo', function(e) {
+		movePageAfterSessionCheck('/m/info');
+	});
+	
+	//일정관리
+	$(document)
+	.off('click', '#lnkViewPlan')
+	.on('click', '#lnkViewPlan', function() {
+		movePageAfterSessionCheck('/calendar/m/view/plan');
+	});
+	
+	//
+	$(document)
+	.off('click', '#lnkViewReceivedBox')
+	.on('click', '#lnkViewReceivedBox', function() {
+		movePageAfterSessionCheck('/gyeoljae/m/view/receivedbox');
+	});
+	
+	
+	
 });
 
 $(document).on('pageshow', function (event, ui) {
@@ -647,4 +711,10 @@ $(document).on('popupafterclose', "[data-role=popup]", function (e) {
 	
 	
     //console.log(e.target.id + " -> " + e.type);
+});
+
+$(document).on('pagebeforechange', function(e, data) {
+	console.log('====================pagebeforechange====================')
+	console.log(e);
+	console.log(data);
 });

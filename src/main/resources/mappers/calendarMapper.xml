@@ -61,7 +61,7 @@
 			   case when 상시표시 = 'Y' then concat(year(#{startDate}) +  year(종료일)-year(시작일), '-', substring(종료일, 6, 5))                      
 				    else 종료일
 			   end 종료일,
-			   카테고리월, 카테고리코드, 일련번호, 상세, 'N' myevent,
+			       카테고리월, 카테고리코드, 일련번호, 상세, 'N' myevent,
 			   '#996600' 바탕색,
 			   '#ffffff' 글자색,
 			   '#996600' 테두리색

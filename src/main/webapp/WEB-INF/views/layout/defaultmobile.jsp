@@ -66,7 +66,7 @@
          <div data-role="navbar">
          	<ul>
          		<li><a id="footerHome" href="#" data-icon="home" data-ajax="false" <c:if test="${'home' eq footbar}">class="ui-btn-active"</c:if>>홈</a></li>
-         		<li><a href="/m/info" data-icon="info" <c:if test="${'info' eq footbar}">class="ui-btn-active"</c:if>>사용안내</a></li>
+         		<li><a id="footerInfo" href="#" data-ajax="false" data-icon="info" <c:if test="${'info' eq footbar}">class="ui-btn-active"</c:if>>사용안내</a></li>
          		<li><a id="footerLogout" href="#" data-icon="user" data-ajax="false">로그아웃</a></li>
          	</ul>
          </div>
@@ -79,7 +79,8 @@
         	<li data-icon="delete"><a href="#" data-rel="close">&nbsp;</a></li>
         	<li data-role="list-divider">Menu</li>
         	<li>
-        		<a href="/gyeoljae/m/view/receivedbox">결재(<span style="color:#f00;"><c:out value="${mygyeoljaeCount}" /></span>) </a>
+<%--         		<a id="lnkViewReceivedBox" data-ajax="false">결재(<span style="color:#f00;"><c:out value="${mygyeoljaeCount}" /></span>) </a> --%>
+        		<a id="lnkViewReceivedBox" data-ajax="false"><img src="/resources/images/gyeoljae.png" style="width:16px;height:16px;" class="ui-li-icon">결재(<span style="color:#f00;"><c:out value="${mygyeoljaeCount}" /></span>) </a>
         	</li>
 <!--         	<li><a href="/book/statistics/read">메뉴2</a></li> -->
 <!--         	<li><a href="/book/rental_manage">메뉴3</a></li> -->
@@ -87,8 +88,10 @@
         
         <div data-role="collapsible" data-inset="false" data-iconpos="right" data-theme="d" data-content-theme="b">
      		<h3>캘린더</h3>
-        	<ul data-role="listview">
-        		<li><a href="/calendar/m/view/plan" class="ui-btn ui-btn-icon-right ui-icon-carat-r">일정관리</a></li>
+        	<ul data-role="listview" >
+<!--         		<li><a href="/calendar/m/view/plan" class="ui-btn ui-btn-icon-right ui-icon-carat-r">일정관리</a></li> -->
+<!-- 				<li><a id="lnkViewPlan" href="#" class="ui-btn ui-btn-icon-right ui-icon-carat-r" data-ajax="false">일정관리</a></li> -->
+				<li><a id="lnkViewPlan" href="#" data-ajax="false"><img src="/resources/images/calendar.png" style="width:16px;height:16px;" class="ui-li-icon">일정관리</a></li>
         	</ul>
      	</div><!-- /collapsible -->
 	</div><!-- /leftpanel3 -->
