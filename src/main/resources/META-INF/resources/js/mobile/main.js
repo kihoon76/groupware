@@ -475,20 +475,6 @@ $(document)
 	    			},
 	    		});
 			});
-			/*Common.checkSession(function() {
-				Common.ajax({
-					url: '/geuntae/m/change/inwork/' + geuntaeCode + '?seatNum=' + seatNum,
-	    	    	method: 'GET',
-	    			dataType: 'json',
-	    			headers: {'CUSTOM': 'Y'},
-	    			success: function(data, textStatus, jqXHR) {
-	    				if(data.success) {
-	    					alert('외근전환 되었습니다.')
-	    					window.location.reload();
-	    				}
-	    			},
-	    		});
-			});*/
 		}
 		else if(inout == 'Y') {
 			movePageAfterSessionCheck(function() {
@@ -506,20 +492,6 @@ $(document)
 	    		});
 			});
 			
-			/*Common.checkSession(function() {
-				Common.ajax({
-					url: '/geuntae/m/change/outwork/' + geuntaeCode + '?seatNum=' + seatNum,
-	    	    	method: 'GET',
-	    			dataType: 'json',
-	    			headers: {'CUSTOM': 'Y'},
-	    			success: function(data, textStatus, jqXHR) {
-	    				if(data.success) {
-	    					alert('내근전환 되었습니다.')
-	    					window.location.reload();
-	    				}
-	    			},
-	    		});
-			});*/
 		}
 	});
 	
@@ -715,6 +687,4 @@ $(document).on('popupafterclose', "[data-role=popup]", function (e) {
 
 $(document).on('pagebeforechange', function(e, data) {
 	console.log('====================pagebeforechange====================')
-	console.log(e);
-	console.log(data);
 });

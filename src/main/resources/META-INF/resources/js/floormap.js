@@ -617,7 +617,7 @@
 		var reserveWin = parent.Ext.create('Ext.window.Window', {
 			title: '회의실 예약현황',
 			iconCls: 'icon-reserved',
-			height: 800,
+			height: 600,
 			width: 800,
 			layout: 'fit',
 			closeAction: 'destroy',
