@@ -196,7 +196,8 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 						Ext.QuickTips.register({
 		                    target: c.getEl(),
 		                    text: c.qtip,
-		                    showDelay: 1 
+		                    showDelay: 1,
+		                    cls: 'qBodyStyle'
 		                });
 					}
 				}
@@ -216,7 +217,8 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 						Ext.QuickTips.register({
 		                    target: c.getEl(),
 		                    text: c.qtip,
-		                    showDelay: 1 
+		                    showDelay: 1,
+		                    cls: 'qBodyStyle'
 		                });
 					}
 				}
@@ -236,7 +238,8 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 						Ext.QuickTips.register({
 		                    target: c.getEl(),
 		                    text: c.qtip,
-		                    showDelay: 1 
+		                    showDelay: 1,
+		                    cls: 'qBodyStyle'
 		                });
 					}
 					
@@ -257,7 +260,8 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 						Ext.QuickTips.register({
 		                    target: c.getEl(),
 		                    text: c.qtip,
-		                    showDelay: 1 
+		                    showDelay: 1,
+		                    cls: 'qBodyStyle'
 		                });
 					}
 				}
@@ -295,7 +299,8 @@ Ext.define('Drpnd.view.panel.GyeoljaePanel', {
 		        		Ext.QuickTips.register({
 		                    target: c.getEl(),
 		                    text: c.qtip,
-		                    showDelay: 1 
+		                    showDelay: 1,
+		                    cls: 'qBodyStyle'
 		                });
 		        	},
 		        }
