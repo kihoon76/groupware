@@ -38,7 +38,7 @@ public class PushTest {
 	
 	@Test
 	public void asyncTest() throws InterruptedException {
-		List<String> devices = sawonService.getSawonDevices("1");
+		List<String> devices = sawonService.getSawonDevices("27");
 		
 		try {
 			Map<String, String> m = new HashMap<>();
