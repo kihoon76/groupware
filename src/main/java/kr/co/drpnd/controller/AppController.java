@@ -30,7 +30,7 @@ public class AppController {
 			HttpServletResponse response,
 			@RequestParam("device") String device) throws Exception  {
 		
-		String fileName = "GroupWareV1.1";
+		String fileName = "GroupWareV1.2";
 			//fileName = new String(fileName.getBytes("UTF-8"), "ISO-8859-1");
 			
 		response.setHeader("Content-Transper-Encoding", "binary");
