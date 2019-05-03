@@ -35,4 +35,6 @@ public interface SawonDao {
 
 	List<Map<String, String>> selectSawonVacationHistory(Map<String, String> m);
 
+	List<Map<String, String>> selectSawonOverworkHistory(Map<String, Object> m);
+
 }

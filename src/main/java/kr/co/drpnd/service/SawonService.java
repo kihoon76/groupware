@@ -126,4 +126,8 @@ public class SawonService {
 		return sawonDao.selectSawonVacationHistory(m);
 	}
 
+	public List<Map<String, String>> getSawonOverworkHistory(Map<String, Object> m) {
+		return sawonDao.selectSawonOverworkHistory(m);
+	}
+
 }

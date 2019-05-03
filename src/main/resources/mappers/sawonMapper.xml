@@ -180,6 +180,23 @@
 		  from [동림].[dbo].[앱정보]
 	</select>
 	
+	<resultMap type="map" id="RM_OverworkHistory">
+		<result column="야근일자" property="overworkDate" javaType="string"/>
+		<result column="출근시간" property="startDate" javaType="string"/>
+		<result column="퇴근시간" property="endDate" javaType="string"/>
+		<result column="야근6시부터" property="fromSix" javaType="string"/>
+		<result column="야근요일" property="overworkYoil" javaType="string"/>
+		<result column="야근시간" property="overworkTime" javaType="int"/>
+	</resultMap>
+	
+	<select id="selectSawonOverworkHistory" parameterType="map" statementType="CALLABLE" resultMap="RM_OverworkHistory">
+		{call [동림].[dbo].[UP_야근내역FOR수당](
+			#{searchYear, mode=IN, jdbcType=INTEGER, javaType=int},
+			#{searchMonth, mode=IN, jdbcType=INTEGER, javaType=int},
+			#{sawonCode, mode=IN, jdbcType=INTEGER, javaType=int}
+		)}
+	</select>
+	
 	<select id="selectSawonVacationHistory" parameterType="map" resultType="map">
 		select case when 결재서브타입 = 1 then '연차'
 					when 결재서브타입 = 2 then '보건'

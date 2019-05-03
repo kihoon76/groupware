@@ -172,4 +172,51 @@ public class SawonController {
 		
 		return vo;
 	}
+	
+	@PostMapping("overwork/history")
+	@ResponseBody
+	public AjaxVO<Map<String, String>> getSawonOverworkHistory(
+			@RequestParam("sawonCode") String sawonCode,
+			@RequestParam("searchYear") String searchYear,
+			@RequestParam("searchMonth") String searchMonth
+		) {
+		
+		AjaxVO<Map<String, String>> vo = new AjaxVO<>();
+		Sawon myInfo = SessionUtil.getSessionSawon();
+		
+		try {
+			Map<String, Object> m = new HashMap<>();
+			m.put("searchYear", Integer.parseInt(searchYear));
+			m.put("searchMonth", Integer.parseInt(searchMonth));
+			
+			String gubun = myInfo.getPositionGubun();
+			
+			if("1".equals(gubun) || "2".equals(gubun)) {
+				m.put("sawonCode", Integer.parseInt(sawonCode));
+			}
+			/*else if("Y".equals(myInfo.getSawonTeamLeader())) {
+				m.put("sawonCode", sawonCode);
+				m.put("leader", "Y");
+				m.put("teamCode", myInfo.getSawonTeam());
+				m.put("department", myInfo.getSawonDepartment());
+			}*/
+			else if(myInfo.getSawonCode().equals(sawonCode)) {
+				m.put("sawonCode", Integer.parseInt(sawonCode));
+			}
+			else {
+				throw new Exception("조회할수 없습니다.");
+			}
+			
+			List<Map<String, String>> history = sawonService.getSawonOverworkHistory(m);
+			vo.setSuccess(true);
+			if(history != null)
+				vo.setDatas(history);
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
+		
+		return vo;
+	}
 }

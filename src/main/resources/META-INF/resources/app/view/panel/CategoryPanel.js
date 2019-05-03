@@ -42,6 +42,8 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
 			 text: '통계', expand: true, iconCls : 'tree-expand', id: 'path-statistics'
 			,children : [{
 				text: '야근', leaf : true, cate : 'statistics', id : 'statistics-overwork', iconCls: 'icon-bars-chart'
+			}, {
+				text: '야근내역', leaf : true, cate : 'statistics', id : 'statistics-overwork-history', iconCls: 'icon-overwork-history'
 			}]
     	});
     	

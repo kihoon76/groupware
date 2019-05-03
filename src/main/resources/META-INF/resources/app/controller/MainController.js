@@ -8,7 +8,8 @@ Ext.define('Drpnd.controller.MainController', {
 	     'panel.ProjectPanel', 
 	     'panel.InnerViewportPanel',
 	     'panel.NormalDocsGridPanel',
-	     'panel.VacationHistoryPanel'
+	     'panel.VacationHistoryPanel',
+	     'panel.OverworkHistoryPanel'
 	],
 	onLaunch : function() {
 		this.addContentTabPanel(
@@ -55,6 +56,11 @@ Ext.define('Drpnd.controller.MainController', {
 				case 'statistics-overwork' :
 					this.addContentTabPanel(recObj.id, recObj.text, {
 						xtype: 'overworkpanel',
+					});
+					break;
+				case 'statistics-overwork-history' :
+					this.addContentTabPanel(recObj.id, recObj.text, {
+						xtype: 'overworkhistorypanel',
 					});
 					break;
 				default :
