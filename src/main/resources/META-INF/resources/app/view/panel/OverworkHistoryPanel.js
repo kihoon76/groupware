@@ -14,19 +14,25 @@ Ext.define('Drpnd.view.panel.OverworkHistoryPanel', {
 		var comboSel = null;
 		var comboMonth = null;
 		var selectedSawonCode = null;
+		var total = 0;
 		
 		try {
 			var sawonStore = Ext.create('Drpnd.store.SawonListStore');
 			var historyStore = Ext.create('Drpnd.store.OverworkHistoryListStore');
 			historyStore.on('load', function(t, r, s) {
-				console.log(s)
 				if(!s) {
 					t.removeAll();
 				}
 				else {
-					
+					t.add({
+						overworkDate: '', 
+						startDate: '', 
+						endDate: '', 
+						fromSix: '', 
+						overworkYoil: '', 
+						overworkTime: -1000
+					});
 				}
-			
 			})
 		}
 		catch(e) {
@@ -192,13 +198,34 @@ Ext.define('Drpnd.view.panel.OverworkHistoryPanel', {
 	    			}, {
 	    				text: '야근시간',
 	    				dataIndex: 'overworkTime',
-	    				flex: 0,
+	    				flex: 1,
 	    				renderer: function(v) {
-	    					if(v) {
-	    						return v + '분';
+	    					var s = '';
+	    					if(v && !isNaN(v)) {
+	    						if(v == -1000) {
+	    							s = '<span style="color:#f00;">총 야근시간: ' + total + '분</span>';
+	    							total = 0;
+	    						}
+	    						else {
+	    						
+		    						v = parseInt(v);
+		    						total += v;
+		    						if(v >= 60) {
+		    							s = parseInt(v/60) + '시간';
+		    							if(v%60 != 0) {
+		    								s += (v%60) + '분';
+		    							}
+		    							s += '(' + v + '분)';
+		    						}
+		    						else {
+		    							s = v + '분';
+		    						}
+
+	    						}
+	    						
 	    					}
 	    					
-	    					return v;
+	    					return s;
 	    				}
 	    			}],
 	            	listeners: {
