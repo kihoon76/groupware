@@ -150,19 +150,23 @@ Ext.define('Drpnd.view.panel.OverworkHistoryPanel', {
 	    			columns: [{
 	    				text: '야근기준일자',
 	    				dataIndex: 'overworkDate',
-	    				flex: 0
+	    				flex: 0,
+	    				align: 'center'
 	    			}, {
 	    				text: '출근시간',
 	    				dataIndex: 'startDate',
-	    				flex: 1
+	    				flex: 1,
+	    				align: 'center'
 	    			}, {
 	    				text: '퇴근시간',
 	    				dataIndex: 'endDate',
-	    				flex: 1
+	    				flex: 1,
+	    				align: 'center'
 	    			}, {
 	    				text: '야근요일',
 	    				dataIndex: 'overworkYoil',
 	    				flex: 0,
+	    				align: 'center',
 	    				renderer: function(v) {
 	    					var s = '';
 	    					switch(v) {
@@ -195,7 +199,8 @@ Ext.define('Drpnd.view.panel.OverworkHistoryPanel', {
 	    			}, {
 	    				text: '야근6시부터',
 	    				dataIndex: 'fromSix',
-	    				flex: 0
+	    				flex: 0,
+	    				align: 'center'
 	    			}, {
 	    				text: '야근시간',
 	    				dataIndex: 'overworkTime',

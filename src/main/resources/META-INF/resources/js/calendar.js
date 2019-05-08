@@ -91,10 +91,11 @@ $(document).ready(function() {
 	}
 	
 	function getPlanDetail(event) {
-		//console.log(event)
+		var start = event.start.format();
 		var nameIdx = event.title.indexOf('_');
 		var name = event.title.substring(0, nameIdx);
-		openPlanDetailWin(name, event.description);
+		var title = event.title.substring(nameIdx + 1)
+		openPlanDetailWin(name, title, start, event.description);
 	}
 	
 	function updateGeuntae(geuntaeCode, modifyObj, details, win) {
@@ -184,13 +185,13 @@ $(document).ready(function() {
 		
 	}
 	
-	function openPlanDetailWin(title, content) {
+	function openPlanDetailWin(name, title, start, content) {
 		console.log(content)
 		var	win = parent.Ext.create('Ext.window.Window', {
-			title: '<span style="color:#0000ff">' + title + '</span>님 일정',
+			title: '<span style="color:#0000ff">' + name + '</span>님 일정 <span style="color:#0000ff">' + title + '</span>&nbsp;&nbsp;<span style="font-size:.8em;color:#060;">' + start + '</span>',
 			iconCls: 'icon-calendar',
-			height: 500, 
-			width: 500,
+			height: 300, 
+			width: 700,
 			layout: 'fit',
 			modal: true,
 			resizable: false,
@@ -484,7 +485,7 @@ $(document).ready(function() {
 	    	 modifyEvent(event);
 	     },
 	     navLinkDayClick: function(date, jsEvent) {
-	    	 console.log('yyyyy')
+	    	 //console.log('yyyyy')
 	     },
 	     viewRender: function(view) {
 	    	calMStart = view.start.format();
