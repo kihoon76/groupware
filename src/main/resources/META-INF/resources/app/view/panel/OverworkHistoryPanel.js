@@ -15,6 +15,7 @@ Ext.define('Drpnd.view.panel.OverworkHistoryPanel', {
 		var comboMonth = null;
 		var selectedSawonCode = null;
 		var total = 0;
+		var totalHour = 0;
 		
 		try {
 			var sawonStore = Ext.create('Drpnd.store.SawonListStore');
@@ -201,9 +202,13 @@ Ext.define('Drpnd.view.panel.OverworkHistoryPanel', {
 	    				flex: 1,
 	    				renderer: function(v) {
 	    					var s = '';
+	    					var h = 0;
 	    					if(v && !isNaN(v)) {
 	    						if(v == -1000) {
-	    							s = '<span style="color:#f00;">총 야근시간: ' + total + '분</span>';
+	    							s  = '<span style="color:#f00;">총 야근시간: ' + total + '분</span>';
+	    							s += '/(<span style="color:#f00;font-weight:bold;">' + totalHour + '</span>시간 | <span style="color:#f00;font-weight:bold;">' + parseInt(total/60) + '</span>시간)';
+	    							
+	    							totalHour = 0;
 	    							total = 0;
 	    						}
 	    						else {
@@ -211,7 +216,9 @@ Ext.define('Drpnd.view.panel.OverworkHistoryPanel', {
 		    						v = parseInt(v);
 		    						total += v;
 		    						if(v >= 60) {
-		    							s = parseInt(v/60) + '시간';
+		    							h = parseInt(v/60);
+		    							totalHour += h;
+		    							s = h + '시간';
 		    							if(v%60 != 0) {
 		    								s += (v%60) + '분';
 		    							}
