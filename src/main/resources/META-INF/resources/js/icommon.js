@@ -70,6 +70,7 @@ var common = (function() {
 //				  },
 //				  autoLoad : true,
 //			});
+			var isDesignAdmin = param.cate == 'C05' && param.isDesignAdmin;
 			var items = [{
 	        	fieldLabel: '제목',
 	            afterLabelTextTpl: required,
@@ -97,6 +98,24 @@ var common = (function() {
 	        	allowBlank: false,
 	        }];
 			
+			if(isDesignAdmin) {
+				items.push({
+					fieldLabel: '디자인요청자',
+					afterLabelTextTpl: required,
+					id: 'ifm-cal-design',
+					xtype: 'combobox',
+					queryMode: 'local',
+					allowBlank: false,
+			    	displayField: 'sawonName',
+			    	valueField: 'sawonCode',
+			    	editable: false,
+			    	store: parent.Ext.create('Ext.data.Store', {
+						fields : ['sawonName', 'sawonCode'],
+						data: param.extraData
+					}),
+				});
+			}
+			
 			var buttons = [];
 			
 //			if(param.cate == 'C1') {
@@ -118,11 +137,14 @@ var common = (function() {
 				    handler: function() {
 				    	var title = parent.Ext.getCmp('ifm-cal-title');
 				    	var desc = parent.Ext.getCmp('ifm-cal-desc');
+				    	var sawonCode = isDesignAdmin ? parent.Ext.getCmp('ifm-cal-design') : null;
 				    	var time = null;
 				    	//var team = parent.Ext.getCmp('ifm-cal-team');
 				    	
 				    	if(!title.validate()) return;
 				    	if(!desc.validate()) return;
+				    	if(isDesignAdmin && !sawonCode.validate()) return;
+				    	
 				    	
 //				    	if(param.cate == 'C1') {
 //				    		time = parent.Ext.getCmp('ifm-cal-time');
@@ -132,7 +154,9 @@ var common = (function() {
 				    	param.add(win, {
 				    		title: title.getValue(),
 				    		desc: desc.getValue(), 
-				    		time: time == null ? '' : time.getRawValue()
+				    		time: time == null ? '' : time.getRawValue(),
+				    		sawonCode: sawonCode == null ? '' : sawonCode.getValue(),
+				    		sawonName: sawonCode == null ? '' : sawonCode.getRawValue()	
 				    	});
 			        }
 				});
@@ -144,11 +168,13 @@ var common = (function() {
 				    handler: function() {
 				    	var title = parent.Ext.getCmp('ifm-cal-title');
 				    	var desc = parent.Ext.getCmp('ifm-cal-desc');
+				    	var sawonCode = isDesignAdmin ? parent.Ext.getCmp('ifm-cal-design') : null;
 				    	//var time = null;
 				    	//var team = parent.Ext.getCmp('ifm-cal-team');
 				    	
 				    	if(!title.validate()) return;
 				    	if(!desc.validate()) return;
+				    	if(isDesignAdmin && !sawonCode.validate()) return;
 				    	
 //				    	if(param.cate == 'C1') {
 //				    		time = parent.Ext.getCmp('ifm-cal-time');
@@ -158,6 +184,8 @@ var common = (function() {
 				    	param.modify(win, {
 				    		title: title.getValue(),
 				    		desc: desc.getValue(), 
+				    		sawonCode: sawonCode == null ? '' : sawonCode.getValue(),
+						    sawonName: sawonCode == null ? '' : sawonCode.getRawValue()
 				    		//time: time == null ? '' : time.getRawValue()
 				    	});
 			        }
@@ -207,6 +235,7 @@ var common = (function() {
 							if(param.mode == 'update') {
 								var title = parent.Ext.getCmp('ifm-cal-title');
 						    	var desc = parent.Ext.getCmp('ifm-cal-desc');
+						    	var sawonCode = isDesignAdmin ? parent.Ext.getCmp('ifm-cal-design') : null;
 						    	//var time = null;
 						    	
 //						    	if(param.cate == 'C1') {
@@ -214,6 +243,7 @@ var common = (function() {
 //						    		time.setValue(param.time);
 //						    	}
 						    	
+						    	if(sawonCode != null) sawonCode.setValue(param.sawonCode);
 						    	title.setValue(param.title);
 						    	desc.setValue(param.description);
 							}

@@ -30,6 +30,7 @@ import kr.co.drpnd.domain.Sawon;
 import kr.co.drpnd.exception.InvalidReservationTime;
 import kr.co.drpnd.exception.InvalidUser;
 import kr.co.drpnd.service.CalendarService;
+import kr.co.drpnd.service.SawonService;
 import kr.co.drpnd.type.ExceptionCode;
 import kr.co.drpnd.type.TokenKey;
 import kr.co.drpnd.util.CommonUtil;
@@ -43,6 +44,9 @@ public class CalendarController {
 
 	@Resource(name="calendarService")
 	CalendarService calendarService;
+	
+	@Resource(name="sawonService")
+	SawonService sawonService;
 	
 	@Value("${colorCfg['mine_bg_color']}")
 	String bgColor;
@@ -74,6 +78,28 @@ public class CalendarController {
 		m.put("mineBgColor", bgColor);
 		m.put("mineTxtColor", txtColor);
 		m.put("prefix", sawon.getSawonName() + "(" + sawon.getSawonId() + ")");
+		
+		if(SessionUtil.hasAuthority("ROLE_DESIGN_ADMIN")) {
+			List<Sawon> sawonList = sawonService.getMyDepartmentAllSawon(sawon.getSawonDepartment());
+			
+			if(sawonList != null && sawonList.size() > 0) {
+				
+				List<Map<String, String>> r = new ArrayList<>();
+				for(Sawon s : sawonList) {
+					if("1".equals(s.getPositionGubun()) || "2".equals(s.getPositionGubun())) continue;
+					Map<String, String> map = new HashMap<>();
+					map.put("sawonCode", s.getSawonCode());
+					map.put("sawonName", s.getSawonName() + '[' + s.getSawonId() + ']');
+					r.add(map);
+				}
+				
+				m.put("sawonList", new Gson().toJson(r));
+			}
+			
+			m.put("isDesignAdmin", "Y");
+		}
+		
+		
 		return "calendar";
 	}
 	

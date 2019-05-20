@@ -9,14 +9,14 @@ $(document).ready(function() {
 	var mineTxtColor = $('#mineTxtColor').val();
 	var prefix = $('#prefix').val();
 	var myToken = $('#_csrfToken').val();
-	var selDesign = $('#selDesign');
+	//var selDesign = $('#selDesign');
 	//var map = null;
 	
 	var eventSources = {}
 	var delEvents = [];
 	var eventElement = {};
-	
-	
+	var isDesignAdmin = $('#isDesignAdmin').val() == 'Y'; //selDesign.get(0) ? true : false;
+	var designExtraData = $('#sawonList').val() ? $.parseJSON($('#sawonList').val()) : {};
 	
 	var Socket = parent.Ext.create('Drpnd.custom.Socket', {
 		socketUrl: '/websocket',
@@ -97,6 +97,25 @@ $(document).ready(function() {
 		var name = event.title.substring(0, nameIdx);
 		var title = event.title.substring(nameIdx + 1)
 		openPlanDetailWin(name, title, start, event.description);
+	}
+	
+	function getDesignDetail(event) {
+		/*common.ajaxExt({
+    		url: '/geuntae/detail/' + event.id,
+    		method: 'GET',
+    		loadmask: {
+    			msg: '정보로딩중...'
+    		},
+			success: function(jo) {
+				//console.log(jo);
+				if(jo.success) {
+					if(jo.datas.length > 0) {
+						var details = jo.datas[0];
+						openGeuntaeWin(event, details);
+					}
+				}
+			}
+    	});*/
 	}
 	
 	function updateGeuntae(geuntaeCode, modifyObj, details, win) {
@@ -422,12 +441,12 @@ $(document).ready(function() {
 	     },
 	     eventClick: function(calEvent, jsEvent, view) {
 	    	 //console.log(calEvent.end.format());
-	    	 
+	    	 console.log(calEvent)
 	    	 common.checkSession(function() {
 	    		 if(calEvent.cate == 'C01') {
 		    		 getGeuntaeDetail(calEvent);
 		    	 }
-		    	 else if(calEvent.cate == 'C02' || calEvent.cate == 'C03'){
+		    	 else if(calEvent.cate == 'C02' || calEvent.cate == 'C03' || calEvent.cate == 'C05'){
 		    		 if(calEvent.editable) {
 			    		 var sDate = calEvent.start.format();
 				    	 var eDate = calEvent.end.format();
@@ -443,10 +462,21 @@ $(document).ready(function() {
 				    		 end: eDate,
 				    		 cate: category,
 				    		 title: title,
+				    		 isDesignAdmin: isDesignAdmin,
+				    		 extraData: isDesignAdmin ? designExtraData : {},
 				    		 description: calEvent.description,
+				    		 sawonCode: calEvent.sawonCode,
 				    		 time: time,
 			    			 modify: function(win, winData) {
-			    				 var title = prefix + '_' + winData.title;
+			    				 
+			    				 if(category == 'C05' && isDesignAdmin) {
+				    				 title = winData.sawonName + '_' + winData.title;
+				    				 calEvent.sawonCode = winData.sawonCode;
+				    			 }
+			    				 else {
+			    					 title = prefix + '_' + winData.title; 
+			    				 }
+			    				 
 			    				 calEvent.title = title;
 			    				 calEvent.description = winData.desc;
 				    			
@@ -458,6 +488,7 @@ $(document).ready(function() {
 			    				 if(calEvent.isDb) {
 			    					 delEvents.push({
 			    	    				 id: calEvent.id,
+			    	    				 cate: calEvent.cate,
 			    	    				 isDelete: true
 			    					 }); 
 			    					 
@@ -474,6 +505,9 @@ $(document).ready(function() {
 		    		 }
 		    		 else if(calEvent.cate == 'C02') {
 		    			 //getVacationDetail(calEvent); 
+		    		 }
+		    		 else if(calEvent.cate == 'C05') {
+		    			 getDesignDetail(calEvent);
 		    		 }
 		    	 } 
 	    	 });
@@ -525,9 +559,21 @@ $(document).ready(function() {
 		    		 start: sDate,
 		    		 end: eDate,
 		    		 cate: category,
+		    		 isDesignAdmin: isDesignAdmin,
+		    		 extraData: isDesignAdmin ? designExtraData : {},
 		    		 add: function(win, winData) {
-		    			 console.log(winData);
-		    			 var title = (category == 'C1') ? winData.title + '(' + winData.time + ')' : prefix + '_' + winData.title;
+		    			 //console.log(winData);
+		    			 var title = ''; //(category == 'C1') ? winData.title + '(' + winData.time + ')' : prefix + '_' + winData.title;
+		    			 
+		    			 if(category == 'C1') {
+		    				 title = winData.title + '(' + winData.time + ')'; 
+		    			 }
+		    			 else if(category == 'C05' && isDesignAdmin) {
+		    				 title = winData.sawonName + '_' + winData.title;
+		    			 }
+		    			 else {
+		    				 title = prefix + '_' + winData.title 
+		    			 }
 		    			 
 		    			 var event = {
 		    				 title: title,
@@ -539,6 +585,10 @@ $(document).ready(function() {
 		    				 editable: true,
 		    				 isNew: true,
 		    				 description: winData.desc
+		    			 }
+		    			 
+		    			 if(category == 'C05' && isDesignAdmin) {
+		    				 event.sawonCode = winData.sawonCode;
 		    			 }
 		    			
 		    			 addEvent(event);
@@ -570,16 +620,16 @@ $(document).ready(function() {
 		select: function(event, ui) {
 			category = ui.item.value;
 			
-			if('C05' == category) {
-				if(selDesign.get(0)) {
+			/*if('C05' == category) {
+				if(isDesignAdmin) {
 					$('#selDesign').next('.ui-selectmenu-button').show();
 				}
 			}
 			else {
-				if(selDesign.get(0)) {
+				if(isDesignAdmin) {
 					$('#selDesign').next('.ui-selectmenu-button').hide();
 				}
-			}
+			}*/
 			
 			common.checkSession(function() {
 				window.location.href = '/calendar/view?dftCate=' + category;
@@ -591,8 +641,8 @@ $(document).ready(function() {
 	
 	
 	
-	(function() {
-		if(selDesign.get(0)) {
+	/*(function() {
+		if(isDesignAdmin) {
 			$('#selDesign').selectmenu({
 				width: '150'
 			});
@@ -602,10 +652,10 @@ $(document).ready(function() {
 			}
 		}
 	}());
-	
+	*/
 	
 	function save(successFn) {
-		
+		var reqDesignSawon = '0';
 		if($('#selCate').val() == 'C01') return;
 		
 		common.ajaxExt({
@@ -706,6 +756,8 @@ $(document).ready(function() {
 				eventArr[i].end = changeEndDate;
 				eventArr[i].title = event.title;
 				eventArr[i].description = event.description;
+				
+				eventArr[i].sawonCode = event.sawonCode;
 				
 				if(!eventArr[i].isNew) {
 					eventArr[i].isModify = true;

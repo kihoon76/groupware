@@ -57,7 +57,7 @@ public class CalendarService {
 				
 				//prefix 제거
 				cal.setTitle(cal.getTitle().substring(cal.getTitle().indexOf("_") + 1));
-				addL.add(cal);
+				if(cal.getCate() != null) addL.add(cal);
 			}
 			else if(cal.isModify()) { //수정된 것
 				if(modL == null) {
@@ -65,22 +65,25 @@ public class CalendarService {
 				}
 				
 				cal.setTitle(cal.getTitle().substring(cal.getTitle().indexOf("_") + 1));
-				modL.add(cal);
+				
+				if(cal.getCate() != null) modL.add(cal);
 			}
 			else if(cal.isDelete()) {
 				if(delL == null) {
 					delL = new ArrayList<CalendarEvent>();
 				}
 				
-				delL.add(cal);
+				if(cal.getCate() != null) delL.add(cal);
 			}
 		}
 		
 		if(addL != null) {
 			Map<String, Object> m = new HashMap<String, Object>();
+			
 			m.put("code", sawonCode);
 			m.put("list", addL);
 			m.put("cate", addL.get(0).getCate());
+			m.put("isDesigner", SessionUtil.hasAuthority("ROLE_DESIGN_ADMIN") ? "Y":"N");
 			calendarDao.insertCalendarEvents(m);
 		}
 		
@@ -91,14 +94,17 @@ public class CalendarService {
 			m.put("cate", modL.get(0).getCate());
 			
 			//C05 디자인일정에서 디자이너 권한을 받은 사원은 모든사원이 작성한 일정을 수정할수 있다.
-			m.put("isDesigner", SessionUtil.hasAuthority("ROLE_DESIGN") ? "Y":"N");
+			//m.put("isDesigner", SessionUtil.hasAnyAuthority("ROLE_DESIGN", "ROLE_DESIGN_ADMIN") ? "Y":"N");
+			m.put("isDesigner", SessionUtil.hasAuthority("ROLE_DESIGN_ADMIN") ? "Y":"N");
 			calendarDao.updateCalendarEvents(m);
 		}
 		
 		if(delL != null) {
 			Map<String, Object> m = new HashMap<String, Object>();
 			m.put("code", sawonCode);
+			m.put("cate", delL.get(0).getCate());
 			m.put("list", delL);
+			m.put("isDesigner", SessionUtil.hasAuthority("ROLE_DESIGN_ADMIN") ? "Y":"N");
 			calendarDao.deleteCalendarEvents(m);
 		}
 	}
@@ -158,9 +164,11 @@ public class CalendarService {
 							map.put("editable", true);
 						}
 						else {
-							System.err.println("role_design:" + SessionUtil.hasAuthority("ROLE_DESIGN"));
-							map.put("editable", (SessionUtil.hasAuthority("ROLE_DESIGN") ? true : false));
+							//map.put("editable", (SessionUtil.hasAnyAuthority("ROLE_DESIGN", "ROLE_DESIGN_ADMIN") ? true : false));
+							map.put("editable", (SessionUtil.hasAuthority("ROLE_DESIGN_ADMIN") ? true : false));
 						}
+						
+						map.put("sawonCode", cal.getSawonCode());
 					}
 					else {
 						map.put("editable", ("Y".equals(cal.getMine()) ? true : false));

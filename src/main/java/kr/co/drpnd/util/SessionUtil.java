@@ -35,4 +35,14 @@ public class SessionUtil {
 		
 		return false;
 	}
+	
+	public static boolean hasAnyAuthority(String... searchAuths) {
+		int authCnt = searchAuths.length;
+		
+		for(int i=0; i<authCnt; i++) {
+			if(hasAuthority(searchAuths[i])) return true; 
+		}
+		
+		return false;
+	}
 }

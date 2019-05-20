@@ -28,20 +28,20 @@
 			</c:forEach>
 		</select> <b>(★ 반드시 저장을 하셔야 등록됩니다 - 단, 근태현황 제외임)</b>
 	</div>
-	<sec:authorize access="hasRole('ROLE_DESIGN')">
-	<div class="calendar-sel">
-<%-- 		<select id="selDesign" <c:choose><c:when test="${defaultCate eq 'C05'}">style="display:;"</c:when><c:otherwise>style="display:none;"</c:otherwise></c:choose>> --%>
-<%-- 			<c:forEach var="cate" items="${category}"> --%>
-<%-- 			<option value="${cate.code}" <c:if test="${cate.code eq dftCate}">selected</c:if>>${cate.name}</option> --%>
+<%-- 	<sec:authorize access="hasRole('ROLE_DESIGN_ADMIN')"> --%>
+<!-- 	<div class="calendar-sel"> -->
+<!-- 		<select id="selDesign" style="display:none;"> -->
+<%-- 			<c:forEach items="${sawonList}" var="sawon"> --%>
+<%-- 			<option value="<c:out value='${sawon.sawonCode}' />"><c:out value="${sawon.sawonName}" /></option> --%>
 <%-- 			</c:forEach> --%>
-		<select id="selDesign" style="display:none;">
-			<option value="">sample</option>
-		</select>
-	</div>
-	</sec:authorize>
+<!-- 		</select> -->
+<!-- 	</div> -->
+<%-- 	</sec:authorize> --%>
 	<div id="calendar"></div>
 	<input type="hidden" id="mineBgColor" value="<c:out value='${mineBgColor}'/>" />
 	<input type="hidden" id="mineTxtColor" value="<c:out value='${mineTxtColor}'/>" />
 	<input type="hidden" id="prefix" value="<c:out value='${prefix}'/>" />
 	<input type="hidden" id="_csrfToken" value="${_csrfToken}" />
+	<input type="hidden" id="isDesignAdmin" value="${isDesignAdmin}" />
+	<input type="hidden" id="sawonList" value='${sawonList}' />
 </body>

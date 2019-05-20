@@ -5,11 +5,22 @@
 	<insert id="insertCalendarEvents" parameterType="map">
 		<choose>
 		<when test="cate == 'C05'">
+			<choose>
+			<when test='isDesigner == "Y"'>
+		insert into [동림].[dbo].[디자인일정](제목, 시작일, 종료일, 작업요청자, 카테고리월, 작업내용, 수정이전시작일, 수정이전종료일)
+		values
+		<foreach collection="list" item="event" separator=" , ">
+		(#{event.title}, #{event.start}, #{event.end}, #{event.sawonCode}, #{event.cateMonth}, #{event.description}, #{event.start}, #{event.end})
+		</foreach>	
+			</when>
+			<otherwise>
 		insert into [동림].[dbo].[디자인일정](제목, 시작일, 종료일, 작업요청자, 카테고리월, 작업내용, 수정이전시작일, 수정이전종료일)
 		values
 		<foreach collection="list" item="event" separator=" , ">
 		(#{event.title}, #{event.start}, #{event.end}, #{code}, #{event.cateMonth}, #{event.description}, #{event.start}, #{event.end})
 		</foreach>
+			</otherwise>
+			</choose>
 		</when>
 		<otherwise>
 		insert into [동림].[dbo].[캘린더](카테고리코드, 제목, 시작일, 종료일, 사원코드, 카테고리월, 상세)
@@ -35,6 +46,7 @@
 		<result column="비고"			property="bigo"		javaType="string"/>
 		<result column="결재완료"		property="confirm"		javaType="string"/>
 		<result column="myevent"	property="mine"	javaType="string"/>
+		<result column="사원코드"		property="sawonCode" javaType="string"/>
 	</resultMap>
 	
 	<resultMap id="RM_CalendarCate" type="CalendarCategory">
@@ -86,6 +98,7 @@
 			   case when T1.작업요청자 = #{sawonCode} then 'Y'
 			   		else 'N'
 			   end as myevent,
+			   T1.작업요청자  as 사원코드, 
 			   isnull(T3.바탕색, '#996600') as 바탕색,
 			   isnull(T3.글자색, '#ffffff') as 글자색,
 			   isnull(T3.테두리색, '#996600') as 테두리색
@@ -135,6 +148,7 @@
 		   	        시작일 = #{event.start},
 		   	        종료일 = #{event.end},
 		   	        제목 = #{event.title},
+		   	        작업요청자 = #{event.sawonCode},
 		   	        수정자 = #{code},
 		   	        작업내용 = #{event.description}
 		 where 일련번호 = #{event.id}
@@ -151,18 +165,47 @@
 		   	       제목 = #{event.title},
 		   	       상세 = #{event.description}
 		 where 일련번호 = #{event.id}
+		   and 사원코드 = #{code}
+		   and 카테고리코드 = #{cate}
 		</foreach>	
 		</otherwise>
 		</choose>
 	</update>
 	
 	<delete id="deleteCalendarEvents" parameterType="map">
+		<choose>
+		<when test="cate == 'C05'">
+			<choose>
+			<when test='isDesigner == "Y"'>
+		delete 
+		  from [동림].[dbo].[디자인일정]
+		 where 일련번호 in 
+		<foreach collection="list" item="event" open="(" close=")" separator=",">
+		 #{event.id}		  
+		</foreach>
+			</when>
+			<otherwise>
+		delete 
+		  from [동림].[dbo].[디자인일정]
+		 where 일련번호 in 
+		<foreach collection="list" item="event" open="(" close=")" separator=",">
+		 #{event.id}		  
+		</foreach>
+		   and 작업요청자 = #{code}
+			</otherwise>
+			</choose>
+		</when>
+		<otherwise>
 		delete 
 		  from [동림].[dbo].[캘린더]
 		 where 일련번호 in 
 		<foreach collection="list" item="event" open="(" close=")" separator=",">
 		 #{event.id}		  
 		</foreach>
+		   and 사원코드 = #{code}
+		   and 카테고리코드 = #{cate}
+		</otherwise>
+		</choose>
 	</delete>
 	
 	<insert id="insertConferenceReservation" parameterType="ConferenceReservation">
