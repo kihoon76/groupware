@@ -132,7 +132,5 @@ $(document).ready(function() {
 		parentNodeSymbol: '',
 		nodeTemplate: nodeTemplate,
 		toggleSiblingsResp: false,
-		//verticalDepth:3,
-		depth:1
 	});
 });
