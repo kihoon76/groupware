@@ -3,11 +3,22 @@
 <mapper namespace="mappers.calendarMapper">
 	
 	<insert id="insertCalendarEvents" parameterType="map">
+		<choose>
+		<when test="cate == 'C05'">
+		insert into [동림].[dbo].[디자인일정](제목, 시작일, 종료일, 작업요청자, 카테고리월, 작업내용, 수정이전시작일, 수정이전종료일)
+		values
+		<foreach collection="list" item="event" separator=" , ">
+		(#{event.title}, #{event.start}, #{event.end}, #{code}, #{event.cateMonth}, #{event.description}, #{event.start}, #{event.end})
+		</foreach>
+		</when>
+		<otherwise>
 		insert into [동림].[dbo].[캘린더](카테고리코드, 제목, 시작일, 종료일, 사원코드, 카테고리월, 상세)
 		values
 		<foreach collection="list" item="event" separator=" , ">
 		(#{event.cate}, #{event.title}, #{event.start}, #{event.end}, #{code}, #{event.cateMonth}, #{event.description})
 		</foreach>
+		</otherwise>
+		</choose>
 	</insert> 
 	
 	<resultMap id="RM_CalendarData" type="CalendarEvent">
@@ -70,6 +81,21 @@
 		   and ((시작일 >= #{startDate} and 시작일 <![CDATA[<]]> #{endDate})
 		    or 상시표시 = 'Y') 
 		</when>
+		<when test="cate == 'C05'">
+		select concat('[', T2.사원명, ']_', 제목) 제목, 시작일, 종료일, 카테고리월, 'C05' as 카테고리코드, 일련번호, 작업내용 as 상세,
+			   case when T1.작업요청자 = #{sawonCode} then 'Y'
+			   		else 'N'
+			   end as myevent,
+			   isnull(T3.바탕색, '#996600') as 바탕색,
+			   isnull(T3.글자색, '#ffffff') as 글자색,
+			   isnull(T3.테두리색, '#996600') as 테두리색
+		  from [동림].[dbo].[디자인일정] T1
+		 inner join [동림].[dbo].[사원] T2
+		    on T1.작업요청자 = T2.사원코드
+		  left outer join [동림].[dbo].[팀] T3
+		    on T2.팀코드 = T3.팀코드
+		 where 시작일 >= #{startDate} and 시작일 <![CDATA[<]]> #{endDate}
+		</when>
 		<otherwise>
 <!-- 		select concat(T2.사원명, '(', T2.사원아이디, ')_', 제목) 제목, 시작일, 종료일, 카테고리월, 카테고리코드, 일련번호, 상세, -->
 		select concat('[', T2.사원명, ']_', 제목) 제목, 시작일, 종료일, 카테고리월, 카테고리코드, 일련번호, 상세,
@@ -99,6 +125,25 @@
 	</select>
 	
 	<update id="updateCalendarEvents" parameterType="map">
+		<choose>
+		<when test="cate == 'C05'">
+		<foreach collection="list" item="event" separator=";">
+		update [동림].[dbo].[디자인일정]
+		   set 수정이전시작일 = 시작일,
+		   	        수정이전종료일 = 종료일,
+		   	        수정횟수 = 수정횟수 + 1,
+		   	        시작일 = #{event.start},
+		   	        종료일 = #{event.end},
+		   	        제목 = #{event.title},
+		   	        수정자 = #{code},
+		   	        작업내용 = #{event.description}
+		 where 일련번호 = #{event.id}
+		 <if test='isDesigner == "N"'>
+		   and 작업요청자 = #{code}
+		 </if>
+		</foreach>	
+		</when>
+		<otherwise>
 		<foreach collection="list" item="event" separator=";">
 		update [동림].[dbo].[캘린더]
 		   set 시작일 = #{event.start},
@@ -107,6 +152,8 @@
 		   	       상세 = #{event.description}
 		 where 일련번호 = #{event.id}
 		</foreach>	
+		</otherwise>
+		</choose>
 	</update>
 	
 	<delete id="deleteCalendarEvents" parameterType="map">

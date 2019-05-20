@@ -66,7 +66,8 @@ $(document).ready(function() {
 		    	  }]   
 		       }]	
 		    },
-		    {position: '실장', name: '박화숙', 'relationship': '110', team: 'imwon', leader: 'N'}
+		    {position: '실장', name: '박화숙', 'relationship': '110', team: 'imwon', leader: 'N'},
+		    {position: '주임', name: '김정아', 'relationship': '110', team: 'design', leader: 'Y'},
 		  ],
 	};
 	
@@ -110,6 +111,9 @@ $(document).ready(function() {
 		case 'ebiz':
 			t = 'e-biz팀';
 			break;
+		case 'design':
+			t = '디자인팀';
+			break;
 		default :
 			t = '';
 			break;
@@ -120,11 +124,11 @@ $(document).ready(function() {
 	}
 	
 	$('#chart-container').orgchart({
-		  data : datascource,
-		  nodeTitle: 'position',
-		  nodeContent: 'name',
-		  parentNodeSymbol: '',
-		  nodeTemplate: nodeTemplate,
-		  toggleSiblingsResp: false
-		});
+		data : datascource,
+		nodeTitle: 'position',
+		nodeContent: 'name',
+		parentNodeSymbol: '',
+		nodeTemplate: nodeTemplate,
+		toggleSiblingsResp: false
+	});
 });

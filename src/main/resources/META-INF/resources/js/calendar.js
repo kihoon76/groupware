@@ -9,6 +9,7 @@ $(document).ready(function() {
 	var mineTxtColor = $('#mineTxtColor').val();
 	var prefix = $('#prefix').val();
 	var myToken = $('#_csrfToken').val();
+	var selDesign = $('#selDesign');
 	//var map = null;
 	
 	var eventSources = {}
@@ -186,7 +187,6 @@ $(document).ready(function() {
 	}
 	
 	function openPlanDetailWin(name, title, start, content) {
-		console.log(content)
 		var	win = parent.Ext.create('Ext.window.Window', {
 			title: '<span style="color:#0000ff">' + name + '</span>님 일정 <span style="color:#0000ff">' + title + '</span>&nbsp;&nbsp;<span style="font-size:.8em;color:#060;">' + start + '</span>',
 			iconCls: 'icon-calendar',
@@ -383,6 +383,8 @@ $(document).ready(function() {
 			 cSave: {
 				 text: '저장',
 				 click: function() {
+					 if($('#selCate').val() == 'C01') return;
+					 
 					 common.showExtMsg({
 						 type: 'confirm',
 						 msg: '저장하시겠습니까?',
@@ -568,6 +570,17 @@ $(document).ready(function() {
 		select: function(event, ui) {
 			category = ui.item.value;
 			
+			if('C05' == category) {
+				if(selDesign.get(0)) {
+					$('#selDesign').next('.ui-selectmenu-button').show();
+				}
+			}
+			else {
+				if(selDesign.get(0)) {
+					$('#selDesign').next('.ui-selectmenu-button').hide();
+				}
+			}
+			
 			common.checkSession(function() {
 				window.location.href = '/calendar/view?dftCate=' + category;
 			});
@@ -576,7 +589,25 @@ $(document).ready(function() {
 		
 	});
 	
+	
+	
+	(function() {
+		if(selDesign.get(0)) {
+			$('#selDesign').selectmenu({
+				width: '150'
+			});
+			
+			if(category != 'C05') {
+				$('#selDesign').next('.ui-selectmenu-button').hide();
+			}
+		}
+	}());
+	
+	
 	function save(successFn) {
+		
+		if($('#selCate').val() == 'C01') return;
+		
 		common.ajaxExt({
     		url: '/calendar/save',
     		headers: { 'Content-Type': 'application/json' }, 
@@ -703,6 +734,8 @@ $(document).ready(function() {
 		
 		$('#calendar').fullCalendar('addEventSource', eventSources[cate]);
 	}
+	
+	
 	
 	//받은 날짜값을 date 형태로 형변환 해주어야 한다.
 //	function convertDate(date) {

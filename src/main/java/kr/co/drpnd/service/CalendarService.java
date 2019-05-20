@@ -80,6 +80,7 @@ public class CalendarService {
 			Map<String, Object> m = new HashMap<String, Object>();
 			m.put("code", sawonCode);
 			m.put("list", addL);
+			m.put("cate", addL.get(0).getCate());
 			calendarDao.insertCalendarEvents(m);
 		}
 		
@@ -87,6 +88,10 @@ public class CalendarService {
 			Map<String, Object> m = new HashMap<String, Object>();
 			m.put("code", sawonCode);
 			m.put("list", modL);
+			m.put("cate", modL.get(0).getCate());
+			
+			//C05 디자인일정에서 디자이너 권한을 받은 사원은 모든사원이 작성한 일정을 수정할수 있다.
+			m.put("isDesigner", SessionUtil.hasAuthority("ROLE_DESIGN") ? "Y":"N");
 			calendarDao.updateCalendarEvents(m);
 		}
 		
@@ -146,6 +151,15 @@ public class CalendarService {
 						else {
 							map.put("editable", ("Y".equals(cal.getMine()) ? true : false));
 							map.put("confirm", "N");
+						}
+					}
+					else if("C05".equals(param.get("cate"))) {
+						if("Y".equals(cal.getMine())) {
+							map.put("editable", true);
+						}
+						else {
+							System.err.println("role_design:" + SessionUtil.hasAuthority("ROLE_DESIGN"));
+							map.put("editable", (SessionUtil.hasAuthority("ROLE_DESIGN") ? true : false));
 						}
 					}
 					else {

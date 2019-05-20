@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import kr.co.drpnd.domain.Authority;
 import kr.co.drpnd.domain.Sawon;
 
 public class SessionUtil {
@@ -23,5 +24,15 @@ public class SessionUtil {
 	
 	public static String createToken() {
 		return UUID.randomUUID().toString().toLowerCase().replace("-", "");
+	}
+	
+	public static boolean hasAuthority(String searchAuth) {
+		Sawon sawon = getSessionSawon();
+		
+		for(Authority auth: sawon.getAuthorities()) {
+			if(searchAuth.equals(auth.getAuthName())) return true;
+		}
+		
+		return false;
 	}
 }
