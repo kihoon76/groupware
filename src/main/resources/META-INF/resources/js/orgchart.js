@@ -67,7 +67,9 @@ $(document).ready(function() {
 		       }]	
 		    },
 		    {position: '실장', name: '박화숙', 'relationship': '110', team: 'imwon', leader: 'N'},
-		    {position: '주임', name: '김정아', 'relationship': '110', team: 'design', leader: 'Y'},
+		    {position: '', name: ' ', relationship: '110', team: 'imwon', leader: 'N',
+		    	children: [{position: '주임', name: '김정아', 'relationship': '101', team: 'design', leader: 'Y'}]	
+			}
 		  ],
 	};
 	
@@ -129,6 +131,8 @@ $(document).ready(function() {
 		nodeContent: 'name',
 		parentNodeSymbol: '',
 		nodeTemplate: nodeTemplate,
-		toggleSiblingsResp: false
+		toggleSiblingsResp: false,
+		//verticalDepth:3,
+		depth:1
 	});
 });
