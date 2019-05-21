@@ -344,6 +344,7 @@ $(document).ready(function() {
 		        defaultType: 'textfield',
 		        items: [{
 		        	fieldLabel: '팀명',
+		        	fieldStyle: 'background-color:' + details.teamBgcolor + ';color:' + details.teamTextColor + ';background-image:none;',
 		            value: details.teamName,
 		            readOnly: true
 		        }, {

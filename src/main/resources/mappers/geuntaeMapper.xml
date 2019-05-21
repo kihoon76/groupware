@@ -124,6 +124,8 @@
 		<result column="야근6시부터" property="startFrom6" javaType="string"/>
 		<result column="위도" property="lat" javaType="float"/>
 		<result column="경도" property="lng" javaType="float"/>
+		<result column="팀바탕색" property="teamBgcolor" javaType="string" />
+		<result column="팀글자색" property="teamTextColor" javaType="string" />
 	</resultMap>
 	
 	<update id="updateGeuntae" parameterType="map">
