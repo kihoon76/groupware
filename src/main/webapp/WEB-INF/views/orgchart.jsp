@@ -29,8 +29,8 @@
 	  .ebiz {background-color:#828282; color:#ffffff;}
 	  .ebiz_title {background-color:#828282; color:#ffffff; margin-bottom:10px;}
 	  .imwon {background-color:#996600; color:#ffffff;}
-	  .design {background-color:#993300; color:#ffffff;}
-	  .design_title {background-color:#993300; color:#ffffff; margin-bottom:10px;}
+	  .design {background-color:#33cccc; color:#000000;}
+	  .design_title {background-color:#33cccc; color:#000000; margin-bottom:10px;}
 	  </style>
 </head>
 <body>
