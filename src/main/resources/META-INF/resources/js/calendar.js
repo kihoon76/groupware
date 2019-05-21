@@ -100,22 +100,22 @@ $(document).ready(function() {
 	}
 	
 	function getDesignDetail(event) {
-		/*common.ajaxExt({
-    		url: '/geuntae/detail/' + event.id,
+		common.ajaxExt({
+    		url: '/design/detail/' + event.id,
     		method: 'GET',
     		loadmask: {
-    			msg: '정보로딩중...'
+    			msg: '일정로딩중...'
     		},
 			success: function(jo) {
-				//console.log(jo);
+				console.log(jo);
 				if(jo.success) {
 					if(jo.datas.length > 0) {
 						var details = jo.datas[0];
-						openGeuntaeWin(event, details);
+						openDesignWin(event, details);
 					}
 				}
 			}
-    	});*/
+    	});
 	}
 	
 	function updateGeuntae(geuntaeCode, modifyObj, details, win) {
@@ -229,6 +229,72 @@ $(document).ready(function() {
 			    	win.close();
 		        }
 			}],
+		});
+		
+		win.show();
+	}
+	
+	function openDesignWin(event, details) {
+		var buttons = [{
+			text: '닫기',
+			iconCls: 'icon-close',
+		    handler: function() {
+		    	win.close();
+	        }
+		}];
+		
+		var	win = parent.Ext.create('Ext.window.Window', {
+			title: '디자인요청 (' + details.reqSawonName + ')',
+			iconCls: 'icon-calendar',
+			height: 500, 
+			width: 500,
+			layout: 'fit',
+			modal: true,
+			resizable: false,
+			closeAction: 'destroy',
+			items: [{
+				xtype: 'form',
+				bodyStyle  : 'padding: 10px;',
+		        margins    : '0 0 0 3',
+		        fieldDefaults: {
+		            msgTarget: 'side',
+		            labelWidth: 95,
+		            anchor: '100%'
+		        },
+		        defaultType: 'textfield',
+		        items: [{
+		        	fieldLabel: '팀명',
+		        	id: 'ttt',
+		        	fieldStyle: 'background-color:' + details.teamBgcolor + ';color:' + details.teamTextColor + ';background-image:none;',
+		            value: details.reqSawonTeamName,
+		            readOnly: true
+		        }, {
+		        	fieldLabel: '디자인요청자',
+		            value: details.reqSawonName,
+		            readOnly: true
+		        }, {
+		        	fieldLabel: '디자인 작업기간',
+		            value: details.startDate + ' ~ ' + details.endDate,
+		            readOnly: true
+		        }, {
+		        	fieldLabel: '요청내용',
+		        	xtype: 'textarea',
+		        	height: 300,
+		            value: details.content,
+		            readOnly: true,
+		            listeners: {
+		            	afterrender: function(txtArea) {
+		            		
+		            	}
+		            }
+		        }],
+			}],
+			buttons: buttons,
+			listeners: {
+				afterrender: function(w) {
+					
+				}
+			}
 		});
 		
 		win.show();

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mappers.designMapper">
+	
+	<select id="selectDesignDetail" parameterType="map" resultType="Design">
+	select 일련번호 id,
+		        제목 title,
+		        시작일 startDate,
+		   convert(char(10),dateadd(day, -1, 종료일),23) endDate,
+		        작업요청자  reqSawonCode,
+		   T2.사원명 reqSawonName,
+		   T3.팀코드 reqSawonTeamCode,
+		   T3.팀명 reqSawonTeamName,
+		   T1.작업내용 content,
+		   T3.바탕색 teamBgcolor,
+		   T3.글자색 teamTextColor   
+	   from [동림].[dbo].[디자인일정] T1
+	  inner join [동림].[dbo].[사원] T2
+	     on T1.작업요청자 = T2.사원코드
+	  left outer join [동림].[dbo].[팀] T3
+	     on T3.팀코드 = T2.팀코드
+	  where T1.일련번호 = #{designId}
+	    and T2.부서코드 = #{department}	
+	</select>
+	
+</mapper>
