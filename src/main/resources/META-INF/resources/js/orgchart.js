@@ -66,10 +66,11 @@ $(document).ready(function() {
 		    	  }]   
 		       }]	
 		    },
-		    {position: '실장', name: '박화숙', 'relationship': '110', team: 'imwon', leader: 'N'},
-		    {position: '', name: ' ', relationship: '110', team: 'imwon', leader: 'N',
+		    {position: '', name: '&nbsp', relationship: '110', team: 'imwon', leader: 'N',
 		    	children: [{position: '주임', name: '김정아', 'relationship': '101', team: 'design', leader: 'Y'}]	
-			}
+			},
+		    {position: '실장', name: '박화숙', 'relationship': '110', team: 'imwon', leader: 'N'},
+		    
 		  ],
 	};
 	
