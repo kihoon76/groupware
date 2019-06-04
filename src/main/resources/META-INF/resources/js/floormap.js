@@ -827,9 +827,9 @@
 		makeRowSeat(4, row4Y);
 		drawDivider(0, div2Y, 4, div2Y);
 		makeRowSeat(4, row5Y);
-		makeRowSeat(4, row6Y);
-		drawDivider(0, div3Y, 4, div3Y);
-		makeRowSeat(1, row7Y);
+		makeRowSeat(3, row6Y);
+		drawDivider(0, div3Y, 3, div3Y);
+		makeRowSeat(2, row7Y);
 		var lastY = imwonSeat(4);
 		makeConferenceSeat(window.innerWidth - recW + recPadding, lastY + seatSpace);
 		
