@@ -238,4 +238,10 @@
 		 </choose>
 		 order by 휴가시작일 asc
 	</select>
+	
+	<select id="selectSawonSeatNum" parameterType="string" resultType="string">
+		select isnull(-1, 좌석번호)
+		  from [동림].[dbo].[사원]
+		 where 사원코드 = #{sawonCode}
+	</select>
 </mapper>

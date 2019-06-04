@@ -28,7 +28,7 @@ $(document).ready(function() {
 		    	   {position: '부장', name: '김나영', 'relationship': '101', team: 'team2', leader: 'Y',
 		    		   children: [
 		    		       {position: '대리', name: '서현민', 'relationship': '101', team: 'team2', leader: 'N',
-		    		    	  children: [{position: '사원', name: '주정연', 'relationship': '100', team: 'team2', leader: 'N'}]   
+		    		    	  children: [{position: '사원', name: '유남규', 'relationship': '100', team: 'team2', leader: 'N'}]   
 		    		       }       
 		    		   ]   
 		    	   }
@@ -39,7 +39,11 @@ $(document).ready(function() {
 		           {position: '차장', name: '송남이', 'relationship': '101', team: 'team3', leader: 'Y',
 		        	   children: [
 		        	       {position: '대리', name: '박승석', 'relationship': '101', team: 'team3', leader: 'N',
-	        	    		   children: [{position: '사원', name: '이가영', 'relationship': '100', team: 'team3', leader: 'N'}]
+	        	    		   children: [
+	        	    		       {position: '사원', name: '이지혜', 'relationship': '101', team: 'team3', leader: 'N',
+	        	    		    	   children: [{position: '사원', name: '이가영', relationship: '100', team: 'team3', leader: 'N'}]
+	        	    		       }
+	        	    		   ]
 		        	       }
 		        	   ]   
 		           },
@@ -56,14 +60,14 @@ $(document).ready(function() {
 		    		  children: [{position: '사원', name: '김현호', 'relationship': '100', team: 'team5', leader: 'N'}]   
 		    	   }]   
 		       }, {position: '과장', name: '박민지', 'relationship': '101', team: 'team6', leader: 'Y',
-		    	   children: [{position: '사원', name: '김유석', 'relationship': '100', team: 'team6', leader: 'N'}]   
+		    	   children: [{position: '사원', name: '김유석', 'relationship': '101', team: 'team6', leader: 'N', 
+		    		   children:[{position: '사원', name: '김지혜', 'relationship': '100', team: 'team6', leader: 'N'}]
+		    	   }]   
 		       }]	
 		    },
 		    {position: '이사', name: '최헌욱', 'relationship': '110', team: 'imwon', leader: 'N',
 		       children: [{position: '부장', name: '김준인', 'relationship': '101', team: 'ebiz', leader: 'Y',
-		    	  children: [{position: '차장', name: '남기훈', 'relationship': '101', team: 'ebiz', leader: 'N',
-		    		 children: [{position: '사원', name: '김사라', 'relationship': '100', team: 'ebiz', leader: 'N'}]  
-		    	  }]   
+		    	  children: [{position: '차장', name: '남기훈', 'relationship': '101', team: 'ebiz', leader: 'N'}]   
 		       }]	
 		    },
 		    {position: '', name: '&nbsp', relationship: '110', team: 'imwon', leader: 'N',

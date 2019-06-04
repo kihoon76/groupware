@@ -37,4 +37,6 @@ public interface SawonDao {
 
 	List<Map<String, String>> selectSawonOverworkHistory(Map<String, Object> m);
 
+	String selectSawonSeatNum(String sawonCode);
+
 }

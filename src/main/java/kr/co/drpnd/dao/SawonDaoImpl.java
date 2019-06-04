@@ -100,4 +100,9 @@ public class SawonDaoImpl implements SawonDao {
 		return msSqlSession.selectList(namespace + ".selectSawonOverworkHistory", m);
 	}
 
+	@Override
+	public String selectSawonSeatNum(String sawonCode) {
+		return msSqlSession.selectOne(namespace + ".selectSawonSeatNum", sawonCode);
+	}
+
 }

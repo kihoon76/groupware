@@ -130,4 +130,8 @@ public class SawonService {
 		return sawonDao.selectSawonOverworkHistory(m);
 	}
 
+	public String getSawonSeatNum(String sawonCode) {
+		return sawonDao.selectSawonSeatNum(sawonCode);
+	}
+
 }
