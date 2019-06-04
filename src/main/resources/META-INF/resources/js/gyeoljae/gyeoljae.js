@@ -270,6 +270,8 @@ var Gyeoljae = (function() {
 									form.style.display = 'none';
 									document.body.appendChild(form);
 									form.submit();
+									
+									document.body.removeChild(form);
 								}
 							});
 						}

@@ -1098,6 +1098,8 @@ public class GyeoljaeController {
 			}
 			else {
 				fileName = new String(fileName.getBytes("UTF-8"), "ISO-8859-1");
+				//fileName = new String(fileName.getBytes("UTF-8"), "UTF-8");
+				//System.err.println(fileName);
 			}
 			
 			response.setHeader("Content-Transper-Encoding", "binary");

@@ -240,7 +240,7 @@
 	</select>
 	
 	<select id="selectSawonSeatNum" parameterType="string" resultType="string">
-		select isnull(-1, 좌석번호)
+		select isnull(좌석번호, -1)
 		  from [동림].[dbo].[사원]
 		 where 사원코드 = #{sawonCode}
 	</select>
