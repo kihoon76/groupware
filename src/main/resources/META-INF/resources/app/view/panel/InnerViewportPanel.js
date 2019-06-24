@@ -74,6 +74,7 @@ Ext.define('Drpnd.view.panel.InnerViewportPanel', {
 	            height: 300,
 	            split: true,         // enable resizing
 	            margins: '0 5 5 5',
+	            autoScroll: true,
 	            items: {
 	            	overflowY: 'auto',
 	            	xtype: 'dataview',
