@@ -103,8 +103,8 @@ public class GeuntaeController {
 			}
 		}
 		
-		System.err.println("sawonCode===" + sawonCode);
-		System.err.println("token===="+token);
+		//System.err.println("sawonCode===" + sawonCode);
+		//System.err.println("token===="+token);
 		return resultMap;
 	}
 	
