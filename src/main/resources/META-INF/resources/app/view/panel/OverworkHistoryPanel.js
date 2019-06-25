@@ -200,7 +200,17 @@ Ext.define('Drpnd.view.panel.OverworkHistoryPanel', {
 	    				text: '야근6시부터',
 	    				dataIndex: 'fromSix',
 	    				flex: 0,
-	    				align: 'center'
+	    				align: 'center',
+	    				renderer: function(v) {
+	    					if(v == 'Y') {
+	    						v = '<img src="/resources/images/check-mark-3-16.png">';
+	    					}
+	    					else {
+	    						v = '';
+	    					}
+	    					
+	    					return v;
+	    				}
 	    			}, {
 	    				text: '야근시간',
 	    				dataIndex: 'overworkTime',
