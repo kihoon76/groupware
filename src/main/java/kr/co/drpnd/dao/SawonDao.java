@@ -39,4 +39,6 @@ public interface SawonDao {
 
 	String selectSawonSeatNum(String sawonCode);
 
+	String selectSawonCodeByRfid(String rfid);
+
 }

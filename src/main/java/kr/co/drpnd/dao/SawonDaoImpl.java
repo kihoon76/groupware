@@ -105,4 +105,9 @@ public class SawonDaoImpl implements SawonDao {
 		return msSqlSession.selectOne(namespace + ".selectSawonSeatNum", sawonCode);
 	}
 
+	@Override
+	public String selectSawonCodeByRfid(String rfid) {
+		return msSqlSession.selectOne(namespace + ".selectSawonCodeByRfid", rfid);
+	}
+
 }

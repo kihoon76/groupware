@@ -4,7 +4,7 @@ import java.util.EnumSet;
 
 public enum WorkMethod {
 
-	PC("P"), MOBILE("M"), FINGER_PRINT("F");
+	PC("P"), MOBILE("M"), FINGER_PRINT("F"), RFID("R");
 	
 	private String value;
 	

@@ -38,6 +38,7 @@ public class Sawon {
 	private String todayGeuntaeCode;
 	private boolean appChecked = false;
 	private String jaetaeg;
+	private String rfid;
 	
 	private Map<TokenKey, String> token = new HashMap<>();
 
@@ -283,6 +284,14 @@ public class Sawon {
 
 	public void setJaetaeg(String jaetaeg) {
 		this.jaetaeg = jaetaeg;
+	}
+	
+	public String getRfid() {
+		return rfid;
+	}
+
+	public void setRfid(String rfid) {
+		this.rfid = rfid;
 	}
 
 	@Override

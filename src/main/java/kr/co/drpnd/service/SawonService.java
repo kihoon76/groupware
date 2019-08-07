@@ -42,6 +42,10 @@ public class SawonService {
 		
 		return info;
 	}
+	
+	public String getSawonCodeByRfid(String rfid) {
+		return sawonDao.selectSawonCodeByRfid(rfid);
+	}
 
 	@Transactional(isolation=Isolation.DEFAULT, 
 			   propagation=Propagation.REQUIRED, 

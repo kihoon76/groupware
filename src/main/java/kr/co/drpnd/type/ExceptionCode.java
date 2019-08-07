@@ -13,7 +13,8 @@ public enum ExceptionCode {
 	HAS_APPTOKEN("1008", "다른사용자에게 등록된 토큰입니다."),
 	MODIFY_SANGSIN("1009", "기안자가 수정중입니다."),
 	REG_PLAN_MOBILE("1010", "일정등록중 오류가 발생했습니다."),
-	DEL_PLAN_MOBILE("1011", "일정삭제중 오류가 발생했습니다.");
+	DEL_PLAN_MOBILE("1011", "일정삭제중 오류가 발생했습니다."),
+	NOT_FOUND_RFID("1012", "존재하지않는 rfid입니다.");
 	
 	private String code;
 	private String msg;

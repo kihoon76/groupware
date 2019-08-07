@@ -19,6 +19,7 @@
 		<result column="팀리더" property="sawonTeamLeader" javaType="String"/>
 		<result column="직급구별" property="positionGubun" javaType="String"/>
 		<result column="재택근무" property="jaetaeg" javaType="String"/>
+		<result column="rfid" property="rfid" javaType="String" />
 		<result column="서명" property="signature" javaType="String"/>
 	 	<collection property="authorities" column="사원코드" javaType="java.util.ArrayList"
 	 				ofType="Authority" select="selectAuthorities" />
@@ -243,5 +244,11 @@
 		select isnull(좌석번호, -1)
 		  from [동림].[dbo].[사원]
 		 where 사원코드 = #{sawonCode}
+	</select>
+	
+	<select id="selectSawonCodeByRfid" parameterType="string" resultType="string">
+		select 사원코드
+		  from [동림].[dbo].[사원]
+		 where rfid = #{rfid}
 	</select>
 </mapper>

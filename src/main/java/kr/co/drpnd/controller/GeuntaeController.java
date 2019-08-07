@@ -26,6 +26,7 @@ import kr.co.drpnd.exception.AlreadyOffwork;
 import kr.co.drpnd.exception.InvalidGotoworkTime;
 import kr.co.drpnd.exception.InvalidUser;
 import kr.co.drpnd.exception.NotExistGotowork;
+import kr.co.drpnd.exception.NotFoundRfid;
 import kr.co.drpnd.service.GeuntaeService;
 import kr.co.drpnd.service.SawonService;
 import kr.co.drpnd.type.ExceptionCode;
@@ -47,6 +48,74 @@ public class GeuntaeController {
 	@Autowired
 	private SimpMessagingTemplate template;
 	
+	@PostMapping("rfid/gotowork")
+	@ResponseBody
+	public Map<String, String> gotoworkByRfid(
+			@RequestParam("sawonCode") String sawonCode,
+			@RequestParam("token") String token,
+			HttpServletRequest request) {
+		
+		//아두이노를 통해서  왔는지 검사
+		String userAgent = request.getHeader("User-Agent");
+		Map<String, String> resultMap = new HashMap<>();
+		resultMap.put("success", "F");
+		resultMap.put("msg", "err");
+		resultMap.put("code", "-1");
+		
+		if(userAgent != null) {
+			userAgent = userAgent.trim().toLowerCase();
+			if("arduino".equals(userAgent) && "db0f65c9005e".equals(token)) {
+				try {
+										
+					sawonCode = sawonService.getSawonCodeByRfid(sawonCode.toUpperCase());
+					if(sawonCode == null || "".equals(sawonCode)) {
+						throw new NotFoundRfid(null);
+					}
+					Geuntae geuntae = new Geuntae();
+					geuntae.setSawonCode(sawonCode);
+					geuntae.setOutworkYN("N");
+					geuntae.setGotoworkMethod(WorkMethod.RFID.toString());
+					geuntae.setLat(0.0f);
+					geuntae.setLng(0.0f);
+					
+					String gotoworkTime = geuntaeService.checkGotowork(geuntae);
+					String sawonSeatNum = sawonService.getSawonSeatNum(sawonCode);
+					
+					resultMap.put("success", "T");
+					resultMap.put("code", "000");
+					resultMap.put("msg", gotoworkTime);
+					
+					if(!"-1".equals(sawonSeatNum)) {
+						Map<String, Object> param = new HashMap<>();
+						param.put("seatNum", sawonSeatNum);
+						param.put("isOutwork", "N");
+						param.put("geuntaeCode", geuntae.getGeuntaeCode());
+						this.template.convertAndSend("/message/geuntae/gotowork", param);
+					}
+				}
+				catch(InvalidGotoworkTime e) {
+					e.printStackTrace();
+					resultMap.put("code", ExceptionCode.INVALID_GOTOWORK_TIME.getCode());
+				}
+				catch(AlreadyGotowork e) {
+					e.printStackTrace();
+					resultMap.put("code", ExceptionCode.ALREADY_GOTOWORK.getCode());
+				}
+				catch(NotFoundRfid e) {
+					e.printStackTrace();
+					resultMap.put("code", ExceptionCode.NOT_FOUND_RFID.getCode());
+				}
+				catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		//System.err.println("sawonCode===" + sawonCode);
+		//System.err.println("token===="+token);
+		return resultMap;
+	}
+	
 	@PostMapping("fingerprint/gotowork")
 	@ResponseBody
 	public Map<String, String> gotoworkByFingerprint(
@@ -60,8 +129,6 @@ public class GeuntaeController {
 		resultMap.put("success", "F");
 		resultMap.put("msg", "err");
 		resultMap.put("code", "-1");
-		
-		System.err.println(userAgent);
 		
 		if(userAgent != null) {
 			userAgent = userAgent.trim().toLowerCase();

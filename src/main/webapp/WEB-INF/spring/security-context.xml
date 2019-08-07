@@ -21,6 +21,7 @@
 		<sec:intercept-url pattern="/result/**" access="permitAll"/>
 		<sec:intercept-url pattern="/logout" access="permitAll"/>
 		<sec:intercept-url pattern="/geuntae/fingerprint/gotowork" access="permitAll"/>
+		<sec:intercept-url pattern="/geuntae/rfid/gotowork" access="permitAll"/>
 <!-- 		<sec:intercept-url pattern="/main" access="hasAnyRole('ROLE_QA_ADMIN', 'ROLE_ADMIN')" /> -->
 		<sec:intercept-url pattern="/**" access="hasRole('ROLE_DONGRIM')"/>
 		
