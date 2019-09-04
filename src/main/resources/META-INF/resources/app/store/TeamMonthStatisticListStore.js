@@ -24,6 +24,7 @@ Ext.define('Drpnd.store.TeamMonthStatisticListStore',  {
 	          '계획5팀',
 	          '계획6팀',
 	          'e-biz팀',
+	          '디자인팀'
 	       ],
 	autoLoad : false
 });

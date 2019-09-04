@@ -222,11 +222,12 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
 		    constructor: function(config) {
 		        Ext.chart.theme.Base.prototype.constructor.call(this, Ext.apply({      
 		            //colors: ['#000000','#006400', '#9932cc','#CD0000','#0000ff','#FFD700','#828282'],
-		            colors: [getTeamColor('계획1팀'), getTeamColor('계획2팀'), getTeamColor('계획3팀'), getTeamColor('계획4팀'), getTeamColor('계획5팀'), getTeamColor('계획6팀'), getTeamColor('e-biz팀')]
+		            colors: [getTeamColor('계획1팀'), getTeamColor('계획2팀'), getTeamColor('계획3팀'), getTeamColor('계획4팀'), getTeamColor('계획5팀'), getTeamColor('계획6팀'), getTeamColor('e-biz팀'), getTeamColor('디자인팀')]
 		        }, config));
 		    }
 		});
 		
+		console.log("999=" + getTeamColor('디자인팀'))
 		var chart3 = Ext.create('Ext.chart.Chart',{
             xtype: 'chart',
             width: 1000,
@@ -248,7 +249,8 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
             	          '계획4팀',
             	          '계획5팀',
             	          '계획6팀',
-            	          'e-biz팀'],
+            	          'e-biz팀',
+            	          '디자인팀'],
                 title: '야근시간(분)',
                 grid: true,
                 label: {
@@ -273,7 +275,8 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
         	          '계획4팀',
         	          '계획5팀',
         	          '계획6팀',
-        	          'e-biz팀'],
+        	          'e-biz팀',
+        	          '디자인팀'],
                 stacked: true,
                 tips: {
                     trackMouse: true,
@@ -323,7 +326,8 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
             	          '계획4팀',
             	          '계획5팀',
             	          '계획6팀',
-            	          'e-biz팀'],
+            	          'e-biz팀',
+            	          '디자인팀'],
                 title: '야근시간(분)',
                 grid: true,
                 label: {
@@ -348,7 +352,8 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
         	          '계획4팀',
         	          '계획5팀',
         	          '계획6팀',
-        	          'e-biz팀'],
+        	          'e-biz팀',
+        	          '디자인팀'],
                 stacked: true,
                 tips: {
                     trackMouse: true,
