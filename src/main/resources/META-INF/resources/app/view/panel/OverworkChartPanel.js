@@ -227,7 +227,6 @@ Ext.define('Drpnd.view.panel.OverworkChartPanel', {
 		    }
 		});
 		
-		console.log("999=" + getTeamColor('디자인팀'))
 		var chart3 = Ext.create('Ext.chart.Chart',{
             xtype: 'chart',
             width: 1000,
