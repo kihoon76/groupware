@@ -18,6 +18,10 @@
 	<link rel="stylesheet" href="/resources/css/jquery-ui.css" />
 	<link rel="stylesheet" href="/resources/css/calendar.css" />
 	<link rel="stylesheet" href="/resources/os/fullcalendar-3.9.0/fullcalendar.min.css" />
+	<style>
+	.fc-bgevent{opacity:.7;}
+	.holiday{color:#FFE641;font-size:.8em;font-style:italic;}
+	</style>
 </head>
 <body>
 	<div class="calendar-sel">

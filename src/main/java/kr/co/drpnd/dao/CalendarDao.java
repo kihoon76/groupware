@@ -6,6 +6,7 @@ import java.util.Map;
 import kr.co.drpnd.domain.CalendarCategory;
 import kr.co.drpnd.domain.CalendarEvent;
 import kr.co.drpnd.domain.ConferenceReservation;
+import kr.co.drpnd.domain.HolidayFlexible;
 
 public interface CalendarDao {
 
@@ -42,5 +43,7 @@ public interface CalendarDao {
 	int deleteMyPlanByMobile(Map<String, String> param);
 
 	List<Map<String, Object>> selectCompanyEventsList();
+
+	List<HolidayFlexible> selectHolidayFlexibleList(String year);
 
 }

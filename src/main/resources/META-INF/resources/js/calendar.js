@@ -50,6 +50,29 @@ $(document).ready(function() {
 	
 	Socket.connect();
 	
+	var holidayBgColor = '#ff0000';
+	var year;
+	var holidayFlexible = {
+		'2019' : [
+		    {start: '2019-09-12', end: '2019-09-16', rendering: 'background', backgroundColor: holidayBgColor, bgTitle: '추석'},
+		 ]
+	};
+	
+	function getHolidayArr() {
+		if(!year) return;
+		
+		return [
+      	    {start: year + '-03-01', end: year + '-03-02', rendering: 'background', backgroundColor: holidayBgColor, bgTitle: '삼일절'},
+      	    {start: year + '-05-01', end: year + '-05-02', rendering: 'background', backgroundColor: holidayBgColor, bgTitle: '근로자의 날'},
+      	    {start: year + '-05-05', end: year + '-05-06', rendering: 'background', backgroundColor: holidayBgColor, bgTitle: '어린이날'},
+      	    {start: year + '-06-06', end: year + '-06-07', rendering: 'background', backgroundColor: holidayBgColor, bgTitle: '현충일'},
+      	    {start: year + '-08-01', end: year + '-08-02', rendering: 'background', backgroundColor: holidayBgColor, bgTitle: '창립기념일'},
+      	    {start: year + '-08-15', end: year + '-08-16', rendering: 'background', backgroundColor: holidayBgColor, bgTitle: '광복절'},
+      	    {start: year + '-10-03', end: year + '-10-04', rendering: 'background', backgroundColor: holidayBgColor, bgTitle: '개천절'},
+      	    {start: year + '-10-09', end: year + '-10-10', rendering: 'background', backgroundColor: holidayBgColor, bgTitle: '한글날'},
+      	    {start: year + '-12-25', end: year + '-12-26', rendering: 'background', backgroundColor: holidayBgColor, bgTitle: '성탄절'},
+      	];
+	}
 	
 	function makeSaveParam() {
 		var param = null;
@@ -595,7 +618,9 @@ $(document).ready(function() {
 	    	calMEnd = view.end.format();
 	    	
 	    	categoryMonth = $('#calendar').fullCalendar('getDate').format().substring(0, 7);
+	    	year = categoryMonth.substring(0, 4);
    		 	initEventSources();
+   		 	//getHolidayFlexible();
    		 	getData();
 	     },
 	     select: function(start, end, jsEvent) {
@@ -678,6 +703,10 @@ $(document).ready(function() {
 	    	 
 	    	 if(event.confirm == 'Y') {
 	    		 element.find('div.fc-content').prepend('<img src="/resources/images/stamp.png" width="16px" height="16px">'); 
+	    	 }
+	    	 
+	    	 if(event.rendering == 'background') {
+	    		 element.append('<span class="holiday">' + event.bgTitle + '</span>');
 	    	 }
 	     }
 	});
@@ -762,6 +791,27 @@ $(document).ready(function() {
 		}
 	}
 	
+	function getHolidayFlexible() {
+		common.ajaxExt({
+    		url: '/calendar/holiday?year=' + year,
+    		method: 'GET',
+    		loadmask: {
+    			msg: '정보로딩중...'
+    		},
+			success: function(jo) {
+				console.log(jo);
+				if(jo.success) {
+					var datas = jo.datas[0];
+					if(datas != null) {
+						holidayFlexibleArr =  jo.datas;
+					}
+					
+					getData();
+				}
+			}
+    	});
+	}
+	
 	function getData() {
 		common.ajaxExt({
     		url: '/calendar/load?startDate=' + calMStart + '&endDate=' + calMEnd + '&cate=' + category,
@@ -775,10 +825,40 @@ $(document).ready(function() {
 					if(jo.datas.length > 0) {
 						var events = jo.datas[0];
 						
-						for(var k in events) {
-							eventSources[k].events = events[k];
-							$('#calendar').fullCalendar('removeEventSource', eventSources[k]);
-							$('#calendar').fullCalendar('addEventSource', eventSources[k]);
+						if(events == null) {
+							eventSources['holiday'] = {	events: getHolidayArr() };
+								
+							$('#calendar').fullCalendar('removeEventSource', eventSources['holiday']);
+							$('#calendar').fullCalendar('addEventSource', eventSources['holiday']);
+						}
+						else {
+							for(var k in events) {
+								var holidayArr = getHolidayArr();
+								var len = holidayArr.length;
+								eventSources[k].events = events[k];
+								
+								for(var h=0; h<len; h++) {
+									eventSources[k].events.push(holidayArr[h]);
+								}
+								
+								var hf = holidayFlexible[year];
+								if(hf) {
+									for(var i=0; i<hf.length; i++) {
+										eventSources[k].events.push(hf[i]);
+									}
+								}
+								/*
+								if(holidayFlexibleArr) {
+									for(var i=0; i<holidayFlexibleArr.length; i++) {
+										holidayFlexibleArr[i].backgroundColor = holidayFlexibleArr[i].backgroundColor.replace('@color', holidayBgColor);
+										eventSources[k].events.push(holidayFlexibleArr[i]);
+									}
+								}
+								*/
+								
+								$('#calendar').fullCalendar('removeEventSource', eventSources[k]);
+								$('#calendar').fullCalendar('addEventSource', eventSources[k]);
+							}
 						}
 					}
 				}

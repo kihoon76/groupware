@@ -17,6 +17,7 @@ import kr.co.drpnd.dao.CalendarDao;
 import kr.co.drpnd.domain.CalendarCategory;
 import kr.co.drpnd.domain.CalendarEvent;
 import kr.co.drpnd.domain.ConferenceReservation;
+import kr.co.drpnd.domain.HolidayFlexible;
 import kr.co.drpnd.domain.Sawon;
 import kr.co.drpnd.exception.InvalidReservationTime;
 import kr.co.drpnd.exception.InvalidUser;
@@ -307,5 +308,10 @@ public class CalendarService {
 	public List<Map<String, Object>> getCompanyEventsList() {
 		return calendarDao.selectCompanyEventsList();
 	}
+
+	public List<HolidayFlexible> getHolidayFlexibleList(String year) {
+		return calendarDao.selectHolidayFlexibleList(year);
+	}
+
 
 }

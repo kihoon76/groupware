@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import kr.co.drpnd.domain.CalendarCategory;
 import kr.co.drpnd.domain.CalendarEvent;
 import kr.co.drpnd.domain.ConferenceReservation;
+import kr.co.drpnd.domain.HolidayFlexible;
 
 @Repository("CalendarDao")
 public class CalendarDaoImpl implements CalendarDao {
@@ -106,6 +107,11 @@ public class CalendarDaoImpl implements CalendarDao {
 	@Override
 	public List<Map<String, Object>> selectCompanyEventsList() {
 		return msSqlSession.selectList(namespace + ".selectCompanyEventsList");
+	}
+
+	@Override
+	public List<HolidayFlexible> selectHolidayFlexibleList(String year) {
+		return msSqlSession.selectList(namespace + ".selectHolidayFlexibleList", year);
 	}
 
 }

@@ -320,4 +320,10 @@
 		   and 사원코드 = #{sawonCode}
 		   and 일련번호 = #{num}
 	</delete>
+	
+	<select id="selectHolidayFlexibleList" parameterType="string" resultType="Holiday">
+		select 이름 bgTitle, 시작일 [start], 종료일 [end]
+		  from [동림].[dbo].[holiday]
+		 where 해당년도 = #{year}
+	</select>
 </mapper>

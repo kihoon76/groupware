@@ -26,6 +26,7 @@ import kr.co.drpnd.domain.AjaxVO;
 import kr.co.drpnd.domain.CalendarCategory;
 import kr.co.drpnd.domain.CalendarEvent;
 import kr.co.drpnd.domain.ConferenceReservation;
+import kr.co.drpnd.domain.HolidayFlexible;
 import kr.co.drpnd.domain.Sawon;
 import kr.co.drpnd.exception.InvalidReservationTime;
 import kr.co.drpnd.exception.InvalidUser;
@@ -505,6 +506,25 @@ public class CalendarController {
 		}
 	
 		
+		return vo;
+	}
+	
+	@GetMapping("holiday")
+	@ResponseBody
+	public AjaxVO<HolidayFlexible> getHolidayFlexible(@RequestParam("year") String year) {
+		
+		AjaxVO<HolidayFlexible> vo = new AjaxVO<>();
+		
+		try {
+			List<HolidayFlexible> holiday = calendarService.getHolidayFlexibleList(year);
+			
+			vo.setSuccess(true);
+			vo.setDatas(holiday);
+		}
+		catch(Exception e) {
+			vo.setSuccess(false);
+			vo.setErrMsg(e.getMessage());
+		}
 		return vo;
 	}
 	
