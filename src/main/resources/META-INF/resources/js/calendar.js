@@ -60,8 +60,9 @@ $(document).ready(function() {
 	
 	function getHolidayArr() {
 		if(!year) return;
-		
+		var nextYear = parseInt(year) + 1;
 		return [
+		    {start: year + '-01-01', end: year + '-01-02', rendering: 'background', backgroundColor: holidayBgColor, bgTitle: '새해'},
       	    {start: year + '-03-01', end: year + '-03-02', rendering: 'background', backgroundColor: holidayBgColor, bgTitle: '삼일절'},
       	    {start: year + '-05-01', end: year + '-05-02', rendering: 'background', backgroundColor: holidayBgColor, bgTitle: '근로자의 날'},
       	    {start: year + '-05-05', end: year + '-05-06', rendering: 'background', backgroundColor: holidayBgColor, bgTitle: '어린이날'},
@@ -71,6 +72,7 @@ $(document).ready(function() {
       	    {start: year + '-10-03', end: year + '-10-04', rendering: 'background', backgroundColor: holidayBgColor, bgTitle: '개천절'},
       	    {start: year + '-10-09', end: year + '-10-10', rendering: 'background', backgroundColor: holidayBgColor, bgTitle: '한글날'},
       	    {start: year + '-12-25', end: year + '-12-26', rendering: 'background', backgroundColor: holidayBgColor, bgTitle: '성탄절'},
+      	    {start: nextYear + '-01-01', end: nextYear + '-01-02', rendering: 'background', backgroundColor: holidayBgColor, bgTitle: '새해'}
       	];
 	}
 	
