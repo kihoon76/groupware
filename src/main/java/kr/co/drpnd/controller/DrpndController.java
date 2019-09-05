@@ -289,6 +289,11 @@ public class DrpndController {
 		return "orgchart";
 	}
 	
+	@GetMapping("view/photos")
+	public String viewPhotoInfo() {
+		return "photo";
+	}
+	
 	@GetMapping("doc/vacation/{sangsinNum}")
 	public String getDocVacation(
 			@PathVariable("sangsinNum") String sangsinNum,

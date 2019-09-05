@@ -96,6 +96,11 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
     		}]
     	});
     	
+    	
+    	treeItems.push({
+    		text: '사진', leaf : true, cate : 'photo', id: 'photo-list'
+    	});
+    	
     	Ext.apply(this, {
     		 store : Ext.create('Ext.data.TreeStore', {
     	    	 root : {

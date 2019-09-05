@@ -54,7 +54,15 @@ $(document).ready(function() {
 	var year;
 	var holidayFlexible = {
 		'2019' : [
+		    {start: '2019-05-06', end: '2019-05-07', rendering: 'background', backgroundColor: holidayBgColor, bgTitle: '대체휴일'},
+		    {start: '2019-06-28', end: '2019-06-30', rendering: 'background', backgroundColor: holidayBgColor, bgTitle: '워크샵'},
 		    {start: '2019-09-12', end: '2019-09-16', rendering: 'background', backgroundColor: holidayBgColor, bgTitle: '추석'},
+		 ],
+		 '2020' : [
+		    {start: '2020-01-24', end: '2020-01-28', rendering: 'background', backgroundColor: holidayBgColor, bgTitle: '설날'},
+		    {start: '2020-04-15', end: '2020-04-16', rendering: 'background', backgroundColor: holidayBgColor, bgTitle: '국회의원 선거일'},
+		    {start: '2020-04-30', end: '2020-05-01', rendering: 'background', backgroundColor: holidayBgColor, bgTitle: '석가탄신일'},
+		    {start: '2020-09-30', end: '2020-10-03', rendering: 'background', backgroundColor: holidayBgColor, bgTitle: '추석'},
 		 ]
 	};
 	
@@ -828,7 +836,15 @@ $(document).ready(function() {
 						var events = jo.datas[0];
 						
 						if(events == null) {
+							
 							eventSources['holiday'] = {	events: getHolidayArr() };
+							
+							var hf = holidayFlexible[year];
+							if(hf) {
+								for(var i=0; i<hf.length; i++) {
+									eventSources['holiday'].events.push(hf[i]);
+								}
+							}
 								
 							$('#calendar').fullCalendar('removeEventSource', eventSources['holiday']);
 							$('#calendar').fullCalendar('addEventSource', eventSources['holiday']);

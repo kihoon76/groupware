@@ -133,5 +133,23 @@ Ext.define('Drpnd.controller.MainController', {
 				this.contentPanel.setActiveTab(recObj.id + '-panel');
 			}
 		}
+		else if(recObj.leaf && recObj.cate == 'photo') {
+			if(!this.categoryPanel.isAttachedCategory(recObj.id)) {
+				switch(recObj.id) {
+				case 'photo-list' :
+					this.addContentTabPanel(
+						recObj.id, 
+						recObj.text, 
+						Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'view/photos' })
+					);
+					break;
+				default :
+					break;
+				}
+			}
+			else {
+				this.contentPanel.setActiveTab(recObj.id + '-panel');
+			}
+		}
 	}
 });
