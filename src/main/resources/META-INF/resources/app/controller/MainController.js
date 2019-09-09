@@ -9,7 +9,8 @@ Ext.define('Drpnd.controller.MainController', {
 	     'panel.InnerViewportPanel',
 	     'panel.NormalDocsGridPanel',
 	     'panel.VacationHistoryPanel',
-	     'panel.OverworkHistoryPanel'
+	     'panel.OverworkHistoryPanel',
+	     'panel.KakaomapPanel'
 	],
 	onLaunch : function() {
 		this.addContentTabPanel(
@@ -137,11 +138,16 @@ Ext.define('Drpnd.controller.MainController', {
 			if(!this.categoryPanel.isAttachedCategory(recObj.id)) {
 				switch(recObj.id) {
 				case 'photo-list' :
+					this.addContentTabPanel(recObj.id, recObj.text, {
+						xtype: 'kakaopanel',
+					});
+					/*
 					this.addContentTabPanel(
 						recObj.id, 
 						recObj.text, 
 						Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'view/photos' })
 					);
+					*/
 					break;
 				default :
 					break;
