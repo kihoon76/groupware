@@ -52,6 +52,10 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
     	});
     	
     	treeItems.push({
+    		text: '사진', leaf : true, cate : 'photo', id: 'photo-list', iconCls: 'icon-camera'
+    	});
+    	
+    	treeItems.push({
 	   		 text: '프로젝트', leaf : true, cate : 'project', id: 'project', iconCls: 'icon-project'
 	   	});
     	
@@ -94,11 +98,6 @@ Ext.define('Drpnd.view.panel.CategoryPanel', {
     				text: 'WBS리스트', leaf : true, cate : 'help', id: 'help-project-wbslist', iconCls: 'icon-help', url: '/help/project/wbslist'
     			}]
     		}]
-    	});
-    	
-    	
-    	treeItems.push({
-    		text: '사진', leaf : true, cate : 'photo', id: 'photo-list'
     	});
     	
     	Ext.apply(this, {

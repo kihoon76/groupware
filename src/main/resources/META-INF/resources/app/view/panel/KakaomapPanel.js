@@ -4,7 +4,7 @@ Ext.define('Drpnd.view.panel.KakaomapPanel', {
 	initComponent: function() {
 		var kakaoWin;
 		var jijeok;
-
+		
 		var grid = Ext.create('Ext.grid.Panel',{
 			store: {
 				autolaod: false,
@@ -69,6 +69,7 @@ Ext.define('Drpnd.view.panel.KakaomapPanel', {
 			tbar:[{
 				xtype: 'button',
 				text: '지적도',
+				iconCls: 'icon-jijeokdo',
 				listeners: {
 					afterrender: function(button) {
 						jijeok = button;
@@ -78,9 +79,19 @@ Ext.define('Drpnd.view.panel.KakaomapPanel', {
 			}, {
 				xtype: 'button',
 				text: '사진선택',
+				qtip: '★ 전체선택 (CTRL+A)',
+				iconCls: 'icon-camera',
 				listeners: {
 					click: function() {
 						kakaoWin.callPhotos();
+					},
+					render: function(c) {
+					   Ext.QuickTips.register({
+						   target: c.getEl(),
+		                   text: c.qtip,
+		                   showDelay: 1,
+		                   cls: 'qBodyStyle'
+		               });
 					}
 				}
 			}, {

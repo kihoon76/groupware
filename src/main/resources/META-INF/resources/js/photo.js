@@ -3,6 +3,7 @@ $(document).ready(function() {
 	var _grid;
 	var datas;
 	var infoWin;
+	var Context = parent.Drpnd.util.Constants.context;
 	
 	window.setUp = function(jijeok, grid) {
 		_jijeok = jijeok;
@@ -56,17 +57,25 @@ $(document).ready(function() {
 		datas = null;
 		zIndexLastMarker = null;
 		markerLog = {};
+		overlays = {};
+		
+		//file 초기화
+		var o = $('#file-input')[0];
+		o.value = '';
+		o.type = 'file';
+				
+		$('#file-input').off('change', fileHandler).on('change', fileHandler);
 	}
 	
 	
-	var imageSrc = 'https://localhost:58443/resources/images/photos/markerimg1.png',
+	var imageSrc = Context + '/resources/images/photos/markerimg1.png',
 		imageSize = new daum.maps.Size(30, 36), // 마커이미지의 크기입니다
 		imageOption = {offset: new kakao.maps.Point(15, 36)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 	
 	var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
 	
 	var markers = {};
-	var infos = [];
+	var overlays = {};
 	var markerLog = {};
 	var zIndexLastMarker;
 	//var images = {};
@@ -82,7 +91,7 @@ $(document).ready(function() {
 	
 	
 	function _info(num) {
-	    return '<div class="customoverlay">' + num + '</div>';
+	    return '<div class="customoverlay" data-num="' + num + '">' + num + '</div>';
 	}
 
 	function createMarker(num, lng, lat) {
@@ -105,32 +114,56 @@ $(document).ready(function() {
            
             markers[num] = marker;
             markerLog[num] = {lng: lng, lat: lat};
-            infos.push(customOverlay);
-            //infoWin.open(map, marker); 
+            overlays[num] = customOverlay;
         }
         catch(e) {
             alert(e.message);
         }
 	}
 	
+	function makeModal(num,img) {
+		var	win = parent.Ext.create('Ext.window.Window', {
+			title: num + '번 사진:GPS정보가 없습니다.',
+			height: 250, 
+			width: 400,
+			layout: 'fit',
+			modal: true,
+			resizable: false,
+			closeAction: 'destroy',
+			//animateTarget: param.aniTarget,
+			items: [{
+				xtype: 'image',
+				src: img
+			}]
+		
+		}).show();
+
+
+	}
 	function makeInfo(num, img) {
 		var gps = markerLog[num];
 		if(!gps) {
-			alert('num: ' + num + ' 사진은 GPS정보가 없습니다.');
+			makeModal(num, img);
+			//alert('num: ' + num + ' 사진은 GPS정보가 없습니다.');
 			return;
 		}
 		var m = markers[num];
-		
+		var o = overlays[num];
 		
 		
 		//zindex조정
-		/*
 		if(zIndexLastMarker) {
-			zIndexLastMarker.setZIndex(1);
+			markers[zIndexLastMarker].setZIndex(1);
+			overlays[zIndexLastMarker].setZIndex(1);
 		}
+		
+		zIndexLastMarker = num;
 		m.setZIndex(1000);
-		*/
+		o.setZIndex(1000);
+		
 		if(infoWin) infoWin.close();
+		
+		map.setCenter(new kakao.maps.LatLng(markerLog[num].lat, markerLog[num].lng));
 		
 		infoWin = new kakao.maps.InfoWindow({
 		    map: map,
@@ -139,14 +172,10 @@ $(document).ready(function() {
 		    removable: true
 		});
 		
-		//map.setCenter(new kakao.maps.LatLng(gps.lat, gps.lng), 13);
-		
 		infoWin.open(map, m); 
 	}
 	
-	var f = null;
-	$('#file-input').on('change', function(e) {
-		//var file = e.target.files[0]
+	function fileHandler(e) {
 		var files = e.target.files;
 		var fileLen = files.length;
 		if(datas == null) {	datas = [];	}
@@ -174,41 +203,31 @@ $(document).ready(function() {
 		                }
 		                */
 		            	
-		            	var aLat = EXIF.getTag(files[x], "GPSLatitude");
-		    			var aLong = EXIF.getTag(files[x], "GPSLongitude");
+		            	var aLat = EXIF.getTag(files[x], 'GPSLatitude');
+		    			var aLong = EXIF.getTag(files[x], 'GPSLongitude');
 	
 		    			if (!(aLat && aLong)) return; // whoops, no GPS info
 	
 		    			// convert from deg/min/sec to decimal for Google
 		    			var strLatRef = EXIF.getTag(files[x], 'GPSLatitudeRef') || 'N';
-		    			var strLongRef = EXIF.getTag(files[x], "GPSLongitudeRef") || 'W';
+		    			var strLongRef = EXIF.getTag(files[x], 'GPSLongitudeRef') || 'W';
 		    			var fLat = (aLat[0] + aLat[1]/60 + aLat[2]/3600) * (strLatRef == 'N' ? 1 : -1);
 		    			var fLong = (aLong[0] + aLong[1]/60 + aLong[2]/3600) * (strLongRef == 'W' ? -1 : 1);
 	
 		    			// center the google map and add a marker
-		    			map.setCenter(new kakao.maps.LatLng(fLat, fLong), 13);
+		    			if(fileLen-1 == x) map.setCenter(new kakao.maps.LatLng(fLat, fLong), 13);
 		    			createMarker(dIdx + (x+1), fLong, fLat);
-		    			/*
-		    			var marker = new kakao.maps.Marker({
-		    				map: map,
-		    				position: new kakao.maps.LatLng(fLat, fLong)
-		    			});
-		    			*/
-		    			//oMarker = new GMarker(new GLatLng(fLat, fLong));
-		    			//oMap.addOverlay(oMarker);
 		            });
 				}(i));
 			}
-			
-			
-			
 		}
 		
 		//zIndexLastMarker = markers[markers.length-1];
 		_grid.getStore().loadData(datas);
-		
-       
-	});
+	}
+	
+	
+	$('#file-input').on('change', fileHandler);
 	
 	
 	   
