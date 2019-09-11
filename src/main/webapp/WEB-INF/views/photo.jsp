@@ -23,6 +23,6 @@
 	</style> 
 </head>
 <body>
-	<input id="file-input" type="file" multiple style="display:none;"/>
+	<input id="file-input" type="file" multiple style="display:none;" accept="image/x-png,image/gif,image/jpeg"/>
 	<div id="map"></div>
 </body>
