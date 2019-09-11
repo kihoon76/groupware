@@ -106,6 +106,7 @@ Ext.define('Drpnd.view.panel.KakaomapPanel', {
 			}, {
 				xtype: 'button',
 				iconCls: 'icon-refresh',
+				text: '새로고침',
 				listeners: {
 					click: function() {
 						gridClear();
