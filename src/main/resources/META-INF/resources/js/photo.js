@@ -1,13 +1,16 @@
 $(document).ready(function() {
 	var _jijeok;
 	var _grid;
+	var _mask;
+	
 	var datas;
 	var infoWin;
 	var Context = parent.Drpnd.util.Constants.context;
 	
-	window.setUp = function(jijeok, grid) {
+	window.setUp = function(jijeok, grid, mask) {
 		_jijeok = jijeok;
 		_grid = grid;
+		_mask = mask;
 		
 		_jijeok.on('click', function(btn) {
 			if(btn.mode == 'J') {
@@ -37,6 +40,10 @@ $(document).ready(function() {
 			}
 			
 		});
+		
+		_grid.getStore().on('clear', function() {
+			_mask.hide();
+		})
 		
 		_grid.getStore().removeAll();
 	}

@@ -4,6 +4,7 @@ Ext.define('Drpnd.view.panel.KakaomapPanel', {
 	initComponent: function() {
 		var kakaoWin;
 		var jijeok;
+		var mask;
 		
 		var grid = Ext.create('Ext.grid.Panel',{
 			store: {
@@ -142,13 +143,18 @@ Ext.define('Drpnd.view.panel.KakaomapPanel', {
 				}
 			}*/],
 			items:[grid,Ext.create('Drpnd.view.iframe.BaseIframe', { url: 'view/photos', height: 600, load: function(dom) {
-				
 				setTimeout(function() {
 					kakaoWin = dom.contentWindow;
-					kakaoWin.setUp(jijeok, grid);
+					kakaoWin.setUp(jijeok, grid, mask);
 				}, 1000);
 				
-			} })]
+			} })],
+			listeners: {
+				afterrender: function(panel) {
+					mask = new Ext.LoadMask(panel, {msg: '로딩중 입니다.'});
+					mask.show();
+				}
+			}
 		});
 		
 		this.callParent(arguments);
