@@ -51,7 +51,10 @@ $(document).ready(function() {
 			markers[k].setMap(null);
 		}
 		
-		$('div').remove('.customoverlay');
+		for(var k in overlays) {
+			overlays[k].setMap(null);
+		}
+		
 		if(infoWin) infoWin.close();
 		markers = {};
 		datas = null;

@@ -83,7 +83,16 @@ Ext.define('Drpnd.view.panel.KakaomapPanel', {
 				iconCls: 'icon-camera',
 				listeners: {
 					click: function() {
-						kakaoWin.callPhotos();
+						if(!kakaoWin) {
+							Ext.Msg.show({
+								msg: '사진탭을 닫고 다시 열어주세요',
+								buttons: Ext.Msg.OK,
+								icon: Ext.MessageBox.WARNING,
+							});
+						}
+						else {
+							kakaoWin.callPhotos();
+						}
 					},
 					render: function(c) {
 					   Ext.QuickTips.register({
