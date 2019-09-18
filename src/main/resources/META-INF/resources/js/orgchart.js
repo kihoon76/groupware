@@ -65,11 +65,6 @@ $(document).ready(function() {
 		    	   }]   
 		       }]	
 		    },
-		    {position: '이사', name: '최헌욱', 'relationship': '110', team: 'imwon', leader: 'N',
-		       children: [{position: '부장', name: '김준인', 'relationship': '101', team: 'ebiz', leader: 'Y',
-		    	  children: [{position: '차장', name: '남기훈', 'relationship': '101', team: 'ebiz', leader: 'N'}]   
-		       }]	
-		    },
 		    {position: '', name: '&nbsp', relationship: '110', team: 'imwon', leader: 'N',
 		    	children: [{position: '주임', name: '김정아', 'relationship': '101', team: 'design', leader: 'Y'}]	
 			},
